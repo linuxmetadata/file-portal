@@ -1,186 +1,128 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
+const path = require("path");
+const { google } = require("googleapis");
 const ExcelJS = require("exceljs");
 
-const { verifyToken } = require("../middleware/authMiddleware");
-const { readSourceData } = require("../services/excelService");
-const { deleteFromDrive } = require("../services/drive");
+const verifyToken = require("../middleware/authMiddleware");
+const auth = require("../services/googleAuth");
 
-// ================= HELPER =================
-function getFilesData() {
-  const filePath = "data/files.json";
+const drive = google.drive({ version: "v3", auth });
+
+const baseData = [
+  { state: "ANDHRA PRADESH", code: "AP183", name: "LAHARI MEDICAL" },
+  { state: "ANDHRA PRADESH", code: "AP220", name: "SADHU PHARMA" },
+  { state: "ANDHRA PRADESH", code: "AP242", name: "SURYA MEDICAL" }
+];
+
+function getUploads() {
+  const filePath = path.join(__dirname, "../data/files.json");
   if (!fs.existsSync(filePath)) return [];
   return JSON.parse(fs.readFileSync(filePath));
 }
 
-// ================= FILE LIST =================
-router.get("/files", verifyToken, (req, res) => {
-  try {
-    let files = getFilesData();
-    const { type, state } = req.query;
+router.get("/list", verifyToken, (req, res) => {
+  const uploads = getUploads();
 
-    // Role filter
-    if (req.user.role !== "admin") {
-      files = files.filter(f => f.uploadedBy === req.user.id);
-    }
+  const result = baseData.map(row => {
+    const aws = uploads.find(f => f.code === row.code && f.type === "AWS");
+    const sss = uploads.find(f => f.code === row.code && f.type === "SSS");
 
-    // Type filter
-    if (type) {
-      files = files.filter(f => f.type === type);
-    }
+    return {
+      ...row,
+      awsUploaded: !!aws,
+      sssUploaded: !!sss,
+      awsFileId: aws?.fileId || null,
+      sssFileId: sss?.fileId || null
+    };
+  });
 
-    // State filter
-    if (state) {
-      files = files.filter(f => f.state === state);
-    }
-
-    res.json({
-      success: true,
-      total: files.length,
-      data: files
-    });
-
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  res.json(result);
 });
 
-// ================= DASHBOARD =================
-router.get("/dashboard", verifyToken, (req, res) => {
-  try {
-    let files = getFilesData();
-    const source = readSourceData();
+router.get("/stats", verifyToken, (req, res) => {
+  const uploads = getUploads();
+  const total = baseData.length;
 
-    // Role filter
-    if (req.user.role !== "admin") {
-      files = files.filter(f => f.uploadedBy === req.user.id);
-    }
+  const awsSubmitted = uploads.filter(f => f.type === "AWS").length;
+  const sssSubmitted = uploads.filter(f => f.type === "SSS").length;
 
-    const total = source.length;
-
-    const sssReceived = files.filter(f => f.type === "SSS").length;
-    const awsReceived = files.filter(f => f.type === "AWS").length;
-
-    res.json({
-      success: true,
-      dashboard: {
-        totalRecords: total,
-
-        SSS: {
-          received: sssReceived,
-          pending: total - sssReceived,
-          percentage: total
-            ? ((sssReceived / total) * 100).toFixed(2) + "%"
-            : "0%"
-        },
-
-        AWS: {
-          received: awsReceived,
-          pending: total - awsReceived,
-          percentage: total
-            ? ((awsReceived / total) * 100).toFixed(2) + "%"
-            : "0%"
-        }
-      }
-    });
-
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  res.json({
+    awsSubmitted,
+    awsPending: total - awsSubmitted,
+    sssSubmitted,
+    sssPending: total - sssSubmitted,
+    total
+  });
 });
 
-// ================= EXCEL REPORT DOWNLOAD =================
-router.get("/report", verifyToken, async (req, res) => {
-  try {
-    if (req.user.role !== "admin") {
-      return res.status(403).json({
-        success: false,
-        message: "Access denied"
-      });
-    }
-
-    const files = getFilesData();
-
-    const workbook = new ExcelJS.Workbook();
-    const sheet = workbook.addWorksheet("Report");
-
-    // Header
-    sheet.columns = [
-      { header: "File Name", key: "name", width: 25 },
-      { header: "Type", key: "type", width: 10 },
-      { header: "State", key: "state", width: 15 },
-      { header: "Uploaded By", key: "uploadedBy", width: 20 },
-      { header: "Uploaded At", key: "uploadedAt", width: 25 }
-    ];
-
-    // Data rows
-    files.forEach(f => {
-      sheet.addRow({
-        name: f.name,
-        type: f.type,
-        state: f.state,
-        uploadedBy: f.uploadedBy,
-        uploadedAt: f.uploadedAt
-      });
-    });
-
-    // Response headers
-    res.setHeader(
-      "Content-Type",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    );
-
-    res.setHeader(
-      "Content-Disposition",
-      "attachment; filename=report.xlsx"
-    );
-
-    await workbook.xlsx.write(res);
-    res.end();
-
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+router.get("/view/:id", verifyToken, (req, res) => {
+  res.json({
+    url: `https://drive.google.com/file/d/${req.params.id}/view`
+  });
 });
 
-// ================= DELETE FILE =================
-router.delete("/file/:id", verifyToken, async (req, res) => {
-  try {
-    if (req.user.role !== "admin") {
-      return res.status(403).json({
-        success: false,
-        message: "Only admin can delete"
-      });
-    }
+router.get("/download/:id", verifyToken, async (req, res) => {
+  const file = await drive.files.get(
+    { fileId: req.params.id, alt: "media" },
+    { responseType: "stream" }
+  );
+  file.data.pipe(res);
+});
 
-    const fileId = req.params.id;
-    let files = getFilesData();
-
-    const index = files.findIndex(f => f.id === fileId);
-
-    if (index === -1) {
-      return res.status(404).json({
-        success: false,
-        message: "File not found"
-      });
-    }
-
-    // Delete from Google Drive
-    await deleteFromDrive(fileId);
-
-    // Remove from JSON
-    files.splice(index, 1);
-    fs.writeFileSync("data/files.json", JSON.stringify(files, null, 2));
-
-    res.json({
-      success: true,
-      message: "File deleted successfully"
-    });
-
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+router.delete("/delete/:id", verifyToken, async (req, res) => {
+  if (req.user.role !== "admin") {
+    return res.status(403).json({ message: "Not allowed" });
   }
+
+  await drive.files.delete({ fileId: req.params.id });
+
+  let data = getUploads();
+  data = data.filter(d => d.fileId !== req.params.id);
+
+  fs.writeFileSync(
+    path.join(__dirname, "../data/files.json"),
+    JSON.stringify(data, null, 2)
+  );
+
+  res.json({ message: "Deleted" });
+});
+
+router.get("/excel", verifyToken, async (req, res) => {
+  const uploads = getUploads();
+
+  const workbook = new ExcelJS.Workbook();
+  const sheet = workbook.addWorksheet("Report");
+
+  sheet.columns = [
+    { header: "State", key: "state" },
+    { header: "Code", key: "code" },
+    { header: "Name", key: "name" },
+    { header: "AWS", key: "aws" },
+    { header: "SSS", key: "sss" }
+  ];
+
+  baseData.forEach(row => {
+    const aws = uploads.find(f => f.code === row.code && f.type === "AWS");
+    const sss = uploads.find(f => f.code === row.code && f.type === "SSS");
+
+    sheet.addRow({
+      state: row.state,
+      code: row.code,
+      name: row.name,
+      aws: aws ? "Submitted" : "Pending",
+      sss: sss ? "Submitted" : "Pending"
+    });
+  });
+
+  res.setHeader(
+    "Content-Disposition",
+    "attachment; filename=report.xlsx"
+  );
+
+  await workbook.xlsx.write(res);
+  res.end();
 });
 
 module.exports = router;

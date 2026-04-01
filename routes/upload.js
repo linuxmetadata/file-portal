@@ -1,17 +1,17 @@
 const express = require("express");
 const multer = require("multer");
-const path = require("path");
 const fs = require("fs");
-const pdf = require("pdf-parse");
-const { verifyToken } = require("../middleware/authMiddleware");
-const { uploadFile } = require("../services/drive");
+const path = require("path");
+const { google } = require("googleapis");
+const verifyToken = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
+const auth = require("../services/googleAuth");
+const drive = google.drive({ version: "v3", auth });
+
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
+  destination: "uploads/",
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
   }
@@ -19,63 +19,42 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-const allowedTypes = ["pdf", "xlsx", "docx", "txt", "html"];
-
 router.post("/", verifyToken, upload.single("file"), async (req, res) => {
   try {
-    const { type } = req.body;
+    const { type, code } = req.body;
     const file = req.file;
 
-    if (!file) {
-      return res.status(400).json({ message: "No file uploaded" });
-    }
+    const response = await drive.files.create({
+      requestBody: { name: file.originalname },
+      media: { body: fs.createReadStream(file.path) },
+      fields: "id"
+    });
 
-    if (!type || !["SSS", "AWS"].includes(type)) {
-      return res.status(400).json({ message: "Invalid type" });
-    }
+    const fileId = response.data.id;
 
-    const ext = file.originalname.split(".").pop().toLowerCase();
-
-    if (!allowedTypes.includes(ext)) {
-      return res.status(400).json({ message: "Invalid file type" });
-    }
-
-    // PDF check
-    if (ext === "pdf") {
-      const data = await pdf(fs.readFileSync(file.path));
-      if (!data.text || data.text.length < 50) {
-        return res.status(400).json({
-          message: "Scanned PDF not allowed"
-        });
-      }
-    }
-
-    // 🚀 Upload to Drive
-    const state = req.body.state || "General";
-
-    const { uploadToDrive } = require("../services/drive");
-
-    const fileId = await uploadToDrive(
-    file.path,
-    file.filename,
-    type,
-    state
-    );
-
-    // Delete local file
     fs.unlinkSync(file.path);
 
-    res.json({
-      message: "Uploaded to Google Drive",
-      driveFileId: fileId,
-      type
+    const filePath = path.join(__dirname, "../data/files.json");
+    let data = fs.existsSync(filePath)
+      ? JSON.parse(fs.readFileSync(filePath))
+      : [];
+
+    data = data.filter(d => !(d.code === code && d.type === type));
+
+    data.push({
+      code,
+      type,
+      fileId,
+      uploadedAt: new Date(),
+      uploadedBy: req.user.id
     });
 
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+
+    res.json({ success: true });
+
   } catch (err) {
-    res.status(500).json({
-      message: "Upload error",
-      error: err.message
-    });
+    res.status(500).json({ error: err.message });
   }
 });
 

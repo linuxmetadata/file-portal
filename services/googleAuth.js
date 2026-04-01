@@ -1,16 +1,18 @@
 const { google } = require("googleapis");
+const fs = require("fs");
 
-// ================= OAUTH CLIENT =================
-const oauth2Client = new google.auth.OAuth2(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  process.env.GOOGLE_REDIRECT_URI
+const credentials = JSON.parse(fs.readFileSync("credentials.json"));
+
+const { client_id, client_secret } = credentials.web;
+
+const oAuth2Client = new google.auth.OAuth2(
+  client_id,
+  client_secret,
+  "http://localhost"
 );
 
-// ================= SET TOKEN =================
-oauth2Client.setCredentials({
-  refresh_token: process.env.GOOGLE_REFRESH_TOKEN
-});
+// Load token
+const token = JSON.parse(fs.readFileSync("token.json"));
+oAuth2Client.setCredentials(token);
 
-// ================= EXPORT =================
-module.exports = oauth2Client;
+module.exports = oAuth2Client;

@@ -1,321 +1,352 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Statement Portal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Statement Portal</title>
 
-  <style>
-    body {
-      font-family: Arial;
-      background: #f4f6f9;
-      margin: 0;
-      padding: 20px;
-    }
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    .container { max-width: 1100px; margin: auto; }
+<style>
+body {
+  margin:0;
+  font-family: Arial;
+  background:#f4f6fb;
+}
 
-    .header {
-      font-size: 26px;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
+/* HEADER */
+.header {
+  background: linear-gradient(90deg,#6a11cb,#2575fc);
+  color:white;
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
 
-    .section {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      margin-top: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
+/* LOGIN */
+.login {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
 
-    input, select, button {
-      padding: 10px;
-      margin: 5px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
+.login-box {
+  background:white;
+  padding:30px;
+  border-radius:10px;
+  width:300px;
+}
 
-    button {
-      background: #007bff;
-      color: white;
-      cursor: pointer;
-    }
+input, select {
+  width:100%;
+  padding:10px;
+  margin:5px 0;
+}
 
-    button:hover { background: #0056b3; }
+/* DASHBOARD */
+.container {
+  padding:20px;
+}
 
-    .cards {
-      display: flex;
-      flex-wrap: wrap;
-    }
+.cards {
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
 
-    .card {
-      background: white;
-      padding: 15px;
-      margin: 10px;
-      border-radius: 10px;
-      width: 30%;
-      text-align: center;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
+.card {
+  flex:1;
+  min-width:150px;
+  padding:15px;
+  border-radius:10px;
+  color:white;
+  text-align:center;
+}
 
-    .card:hover {
-      background: #e9f3ff;
-    }
+.green{background:#2ecc71;}
+.orange{background:#ff6f00;}
+.blue{background:#2c3e50;}
 
-    .file-item {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-    }
+table {
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
+  background:white;
+}
 
-    .delete-btn {
-      background: red;
-      margin-left: 10px;
-    }
-  </style>
+th, td {
+  padding:10px;
+  border:1px solid #ddd;
+  text-align:center;
+}
+
+button {
+  padding:6px 10px;
+  margin:2px;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+}
+
+.upload {background:#3498db;color:white;}
+.view {background:#2ecc71;color:white;}
+.delete {background:#e74c3c;color:white;}
+.download {background:#8e44ad;color:white;}
+
+.status {
+  padding:4px 8px;
+  border-radius:5px;
+  color:white;
+}
+
+.pending {background:#ff6f00;}
+.done {background:#2ecc71;}
+
+.loader {
+  display:none;
+  position:fixed;
+  top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.4);
+  justify-content:center;
+  align-items:center;
+  color:white;
+  font-size:20px;
+}
+</style>
+
 </head>
 
 <body>
 
+<!-- LOGIN -->
+<div id="loginPage" class="login">
+  <div class="login-box">
+    <h3>Login</h3>
+    <input id="email" placeholder="Enter ID">
+    <button onclick="login()">Login</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="app" style="display:none">
+
+<div class="header">
+  <div>Statement Portal</div>
+  <div>
+    <button onclick="downloadExcel()">Excel</button>
+    <button onclick="logout()">Logout</button>
+  </div>
+</div>
+
 <div class="container">
 
-  <div class="header">📊 Statement Portal</div>
+<!-- SEARCH -->
+<input id="search" placeholder="Search..." onkeyup="filterTable()">
 
-  <!-- LOGIN -->
-  <div class="section">
-    <h3>Login</h3>
-    <input id="userId" placeholder="User ID">
-    <button onclick="login()">User Login</button>
+<!-- CARDS -->
+<div class="cards">
+  <div class="card green" id="awsSub"></div>
+  <div class="card orange" id="awsPend"></div>
+  <div class="card green" id="sssSub"></div>
+  <div class="card orange" id="sssPend"></div>
+  <div class="card blue" id="total"></div>
+</div>
 
-    <br><br>
-
-    <input id="adminUser" placeholder="Admin Username">
-    <input id="adminPass" type="password" placeholder="Password">
-    <button onclick="adminLogin()">Admin Login</button>
-  </div>
-
-  <!-- DASHBOARD -->
-  <div class="section">
-    <h3>Dashboard</h3>
-    <button onclick="loadDashboard()">Refresh</button>
-    <div class="cards" id="dashboard"></div>
-  </div>
-
-  <!-- FILTER -->
-  <div class="section">
-    <h3>Search / Filter</h3>
-    <select id="filterType">
-      <option value="">All</option>
-      <option value="SSS">SSS</option>
-      <option value="AWS">AWS</option>
-    </select>
-
-    <input id="filterState" placeholder="State">
-
-    <button onclick="loadFiles()">Search</button>
-  </div>
-
-  <!-- UPLOAD -->
-  <div class="section">
-    <h3>Upload</h3>
-    <input type="file" id="file">
-    <select id="type">
-      <option value="SSS">SSS</option>
-      <option value="AWS">AWS</option>
-    </select>
-    <input id="state" placeholder="State">
-    <button onclick="upload()">Upload</button>
-  </div>
-
-  <!-- FILE LIST -->
-  <div class="section">
-    <h3>Files</h3>
-    <button onclick="downloadReport()">Download Report</button>
-    <div id="files"></div>
-  </div>
+<!-- TABLE -->
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Code</th>
+<th>Name</th>
+<th>AWS</th>
+<th>SSS</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
 
 </div>
 
+</div>
+
+<input type="file" id="fileInput" style="display:none"/>
+<div class="loader" id="loader">Uploading...</div>
+
 <script>
-let token = "";
-let role = "";
+let token = localStorage.getItem("token");
+let role = "admin";
 
-// LOGIN
-function login() {
-  const id = document.getElementById("userId").value;
+let selectedFile = null;
+let currentCode = "";
+let currentType = "";
 
-  fetch("/auth/user-login", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ id })
-  })
-  .then(res => res.json())
-  .then(data => {
-    token = data.token;
-    role = "user";
-    alert("User login successful");
+/* LOGIN */
+async function login(){
+  const email = document.getElementById("email").value;
+
+  const res = await fetch("/auth/user-login",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({id:email})
   });
+
+  const data = await res.json();
+
+  token = data.token;
+  role = data.role || "user";
+
+  localStorage.setItem("token",token);
+
+  startApp();
 }
 
-// ADMIN LOGIN
-function adminLogin() {
-  const username = document.getElementById("adminUser").value;
-  const password = document.getElementById("adminPass").value;
-
-  fetch("/auth/admin-login", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ username, password })
-  })
-  .then(res => res.json())
-  .then(data => {
-    token = data.token;
-    role = "admin";
-    alert("Admin login successful");
-  });
+/* START */
+function startApp(){
+  document.getElementById("loginPage").style.display="none";
+  document.getElementById("app").style.display="block";
+  load();
 }
 
-// DASHBOARD
-function loadDashboard() {
-  fetch("/data/dashboard", {
-    headers: { Authorization: "Bearer " + token }
-  })
-  .then(res => res.json())
-  .then(data => {
-    const d = data.dashboard;
+/* LOAD */
+async function load(){
+  tbody.innerHTML="";
 
-    document.getElementById("dashboard").innerHTML = `
-      <div class="card" onclick="filterType('SSS')">
-        <h3>SSS Received</h3>
-        <p>${d.SSS.received}</p>
-      </div>
+  const s = await fetch("/data/stats",{headers:{Authorization:"Bearer "+token}});
+  const stats = await s.json();
 
-      <div class="card" onclick="filterType('SSS')">
-        <h3>SSS Pending</h3>
-        <p>${d.SSS.pending}</p>
-      </div>
+  awsSub.innerText="AWS Submitted: "+stats.awsSubmitted;
+  awsPend.innerText="AWS Pending: "+stats.awsPending;
+  sssSub.innerText="SSS Submitted: "+stats.sssSubmitted;
+  sssPend.innerText="SSS Pending: "+stats.sssPending;
+  total.innerText="Total: "+stats.total;
 
-      <div class="card">
-        <h3>SSS %</h3>
-        <p>${d.SSS.percentage}</p>
-      </div>
+  const r = await fetch("/data/list",{headers:{Authorization:"Bearer "+token}});
+  const list = await r.json();
 
-      <div class="card" onclick="filterType('AWS')">
-        <h3>AWS Received</h3>
-        <p>${d.AWS.received}</p>
-      </div>
+  list.forEach(row=>{
+    tbody.innerHTML += `
+      <tr>
+        <td>${row.state}</td>
+        <td>${row.code}</td>
+        <td>${row.name}</td>
 
-      <div class="card" onclick="filterType('AWS')">
-        <h3>AWS Pending</h3>
-        <p>${d.AWS.pending}</p>
-      </div>
+        <td id="aws-${row.code}">
+          ${renderCell(row.awsUploaded,row.awsFileId,row.code,"AWS")}
+        </td>
 
-      <div class="card">
-        <h3>AWS %</h3>
-        <p>${d.AWS.percentage}</p>
-      </div>
+        <td id="sss-${row.code}">
+          ${renderCell(row.sssUploaded,row.sssFileId,row.code,"SSS")}
+        </td>
+      </tr>
     `;
   });
 }
 
-// FILTER
-function filterType(type) {
-  document.getElementById("filterType").value = type;
-  loadFiles();
-}
-
-// UPLOAD
-function upload() {
-  const file = document.getElementById("file").files[0];
-  const type = document.getElementById("type").value;
-  const state = document.getElementById("state").value;
-
-  if (!file) {
-    alert("Select file first");
-    return;
+/* CELL */
+function renderCell(uploaded,fileId,code,type){
+  if(uploaded){
+    return `
+      <span class="status done">Submitted</span><br>
+      <button class="view" onclick="viewFile('${fileId}')">View</button>
+      <button class="download" onclick="downloadFile('${fileId}')">Download</button>
+      ${role==="admin" ? `<button class="delete" onclick="deleteFile('${fileId}')">Delete</button>`:""}
+    `;
+  } else {
+    return `
+      <span class="status pending">Pending</span><br>
+      <button class="upload" onclick="chooseFile('${code}','${type}')">Choose File</button>
+    `;
   }
+}
 
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("type", type);
-  formData.append("state", state);
+/* FILE SELECT */
+function chooseFile(code,type){
+  currentCode=code;
+  currentType=type;
+  fileInput.click();
+}
 
-  fetch("/upload", {
-    method: "POST",
-    headers: { Authorization: "Bearer " + token },
-    body: formData
-  })
-  .then(res => res.json())
-  .then(() => {
-    alert("Upload successful");
-    loadFiles();
-    loadDashboard();
+fileInput.addEventListener("change",function(){
+  selectedFile=this.files[0];
+
+  const cell=(currentType==="AWS"?"aws-":"sss-")+currentCode;
+
+  document.getElementById(cell).innerHTML=`
+    <button class="view" onclick="previewFile()">View</button>
+    <button class="upload" onclick="submitUpload()">Submit</button>
+  `;
+});
+
+/* PREVIEW */
+function previewFile(){
+  window.open(URL.createObjectURL(selectedFile));
+}
+
+/* UPLOAD */
+async function submitUpload(){
+  const formData=new FormData();
+  formData.append("file",selectedFile);
+  formData.append("type",currentType);
+  formData.append("code",currentCode);
+
+  loader.style.display="flex";
+
+  await fetch("/upload",{
+    method:"POST",
+    headers:{Authorization:"Bearer "+token},
+    body:formData
+  });
+
+  loader.style.display="none";
+
+  load();
+}
+
+/* VIEW */
+function viewFile(id){
+  window.open(`/data/view/${id}`);
+}
+
+/* DOWNLOAD */
+function downloadFile(id){
+  window.open(`/data/download/${id}`);
+}
+
+/* DELETE */
+async function deleteFile(id){
+  if(!confirm("Delete?")) return;
+
+  await fetch(`/data/delete/${id}`,{
+    method:"DELETE",
+    headers:{Authorization:"Bearer "+token}
+  });
+
+  load();
+}
+
+/* EXCEL */
+function downloadExcel(){
+  window.open("/data/excel");
+}
+
+/* SEARCH */
+function filterTable(){
+  const val=document.getElementById("search").value.toLowerCase();
+  document.querySelectorAll("tbody tr").forEach(tr=>{
+    tr.style.display=tr.innerText.toLowerCase().includes(val)?"":"none";
   });
 }
 
-// FILE LIST
-function loadFiles() {
-  const type = document.getElementById("filterType").value;
-  const state = document.getElementById("filterState").value;
-
-  let url = "/data/files?";
-  if (type) url += "type=" + type + "&";
-  if (state) url += "state=" + state;
-
-  fetch(url, {
-    headers: { Authorization: "Bearer " + token }
-  })
-  .then(res => res.json())
-  .then(data => {
-    let html = "";
-
-    if (!data.data || data.data.length === 0) {
-      html = "<p>No files found</p>";
-    } else {
-      data.data.forEach(f => {
-        html += `<div class="file-item">
-          📄 ${f.name} | ${f.type} | ${f.state}
-          ${role === "admin"
-            ? `<button class="delete-btn" onclick="deleteFile('${f.id}')">Delete</button>`
-            : ""}
-        </div>`;
-      });
-    }
-
-    document.getElementById("files").innerHTML = html;
-  });
+/* LOGOUT */
+function logout(){
+  localStorage.removeItem("token");
+  location.reload();
 }
 
-// DELETE
-function deleteFile(id) {
-  if (!confirm("Delete this file?")) return;
-
-  fetch("/data/file/" + id, {
-    method: "DELETE",
-    headers: { Authorization: "Bearer " + token }
-  })
-  .then(res => res.json())
-  .then(() => {
-    alert("Deleted successfully");
-    loadFiles();
-    loadDashboard();
-  });
-}
-
-// EXCEL DOWNLOAD
-function downloadReport() {
-  fetch("/data/report", {
-    headers: { Authorization: "Bearer " + token }
-  })
-  .then(res => res.blob())
-  .then(blob => {
-    const url = window.URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "report.xlsx";
-    a.click();
-  });
+/* AUTO LOGIN */
+if(token){
+  startApp();
 }
 </script>
 

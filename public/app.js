@@ -12,11 +12,11 @@ async function loadData() {
   data.forEach(row => {
 
     // ✅ SUPPORT BOTH FORMATS (IMPORTANT FIX)
-    const division = row.division || row.Division || "";
-    const state = row.state || row.State || "";
-    const bmhq = row.bmhq || row["BM HQ"] || "";
-    const code = row.code || row.Code || "";
-    const name = row.name || row.Name || "";
+    const division = row.division || row.Division || row.DIVISION || "";
+    const state = row.state || row.State || row.STATE || "";
+    const bmhq = row.bmhq || row["BM HQ"] || row["BM HQ "] || "";
+    const code = row.code || row.Code || row.CODE || "";
+    const name = row.name || row.Name || row.NAME || "";
 
     if (search && !name.toLowerCase().includes(search)) return;
 

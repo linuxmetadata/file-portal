@@ -109,6 +109,9 @@
     document.getElementById("userLogin").classList.remove("hidden");
   }
 
+  /* =========================
+     USER LOGIN
+  ========================= */
   async function userLogin() {
     const id = document.getElementById("userId").value;
 
@@ -121,12 +124,19 @@
     const data = await res.json();
 
     if (data.success) {
+
+      // ✅ IMPORTANT FIX
+      localStorage.setItem("role", "user");
+
       window.location.href = "/dashboard.html";
     } else {
       alert(data.message || "Invalid ID");
     }
   }
 
+  /* =========================
+     ADMIN LOGIN
+  ========================= */
   async function adminLogin() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
@@ -140,6 +150,10 @@
     const data = await res.json();
 
     if (data.success) {
+
+      // ✅ IMPORTANT FIX
+      localStorage.setItem("role", "admin");
+
       window.location.href = "/admin.html";
     } else {
       alert("Invalid admin login");

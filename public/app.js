@@ -2,27 +2,29 @@ async function loadData() {
 
   const search = document.getElementById("search").value.toLowerCase();
 
-  const res = await fetch("/api/data");
+  // ✅ FIXED API
+  const res = await fetch("/data/list");
   const data = await res.json();
 
   let html = "";
 
-  let awsDone=0, awsPending=0, sssDone=0, sssPending=0;
+  let awsDone = 0, awsPending = 0, sssDone = 0, sssPending = 0;
 
   data.forEach(row => {
 
-    if (search && !row.Name?.toLowerCase().includes(search)) return;
+    // ✅ FIXED mapping
+    if (search && !(row.name || "").toLowerCase().includes(search)) return;
 
     if (row.awsFile) awsDone++; else awsPending++;
     if (row.sssFile) sssDone++; else sssPending++;
 
     html += `
       <tr>
-        <td>${row.Division || ""}</td>
-        <td>${row.State || ""}</td>
-        <td>${row["BM HQ"] || ""}</td>
-        <td>${row.Code || ""}</td>
-        <td>${row.Name || ""}</td>
+        <td>${row.division || ""}</td>
+        <td>${row.state || ""}</td>
+        <td>${row.bmhq || ""}</td>
+        <td>${row.code || ""}</td>
+        <td>${row.name || ""}</td>
 
         <td>
           <input placeholder="Enter value">
@@ -31,16 +33,16 @@ async function loadData() {
         <td>
           ${row.awsFile
             ? `<button class="view" onclick="viewFile('${row.awsFile}')">View</button>
-               ${isAdmin()?`<button class="delete" onclick="deleteFile('${row.Code}','aws')">Delete</button>`:""}`
-            : `<button class="upload" onclick="upload('${row.Code}','aws')">Upload AWS</button>`
+               ${isAdmin() ? `<button class="delete" onclick="deleteFile('${row.code}','aws')">Delete</button>` : ""}`
+            : `<button class="upload" onclick="upload('${row.code}','aws')">Upload AWS</button>`
           }
         </td>
 
         <td>
           ${row.sssFile
             ? `<button class="view" onclick="viewFile('${row.sssFile}')">View</button>
-               ${isAdmin()?`<button class="delete" onclick="deleteFile('${row.Code}','sss')">Delete</button>`:""}`
-            : `<button class="upload" onclick="upload('${row.Code}','sss')">Upload SSS</button>`
+               ${isAdmin() ? `<button class="delete" onclick="deleteFile('${row.code}','sss')">Delete</button>` : ""}`
+            : `<button class="upload" onclick="upload('${row.code}','sss')">Upload SSS</button>`
           }
         </td>
       </tr>
@@ -56,48 +58,67 @@ async function loadData() {
   document.getElementById("total").innerText = data.length;
 }
 
-/* UPLOAD */
-function upload(code,type){
+/* =========================
+   UPLOAD
+========================= */
+function upload(code, type) {
   const input = document.createElement("input");
-  input.type="file";
+  input.type = "file";
 
-  input.onchange = async ()=>{
+  input.onchange = async () => {
     const form = new FormData();
-    form.append("file",input.files[0]);
-    form.append("code",code);
-    form.append("type",type);
+    form.append("file", input.files[0]);
+    form.append("code", code);
+    form.append("type", type);
 
-    await fetch("/api/upload",{method:"POST",body:form});
+    // ✅ FIXED API
+    await fetch("/data/upload", { method: "POST", body: form });
+
     loadData();
   };
 
   input.click();
 }
 
-/* VIEW */
-function viewFile(name){
-  window.open("/api/file/"+name);
+/* =========================
+   VIEW
+========================= */
+function viewFile(url) {
+  // ✅ FIXED (already full path from backend)
+  window.open(url);
 }
 
-/* DELETE */
-function deleteFile(code,type){
-  fetch(`/api/delete/${code}/${type}`,{method:"DELETE"});
+/* =========================
+   DELETE
+========================= */
+function deleteFile(code, type) {
+  // ✅ FIXED API
+  fetch(`/data/delete/${code}/${type}`, { method: "DELETE" });
   loadData();
 }
 
-function isAdmin(){
-  return localStorage.getItem("role")==="admin";
+/* =========================
+   ROLE CHECK
+========================= */
+function isAdmin() {
+  return localStorage.getItem("role") === "admin";
 }
 
-/* DOWNLOAD */
-function downloadExcel(){
-  window.open("/api/download/excel");
+/* =========================
+   DOWNLOAD
+========================= */
+function downloadExcel() {
+  // ✅ FIXED API
+  window.open("/data/download/excel");
 }
 
-/* LOGOUT */
-function logout(){
+/* =========================
+   LOGOUT
+========================= */
+function logout() {
   localStorage.clear();
-  window.location="/";
+  window.location = "/";
 }
 
+/* INIT */
 loadData();

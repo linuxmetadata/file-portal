@@ -43,7 +43,7 @@ router.get("/list", (req, res) => {
       id: index,
 
       division: row.Division || "",
-      state: row.State || "",
+      state: row.STATE || "",
       bmhq: row["BM HQ"] || row.BM_HQ || "",
       code: code || "",
       name: row["Stockist Name"] || row.Name || "",

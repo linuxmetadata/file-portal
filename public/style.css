@@ -2,16 +2,20 @@ body {
   font-family: Arial;
   margin: 0;
   background: #f4f6fb;
+  overflow-x: hidden; /* prevent scroll */
 }
 
+/* HEADER */
 .header {
   background: linear-gradient(90deg,#6a11cb,#2575fc);
   color: white;
   padding: 15px 25px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
+/* CARDS */
 .cards {
   display: flex;
   gap: 15px;
@@ -30,38 +34,75 @@ body {
 .red { background: #dc3545; }
 .blue { background: #007bff; }
 
+/* REMOVE OLD FILTER BAR (not needed anymore) */
 .filters {
-  padding: 10px 20px;
+  display: none;
 }
 
-input {
-  padding: 8px;
-  width: 250px;
-}
-
+/* TABLE */
 table {
   width: 95%;
   margin: auto;
   border-collapse: collapse;
   background: white;
+
+  table-layout: fixed; /* 🔥 IMPORTANT */
 }
 
+/* HEADER CELLS */
 th {
   background: linear-gradient(90deg,#6a11cb,#2575fc);
   color: white;
+  padding: 8px;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: top;
+
+  word-wrap: break-word;
 }
 
-th, td {
-  padding: 10px;
+/* FILTER INPUTS INSIDE HEADER */
+th input {
+  width: 100%;
+  margin-top: 5px;
+  padding: 5px;
+  border-radius: 4px;
+  border: none;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+
+/* DATA CELLS */
+td {
+  padding: 8px;
   border: 1px solid #ddd;
   text-align: center;
+  font-size: 13px;
+
+  /* 🔥 TEXT WRAP FIX */
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
+/* COLUMN WIDTHS (BALANCED) */
+th:nth-child(1), td:nth-child(1) { width: 8%; }
+th:nth-child(2), td:nth-child(2) { width: 10%; }
+th:nth-child(3), td:nth-child(3) { width: 12%; }
+th:nth-child(4), td:nth-child(4) { width: 8%; }
+th:nth-child(5), td:nth-child(5) { width: 22%; }
+th:nth-child(6), td:nth-child(6) { width: 12%; }
+th:nth-child(7), td:nth-child(7) { width: 14%; }
+th:nth-child(8), td:nth-child(8) { width: 14%; }
+
+/* BUTTONS */
 button {
   padding: 6px 10px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  font-size: 12px;
+  white-space: nowrap;
 }
 
 .upload { background: green; color: white; }

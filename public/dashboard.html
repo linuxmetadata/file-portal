@@ -45,20 +45,40 @@
   </div>
 </div>
 
-<!-- FILTERS -->
-<div class="filters">
-  <input id="search" placeholder="Search..." onkeyup="loadData()">
-</div>
-
 <!-- TABLE -->
 <table>
 <thead>
 <tr>
-  <th>Division</th>
-  <th>State</th>
-  <th>BM HQ</th>
-  <th>Code</th>
-  <th>Name</th>
+  <th>
+    Division
+    <br>
+    <input id="f_division" placeholder="Filter division" onkeyup="filterTable()">
+  </th>
+
+  <th>
+    State
+    <br>
+    <input id="f_state" placeholder="Filter state" onkeyup="filterTable()">
+  </th>
+
+  <th>
+    BM HQ
+    <br>
+    <input id="f_bmhq" placeholder="Filter BM HQ" onkeyup="filterTable()">
+  </th>
+
+  <th>
+    Code
+    <br>
+    <input id="f_code" placeholder="Filter code" onkeyup="filterTable()">
+  </th>
+
+  <th>
+    Name
+    <br>
+    <input id="f_name" placeholder="Filter name" onkeyup="filterTable()">
+  </th>
+
   <th>Sales</th>
   <th>AWS</th>
   <th>SSS</th>
@@ -71,13 +91,35 @@
 <script src="app.js"></script>
 
 <script>
-  // ✅ ROLE BASED TITLE FIX
+  // ✅ ROLE BASED TITLE
   const role = localStorage.getItem("role");
 
   if (role === "admin") {
     document.getElementById("pageTitle").innerText = "Admin Dashboard";
   } else {
     document.getElementById("pageTitle").innerText = "User Dashboard";
+  }
+
+  // ✅ COLUMN FILTER FUNCTION
+  function filterTable() {
+    const div = document.getElementById("f_division").value.toLowerCase();
+    const state = document.getElementById("f_state").value.toLowerCase();
+    const bmhq = document.getElementById("f_bmhq").value.toLowerCase();
+    const code = document.getElementById("f_code").value.toLowerCase();
+    const name = document.getElementById("f_name").value.toLowerCase();
+
+    document.querySelectorAll("#tableData tr").forEach(row => {
+      const cells = row.children;
+
+      const match =
+        cells[0].innerText.toLowerCase().includes(div) &&
+        cells[1].innerText.toLowerCase().includes(state) &&
+        cells[2].innerText.toLowerCase().includes(bmhq) &&
+        cells[3].innerText.toLowerCase().includes(code) &&
+        cells[4].innerText.toLowerCase().includes(name);
+
+      row.style.display = match ? "" : "none";
+    });
   }
 </script>
 

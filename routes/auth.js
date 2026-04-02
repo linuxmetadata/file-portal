@@ -1,49 +1,67 @@
 const express = require("express");
-const jwt = require("jsonwebtoken");
-const XLSX = require("xlsx");
-const path = require("path");
-const fs = require("fs");
-
 const router = express.Router();
 
-/* LOAD EXCEL */
-function loadUsers() {
-  const filePath = path.join(__dirname, "../data/source.xlsx");
+const fs = require("fs");
+const path = require("path");
+const XLSX = require("xlsx");
 
-  if (!fs.existsSync(filePath)) return [];
+// Load Excel data
+function getUsers() {
+  const filePath = path.join(__dirname, "../data/source.xlsx");
 
   const workbook = XLSX.readFile(filePath);
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
-  return XLSX.utils.sheet_to_json(sheet);
+  const data = XLSX.utils.sheet_to_json(sheet);
+
+  return data;
 }
 
-/* LOGIN */
-router.post("/login", (req, res) => {
-  const { id } = req.body;
+/* =========================
+   USER LOGIN (ID)
+========================= */
+router.post("/user-login", (req, res) => {
+  try {
+    const { id } = req.body;
 
-  if (!id) return res.status(400).json({ message: "Enter ID" });
+    if (!id) {
+      return res.json({ success: false, message: "ID required" });
+    }
 
-  // ADMIN LOGIN
-  if (id.includes("@")) {
-    const token = jwt.sign({ id, role: "admin" }, process.env.JWT_SECRET);
-    return res.json({ token, role: "admin" });
+    const users = getUsers();
+
+    const found = users.find(row =>
+      row.BH_ID === id ||
+      row.SM_ID === id ||
+      row.ZBM_ID === id ||
+      row.RBM_ID === id ||
+      row.ABM_ID === id
+    );
+
+    if (found) {
+      return res.json({ success: true });
+    } else {
+      return res.json({ success: false, message: "Invalid ID" });
+    }
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
   }
+});
 
-  const data = loadUsers();
 
-  const found = data.find(r =>
-    r.BH_ID == id ||
-    r.SM_ID == id ||
-    r.ZBM_ID == id ||
-    r.RBM_ID == id ||
-    r.ABM_ID == id
-  );
+/* =========================
+   ADMIN LOGIN
+========================= */
+router.post("/admin-login", (req, res) => {
+  const { email, password } = req.body;
 
-  if (!found) return res.status(401).json({ message: "Invalid ID" });
-
-  const token = jwt.sign({ id, role: "user" }, process.env.JWT_SECRET);
-
-  res.json({ token, role: "user" });
+  // 👉 Change credentials here
+  if (email === "admin@gmail.com" && password === "admin123") {
+    return res.json({ success: true });
+  } else {
+    return res.json({ success: false });
+  }
 });
 
 module.exports = router;

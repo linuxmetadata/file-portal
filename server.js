@@ -14,8 +14,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 /* ROUTES */
-app.use("/api/auth", require("./routes/auth"));
-app.use("/api", require("./routes/data"));
+app.use("/auth", require("./routes/auth"));   // ✅ FIXED
+app.use("/data", require("./routes/data"));   // ✅ CLEAN
 
 /* START */
 const PORT = process.env.PORT || 5000;

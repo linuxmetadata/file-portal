@@ -1,6 +1,7 @@
 async function loadData() {
 
-  const search = document.getElementById("search").value.toLowerCase();
+  // ❌ REMOVE SEARCH DEPENDENCY (FIX)
+  const search = "";
 
   const res = await fetch("/data/list");
   const data = await res.json();
@@ -11,7 +12,7 @@ async function loadData() {
 
   data.forEach(row => {
 
-    // ✅ SUPPORT BOTH FORMATS (IMPORTANT FIX)
+    // ✅ SAFE MAPPING (ALL FORMATS)
     const division = row.division || row.Division || row.DIVISION || "";
     const state = row.state || row.State || row.STATE || "";
     const bmhq = row.bmhq || row["BM HQ"] || row["BM HQ "] || "";
@@ -122,4 +123,4 @@ function logout() {
 }
 
 /* INIT */
-loadData();
+window.onload = loadData;

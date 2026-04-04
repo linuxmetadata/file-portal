@@ -9,7 +9,7 @@ async function loadData() {
 }
 
 /* =========================
-   APPLY FILTERS (FIXED)
+   APPLY FILTERS
 ========================= */
 function applyFilters() {
 
@@ -36,7 +36,6 @@ function applyFilters() {
     );
   });
 
-  /* ✅ CARD FILTER */
   if (activeCardFilter) {
     data = data.filter(row => {
       if (activeCardFilter === "awsDone") return row.awsFile;
@@ -48,11 +47,11 @@ function applyFilters() {
   }
 
   renderTable(data);
-  updateCards(data); // 🔥 IMPORTANT: pass filtered data only
+  updateCards(data);
 }
 
 /* =========================
-   TABLE RENDER
+   TABLE RENDER (FINAL)
 ========================= */
 function renderTable(data) {
 
@@ -74,25 +73,21 @@ function renderTable(data) {
         <td>${code}</td>
         <td>${name}</td>
 
+        <!-- SALES -->
         <td>
-          <input placeholder="Enter value">
+          <input 
+            id="sales_${code}" 
+            placeholder="Enter value"
+            value="${row.sales || ""}"
+            ${row.awsFile || row.sssFile ? "disabled" : ""}
+          >
         </td>
 
-        <td>
-          ${row.awsFile
-            ? `<button class="view" onclick="viewFile('${row.awsFile}')">View</button>
-               ${isAdmin() ? `<button class="delete" onclick="deleteFile('${code}','aws')">Delete</button>` : ""}`
-            : `<button class="upload" onclick="upload('${code}','aws')">Upload AWS</button>`
-          }
-        </td>
+        <!-- AWS -->
+        <td>${getUploadUI(row, code, "aws")}</td>
 
-        <td>
-          ${row.sssFile
-            ? `<button class="view" onclick="viewFile('${row.sssFile}')">View</button>
-               ${isAdmin() ? `<button class="delete" onclick="deleteFile('${code}','sss')">Delete</button>` : ""}`
-            : `<button class="upload" onclick="upload('${code}','sss')">Upload SSS</button>`
-          }
-        </td>
+        <!-- SSS -->
+        <td>${getUploadUI(row, code, "sss")}</td>
       </tr>
     `;
   });
@@ -101,7 +96,94 @@ function renderTable(data) {
 }
 
 /* =========================
-   CARD UPDATE (FINAL FIX)
+   UPLOAD UI FLOW
+========================= */
+function getUploadUI(row, code, type) {
+
+  const fileKey = type === "aws" ? row.awsFile : row.sssFile;
+
+  if (fileKey) {
+    return `
+      <button class="view" onclick="viewFile('${fileKey}')">View</button>
+      ${isAdmin() ? `<button class="delete" onclick="deleteFile('${code}','${type}')">Delete</button>` : ""}
+    `;
+  }
+
+  if (window[`temp_${type}_${code}`]) {
+    return `
+      <button class="view" onclick="previewFile('${type}','${code}')">View</button>
+      <button class="upload" onclick="submitFile('${code}','${type}')">Submit</button>
+    `;
+  }
+
+  return `<button class="upload" onclick="chooseFile('${code}','${type}')">Upload ${type.toUpperCase()}</button>`;
+}
+
+/* =========================
+   CHOOSE FILE
+========================= */
+function chooseFile(code, type) {
+
+  const salesInput = document.getElementById(`sales_${code}`);
+
+  if (!salesInput.value) {
+    alert("Sales is mandatory before upload");
+    return;
+  }
+
+  if (salesInput.disabled) {
+    alert("Already uploaded. Cannot modify.");
+    return;
+  }
+
+  const input = document.createElement("input");
+  input.type = "file";
+
+  input.onchange = () => {
+    window[`temp_${type}_${code}`] = input.files[0];
+    applyFilters();
+  };
+
+  input.click();
+}
+
+/* =========================
+   PREVIEW
+========================= */
+function previewFile(type, code) {
+  const file = window[`temp_${type}_${code}`];
+  const url = URL.createObjectURL(file);
+  window.open(url);
+}
+
+/* =========================
+   SUBMIT (UPDATED)
+========================= */
+async function submitFile(code, type) {
+
+  const file = window[`temp_${type}_${code}`];
+  if (!file) return;
+
+  const salesValue = document.getElementById(`sales_${code}`).value;
+
+  const form = new FormData();
+  form.append("file", file);
+  form.append("code", code);
+  form.append("type", type);
+  form.append("sales", salesValue); // ✅ FIX
+
+  await fetch("/data/upload", {
+    method: "POST",
+    body: form
+  });
+
+  delete window[`temp_${type}_${code}`];
+
+  loadData();
+}
+
+/* =========================
+   CARDS
 ========================= */
 function updateCards(data) {
 
@@ -131,18 +213,14 @@ function updateCards(data) {
 }
 
 /* =========================
-   CARD CLICK FILTER
+   OTHER
 ========================= */
 function filterByCard(type) {
   activeCardFilter = type;
   applyFilters();
 }
 
-/* =========================
-   CLEAR FILTERS
-========================= */
 function clearFilters() {
-
   activeCardFilter = null;
 
   ["f_division","f_state","f_bmhq","f_code","f_name"].forEach(id => {
@@ -153,59 +231,23 @@ function clearFilters() {
   applyFilters();
 }
 
-/* =========================
-   UPLOAD
-========================= */
-function upload(code, type) {
-  const input = document.createElement("input");
-  input.type = "file";
-
-  input.onchange = async () => {
-    const form = new FormData();
-    form.append("file", input.files[0]);
-    form.append("code", code);
-    form.append("type", type);
-
-    await fetch("/data/upload", { method: "POST", body: form });
-
-    loadData();
-  };
-
-  input.click();
-}
-
-/* =========================
-   VIEW
-========================= */
 function viewFile(url) {
   window.open(url);
 }
 
-/* =========================
-   DELETE
-========================= */
 function deleteFile(code, type) {
   fetch(`/data/delete/${code}/${type}`, { method: "DELETE" });
   loadData();
 }
 
-/* =========================
-   ROLE
-========================= */
 function isAdmin() {
   return localStorage.getItem("role") === "admin";
 }
 
-/* =========================
-   DOWNLOAD
-========================= */
 function downloadExcel() {
   window.open("/data/download/excel");
 }
 
-/* =========================
-   LOGOUT
-========================= */
 function logout() {
   localStorage.clear();
   window.location = "/";

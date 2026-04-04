@@ -4,7 +4,6 @@ let activeCardFilter = null;
 async function loadData() {
   const res = await fetch("/data/list");
   fullData = await res.json();
-
   applyFilters();
 }
 
@@ -51,7 +50,7 @@ function applyFilters() {
 }
 
 /* =========================
-   TABLE RENDER (FINAL)
+   TABLE RENDER
 ========================= */
 function renderTable(data) {
 
@@ -79,7 +78,7 @@ function renderTable(data) {
             id="sales_${code}" 
             placeholder="Enter value"
             value="${row.sales || ""}"
-            ${row.awsFile || row.sssFile ? "disabled" : ""}
+            ${(!isAdmin() && (row.awsFile || row.sssFile)) ? "disabled" : ""}
           >
         </td>
 
@@ -96,7 +95,7 @@ function renderTable(data) {
 }
 
 /* =========================
-   UPLOAD UI FLOW
+   UPLOAD UI
 ========================= */
 function getUploadUI(row, code, type) {
 
@@ -120,20 +119,26 @@ function getUploadUI(row, code, type) {
 }
 
 /* =========================
-   CHOOSE FILE
+   CHOOSE FILE (FINAL FIX)
 ========================= */
 function chooseFile(code, type) {
 
   const salesInput = document.getElementById(`sales_${code}`);
+  const row = fullData.find(r => r.code == code);
 
-  if (!salesInput.value) {
-    alert("Sales is mandatory before upload");
-    return;
-  }
+  // 🔴 USER RULES
+  if (!isAdmin()) {
 
-  if (salesInput.disabled) {
-    alert("Already uploaded. Cannot modify.");
-    return;
+    if (!salesInput.value) {
+      alert("Sales is mandatory before upload");
+      return;
+    }
+
+    // ❌ block second upload
+    if (row.awsFile || row.sssFile) {
+      alert("Already uploaded. Cannot upload another type.");
+      return;
+    }
   }
 
   const input = document.createElement("input");
@@ -157,7 +162,7 @@ function previewFile(type, code) {
 }
 
 /* =========================
-   SUBMIT (UPDATED)
+   SUBMIT
 ========================= */
 async function submitFile(code, type) {
 
@@ -170,7 +175,7 @@ async function submitFile(code, type) {
   form.append("file", file);
   form.append("code", code);
   form.append("type", type);
-  form.append("sales", salesValue); // ✅ FIX
+  form.append("sales", salesValue);
 
   await fetch("/data/upload", {
     method: "POST",
@@ -178,7 +183,6 @@ async function submitFile(code, type) {
   });
 
   delete window[`temp_${type}_${code}`];
-
   loadData();
 }
 
@@ -194,22 +198,21 @@ function updateCards(data) {
     if (row.sssFile) sssDone++; else sssPending++;
   });
 
-  const total = data.length;
-  const safeTotal = total === 0 ? 1 : total;
+  const total = data.length || 1;
 
   document.getElementById("awsDone").innerText =
-    `${awsDone} (${Math.round((awsDone/safeTotal)*100)}%)`;
+    `${awsDone} (${Math.round((awsDone/total)*100)}%)`;
 
   document.getElementById("awsPending").innerText =
-    `${awsPending} (${Math.round((awsPending/safeTotal)*100)}%)`;
+    `${awsPending} (${Math.round((awsPending/total)*100)}%)`;
 
   document.getElementById("sssDone").innerText =
-    `${sssDone} (${Math.round((sssDone/safeTotal)*100)}%)`;
+    `${sssDone} (${Math.round((sssDone/total)*100)}%)`;
 
   document.getElementById("sssPending").innerText =
-    `${sssPending} (${Math.round((sssPending/safeTotal)*100)}%)`;
+    `${sssPending} (${Math.round((sssPending/total)*100)}%)`;
 
-  document.getElementById("total").innerText = total;
+  document.getElementById("total").innerText = data.length;
 }
 
 /* =========================

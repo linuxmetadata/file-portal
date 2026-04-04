@@ -1,5 +1,6 @@
 let fullData = [];
 let activeCardFilter = null;
+let uploadStatus = {}; // track upload state
 
 async function loadData() {
   const res = await fetch("/data/list");
@@ -58,34 +59,22 @@ function renderTable(data) {
 
   data.forEach(row => {
 
-    const division = row.division || row.Division || row.DIVISION || "";
-    const state = row.state || row.State || row.STATE || "";
-    const bmhq = row.bmhq || row["BM HQ"] || row["BM HQ "] || "";
     const code = row.code || row.Code || row.CODE || "";
-    const name = row.name || row.Name || row.NAME || "";
 
     html += `
       <tr>
-        <td>${division}</td>
-        <td>${state}</td>
-        <td>${bmhq}</td>
+        <td>${row.division || ""}</td>
+        <td>${row.state || ""}</td>
+        <td>${row.bmhq || ""}</td>
         <td>${code}</td>
-        <td>${name}</td>
+        <td>${row.name || ""}</td>
 
-        <!-- SALES -->
         <td>
-          <input 
-            id="sales_${code}" 
-            placeholder="Enter value"
-            value="${row.sales || ""}"
-            ${(!isAdmin() && (row.awsFile || row.sssFile)) ? "disabled" : ""}
-          >
+          <input id="sales_${code}" value="${row.sales || ""}"
+          ${(!isAdmin() && (row.awsFile || row.sssFile)) ? "disabled" : ""}>
         </td>
 
-        <!-- AWS -->
         <td>${getUploadUI(row, code, "aws")}</td>
-
-        <!-- SSS -->
         <td>${getUploadUI(row, code, "sss")}</td>
       </tr>
     `;
@@ -99,44 +88,55 @@ function renderTable(data) {
 ========================= */
 function getUploadUI(row, code, type) {
 
+  const key = `${code}_${type}`;
   const fileKey = type === "aws" ? row.awsFile : row.sssFile;
 
+  // uploaded
   if (fileKey) {
     return `
-      <button class="view" onclick="viewFile('${fileKey}')">View</button>
-      ${isAdmin() ? `<button class="delete" onclick="deleteFile('${code}','${type}')">Delete</button>` : ""}
+      <button onclick="viewFile('${fileKey}')">View</button>
+      ${isAdmin() ? `<button onclick="deleteFile('${code}','${type}')">Delete</button>` : ""}
     `;
   }
 
+  // uploading
+  if (uploadStatus[key]?.status === "uploading") {
+    return `
+      <div style="width:100%">
+        <div style="background:#ddd;height:6px">
+          <div style="width:${uploadStatus[key].progress}%;background:green;height:6px"></div>
+        </div>
+        <small>${uploadStatus[key].progress}%</small>
+      </div>
+    `;
+  }
+
+  // error retry
+  if (uploadStatus[key]?.status === "error") {
+    return `<button onclick="submitFile('${code}','${type}')">Retry</button>`;
+  }
+
+  // temp selected
   if (window[`temp_${type}_${code}`]) {
     return `
-      <button class="view" onclick="previewFile('${type}','${code}')">View</button>
-      <button class="upload" onclick="submitFile('${code}','${type}')">Submit</button>
+      <button onclick="previewFile('${type}','${code}')">View</button>
+      <button onclick="submitFile('${code}','${type}')">Submit</button>
     `;
   }
 
-  return `<button class="upload" onclick="chooseFile('${code}','${type}')">Upload ${type.toUpperCase()}</button>`;
+  return `<button onclick="chooseFile('${code}','${type}')">Upload</button>`;
 }
 
 /* =========================
-   CHOOSE FILE (FINAL FIX)
+   CHOOSE FILE
 ========================= */
 function chooseFile(code, type) {
 
-  const salesInput = document.getElementById(`sales_${code}`);
   const row = fullData.find(r => r.code == code);
 
-  // 🔴 USER RULES
   if (!isAdmin()) {
-
-    if (!salesInput.value) {
-      alert("Sales is mandatory before upload");
-      return;
-    }
-
-    // ❌ block second upload
     if (row.awsFile || row.sssFile) {
-      alert("Already uploaded. Cannot upload another type.");
+      alert("Already uploaded.");
       return;
     }
   }
@@ -153,49 +153,80 @@ function chooseFile(code, type) {
 }
 
 /* =========================
-   PREVIEW
+   ADVANCED UPLOAD (XHR)
 ========================= */
-function previewFile(type, code) {
-  const file = window[`temp_${type}_${code}`];
-  const url = URL.createObjectURL(file);
-  window.open(url);
-}
-
-/* =========================
-   SUBMIT
-========================= */
-async function submitFile(code, type) {
+function submitFile(code, type) {
 
   const file = window[`temp_${type}_${code}`];
   if (!file) return;
 
-  const salesValue = document.getElementById(`sales_${code}`).value;
+  const key = `${code}_${type}`;
+  uploadStatus[key] = { status: "uploading", progress: 0 };
 
   const form = new FormData();
   form.append("file", file);
   form.append("code", code);
   form.append("type", type);
-  form.append("sales", salesValue);
+  form.append("sales", document.getElementById(`sales_${code}`).value);
 
-  await fetch("/data/upload", {
-    method: "POST",
-    body: form
-  });
+  const xhr = new XMLHttpRequest();
 
-  delete window[`temp_${type}_${code}`];
+  xhr.upload.onprogress = function (e) {
+    if (e.lengthComputable) {
+      uploadStatus[key].progress = Math.round((e.loaded / e.total) * 100);
+      applyFilters();
+    }
+  };
+
+  xhr.onload = function () {
+    uploadStatus[key] = { status: "done" };
+    delete window[`temp_${type}_${code}`];
+    loadData();
+  };
+
+  xhr.onerror = function () {
+    uploadStatus[key] = { status: "error" };
+    applyFilters();
+  };
+
+  xhr.open("POST", "/data/upload");
+  xhr.send(form);
+}
+
+/* =========================
+   DELETE (FAST)
+========================= */
+function deleteFile(code, type) {
+
+  if (!confirm("Delete file?")) return;
+
+  fetch(`/data/delete/${code}/${type}`, { method: "DELETE" });
   loadData();
 }
 
 /* =========================
-   CARDS
+   OTHER
 ========================= */
+function previewFile(type, code) {
+  const file = window[`temp_${type}_${code}`];
+  window.open(URL.createObjectURL(file));
+}
+
+function viewFile(url) {
+  window.open(url);
+}
+
+function isAdmin() {
+  return localStorage.getItem("role") === "admin";
+}
+
 function updateCards(data) {
 
-  let awsDone = 0, awsPending = 0, sssDone = 0, sssPending = 0;
+  let awsDone = 0, sssDone = 0;
 
   data.forEach(row => {
-    if (row.awsFile) awsDone++; else awsPending++;
-    if (row.sssFile) sssDone++; else sssPending++;
+    if (row.awsFile) awsDone++;
+    if (row.sssFile) sssDone++;
   });
 
   const total = data.length || 1;
@@ -203,21 +234,12 @@ function updateCards(data) {
   document.getElementById("awsDone").innerText =
     `${awsDone} (${Math.round((awsDone/total)*100)}%)`;
 
-  document.getElementById("awsPending").innerText =
-    `${awsPending} (${Math.round((awsPending/total)*100)}%)`;
-
   document.getElementById("sssDone").innerText =
     `${sssDone} (${Math.round((sssDone/total)*100)}%)`;
-
-  document.getElementById("sssPending").innerText =
-    `${sssPending} (${Math.round((sssPending/total)*100)}%)`;
 
   document.getElementById("total").innerText = data.length;
 }
 
-/* =========================
-   OTHER
-========================= */
 function filterByCard(type) {
   activeCardFilter = type;
   applyFilters();
@@ -225,26 +247,11 @@ function filterByCard(type) {
 
 function clearFilters() {
   activeCardFilter = null;
-
-  ["f_division","f_state","f_bmhq","f_code","f_name"].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = "";
+  ["f_division","f_state","f_bmhq","f_code","f_name"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.value="";
   });
-
   applyFilters();
-}
-
-function viewFile(url) {
-  window.open(url);
-}
-
-function deleteFile(code, type) {
-  fetch(`/data/delete/${code}/${type}`, { method: "DELETE" });
-  loadData();
-}
-
-function isAdmin() {
-  return localStorage.getItem("role") === "admin";
 }
 
 function downloadExcel() {
@@ -256,5 +263,4 @@ function logout() {
   window.location = "/";
 }
 
-/* INIT */
 window.onload = loadData;

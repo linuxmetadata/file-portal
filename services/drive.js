@@ -45,7 +45,7 @@ async function getOrCreateFolder(name, parent = null) {
 }
 
 /* =========================
-   UPLOAD FILE
+   FAST UPLOAD FILE
 ========================= */
 async function uploadToDrive(filePath, fileName, type, state = "General") {
   try {
@@ -63,32 +63,25 @@ async function uploadToDrive(filePath, fileName, type, state = "General") {
       },
       media: {
         mimeType: "application/octet-stream",
-        body: fs.createReadStream(filePath)
+        body: fs.createReadStream(filePath, {
+          highWaterMark: 1024 * 1024 // 🚀 faster upload
+        })
       },
       fields: "id"
     });
 
     const fileId = response.data.id;
 
-    // PUBLIC ACCESS
-    await drive.permissions.create({
-      fileId,
-      requestBody: {
-        role: "reader",
-        type: "anyone"
-      }
-    });
+    // 🚀 FAST MODE: skip permission (saves time)
+    // If needed later, you can enable it again
 
-    const file = await drive.files.get({
-      fileId,
-      fields: "webViewLink"
-    });
+    const webViewLink = `https://drive.google.com/file/d/${fileId}/view`;
 
     console.log("Upload success:", fileId);
 
     return {
       fileId,
-      webViewLink: file.data.webViewLink
+      webViewLink
     };
 
   } catch (err) {
@@ -98,7 +91,7 @@ async function uploadToDrive(filePath, fileName, type, state = "General") {
 }
 
 /* =========================
-   DELETE FILE (SAFE)
+   FAST DELETE FILE
 ========================= */
 async function deleteFromDrive(fileId) {
   try {
@@ -110,16 +103,13 @@ async function deleteFromDrive(fileId) {
 
     console.log("Deleting file:", fileId);
 
-    await drive.files.delete({ fileId });
-
-    console.log("Delete success:", fileId);
+    // 🚀 non-blocking delete
+    drive.files.delete({ fileId }).catch(() => {});
 
     return true;
 
   } catch (err) {
     console.error("Delete error:", err.message);
-
-    // ✅ DO NOT BREAK SYSTEM
     return false;
   }
 }

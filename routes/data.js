@@ -3,7 +3,13 @@ const multer = require("multer");
 const XLSX = require("xlsx");
 const path = require("path");
 const fs = require("fs");
-const pdfParse = require("pdf-parse");
+
+let pdfParse;
+try {
+  pdfParse = require("pdf-parse");
+} catch (e) {
+  pdfParse = null;
+}
 
 const { uploadToDrive, deleteFromDrive } = require("../services/drive");
 
@@ -16,10 +22,7 @@ const upload = multer({ dest: "uploads/" });
 function loadExcel() {
   const filePath = path.join(__dirname, "../data/source.xlsx");
 
-  if (!fs.existsSync(filePath)) {
-    console.log("Excel file missing");
-    return [];
-  }
+  if (!fs.existsSync(filePath)) return [];
 
   const workbook = XLSX.readFile(filePath);
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -39,24 +42,36 @@ async function validateFile(file) {
   const ext = file.originalname.split(".").pop().toLowerCase();
 
   const allowed = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html"];
-
   const imageTypes = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
 
   // ❌ Reject images
   if (imageTypes.includes(ext)) {
-    throw new Error("Unsupported Format");
+    throw new Error("UNSUPPORTED FORMAT");
   }
 
   // ❌ Reject unknown
   if (!allowed.includes(ext)) {
-    throw new Error("Unsupported Format");
+    throw new Error("UNSUPPORTED FORMAT");
   }
 
   // ✅ PDF validation
   if (ext === "pdf") {
-    const data = await pdfParse(fs.readFileSync(file.path));
 
-    if (!data.text || data.text.trim().length < 20) {
+    // If library missing → treat as invalid
+    if (!pdfParse) {
+      throw new Error("INVALID PDF");
+    }
+
+    try {
+      const buffer = fs.readFileSync(file.path);
+      const data = await pdfParse(buffer);
+
+      // scanned / blank PDF
+      if (!data.text || data.text.trim().length < 20) {
+        throw new Error("INVALID PDF");
+      }
+
+    } catch (err) {
       throw new Error("INVALID PDF");
     }
   }
@@ -92,7 +107,7 @@ router.get("/list", (req, res) => {
 });
 
 /* =========================
-   UPLOAD (WITH VALIDATION)
+   UPLOAD
 ========================= */
 router.post("/upload", upload.single("file"), async (req, res) => {
 
@@ -100,10 +115,10 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     const { code, type, sales } = req.body;
 
     if (!code || !type || !req.file) {
-      return res.status(400).json({ error: "Missing data" });
+      return res.status(400).json({ error: "UPLOAD FAILED" });
     }
 
-    // 🚀 VALIDATE FILE
+    // ✅ VALIDATE
     await validateFile(req.file);
 
     const excelData = loadExcel();
@@ -128,28 +143,34 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       uploadedFiles.push(record);
     }
 
-    // ✅ KEEP SALES
-    record.sales = (sales !== undefined && sales !== null) ? sales : record.sales || "";
+    // ✅ SAVE SALES CORRECTLY
+    if (sales !== undefined) {
+      record.sales = sales;
+    }
 
     record[type + "File"] = driveFile.webViewLink;
     record[type + "FileId"] = driveFile.fileId;
 
-    res.json({
-      success: true,
-      file: driveFile.webViewLink
-    });
+    res.json({ success: true });
 
   } catch (err) {
 
-    console.error(err.message);
+    console.error("Upload Error:", err.message);
 
     if (req.file && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }
 
-    res.status(400).json({
-      error: err.message || "Upload failed"
-    });
+    // ✅ CLEAN ERROR ONLY
+    if (err.message === "INVALID PDF") {
+      return res.status(400).json({ error: "INVALID PDF" });
+    }
+
+    if (err.message === "UNSUPPORTED FORMAT") {
+      return res.status(400).json({ error: "UNSUPPORTED FORMAT" });
+    }
+
+    return res.status(400).json({ error: "UPLOAD FAILED" });
   }
 });
 
@@ -179,12 +200,12 @@ router.delete("/delete/:code/:type", async (req, res) => {
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Delete failed" });
+    res.status(500).json({ error: "DELETE FAILED" });
   }
 });
 
 /* =========================
-   DOWNLOAD EXCEL
+   DOWNLOAD
 ========================= */
 router.get("/download/excel", (req, res) => {
 

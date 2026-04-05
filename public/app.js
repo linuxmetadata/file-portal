@@ -12,23 +12,37 @@ async function loadData() {
 }
 
 /* =========================
-   SHOW MESSAGE (SUCCESS + ERROR)
+   SHOW MESSAGE (CARD + ANIMATION)
 ========================= */
 function showMessage(message, isError = false) {
 
   const box = document.getElementById("errorBox");
+  const card = document.getElementById("errorCard");
 
-  if (!box) {
+  if (!box || !card) {
     alert(message);
     return;
   }
 
-  box.innerText = message;
   box.style.display = "block";
-  box.style.background = isError ? "#ff4d4d" : "#28a745";
+
+  card.classList.remove("message-show", "message-hide");
+
+  card.innerText = message;
+  card.style.background = isError ? "#e74c3c" : "#27ae60";
+
+  // show animation
+  card.classList.add("message-show");
 
   setTimeout(() => {
-    box.style.display = "none";
+
+    card.classList.remove("message-show");
+    card.classList.add("message-hide");
+
+    setTimeout(() => {
+      box.style.display = "none";
+    }, 400);
+
   }, 3000);
 }
 
@@ -169,7 +183,7 @@ function chooseFile(code, type) {
 }
 
 /* =========================
-   SUBMIT FILE (FINAL FIX)
+   SUBMIT FILE (FIXED RESET)
 ========================= */
 function submitFile(code, type) {
 
@@ -209,7 +223,11 @@ function submitFile(code, type) {
       } catch {}
 
       showMessage(errorMsg, true);
+
+      // ✅ FULL RESET
       uploadStatus[key] = {};
+      delete window[`temp_${type}_${code}`];
+
       applyFilters();
       return;
     }
@@ -218,12 +236,18 @@ function submitFile(code, type) {
 
     uploadStatus[key] = {};
     delete window[`temp_${type}_${code}`];
+
     loadData();
   };
 
   xhr.onerror = function () {
+
     showMessage("Network Error", true);
+
+    // ✅ FULL RESET
     uploadStatus[key] = {};
+    delete window[`temp_${type}_${code}`];
+
     applyFilters();
   };
 

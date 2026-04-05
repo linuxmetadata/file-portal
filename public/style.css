@@ -1,8 +1,9 @@
+/* BASE */
 body {
   font-family: Arial;
   margin: 0;
   background: #f4f6fb;
-  overflow-x: hidden; /* prevent scroll */
+  overflow-x: hidden;
 }
 
 /* HEADER */
@@ -28,16 +29,17 @@ body {
   border-radius: 12px;
   color: white;
   text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.03);
 }
 
 .green { background: #28a745; }
 .red { background: #dc3545; }
 .blue { background: #007bff; }
-
-/* REMOVE OLD FILTER BAR (not needed anymore) */
-.filters {
-  display: none;
-}
 
 /* TABLE */
 table {
@@ -45,8 +47,7 @@ table {
   margin: auto;
   border-collapse: collapse;
   background: white;
-
-  table-layout: fixed; /* 🔥 IMPORTANT */
+  table-layout: fixed;
 }
 
 /* HEADER CELLS */
@@ -57,11 +58,10 @@ th {
   font-size: 13px;
   text-align: center;
   vertical-align: top;
-
   word-wrap: break-word;
 }
 
-/* FILTER INPUTS INSIDE HEADER */
+/* FILTER INPUTS */
 th input {
   width: 100%;
   margin-top: 5px;
@@ -79,13 +79,12 @@ td {
   text-align: center;
   font-size: 13px;
 
-  /* 🔥 TEXT WRAP FIX */
   white-space: normal;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
 
-/* COLUMN WIDTHS (BALANCED) */
+/* COLUMN WIDTHS */
 th:nth-child(1), td:nth-child(1) { width: 8%; }
 th:nth-child(2), td:nth-child(2) { width: 10%; }
 th:nth-child(3), td:nth-child(3) { width: 12%; }
@@ -103,8 +102,61 @@ button {
   cursor: pointer;
   font-size: 12px;
   white-space: nowrap;
+  transition: 0.2s ease;
+}
+
+button:hover {
+  opacity: 0.85;
 }
 
 .upload { background: green; color: white; }
 .view { background: blue; color: white; }
 .delete { background: red; color: white; }
+
+/* =========================
+   ✅ MESSAGE CARD (NEW)
+========================= */
+
+.message-card {
+  border-radius: 10px;
+  padding: 15px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+
+  opacity: 0;
+  transform: translateY(-15px);
+}
+
+/* SHOW ANIMATION */
+.message-show {
+  animation: slideDownFade 0.4s ease forwards;
+}
+
+/* HIDE ANIMATION */
+.message-hide {
+  animation: slideUpFade 0.4s ease forwards;
+}
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}

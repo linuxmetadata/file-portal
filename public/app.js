@@ -152,7 +152,7 @@ function chooseFile(code, type) {
 }
 
 /* =========================
-   PREVIEW
+   PREVIEW (FULL FIX)
 ========================= */
 function openPreview(type, code) {
 
@@ -168,10 +168,12 @@ function openPreview(type, code) {
 
   const ext = file.name.split(".").pop().toLowerCase();
 
+  // PDF
   if (ext === "pdf") {
     frame.src = URL.createObjectURL(file);
   }
 
+  // EXCEL
   else if (ext === "xlsx" || ext === "xls") {
 
     const reader = new FileReader();
@@ -181,26 +183,39 @@ function openPreview(type, code) {
       const workbook = XLSX.read(data, { type: "array" });
 
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      frame.srcdoc = XLSX.utils.sheet_to_html(sheet);
+      const html = XLSX.utils.sheet_to_html(sheet);
+
+      frame.srcdoc = html;
     };
 
     reader.readAsArrayBuffer(file);
   }
 
+  // HTML
   else if (ext === "html") {
 
     const reader = new FileReader();
-    reader.onload = e => frame.srcdoc = e.target.result;
+
+    reader.onload = function (e) {
+      frame.srcdoc = e.target.result;
+    };
+
     reader.readAsText(file);
   }
 
+  // TXT
   else if (ext === "txt") {
 
     const reader = new FileReader();
-    reader.onload = e => frame.srcdoc = `<pre style="padding:20px">${e.target.result}</pre>`;
+
+    reader.onload = function (e) {
+      frame.srcdoc = `<pre style="padding:20px">${e.target.result}</pre>`;
+    };
+
     reader.readAsText(file);
   }
 
+  // FALLBACK
   else {
     frame.srcdoc = "<h3 style='padding:20px'>Preview not available</h3>";
   }
@@ -214,14 +229,10 @@ function openPreview(type, code) {
 function closePreview() {
   document.getElementById("filePreviewModal").classList.add("hidden");
   document.getElementById("previewFrame").src = "";
-
-  currentPreviewFile = null;
-  currentPreviewCode = null;
-  currentPreviewType = null;
 }
 
 /* =========================
-   SUBMIT (AUTO REFRESH FIX)
+   SUBMIT (FIXED)
 ========================= */
 function submitFile() {
 
@@ -247,7 +258,6 @@ function submitFile() {
 
       delete window[`temp_${currentPreviewType}_${currentPreviewCode}`];
       closePreview();
-      applyFilters();
       return;
     }
 
@@ -255,18 +265,10 @@ function submitFile() {
 
     delete window[`temp_${currentPreviewType}_${currentPreviewCode}`];
 
-    // 🔥 INSTANT UI UPDATE
-    applyFilters();
-
-    // 🔄 BACKEND SYNC
-    setTimeout(loadData, 500);
-
     closePreview();
+    loadData();
   })
-  .catch(() => {
-    showMessage("Upload error", true);
-    closePreview();
-  });
+  .catch(() => showMessage("Upload error", true));
 }
 
 /* =========================
@@ -274,12 +276,8 @@ function submitFile() {
 ========================= */
 function deleteFile(code, type) {
   if (!confirm("Delete file?")) return;
-
   fetch(`/data/delete/${code}/${type}`, { method: "DELETE" });
-
-  // instant refresh
-  applyFilters();
-  setTimeout(loadData, 500);
+  loadData();
 }
 
 /* =========================

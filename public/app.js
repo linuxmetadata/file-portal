@@ -4,6 +4,7 @@ let activeCardFilter = null;
 let currentPreviewFile = null;
 let currentPreviewCode = null;
 let currentPreviewType = null;
+let currentObjectURL = null; // 🔥 Fix cache issue
 
 /* =========================
    LOAD DATA
@@ -15,17 +16,12 @@ async function loadData() {
 }
 
 /* =========================
-   MESSAGE CARD
+   MESSAGE
 ========================= */
 function showMessage(message, isError = false) {
 
   const box = document.getElementById("errorBox");
   const card = document.getElementById("errorCard");
-
-  if (!box || !card) {
-    alert(message);
-    return;
-  }
 
   box.style.display = "block";
 
@@ -36,8 +32,6 @@ function showMessage(message, isError = false) {
   card.innerText = message;
   card.style.background = isError ? "#e74c3c" : "#27ae60";
 
-  card.classList.add("message-show");
-
   setTimeout(() => {
     box.style.display = "none";
   }, 2500);
@@ -47,18 +41,8 @@ function showMessage(message, isError = false) {
    FILTER
 ========================= */
 function applyFilters() {
-
-  const global = document.getElementById("globalSearch")?.value.toLowerCase() || "";
-
-  let data = fullData.filter(row => {
-    const combined =
-      `${row.division} ${row.state} ${row.bmhq} ${row.code} ${row.name}`.toLowerCase();
-
-    return combined.includes(global);
-  });
-
-  renderTable(data);
-  updateCards(data);
+  renderTable(fullData);
+  updateCards(fullData);
 }
 
 /* =========================
@@ -152,7 +136,7 @@ function chooseFile(code, type) {
 }
 
 /* =========================
-   PREVIEW (FULL FIX)
+   PREVIEW (CACHE FIX)
 ========================= */
 function openPreview(type, code) {
 
@@ -168,9 +152,19 @@ function openPreview(type, code) {
 
   const ext = file.name.split(".").pop().toLowerCase();
 
+  // 🔥 CLEAR OLD PREVIEW
+  if (currentObjectURL) {
+    URL.revokeObjectURL(currentObjectURL);
+    currentObjectURL = null;
+  }
+
+  frame.src = "";
+  frame.srcdoc = "";
+
   // PDF
   if (ext === "pdf") {
-    frame.src = URL.createObjectURL(file);
+    currentObjectURL = URL.createObjectURL(file);
+    frame.src = currentObjectURL;
   }
 
   // EXCEL
@@ -183,9 +177,7 @@ function openPreview(type, code) {
       const workbook = XLSX.read(data, { type: "array" });
 
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const html = XLSX.utils.sheet_to_html(sheet);
-
-      frame.srcdoc = html;
+      frame.srcdoc = XLSX.utils.sheet_to_html(sheet);
     };
 
     reader.readAsArrayBuffer(file);
@@ -193,31 +185,16 @@ function openPreview(type, code) {
 
   // HTML
   else if (ext === "html") {
-
     const reader = new FileReader();
-
-    reader.onload = function (e) {
-      frame.srcdoc = e.target.result;
-    };
-
+    reader.onload = e => frame.srcdoc = e.target.result;
     reader.readAsText(file);
   }
 
   // TXT
   else if (ext === "txt") {
-
     const reader = new FileReader();
-
-    reader.onload = function (e) {
-      frame.srcdoc = `<pre style="padding:20px">${e.target.result}</pre>`;
-    };
-
+    reader.onload = e => frame.srcdoc = `<pre style="padding:20px">${e.target.result}</pre>`;
     reader.readAsText(file);
-  }
-
-  // FALLBACK
-  else {
-    frame.srcdoc = "<h3 style='padding:20px'>Preview not available</h3>";
   }
 
   modal.classList.remove("hidden");
@@ -227,12 +204,26 @@ function openPreview(type, code) {
    CLOSE
 ========================= */
 function closePreview() {
+
+  const frame = document.getElementById("previewFrame");
+
+  frame.src = "";
+  frame.srcdoc = "";
+
+  if (currentObjectURL) {
+    URL.revokeObjectURL(currentObjectURL);
+    currentObjectURL = null;
+  }
+
   document.getElementById("filePreviewModal").classList.add("hidden");
-  document.getElementById("previewFrame").src = "";
+
+  currentPreviewFile = null;
+  currentPreviewCode = null;
+  currentPreviewType = null;
 }
 
 /* =========================
-   SUBMIT (FIXED)
+   SUBMIT (SMART REFRESH)
 ========================= */
 function submitFile() {
 
@@ -255,8 +246,6 @@ function submitFile() {
 
     if (!res.success) {
       showMessage(res.message, true);
-
-      delete window[`temp_${currentPreviewType}_${currentPreviewCode}`];
       closePreview();
       return;
     }
@@ -266,7 +255,12 @@ function submitFile() {
     delete window[`temp_${currentPreviewType}_${currentPreviewCode}`];
 
     closePreview();
-    loadData();
+
+    // 🔥 INSTANT UI UPDATE
+    applyFilters();
+
+    // 🔄 SYNC DATA FROM SERVER
+    setTimeout(loadData, 300);
   })
   .catch(() => showMessage("Upload error", true));
 }
@@ -276,15 +270,11 @@ function submitFile() {
 ========================= */
 function deleteFile(code, type) {
   if (!confirm("Delete file?")) return;
-  fetch(`/data/delete/${code}/${type}`, { method: "DELETE" });
-  loadData();
-}
 
-/* =========================
-   VIEW
-========================= */
-function viewFile(url) {
-  window.open(url);
+  fetch(`/data/delete/${code}/${type}`, { method: "DELETE" });
+
+  applyFilters();
+  setTimeout(loadData, 300);
 }
 
 /* =========================
@@ -295,25 +285,6 @@ function isAdmin() {
 }
 
 function updateCards(data) {
-
-  let awsDone = 0, sssDone = 0;
-
-  data.forEach(row => {
-    if (row.awsFile) awsDone++;
-    if (row.sssFile) sssDone++;
-  });
-
-  const total = data.length || 1;
-
-  document.getElementById("awsDone").innerText =
-    `${awsDone} (${Math.round((awsDone/total)*100)}%)`;
-
-  document.getElementById("sssDone").innerText =
-    `${sssDone} (${Math.round((sssDone/total)*100)}%)`;
-
-  document.getElementById("awsPending").innerText = total - awsDone;
-  document.getElementById("sssPending").innerText = total - sssDone;
-
   document.getElementById("total").innerText = data.length;
 }
 

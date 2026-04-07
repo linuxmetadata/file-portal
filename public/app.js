@@ -4,7 +4,7 @@ let activeCardFilter = null;
 let currentPreviewFile = null;
 let currentPreviewCode = null;
 let currentPreviewType = null;
-let currentObjectURL = null; // 🔥 Fix cache issue
+let currentObjectURL = null;
 
 /* =========================
    LOAD DATA
@@ -136,7 +136,7 @@ function chooseFile(code, type) {
 }
 
 /* =========================
-   PREVIEW (CACHE FIX)
+   PREVIEW (FULL FIX)
 ========================= */
 function openPreview(type, code) {
 
@@ -152,7 +152,7 @@ function openPreview(type, code) {
 
   const ext = file.name.split(".").pop().toLowerCase();
 
-  // 🔥 CLEAR OLD PREVIEW
+  // CLEAR OLD
   if (currentObjectURL) {
     URL.revokeObjectURL(currentObjectURL);
     currentObjectURL = null;
@@ -183,6 +183,25 @@ function openPreview(type, code) {
     reader.readAsArrayBuffer(file);
   }
 
+  // WORD (.docx)
+  else if (ext === "docx") {
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+
+      mammoth.convertToHtml({ arrayBuffer: e.target.result })
+        .then(result => {
+          frame.srcdoc = result.value;
+        })
+        .catch(() => {
+          frame.srcdoc = "<h3 style='padding:20px'>Preview not available</h3>";
+        });
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+
   // HTML
   else if (ext === "html") {
     const reader = new FileReader();
@@ -193,8 +212,13 @@ function openPreview(type, code) {
   // TXT
   else if (ext === "txt") {
     const reader = new FileReader();
-    reader.onload = e => frame.srcdoc = `<pre style="padding:20px">${e.target.result}</pre>`;
+    reader.onload = e => frame.srcdoc = `<pre style="padding:20px;white-space:pre-wrap">${e.target.result}</pre>`;
     reader.readAsText(file);
+  }
+
+  // FALLBACK
+  else {
+    frame.srcdoc = "<h3 style='padding:20px'>Preview not available</h3>";
   }
 
   modal.classList.remove("hidden");
@@ -223,7 +247,7 @@ function closePreview() {
 }
 
 /* =========================
-   SUBMIT (SMART REFRESH)
+   SUBMIT
 ========================= */
 function submitFile() {
 
@@ -256,10 +280,7 @@ function submitFile() {
 
     closePreview();
 
-    // 🔥 INSTANT UI UPDATE
     applyFilters();
-
-    // 🔄 SYNC DATA FROM SERVER
     setTimeout(loadData, 300);
   })
   .catch(() => showMessage("Upload error", true));
@@ -275,6 +296,13 @@ function deleteFile(code, type) {
 
   applyFilters();
   setTimeout(loadData, 300);
+}
+
+/* =========================
+   VIEW
+========================= */
+function viewFile(url) {
+  window.open(url);
 }
 
 /* =========================

@@ -4,8 +4,11 @@
   <title>Dashboard</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- ✅ REQUIRED FOR EXCEL PREVIEW -->
+  <!-- Excel -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+  <!-- Word -->
+  <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 
 </head>
 
@@ -21,7 +24,6 @@
 
   <h2 id="pageTitle">Dashboard</h2>
 
-  <!-- SEARCH -->
   <input 
     id="globalSearch" 
     placeholder="Search..." 
@@ -29,7 +31,6 @@
     style="padding:8px;width:220px;border-radius:5px;border:1px solid #ccc"
   >
 
-  <!-- ACTIONS -->
   <div class="top-actions" style="display:flex;gap:10px">
     <button onclick="clearFilters()">Clear Filters</button>
     <button onclick="downloadExcel()">Download</button>
@@ -75,30 +76,11 @@
 <thead>
 <tr>
 
-  <th>
-    Division<br>
-    <input id="f_division" placeholder="Filter division" onkeyup="applyFilters()">
-  </th>
-
-  <th>
-    State<br>
-    <input id="f_state" placeholder="Filter state" onkeyup="applyFilters()">
-  </th>
-
-  <th>
-    BM HQ<br>
-    <input id="f_bmhq" placeholder="Filter BM HQ" onkeyup="applyFilters()">
-  </th>
-
-  <th>
-    Code<br>
-    <input id="f_code" placeholder="Filter code" onkeyup="applyFilters()">
-  </th>
-
-  <th>
-    Name<br>
-    <input id="f_name" placeholder="Filter name" onkeyup="applyFilters()">
-  </th>
+  <th>Division<br><input id="f_division" onkeyup="applyFilters()"></th>
+  <th>State<br><input id="f_state" onkeyup="applyFilters()"></th>
+  <th>BM HQ<br><input id="f_bmhq" onkeyup="applyFilters()"></th>
+  <th>Code<br><input id="f_code" onkeyup="applyFilters()"></th>
+  <th>Name<br><input id="f_name" onkeyup="applyFilters()"></th>
 
   <th>Sales</th>
   <th>AWS</th>
@@ -125,14 +107,13 @@
       <button onclick="closePreview()">✖</button>
     </div>
 
-    <!-- BODY -->
+    <!-- BODY (FIXED HERE) -->
     <div class="preview-body">
-      <iframe id="previewFrame"></iframe>
+      <div id="previewFrame" style="width:100%;height:600px;overflow:auto;"></div>
     </div>
 
     <!-- FOOTER -->
     <div class="preview-footer">
-      <!-- ✅ FIXED BUTTON -->
       <button onclick="submitFile()" class="submit-btn">Submit</button>
     </div>
 
@@ -145,11 +126,8 @@
 <script>
   const role = localStorage.getItem("role");
 
-  if (role === "admin") {
-    document.getElementById("pageTitle").innerText = "Admin Dashboard";
-  } else {
-    document.getElementById("pageTitle").innerText = "User Dashboard";
-  }
+  document.getElementById("pageTitle").innerText =
+    role === "admin" ? "Admin Dashboard" : "User Dashboard";
 </script>
 
 </body>

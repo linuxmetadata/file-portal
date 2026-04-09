@@ -12,6 +12,7 @@ try {
 }
 
 const { uploadToDrive, deleteFromDrive } = require("../services/drive");
+const { updateRow, getSheetData, deleteFileFromSheet } = require("../googleSheet");
 
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
@@ -30,11 +31,6 @@ function loadExcel() {
 }
 
 /* =========================
-   MEMORY STORAGE
-========================= */
-let uploadedFiles = [];
-
-/* =========================
    FILE VALIDATION
 ========================= */
 async function validateFile(file) {
@@ -44,20 +40,16 @@ async function validateFile(file) {
   const allowed = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html"];
   const imageTypes = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
 
-  // ❌ Reject images
   if (imageTypes.includes(ext)) {
     throw new Error("UNSUPPORTED FORMAT");
   }
 
-  // ❌ Reject unknown
   if (!allowed.includes(ext)) {
     throw new Error("UNSUPPORTED FORMAT");
   }
 
-  // ✅ PDF validation
   if (ext === "pdf") {
 
-    // If library missing → treat as invalid
     if (!pdfParse) {
       throw new Error("INVALID PDF");
     }
@@ -66,12 +58,11 @@ async function validateFile(file) {
       const buffer = fs.readFileSync(file.path);
       const data = await pdfParse(buffer);
 
-      // scanned / blank PDF
       if (!data.text || data.text.trim().length < 20) {
         throw new Error("INVALID PDF");
       }
 
-    } catch (err) {
+    } catch {
       throw new Error("INVALID PDF");
     }
   }
@@ -80,30 +71,41 @@ async function validateFile(file) {
 /* =========================
    LIST DATA
 ========================= */
-router.get("/list", (req, res) => {
+router.get("/list", async (req, res) => {
 
-  const excelData = loadExcel();
+  try {
+    const excelData = loadExcel();
+    const sheetRows = await getSheetData();
 
-  const finalData = excelData.map((row, index) => {
+    const finalData = excelData.map((row, index) => {
 
-    const code = row.Code || row.CODE || "";
-    const match = uploadedFiles.find(f => String(f.Code) === String(code));
+      const code = row.Code || row.CODE || "";
+      const match = sheetRows.find(r => String(r[0]) === String(code));
 
-    return {
-      id: index,
-      division: row.Division || "",
-      state: row.STATE || "",
-      bmhq: row["BM HQ"] || row.BM_HQ || "",
-      code: code,
-      name: row["Stockist Name"] || row.Name || "",
+      return {
+        id: index,
+        division: row.Division || "",
+        state: row.STATE || "",
+        bmhq: row["BM HQ"] || row.BM_HQ || "",
+        code: code,
+        name: row["Stockist Name"] || row.Name || "",
 
-      sales: match?.sales || "",
-      awsFile: match?.awsFile || null,
-      sssFile: match?.sssFile || null
-    };
-  });
+        sales: match?.[4] || "",
+        awsFile: match?.[2]
+          ? `https://drive.google.com/file/d/${match[2]}/view`
+          : null,
+        sssFile: match?.[3]
+          ? `https://drive.google.com/file/d/${match[3]}/view`
+          : null
+      };
+    });
 
-  res.json(finalData);
+    res.json(finalData);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "FAILED TO LOAD DATA" });
+  }
 });
 
 /* =========================
@@ -118,13 +120,14 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "UPLOAD FAILED" });
     }
 
-    // ✅ VALIDATE
     await validateFile(req.file);
 
     const excelData = loadExcel();
     const rowData = excelData.find(r => String(r.Code || r.CODE) === String(code));
     const state = rowData?.STATE || "General";
+    const name = rowData?.["Stockist Name"] || rowData?.Name || "";
 
+    // Upload to Drive
     const driveFile = await uploadToDrive(
       req.file.path,
       req.file.originalname,
@@ -136,20 +139,14 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       fs.unlinkSync(req.file.path);
     }
 
-    let record = uploadedFiles.find(r => String(r.Code) === String(code));
-
-    if (!record) {
-      record = { Code: code };
-      uploadedFiles.push(record);
-    }
-
-    // ✅ SAVE SALES CORRECTLY
-    if (sales !== undefined) {
-      record.sales = sales;
-    }
-
-    record[type + "File"] = driveFile.webViewLink;
-    record[type + "FileId"] = driveFile.fileId;
+    // Save to Google Sheet
+    await updateRow(
+      code,
+      name,
+      type,
+      driveFile.fileId,
+      sales
+    );
 
     res.json({ success: true });
 
@@ -161,7 +158,6 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       fs.unlinkSync(req.file.path);
     }
 
-    // ✅ CLEAN ERROR ONLY
     if (err.message === "INVALID PDF") {
       return res.status(400).json({ error: "INVALID PDF" });
     }
@@ -175,25 +171,26 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 });
 
 /* =========================
-   DELETE
+   DELETE (FULL SYNC)
 ========================= */
 router.delete("/delete/:code/:type", async (req, res) => {
 
   try {
     const { code, type } = req.params;
 
-    let record = uploadedFiles.find(r => String(r.Code) === String(code));
+    const sheetRows = await getSheetData();
+    const match = sheetRows.find(r => String(r[0]) === String(code));
 
-    if (record) {
+    if (match) {
+      const fileId = type === "aws" ? match[2] : match[3];
 
-      const fileId = record[type + "FileId"];
-
+      // Delete from Drive
       if (fileId) {
         await deleteFromDrive(fileId);
       }
 
-      delete record[type + "File"];
-      delete record[type + "FileId"];
+      // Remove from Sheet
+      await deleteFileFromSheet(code, type);
     }
 
     res.json({ success: true });
@@ -207,20 +204,21 @@ router.delete("/delete/:code/:type", async (req, res) => {
 /* =========================
    DOWNLOAD
 ========================= */
-router.get("/download/excel", (req, res) => {
+router.get("/download/excel", async (req, res) => {
 
   const excelData = loadExcel();
+  const sheetRows = await getSheetData();
 
   const finalData = excelData.map(row => {
 
     const code = row.Code || row.CODE;
-    const match = uploadedFiles.find(f => String(f.Code) === String(code));
+    const match = sheetRows.find(r => String(r[0]) === String(code));
 
     return {
       ...row,
-      Sales: match?.sales || "",
-      AWS_Status: match?.awsFile ? "Received" : "Pending",
-      SSS_Status: match?.sssFile ? "Received" : "Pending"
+      Sales: match?.[4] || "",
+      AWS_Status: match?.[2] ? "Received" : "Pending",
+      SSS_Status: match?.[3] ? "Received" : "Pending"
     };
   });
 

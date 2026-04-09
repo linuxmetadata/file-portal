@@ -49,16 +49,14 @@ async function validateFile(file) {
   // ✅ ONLY PDF VALIDATION
   if (ext === ".pdf") {
 
-    if (!pdfParse) {
-      throw new Error("INVALID PDF");
-    }
+    if (!pdfParse) return;
 
     try {
       const buffer = fs.readFileSync(file.path);
       const data = await pdfParse(buffer);
 
-      // ❌ SCANNED PDF
-      if (!data.text || data.text.trim().length < 20) {
+      // ✅ ONLY reject if COMPLETELY EMPTY
+      if (!data.text || data.text.trim().length === 0) {
         throw new Error("INVALID PDF");
       }
 
@@ -112,7 +110,7 @@ router.get("/list", async (req, res) => {
 });
 
 /* =========================
-   UPLOAD (SAFE + FIXED)
+   UPLOAD (FINAL FIX)
 ========================= */
 router.post("/upload", upload.single("file"), async (req, res) => {
 
@@ -123,7 +121,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "UPLOAD FAILED" });
     }
 
-    // ✅ SAFE VALIDATION (PREVENT CRASH)
+    // ✅ SAFE VALIDATION
     try {
       await validateFile(req.file);
     } catch (err) {

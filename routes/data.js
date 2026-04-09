@@ -35,23 +35,19 @@ function loadExcel() {
 ========================= */
 async function validateFile(file) {
 
-  const ext = file.originalname.split(".").pop().toLowerCase();
+  const ext = path.extname(file.originalname).toLowerCase();
 
-  const allowed = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html"];
-  const imageTypes = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
+  const allowedExt = [
+    ".pdf", ".xlsx", ".xls", ".doc", ".docx", ".txt", ".html"
+  ];
 
-  // ❌ INVALID FORMAT (images)
-  if (imageTypes.includes(ext)) {
+  // ❌ INVALID FORMAT
+  if (!allowedExt.includes(ext)) {
     throw new Error("INVALID FORMAT");
   }
 
-  // ❌ INVALID FORMAT (others)
-  if (!allowed.includes(ext)) {
-    throw new Error("INVALID FORMAT");
-  }
-
-  // ✅ PDF VALIDATION (SCANNED CHECK)
-  if (ext === "pdf") {
+  // ✅ ONLY PDF VALIDATION
+  if (ext === ".pdf") {
 
     if (!pdfParse) {
       throw new Error("INVALID PDF");
@@ -61,12 +57,12 @@ async function validateFile(file) {
       const buffer = fs.readFileSync(file.path);
       const data = await pdfParse(buffer);
 
-      // ❌ SCANNED PDF (no readable text)
+      // ❌ SCANNED PDF
       if (!data.text || data.text.trim().length < 20) {
         throw new Error("INVALID PDF");
       }
 
-    } catch {
+    } catch (err) {
       throw new Error("INVALID PDF");
     }
   }
@@ -116,7 +112,7 @@ router.get("/list", async (req, res) => {
 });
 
 /* =========================
-   UPLOAD
+   UPLOAD (SAFE + FIXED)
 ========================= */
 router.post("/upload", upload.single("file"), async (req, res) => {
 
@@ -127,7 +123,15 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "UPLOAD FAILED" });
     }
 
-    await validateFile(req.file);
+    // ✅ SAFE VALIDATION (PREVENT CRASH)
+    try {
+      await validateFile(req.file);
+    } catch (err) {
+      if (fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+      }
+      throw err;
+    }
 
     const excelData = loadExcel();
     const rowData = excelData.find(r => String(r.Code || r.CODE) === String(code));
@@ -142,10 +146,12 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       state
     );
 
+    // ✅ CLEAN TEMP FILE
     if (fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }
 
+    // ✅ UPDATE SHEET
     await updateRow(code, name, type, driveFile.fileId, sales);
 
     res.json({ success: true });

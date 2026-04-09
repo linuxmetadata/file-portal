@@ -69,18 +69,27 @@ async function validateFile(file) {
 }
 
 /* =========================
-   LIST DATA
+   LIST DATA (FIXED)
 ========================= */
 router.get("/list", async (req, res) => {
 
   try {
     const excelData = loadExcel();
-    const sheetRows = await getSheetData();
+
+    let sheetRows = [];
+
+    try {
+      sheetRows = await getSheetData();
+    } catch (e) {
+      console.log("Sheet error → fallback mode");
+    }
 
     const finalData = excelData.map((row, index) => {
 
       const code = row.Code || row.CODE || "";
-      const match = sheetRows.find(r => String(r[0]) === String(code));
+
+      // ✅ SAFE MATCH (NO BREAK)
+      const match = sheetRows.find(r => String(r[0]) === String(code)) || [];
 
       return {
         id: index,
@@ -90,11 +99,13 @@ router.get("/list", async (req, res) => {
         code: code,
         name: row["Stockist Name"] || row.Name || "",
 
-        sales: match?.[4] || "",
-        awsFile: match?.[2]
+        sales: match[4] || "",
+
+        awsFile: match[2]
           ? `https://drive.google.com/file/d/${match[2]}/view`
           : null,
-        sssFile: match?.[3]
+
+        sssFile: match[3]
           ? `https://drive.google.com/file/d/${match[3]}/view`
           : null
       };
@@ -127,7 +138,6 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     const state = rowData?.STATE || "General";
     const name = rowData?.["Stockist Name"] || rowData?.Name || "";
 
-    // Upload to Drive
     const driveFile = await uploadToDrive(
       req.file.path,
       req.file.originalname,
@@ -139,7 +149,6 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       fs.unlinkSync(req.file.path);
     }
 
-    // Save to Google Sheet
     await updateRow(
       code,
       name,
@@ -171,7 +180,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 });
 
 /* =========================
-   DELETE (FULL SYNC)
+   DELETE
 ========================= */
 router.delete("/delete/:code/:type", async (req, res) => {
 
@@ -184,12 +193,10 @@ router.delete("/delete/:code/:type", async (req, res) => {
     if (match) {
       const fileId = type === "aws" ? match[2] : match[3];
 
-      // Delete from Drive
       if (fileId) {
         await deleteFromDrive(fileId);
       }
 
-      // Remove from Sheet
       await deleteFileFromSheet(code, type);
     }
 
@@ -212,13 +219,13 @@ router.get("/download/excel", async (req, res) => {
   const finalData = excelData.map(row => {
 
     const code = row.Code || row.CODE;
-    const match = sheetRows.find(r => String(r[0]) === String(code));
+    const match = sheetRows.find(r => String(r[0]) === String(code)) || [];
 
     return {
       ...row,
-      Sales: match?.[4] || "",
-      AWS_Status: match?.[2] ? "Received" : "Pending",
-      SSS_Status: match?.[3] ? "Received" : "Pending"
+      Sales: match[4] || "",
+      AWS_Status: match[2] ? "Received" : "Pending",
+      SSS_Status: match[3] ? "Received" : "Pending"
     };
   });
 

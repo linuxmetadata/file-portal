@@ -31,7 +31,7 @@ function loadExcel() {
 }
 
 /* =========================
-   FILE VALIDATION
+   FILE VALIDATION (FINAL FIX)
 ========================= */
 async function validateFile(file) {
 
@@ -40,14 +40,17 @@ async function validateFile(file) {
   const allowed = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html"];
   const imageTypes = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
 
+  // ❌ INVALID FORMAT (images)
   if (imageTypes.includes(ext)) {
-    throw new Error("UNSUPPORTED FORMAT");
+    throw new Error("INVALID FORMAT");
   }
 
+  // ❌ INVALID FORMAT (others)
   if (!allowed.includes(ext)) {
-    throw new Error("UNSUPPORTED FORMAT");
+    throw new Error("INVALID FORMAT");
   }
 
+  // ✅ PDF VALIDATION (SCANNED CHECK)
   if (ext === "pdf") {
 
     if (!pdfParse) {
@@ -58,6 +61,7 @@ async function validateFile(file) {
       const buffer = fs.readFileSync(file.path);
       const data = await pdfParse(buffer);
 
+      // ❌ SCANNED PDF (no readable text)
       if (!data.text || data.text.trim().length < 20) {
         throw new Error("INVALID PDF");
       }
@@ -69,7 +73,7 @@ async function validateFile(file) {
 }
 
 /* =========================
-   LIST DATA (FIXED)
+   LIST DATA
 ========================= */
 router.get("/list", async (req, res) => {
 
@@ -80,15 +84,13 @@ router.get("/list", async (req, res) => {
 
     try {
       sheetRows = await getSheetData();
-    } catch (e) {
-      console.log("Sheet error → fallback mode");
+    } catch {
+      console.log("Sheet fallback mode");
     }
 
     const finalData = excelData.map((row, index) => {
 
       const code = row.Code || row.CODE || "";
-
-      // ✅ SAFE MATCH (NO BREAK)
       const match = sheetRows.find(r => String(r[0]) === String(code)) || [];
 
       return {
@@ -100,14 +102,8 @@ router.get("/list", async (req, res) => {
         name: row["Stockist Name"] || row.Name || "",
 
         sales: match[4] || "",
-
-        awsFile: match[2]
-          ? `https://drive.google.com/file/d/${match[2]}/view`
-          : null,
-
-        sssFile: match[3]
-          ? `https://drive.google.com/file/d/${match[3]}/view`
-          : null
+        awsFile: match[2] ? `https://drive.google.com/file/d/${match[2]}/view` : null,
+        sssFile: match[3] ? `https://drive.google.com/file/d/${match[3]}/view` : null
       };
     });
 
@@ -135,6 +131,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 
     const excelData = loadExcel();
     const rowData = excelData.find(r => String(r.Code || r.CODE) === String(code));
+
     const state = rowData?.STATE || "General";
     const name = rowData?.["Stockist Name"] || rowData?.Name || "";
 
@@ -149,13 +146,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       fs.unlinkSync(req.file.path);
     }
 
-    await updateRow(
-      code,
-      name,
-      type,
-      driveFile.fileId,
-      sales
-    );
+    await updateRow(code, name, type, driveFile.fileId, sales);
 
     res.json({ success: true });
 
@@ -171,8 +162,8 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "INVALID PDF" });
     }
 
-    if (err.message === "UNSUPPORTED FORMAT") {
-      return res.status(400).json({ error: "UNSUPPORTED FORMAT" });
+    if (err.message === "INVALID FORMAT") {
+      return res.status(400).json({ error: "INVALID FORMAT" });
     }
 
     return res.status(400).json({ error: "UPLOAD FAILED" });

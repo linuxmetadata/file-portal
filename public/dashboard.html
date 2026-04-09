@@ -10,14 +10,45 @@
   <!-- Word -->
   <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 
+  <style>
+    /* MESSAGE CARD */
+    .message-card {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: bold;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+    }
+
+    .show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .success { background: #27ae60; }
+    .error { background: #e74c3c; }
+
+    .submit-btn {
+      background: #27ae60;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- MESSAGE CARD -->
-<div id="errorBox" style="display:none;">
-  <div id="errorCard" class="message-card"></div>
-</div>
+<!-- MESSAGE -->
+<div id="errorCard" class="message-card"></div>
 
 <!-- HEADER -->
 <div class="header" style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
@@ -41,32 +72,11 @@
 
 <!-- CARDS -->
 <div class="cards">
-
-  <div class="card green" onclick="filterByCard('awsDone')">
-    <h3 id="awsDone">0</h3>
-    <p>AWS Submitted</p>
-  </div>
-
-  <div class="card red" onclick="filterByCard('awsPending')">
-    <h3 id="awsPending">0</h3>
-    <p>AWS Pending</p>
-  </div>
-
-  <div class="card green" onclick="filterByCard('sssDone')">
-    <h3 id="sssDone">0</h3>
-    <p>SSS Submitted</p>
-  </div>
-
-  <div class="card red" onclick="filterByCard('sssPending')">
-    <h3 id="sssPending">0</h3>
-    <p>SSS Pending</p>
-  </div>
-
-  <div class="card blue">
-    <h3 id="total">0</h3>
-    <p>Total</p>
-  </div>
-
+  <div class="card green"><h3 id="awsDone">0</h3><p>AWS Submitted</p></div>
+  <div class="card red"><h3 id="awsPending">0</h3><p>AWS Pending</p></div>
+  <div class="card green"><h3 id="sssDone">0</h3><p>SSS Submitted</p></div>
+  <div class="card red"><h3 id="sssPending">0</h3><p>SSS Pending</p></div>
+  <div class="card blue"><h3 id="total">0</h3><p>Total</p></div>
 </div>
 
 <!-- TABLE -->
@@ -74,71 +84,58 @@
 <table>
 <thead>
 <tr>
-
   <th>Division<br><input id="f_division" onkeyup="applyFilters()"></th>
   <th>State<br><input id="f_state" onkeyup="applyFilters()"></th>
   <th>BM HQ<br><input id="f_bmhq" onkeyup="applyFilters()"></th>
   <th>Code<br><input id="f_code" onkeyup="applyFilters()"></th>
   <th>Name<br><input id="f_name" onkeyup="applyFilters()"></th>
-
   <th>Sales</th>
   <th>AWS</th>
   <th>SSS</th>
-
 </tr>
 </thead>
-
 <tbody id="tableData"></tbody>
 </table>
 </div>
 
-<!-- ===================== -->
-<!-- FILE PREVIEW MODAL -->
-<!-- ===================== -->
+<!-- PREVIEW MODAL -->
 <div id="filePreviewModal" class="preview-modal hidden">
+  <div class="preview-container" style="display:flex;flex-direction:column;max-height:80vh;">
 
-  <div class="preview-container" style="
-      display:flex;
-      flex-direction:column;
-      max-height:80vh;
-  ">
-
-    <!-- HEADER -->
     <div class="preview-header">
       <span>File Preview</span>
       <button onclick="closePreview()">✖</button>
     </div>
 
-    <!-- BODY (SCROLLABLE) -->
-    <div class="preview-body" style="
-        flex:1;
-        overflow:auto;
-        padding:10px;
-    ">
+    <div class="preview-body" style="flex:1;overflow:auto;padding:10px;">
       <div id="previewFrame"></div>
     </div>
 
-    <!-- FOOTER (ALWAYS VISIBLE) -->
-    <div class="preview-footer" style="
-        background:#fff;
-        padding:10px;
-        text-align:right;
-        border-top:1px solid #ddd;
-    ">
+    <div class="preview-footer" style="background:#fff;padding:10px;text-align:right;border-top:1px solid #ddd;">
       <button onclick="submitFile()" class="submit-btn">Submit</button>
     </div>
 
   </div>
-
 </div>
 
 <script src="app.js"></script>
 
 <script>
   const role = localStorage.getItem("role");
-
   document.getElementById("pageTitle").innerText =
     role === "admin" ? "Admin Dashboard" : "User Dashboard";
+
+  // ✅ MESSAGE FUNCTION
+  function showMessage(msg, type = "success") {
+    const card = document.getElementById("errorCard");
+
+    card.innerText = msg;
+    card.className = "message-card " + type + " show";
+
+    setTimeout(() => {
+      card.classList.remove("show");
+    }, 2500);
+  }
 </script>
 
 </body>

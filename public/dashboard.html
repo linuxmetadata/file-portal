@@ -71,7 +71,6 @@
 
 <!-- TABLE -->
 <div style="overflow:auto; max-height:70vh;">
-
 <table>
 <thead>
 <tr>
@@ -91,7 +90,6 @@
 
 <tbody id="tableData"></tbody>
 </table>
-
 </div>
 
 <!-- ===================== -->
@@ -99,7 +97,11 @@
 <!-- ===================== -->
 <div id="filePreviewModal" class="preview-modal hidden">
 
-  <div class="preview-container">
+  <div class="preview-container" style="
+      display:flex;
+      flex-direction:column;
+      max-height:80vh;
+  ">
 
     <!-- HEADER -->
     <div class="preview-header">
@@ -107,13 +109,22 @@
       <button onclick="closePreview()">✖</button>
     </div>
 
-    <!-- BODY (FIXED HERE) -->
-    <div class="preview-body">
-      <div id="previewFrame" style="width:100%;height:600px;overflow:auto;"></div>
+    <!-- BODY (SCROLLABLE) -->
+    <div class="preview-body" style="
+        flex:1;
+        overflow:auto;
+        padding:10px;
+    ">
+      <div id="previewFrame"></div>
     </div>
 
-    <!-- FOOTER -->
-    <div class="preview-footer">
+    <!-- FOOTER (ALWAYS VISIBLE) -->
+    <div class="preview-footer" style="
+        background:#fff;
+        padding:10px;
+        text-align:right;
+        border-top:1px solid #ddd;
+    ">
       <button onclick="submitFile()" class="submit-btn">Submit</button>
     </div>
 

@@ -4,7 +4,6 @@ let activeCardFilter = null;
 let currentPreviewFile = null;
 let currentPreviewCode = null;
 let currentPreviewType = null;
-let currentObjectURL = null;
 
 /* =========================
    LOAD DATA
@@ -136,7 +135,7 @@ function chooseFile(code, type) {
 }
 
 /* =========================
-   PREVIEW (FULL FIX)
+   PREVIEW (FINAL FIX)
 ========================= */
 function openPreview(type, code) {
 
@@ -152,19 +151,15 @@ function openPreview(type, code) {
 
   const ext = file.name.split(".").pop().toLowerCase();
 
-  // CLEAR OLD
-  if (currentObjectURL) {
-    URL.revokeObjectURL(currentObjectURL);
-    currentObjectURL = null;
-  }
-
-  frame.src = "";
-  frame.srcdoc = "";
+  // 🔥 CLEAR OLD
+  frame.innerHTML = "";
 
   // PDF
   if (ext === "pdf") {
-    currentObjectURL = URL.createObjectURL(file);
-    frame.src = currentObjectURL;
+    const url = URL.createObjectURL(file);
+    frame.innerHTML = `
+      <embed src="${url}" type="application/pdf" width="100%" height="600px">
+    `;
   }
 
   // EXCEL
@@ -177,25 +172,24 @@ function openPreview(type, code) {
       const workbook = XLSX.read(data, { type: "array" });
 
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      frame.srcdoc = XLSX.utils.sheet_to_html(sheet);
+      frame.innerHTML = XLSX.utils.sheet_to_html(sheet);
     };
 
     reader.readAsArrayBuffer(file);
   }
 
-  // WORD (.docx)
+  // WORD
   else if (ext === "docx") {
 
     const reader = new FileReader();
 
     reader.onload = function (e) {
-
       mammoth.convertToHtml({ arrayBuffer: e.target.result })
         .then(result => {
-          frame.srcdoc = result.value;
+          frame.innerHTML = result.value;
         })
         .catch(() => {
-          frame.srcdoc = "<h3 style='padding:20px'>Preview not available</h3>";
+          frame.innerHTML = "<h3 style='padding:20px'>Preview not available</h3>";
         });
     };
 
@@ -205,20 +199,20 @@ function openPreview(type, code) {
   // HTML
   else if (ext === "html") {
     const reader = new FileReader();
-    reader.onload = e => frame.srcdoc = e.target.result;
+    reader.onload = e => frame.innerHTML = e.target.result;
     reader.readAsText(file);
   }
 
   // TXT
   else if (ext === "txt") {
     const reader = new FileReader();
-    reader.onload = e => frame.srcdoc = `<pre style="padding:20px;white-space:pre-wrap">${e.target.result}</pre>`;
+    reader.onload = e => frame.innerHTML = `<pre style="padding:20px;white-space:pre-wrap">${e.target.result}</pre>`;
     reader.readAsText(file);
   }
 
   // FALLBACK
   else {
-    frame.srcdoc = "<h3 style='padding:20px'>Preview not available</h3>";
+    frame.innerHTML = "<h3 style='padding:20px'>Preview not available</h3>";
   }
 
   modal.classList.remove("hidden");
@@ -231,13 +225,7 @@ function closePreview() {
 
   const frame = document.getElementById("previewFrame");
 
-  frame.src = "";
-  frame.srcdoc = "";
-
-  if (currentObjectURL) {
-    URL.revokeObjectURL(currentObjectURL);
-    currentObjectURL = null;
-  }
+  frame.innerHTML = "";
 
   document.getElementById("filePreviewModal").classList.add("hidden");
 

@@ -104,7 +104,7 @@ function getUploadUI(row, code, type) {
 }
 
 /* =========================
-   CHOOSE FILE (FINAL - BACKEND VALIDATION)
+   CHOOSE FILE (NO VALIDATION)
 ========================= */
 function chooseFile(code, type) {
 
@@ -116,38 +116,8 @@ function chooseFile(code, type) {
     const file = input.files[0];
     if (!file) return;
 
-    const ext = file.name.split(".").pop().toLowerCase();
-    const allowedExt = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html"];
+    // ✅ NO RESTRICTIONS — allow everything
 
-    // ❌ INVALID FORMAT (FRONTEND CHECK)
-    if (!allowedExt.includes(ext)) {
-      showMessage("INVALID FORMAT", true);
-      return;
-    }
-
-    // 🔥 BACKEND VALIDATION (FINAL AUTHORITY)
-    const form = new FormData();
-    form.append("file", file);
-
-    try {
-      const res = await fetch("/data/validate", {
-        method: "POST",
-        body: form
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        showMessage(data.error || "Validation failed", true);
-        return; // 🚨 HARD STOP → NO PREVIEW
-      }
-
-    } catch (err) {
-      showMessage("Validation error", true);
-      return; // 🚨 HARD STOP
-    }
-
-    // ✅ ONLY VALID FILES REACH HERE
     window[`temp_${type}_${code}`] = file;
 
     currentPreviewFile = file;

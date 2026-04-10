@@ -104,7 +104,7 @@ function getUploadUI(row, code, type) {
 }
 
 /* =========================
-   CHOOSE FILE (VALIDATE FIRST)
+   CHOOSE FILE (FINAL - BACKEND VALIDATION)
 ========================= */
 function chooseFile(code, type) {
 
@@ -119,13 +119,13 @@ function chooseFile(code, type) {
     const ext = file.name.split(".").pop().toLowerCase();
     const allowedExt = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html"];
 
-    // ❌ INVALID FORMAT
+    // ❌ INVALID FORMAT (FRONTEND CHECK)
     if (!allowedExt.includes(ext)) {
       showMessage("INVALID FORMAT", true);
       return;
     }
 
-    // 🔥 NEW: BACKEND VALIDATION BEFORE PREVIEW
+    // 🔥 BACKEND VALIDATION (FINAL AUTHORITY)
     const form = new FormData();
     form.append("file", file);
 
@@ -139,15 +139,15 @@ function chooseFile(code, type) {
 
       if (!res.ok) {
         showMessage(data.error || "Validation failed", true);
-        return;
+        return; // 🚨 HARD STOP → NO PREVIEW
       }
 
     } catch (err) {
       showMessage("Validation error", true);
-      return;
+      return; // 🚨 HARD STOP
     }
 
-    // ✅ ONLY AFTER VALIDATION SUCCESS
+    // ✅ ONLY VALID FILES REACH HERE
     window[`temp_${type}_${code}`] = file;
 
     currentPreviewFile = file;

@@ -34,7 +34,7 @@ function loadExcel() {
 }
 
 /* =========================
-   FILE VALIDATION (FINAL FIX)
+   FILE VALIDATION (STRICT FIX)
 ========================= */
 async function validateFile(file) {
 
@@ -49,23 +49,28 @@ async function validateFile(file) {
     throw new Error("INVALID FORMAT");
   }
 
-  // ✅ PDF VALIDATION (SAFE MODE)
+  // 🔒 STRICT PDF VALIDATION
   if (ext === ".pdf") {
 
-    if (!pdfParse) return;
+    if (!pdfParse) {
+      throw new Error("INVALID PDF");
+    }
 
     try {
       const buffer = fs.readFileSync(file.path);
       const data = await pdfParse(buffer);
 
-      console.log("PDF text length:", data.text ? data.text.length : 0);
+      const textLength = data.text ? data.text.trim().length : 0;
 
-      // ✅ DO NOT BLOCK — allow all PDFs
-      return;
+      console.log("PDF text length:", textLength);
+
+      // ❌ Reject scanned PDFs (no readable text)
+      if (textLength < 20) {
+        throw new Error("INVALID PDF");
+      }
 
     } catch (err) {
-      console.log("PDF parse failed but allowing upload");
-      return; // ✅ allow instead of blocking
+      throw new Error("INVALID PDF");
     }
   }
 }
@@ -114,7 +119,7 @@ router.get("/list", async (req, res) => {
 });
 
 /* =========================
-   UPLOAD (FINAL FIX)
+   UPLOAD
 ========================= */
 router.post("/upload", upload.single("file"), async (req, res) => {
 
@@ -132,7 +137,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     }
     uploadLocks[lockKey] = true;
 
-    // ❌ DUPLICATE CHECK (sheet level)
+    // ❌ DUPLICATE CHECK
     const existingRows = await getSheetData();
     const existing = existingRows.find(r => String(r[0]) === String(code));
 
@@ -149,7 +154,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       }
     }
 
-    // ✅ SAFE VALIDATION
+    // ✅ VALIDATION
     try {
       await validateFile(req.file);
     } catch (err) {
@@ -196,73 +201,16 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       delete uploadLocks[lockKey];
     }
 
+    if (err.message === "INVALID PDF") {
+      return res.status(400).json({ error: "INVALID PDF" });
+    }
+
     if (err.message === "INVALID FORMAT") {
       return res.status(400).json({ error: "INVALID FORMAT" });
     }
 
-    return res.status(400).json({ error: err.message || "UPLOAD FAILED" });
+    return res.status(400).json({ error: "UPLOAD FAILED" });
   }
-});
-
-/* =========================
-   DELETE
-========================= */
-router.delete("/delete/:code/:type", async (req, res) => {
-
-  try {
-    const { code, type } = req.params;
-
-    const sheetRows = await getSheetData();
-    const match = sheetRows.find(r => String(r[0]) === String(code));
-
-    if (match) {
-      const fileId = type === "aws" ? match[2] : match[3];
-
-      if (fileId) {
-        await deleteFromDrive(fileId);
-      }
-
-      await deleteFileFromSheet(code, type);
-    }
-
-    res.json({ success: true });
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "DELETE FAILED" });
-  }
-});
-
-/* =========================
-   DOWNLOAD
-========================= */
-router.get("/download/excel", async (req, res) => {
-
-  const excelData = loadExcel();
-  const sheetRows = await getSheetData();
-
-  const finalData = excelData.map(row => {
-
-    const code = row.Code || row.CODE;
-    const match = sheetRows.find(r => String(r[0]) === String(code)) || [];
-
-    return {
-      ...row,
-      Sales: match[4] || "",
-      AWS_Status: match[2] ? "Received" : "Pending",
-      SSS_Status: match[3] ? "Received" : "Pending"
-    };
-  });
-
-  const ws = XLSX.utils.json_to_sheet(finalData);
-  const wb = XLSX.utils.book_new();
-
-  XLSX.utils.book_append_sheet(wb, ws, "Report");
-
-  const filePath = path.join(__dirname, "../uploads/export.xlsx");
-  XLSX.writeFile(wb, filePath);
-
-  res.download(filePath);
 });
 
 module.exports = router;

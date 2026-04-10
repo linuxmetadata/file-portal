@@ -108,6 +108,17 @@ function getUploadUI(row, code, type) {
 ========================= */
 function chooseFile(code, type) {
 
+  // ✅ CLEAR OLD STATE BEFORE NEW FILE
+  currentPreviewFile = null;
+  currentPreviewCode = null;
+  currentPreviewType = null;
+
+  Object.keys(window).forEach(key => {
+    if (key.startsWith("temp_")) {
+      delete window[key];
+    }
+  });
+
   const input = document.createElement("input");
   input.type = "file";
 
@@ -115,8 +126,6 @@ function chooseFile(code, type) {
 
     const file = input.files[0];
     if (!file) return;
-
-    // ✅ NO RESTRICTIONS — allow everything
 
     window[`temp_${type}_${code}`] = file;
 
@@ -221,6 +230,13 @@ function closePreview() {
   currentPreviewFile = null;
   currentPreviewCode = null;
   currentPreviewType = null;
+
+  // ✅ CLEAR ALL TEMP FILES
+  Object.keys(window).forEach(key => {
+    if (key.startsWith("temp_")) {
+      delete window[key];
+    }
+  });
 }
 
 /* =========================
@@ -264,9 +280,7 @@ async function submitFile() {
 
     showMessage("UPLOAD SUCCESSFUL");
 
-    delete window[`temp_${currentPreviewType}_${currentPreviewCode}`];
-
-    closePreview();
+    closePreview(); // ✅ full reset
 
     applyFilters();
     setTimeout(loadData, 300);

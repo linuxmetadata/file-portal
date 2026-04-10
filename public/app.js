@@ -96,7 +96,7 @@ function getUploadUI(row, code, type) {
   if (window[`temp_${type}_${code}`]) {
     return `
       <button onclick="openPreview('${type}','${code}')">View</button>
-      <button id="submitBtn" onclick="submitFile()">Submit</button>
+      <button onclick="submitFile(this)">Submit</button>
     `;
   }
 

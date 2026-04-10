@@ -17,6 +17,9 @@ const { updateRow, getSheetData, deleteFileFromSheet } = require("../googleSheet
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
 
+// 🔒 Prevent double upload (memory lock)
+const uploadLocks = {};
+
 /* =========================
    LOAD EXCEL
 ========================= */
@@ -46,7 +49,7 @@ async function validateFile(file) {
     throw new Error("INVALID FORMAT");
   }
 
-  // ✅ ONLY PDF VALIDATION
+  // ✅ PDF VALIDATION (SAFE MODE)
   if (ext === ".pdf") {
 
     if (!pdfParse) return;
@@ -55,13 +58,14 @@ async function validateFile(file) {
       const buffer = fs.readFileSync(file.path);
       const data = await pdfParse(buffer);
 
-      // ✅ ONLY reject if COMPLETELY EMPTY
-      if (!data.text || data.text.trim().length === 0) {
-        throw new Error("INVALID PDF");
-      }
+      console.log("PDF text length:", data.text ? data.text.length : 0);
+
+      // ✅ DO NOT BLOCK — allow all PDFs
+      return;
 
     } catch (err) {
-      throw new Error("INVALID PDF");
+      console.log("PDF parse failed but allowing upload");
+      return; // ✅ allow instead of blocking
     }
   }
 }
@@ -121,6 +125,30 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "UPLOAD FAILED" });
     }
 
+    // 🔒 DOUBLE CLICK PROTECTION
+    const lockKey = `${code}_${type}`;
+    if (uploadLocks[lockKey]) {
+      return res.status(429).json({ error: "Upload already in progress" });
+    }
+    uploadLocks[lockKey] = true;
+
+    // ❌ DUPLICATE CHECK (sheet level)
+    const existingRows = await getSheetData();
+    const existing = existingRows.find(r => String(r[0]) === String(code));
+
+    if (existing) {
+      const alreadyUploaded = (type === "aws" && existing[2]) || (type === "sss" && existing[3]);
+
+      if (alreadyUploaded) {
+        if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
+        delete uploadLocks[lockKey];
+
+        return res.status(400).json({
+          error: `${type.toUpperCase()} already uploaded`
+        });
+      }
+    }
+
     // ✅ SAFE VALIDATION
     try {
       await validateFile(req.file);
@@ -128,6 +156,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       if (fs.existsSync(req.file.path)) {
         fs.unlinkSync(req.file.path);
       }
+      delete uploadLocks[lockKey];
       throw err;
     }
 
@@ -144,13 +173,13 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       state
     );
 
-    // ✅ CLEAN TEMP FILE
     if (fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }
 
-    // ✅ UPDATE SHEET
     await updateRow(code, name, type, driveFile.fileId, sales);
+
+    delete uploadLocks[lockKey];
 
     res.json({ success: true });
 
@@ -162,15 +191,16 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       fs.unlinkSync(req.file.path);
     }
 
-    if (err.message === "INVALID PDF") {
-      return res.status(400).json({ error: "INVALID PDF" });
+    if (req.body) {
+      const lockKey = `${req.body.code}_${req.body.type}`;
+      delete uploadLocks[lockKey];
     }
 
     if (err.message === "INVALID FORMAT") {
       return res.status(400).json({ error: "INVALID FORMAT" });
     }
 
-    return res.status(400).json({ error: "UPLOAD FAILED" });
+    return res.status(400).json({ error: err.message || "UPLOAD FAILED" });
   }
 });
 

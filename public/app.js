@@ -124,17 +124,18 @@ function chooseFile(code, type) {
 
   input.onchange = async () => {
 
-    const file = input.files[0];
-    if (!file) return;
+  const file = input.files[0];
+if (!file) return;
 
-    window[`temp_${type}_${code}`] = file;
+// ❌ REMOVE GLOBAL TEMP STORAGE (ROOT CAUSE)
+// window[`temp_${type}_${code}`] = file;
 
-    currentPreviewFile = file;
-    currentPreviewCode = code;
-    currentPreviewType = type;
+// ✅ ONLY USE LOCAL STATE
+currentPreviewFile = file;
+currentPreviewCode = code;
+currentPreviewType = type;
 
-    openPreview(type, code);
-  };
+openPreview(type, code);
 
   input.click();
 }

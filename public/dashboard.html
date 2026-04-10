@@ -4,14 +4,10 @@
   <title>Dashboard</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- Excel -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-
-  <!-- Word -->
   <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 
   <style>
-    /* MESSAGE CARD */
     .message-card {
       position: fixed;
       top: 20px;
@@ -29,11 +25,6 @@
     .success { background: #27ae60; }
     .error { background: #e74c3c; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     .submit-btn {
       background: #27ae60;
       color: white;
@@ -42,25 +33,24 @@
       border-radius: 6px;
       cursor: pointer;
     }
+
+    .submit-btn:disabled {
+      background: gray;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 
 <body>
 
-<!-- MESSAGE -->
 <div id="errorCard" class="message-card"></div>
 
-<!-- HEADER -->
 <div class="header" style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
 
   <h2 id="pageTitle">Dashboard</h2>
 
-  <input 
-    id="globalSearch" 
-    placeholder="Search..." 
-    onkeyup="applyFilters()" 
-    style="padding:8px;width:220px;border-radius:5px;border:1px solid #ccc"
-  >
+  <input id="globalSearch" placeholder="Search..." onkeyup="applyFilters()" 
+    style="padding:8px;width:220px;border-radius:5px;border:1px solid #ccc">
 
   <div class="top-actions" style="display:flex;gap:10px">
     <button onclick="clearFilters()">Clear Filters</button>
@@ -70,7 +60,6 @@
 
 </div>
 
-<!-- CARDS -->
 <div class="cards">
   <div class="card green"><h3 id="awsDone">0</h3><p>AWS Submitted</p></div>
   <div class="card red"><h3 id="awsPending">0</h3><p>AWS Pending</p></div>
@@ -79,7 +68,6 @@
   <div class="card blue"><h3 id="total">0</h3><p>Total</p></div>
 </div>
 
-<!-- TABLE -->
 <div style="overflow:auto; max-height:70vh;">
 <table>
 <thead>
@@ -98,7 +86,6 @@
 </table>
 </div>
 
-<!-- PREVIEW MODAL -->
 <div id="filePreviewModal" class="preview-modal hidden">
   <div class="preview-container" style="display:flex;flex-direction:column;max-height:80vh;">
 
@@ -111,8 +98,8 @@
       <div id="previewFrame"></div>
     </div>
 
-    <div class="preview-footer" style="background:#fff;padding:10px;text-align:right;border-top:1px solid #ddd;">
-      <button onclick="submitFile()" class="submit-btn">Submit</button>
+    <div class="preview-footer" style="padding:10px;text-align:right;">
+      <button id="submitBtn" onclick="submitFile()" class="submit-btn">Submit</button>
     </div>
 
   </div>
@@ -121,31 +108,66 @@
 <script src="app.js"></script>
 
 <script>
-  const role = localStorage.getItem("role");
-  document.getElementById("pageTitle").innerText =
-    role === "admin" ? "Admin Dashboard" : "User Dashboard";
+const role = localStorage.getItem("role");
+document.getElementById("pageTitle").innerText =
+  role === "admin" ? "Admin Dashboard" : "User Dashboard";
 
-  // ✅ FINAL MESSAGE FUNCTION
-  function showMessage(msg, type = "success") {
+function showMessage(msg, type = "success") {
+  const card = document.getElementById("errorCard");
+  card.innerText = msg;
+  card.className = "message-card " + type;
+  card.style.display = "block";
 
-    const card = document.getElementById("errorCard");
+  setTimeout(() => {
+    card.style.display = "none";
+  }, 3000);
+}
 
-    card.innerText = msg;
-    card.className = "message-card " + type;
+function closePreview() {
+  document.getElementById("filePreviewModal").classList.add("hidden");
+  document.getElementById("previewFrame").innerHTML = "";
+}
 
-    card.style.display = "block";
+// 🔥 FINAL SUBMIT FUNCTION (FIXED)
+async function submitFile() {
 
-    setTimeout(() => {
-      card.style.display = "none";
-    }, 3000);
+  const btn = document.getElementById("submitBtn");
+
+  if (btn.disabled) return;
+
+  btn.disabled = true;
+  btn.innerText = "Uploading...";
+
+  try {
+    const formData = new FormData();
+    formData.append("file", window.selectedFile);
+    formData.append("code", window.selectedCode);
+    formData.append("type", window.selectedType);
+
+    const res = await fetch("/upload", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      showMessage(data.error || "Upload failed", "error");
+      btn.disabled = false;
+      btn.innerText = "Submit";
+      return;
+    }
+
+    showMessage("Upload successful", "success");
+    closePreview();
+    location.reload();
+
+  } catch (err) {
+    showMessage("Something went wrong", "error");
+    btn.disabled = false;
+    btn.innerText = "Submit";
   }
-
-  // ✅ CLOSE PREVIEW AFTER SUCCESS
-  function closePreview() {
-    document.getElementById("filePreviewModal").classList.add("hidden");
-    document.getElementById("previewFrame").innerHTML = "";
-    document.getElementById("fileInput") && (document.getElementById("fileInput").value = "");
-  }
+}
 </script>
 
 </body>

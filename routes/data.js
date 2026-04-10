@@ -34,7 +34,7 @@ function loadExcel() {
 }
 
 /* =========================
-   FILE VALIDATION (STRICT FIX)
+   FILE VALIDATION (UNCHANGED)
 ========================= */
 async function validateFile(file) {
 
@@ -44,12 +44,10 @@ async function validateFile(file) {
     ".pdf", ".xlsx", ".xls", ".doc", ".docx", ".txt", ".html"
   ];
 
-  // ❌ INVALID FORMAT
   if (!allowedExt.includes(ext)) {
     throw new Error("INVALID FORMAT");
   }
 
-  // 🔒 STRICT PDF VALIDATION
   if (ext === ".pdf") {
 
     if (!pdfParse) {
@@ -75,7 +73,7 @@ async function validateFile(file) {
 }
 
 /* =========================
-   🔥 NEW: VALIDATE BEFORE PREVIEW
+   VALIDATE BEFORE PREVIEW (UNCHANGED)
 ========================= */
 router.post("/validate", upload.single("file"), async (req, res) => {
   try {
@@ -154,7 +152,7 @@ router.get("/list", async (req, res) => {
 });
 
 /* =========================
-   UPLOAD
+   UPLOAD (VALIDATION DISABLED ONLY HERE)
 ========================= */
 router.post("/upload", upload.single("file"), async (req, res) => {
 
@@ -187,15 +185,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       }
     }
 
-    try {
-      await validateFile(req.file);
-    } catch (err) {
-      if (fs.existsSync(req.file.path)) {
-        fs.unlinkSync(req.file.path);
-      }
-      delete uploadLocks[lockKey];
-      throw err;
-    }
+    // 🚫 VALIDATION DISABLED HERE ONLY
 
     const excelData = loadExcel();
     const rowData = excelData.find(r => String(r.Code || r.CODE) === String(code));
@@ -231,14 +221,6 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     if (req.body) {
       const lockKey = `${req.body.code}_${req.body.type}`;
       delete uploadLocks[lockKey];
-    }
-
-    if (err.message === "INVALID PDF") {
-      return res.status(400).json({ error: "INVALID PDF" });
-    }
-
-    if (err.message === "INVALID FORMAT") {
-      return res.status(400).json({ error: "INVALID FORMAT" });
     }
 
     return res.status(400).json({ error: "UPLOAD FAILED" });

@@ -125,39 +125,29 @@ function chooseFile(code, type) {
       return;
     }
 
-    // 🔥 FIXED PDF VALIDATION (ONLY CHANGE)
-    if (ext === "pdf") {
+    // 🔥 NEW: BACKEND VALIDATION BEFORE PREVIEW
+    const form = new FormData();
+    form.append("file", file);
 
-      const reader = new FileReader();
+    try {
+      const res = await fetch("/data/validate", {
+        method: "POST",
+        body: form
+      });
 
-      reader.onload = function (e) {
-        const content = e.target.result;
+      const data = await res.json();
 
-        const hasText = /[a-zA-Z0-9]{5,}/.test(content);
+      if (!res.ok) {
+        showMessage(data.error || "Validation failed", true);
+        return;
+      }
 
-        if (!hasText) {
-          showMessage("INVALID PDF", true);
-          return;
-        }
-
-        // continue only if valid
-        window[`temp_${type}_${code}`] = file;
-
-        currentPreviewFile = file;
-        currentPreviewCode = code;
-        currentPreviewType = type;
-
-        openPreview(type, code);
-      };
-
-      reader.onerror = function () {
-        showMessage("INVALID PDF", true);
-      };
-
-      reader.readAsText(file);
+    } catch (err) {
+      showMessage("Validation error", true);
       return;
     }
 
+    // ✅ ONLY AFTER VALIDATION SUCCESS
     window[`temp_${type}_${code}`] = file;
 
     currentPreviewFile = file;

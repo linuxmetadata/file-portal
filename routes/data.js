@@ -64,7 +64,6 @@ async function validateFile(file) {
 
       console.log("PDF text length:", textLength);
 
-      // ❌ Reject scanned PDFs (no readable text)
       if (textLength < 20) {
         throw new Error("INVALID PDF");
       }
@@ -74,6 +73,42 @@ async function validateFile(file) {
     }
   }
 }
+
+/* =========================
+   🔥 NEW: VALIDATE BEFORE PREVIEW
+========================= */
+router.post("/validate", upload.single("file"), async (req, res) => {
+  try {
+
+    if (!req.file) {
+      return res.status(400).json({ error: "NO FILE" });
+    }
+
+    await validateFile(req.file);
+
+    if (fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+
+    return res.json({ success: true });
+
+  } catch (err) {
+
+    if (req.file && fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+
+    if (err.message === "INVALID PDF") {
+      return res.status(400).json({ error: "INVALID PDF" });
+    }
+
+    if (err.message === "INVALID FORMAT") {
+      return res.status(400).json({ error: "INVALID FORMAT" });
+    }
+
+    return res.status(400).json({ error: "VALIDATION FAILED" });
+  }
+});
 
 /* =========================
    LIST DATA
@@ -130,14 +165,12 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "UPLOAD FAILED" });
     }
 
-    // 🔒 DOUBLE CLICK PROTECTION
     const lockKey = `${code}_${type}`;
     if (uploadLocks[lockKey]) {
       return res.status(429).json({ error: "Upload already in progress" });
     }
     uploadLocks[lockKey] = true;
 
-    // ❌ DUPLICATE CHECK
     const existingRows = await getSheetData();
     const existing = existingRows.find(r => String(r[0]) === String(code));
 
@@ -154,7 +187,6 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       }
     }
 
-    // ✅ VALIDATION
     try {
       await validateFile(req.file);
     } catch (err) {

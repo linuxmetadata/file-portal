@@ -19,21 +19,15 @@ async function loadData() {
 ========================= */
 function showMessage(message, isError = false) {
 
-  const box = document.getElementById("errorBox");
   const card = document.getElementById("errorCard");
 
-  box.style.display = "block";
-
-  if (message.toLowerCase().includes("pdfparse")) {
-    message = "INVALID PDF";
-  }
-
   card.innerText = message;
-  card.style.background = isError ? "#e74c3c" : "#27ae60";
+  card.className = "message-card " + (isError ? "error" : "success");
+  card.style.display = "block";
 
   setTimeout(() => {
-    box.style.display = "none";
-  }, 2500);
+    card.style.display = "none";
+  }, 3000);
 }
 
 /* =========================
@@ -135,7 +129,7 @@ function chooseFile(code, type) {
 }
 
 /* =========================
-   PREVIEW (FINAL FIX)
+   PREVIEW
 ========================= */
 function openPreview(type, code) {
 
@@ -151,68 +145,48 @@ function openPreview(type, code) {
 
   const ext = file.name.split(".").pop().toLowerCase();
 
-  // 🔥 CLEAR OLD
   frame.innerHTML = "";
 
-  // PDF
   if (ext === "pdf") {
     const url = URL.createObjectURL(file);
-    frame.innerHTML = `
-      <embed src="${url}" type="application/pdf" width="100%" height="600px">
-    `;
+    frame.innerHTML = `<embed src="${url}" type="application/pdf" width="100%" height="600px">`;
   }
 
-  // EXCEL
   else if (ext === "xlsx" || ext === "xls") {
-
     const reader = new FileReader();
-
     reader.onload = function (e) {
       const data = new Uint8Array(e.target.result);
       const workbook = XLSX.read(data, { type: "array" });
-
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
       frame.innerHTML = XLSX.utils.sheet_to_html(sheet);
     };
-
     reader.readAsArrayBuffer(file);
   }
 
-  // WORD
   else if (ext === "docx") {
-
     const reader = new FileReader();
-
     reader.onload = function (e) {
       mammoth.convertToHtml({ arrayBuffer: e.target.result })
-        .then(result => {
-          frame.innerHTML = result.value;
-        })
-        .catch(() => {
-          frame.innerHTML = "<h3 style='padding:20px'>Preview not available</h3>";
-        });
+        .then(result => frame.innerHTML = result.value)
+        .catch(() => frame.innerHTML = "<h3>Preview not available</h3>");
     };
-
     reader.readAsArrayBuffer(file);
   }
 
-  // HTML
   else if (ext === "html") {
     const reader = new FileReader();
     reader.onload = e => frame.innerHTML = e.target.result;
     reader.readAsText(file);
   }
 
-  // TXT
   else if (ext === "txt") {
     const reader = new FileReader();
-    reader.onload = e => frame.innerHTML = `<pre style="padding:20px;white-space:pre-wrap">${e.target.result}</pre>`;
+    reader.onload = e => frame.innerHTML = `<pre>${e.target.result}</pre>`;
     reader.readAsText(file);
   }
 
-  // FALLBACK
   else {
-    frame.innerHTML = "<h3 style='padding:20px'>Preview not available</h3>";
+    frame.innerHTML = "<h3>Preview not available</h3>";
   }
 
   modal.classList.remove("hidden");
@@ -222,11 +196,7 @@ function openPreview(type, code) {
    CLOSE
 ========================= */
 function closePreview() {
-
-  const frame = document.getElementById("previewFrame");
-
-  frame.innerHTML = "";
-
+  document.getElementById("previewFrame").innerHTML = "";
   document.getElementById("filePreviewModal").classList.add("hidden");
 
   currentPreviewFile = null;
@@ -235,9 +205,9 @@ function closePreview() {
 }
 
 /* =========================
-   SUBMIT
+   SUBMIT (🔥 FIXED)
 ========================= */
-function submitFile() {
+async function submitFile() {
 
   if (!currentPreviewFile) {
     showMessage("No file selected", true);
@@ -249,16 +219,16 @@ function submitFile() {
   form.append("code", currentPreviewCode);
   form.append("type", currentPreviewType);
 
-  fetch("/data/upload", {
-    method: "POST",
-    body: form
-  })
-  .then(res => res.json())
-  .then(res => {
+  try {
+    const res = await fetch("/data/upload", {
+      method: "POST",
+      body: form
+    });
 
-    if (!res.success) {
-      showMessage(res.message, true);
-      closePreview();
+    const data = await res.json();
+
+    if (!res.ok) {
+      showMessage(data.error || "Upload failed", true);
       return;
     }
 
@@ -270,8 +240,10 @@ function submitFile() {
 
     applyFilters();
     setTimeout(loadData, 300);
-  })
-  .catch(() => showMessage("Upload error", true));
+
+  } catch (err) {
+    showMessage("Upload error", true);
+  }
 }
 
 /* =========================

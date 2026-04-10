@@ -125,21 +125,37 @@ function chooseFile(code, type) {
       return;
     }
 
-    // ❌ INVALID PDF (quick check)
+    // 🔥 FIXED PDF VALIDATION (ONLY CHANGE)
     if (ext === "pdf") {
-      try {
-        const buffer = await file.arrayBuffer();
-        const text = new TextDecoder().decode(buffer);
 
-        if (!text || text.trim().length < 20) {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        const content = e.target.result;
+
+        const hasText = /[a-zA-Z0-9]{5,}/.test(content);
+
+        if (!hasText) {
           showMessage("INVALID PDF", true);
           return;
         }
 
-      } catch {
+        // continue only if valid
+        window[`temp_${type}_${code}`] = file;
+
+        currentPreviewFile = file;
+        currentPreviewCode = code;
+        currentPreviewType = type;
+
+        openPreview(type, code);
+      };
+
+      reader.onerror = function () {
         showMessage("INVALID PDF", true);
-        return;
-      }
+      };
+
+      reader.readAsText(file);
+      return;
     }
 
     window[`temp_${type}_${code}`] = file;
@@ -171,7 +187,6 @@ function openPreview(type, code) {
 
   const ext = file.name.split(".").pop().toLowerCase();
 
-  // 🔄 Spinner
   frame.innerHTML = `
     <div style="text-align:center;padding:40px">
       <div class="spinner"></div>

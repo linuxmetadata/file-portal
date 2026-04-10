@@ -282,8 +282,8 @@ async function submitFile() {
 
     closePreview(); // ✅ full reset
 
-    applyFilters();
-    setTimeout(loadData, 300);
+    // ✅ FORCE FULL UI REFRESH (CRITICAL FIX)
+    await loadData();
 
   } catch (err) {
     showMessage("Upload error", true);

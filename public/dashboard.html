@@ -19,7 +19,6 @@
       z-index: 99999;
       display: none;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      animation: fadeIn 0.3s ease;
     }
 
     .success { background: #27ae60; }
@@ -37,6 +36,21 @@
     .submit-btn:disabled {
       background: gray;
       cursor: not-allowed;
+    }
+
+    /* 🔄 Spinner */
+    .spinner {
+      border: 4px solid #eee;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: auto;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
@@ -126,47 +140,6 @@ function showMessage(msg, type = "success") {
 function closePreview() {
   document.getElementById("filePreviewModal").classList.add("hidden");
   document.getElementById("previewFrame").innerHTML = "";
-}
-
-// 🔥 FINAL SUBMIT FUNCTION (FIXED)
-async function submitFile() {
-
-  const btn = document.getElementById("submitBtn");
-
-  if (btn.disabled) return;
-
-  btn.disabled = true;
-  btn.innerText = "Uploading...";
-
-  try {
-    const formData = new FormData();
-    formData.append("file", window.selectedFile);
-    formData.append("code", window.selectedCode);
-    formData.append("type", window.selectedType);
-
-    const res = await fetch("/upload", {
-      method: "POST",
-      body: formData
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      showMessage(data.error || "Upload failed", "error");
-      btn.disabled = false;
-      btn.innerText = "Submit";
-      return;
-    }
-
-    showMessage("Upload successful", "success");
-    closePreview();
-    location.reload();
-
-  } catch (err) {
-    showMessage("Something went wrong", "error");
-    btn.disabled = false;
-    btn.innerText = "Submit";
-  }
 }
 </script>
 

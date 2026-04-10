@@ -96,7 +96,7 @@ function getUploadUI(row, code, type) {
   if (window[`temp_${type}_${code}`]) {
     return `
       <button onclick="openPreview('${type}','${code}')">View</button>
-      <button onclick="submitFile()">Submit</button>
+      <button id="submitBtn" onclick="submitFile()">Submit</button>
     `;
   }
 
@@ -104,17 +104,43 @@ function getUploadUI(row, code, type) {
 }
 
 /* =========================
-   CHOOSE FILE
+   CHOOSE FILE (VALIDATE FIRST)
 ========================= */
 function chooseFile(code, type) {
 
   const input = document.createElement("input");
   input.type = "file";
 
-  input.onchange = () => {
+  input.onchange = async () => {
 
     const file = input.files[0];
     if (!file) return;
+
+    const ext = file.name.split(".").pop().toLowerCase();
+    const allowedExt = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html"];
+
+    // ❌ INVALID FORMAT
+    if (!allowedExt.includes(ext)) {
+      showMessage("INVALID FORMAT", true);
+      return;
+    }
+
+    // ❌ INVALID PDF (quick check)
+    if (ext === "pdf") {
+      try {
+        const buffer = await file.arrayBuffer();
+        const text = new TextDecoder().decode(buffer);
+
+        if (!text || text.trim().length < 20) {
+          showMessage("INVALID PDF", true);
+          return;
+        }
+
+      } catch {
+        showMessage("INVALID PDF", true);
+        return;
+      }
+    }
 
     window[`temp_${type}_${code}`] = file;
 
@@ -129,7 +155,7 @@ function chooseFile(code, type) {
 }
 
 /* =========================
-   PREVIEW
+   PREVIEW (WITH SPINNER)
 ========================= */
 function openPreview(type, code) {
 
@@ -145,7 +171,17 @@ function openPreview(type, code) {
 
   const ext = file.name.split(".").pop().toLowerCase();
 
-  frame.innerHTML = "";
+  // 🔄 Spinner
+  frame.innerHTML = `
+    <div style="text-align:center;padding:40px">
+      <div class="spinner"></div>
+      <p>Loading preview...</p>
+    </div>
+  `;
+
+  const loadPreview = () => {
+    frame.innerHTML = "";
+  };
 
   if (ext === "pdf") {
     const url = URL.createObjectURL(file);
@@ -155,6 +191,7 @@ function openPreview(type, code) {
   else if (ext === "xlsx" || ext === "xls") {
     const reader = new FileReader();
     reader.onload = function (e) {
+      loadPreview();
       const data = new Uint8Array(e.target.result);
       const workbook = XLSX.read(data, { type: "array" });
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -166,6 +203,7 @@ function openPreview(type, code) {
   else if (ext === "docx") {
     const reader = new FileReader();
     reader.onload = function (e) {
+      loadPreview();
       mammoth.convertToHtml({ arrayBuffer: e.target.result })
         .then(result => frame.innerHTML = result.value)
         .catch(() => frame.innerHTML = "<h3>Preview not available</h3>");
@@ -175,13 +213,19 @@ function openPreview(type, code) {
 
   else if (ext === "html") {
     const reader = new FileReader();
-    reader.onload = e => frame.innerHTML = e.target.result;
+    reader.onload = e => {
+      loadPreview();
+      frame.innerHTML = e.target.result;
+    };
     reader.readAsText(file);
   }
 
   else if (ext === "txt") {
     const reader = new FileReader();
-    reader.onload = e => frame.innerHTML = `<pre>${e.target.result}</pre>`;
+    reader.onload = e => {
+      loadPreview();
+      frame.innerHTML = `<pre>${e.target.result}</pre>`;
+    };
     reader.readAsText(file);
   }
 
@@ -205,9 +249,16 @@ function closePreview() {
 }
 
 /* =========================
-   SUBMIT (🔥 FIXED)
+   SUBMIT (NO DOUBLE CLICK)
 ========================= */
 async function submitFile() {
+
+  const btn = document.getElementById("submitBtn");
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerText = "Uploading...";
+  }
 
   if (!currentPreviewFile) {
     showMessage("No file selected", true);
@@ -229,6 +280,10 @@ async function submitFile() {
 
     if (!res.ok) {
       showMessage(data.error || "Upload failed", true);
+      if (btn) {
+        btn.disabled = false;
+        btn.innerText = "Submit";
+      }
       return;
     }
 
@@ -243,6 +298,10 @@ async function submitFile() {
 
   } catch (err) {
     showMessage("Upload error", true);
+    if (btn) {
+      btn.disabled = false;
+      btn.innerText = "Submit";
+    }
   }
 }
 

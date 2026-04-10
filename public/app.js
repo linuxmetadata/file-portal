@@ -9,9 +9,20 @@ let currentPreviewType = null;
    LOAD DATA
 ========================= */
 async function loadData() {
-  const res = await fetch("/data/list");
-  fullData = await res.json();
-  applyFilters();
+  try {
+    const res = await fetch("/data/list");
+
+    if (!res.ok) {
+      console.error("API failed");
+      return;
+    }
+
+    fullData = await res.json();
+    applyFilters();
+
+  } catch (err) {
+    console.error("Load error:", err);
+  }
 }
 
 /* =========================
@@ -93,68 +104,47 @@ function getUploadUI(row, code, type) {
     `;
   }
 
-  if (window[`temp_${type}_${code}`]) {
-    return `
-      <button onclick="openPreview('${type}','${code}')">View</button>
-      <button onclick="submitFile(this)">Submit</button>
-    `;
-  }
-
   return `<button onclick="chooseFile('${code}','${type}')">Upload</button>`;
 }
 
 /* =========================
-   CHOOSE FILE (NO VALIDATION)
+   CHOOSE FILE
 ========================= */
 function chooseFile(code, type) {
 
-  // ✅ CLEAR OLD STATE BEFORE NEW FILE
   currentPreviewFile = null;
   currentPreviewCode = null;
   currentPreviewType = null;
-
-  Object.keys(window).forEach(key => {
-    if (key.startsWith("temp_")) {
-      delete window[key];
-    }
-  });
 
   const input = document.createElement("input");
   input.type = "file";
 
   input.onchange = async () => {
 
-  const file = input.files[0];
-if (!file) return;
+    const file = input.files[0];
+    if (!file) return;
 
-// ❌ REMOVE GLOBAL TEMP STORAGE (ROOT CAUSE)
-// window[`temp_${type}_${code}`] = file;
+    currentPreviewFile = file;
+    currentPreviewCode = code;
+    currentPreviewType = type;
 
-// ✅ ONLY USE LOCAL STATE
-currentPreviewFile = file;
-currentPreviewCode = code;
-currentPreviewType = type;
-
-openPreview(type, code);
+    openPreview();
+  };
 
   input.click();
 }
 
 /* =========================
-   PREVIEW (WITH SPINNER)
+   PREVIEW
 ========================= */
-function openPreview(type, code) {
+function openPreview() {
 
-  const file = window[`temp_${type}_${code}`];
-  if (!file) return;
-
-  currentPreviewFile = file;
-  currentPreviewCode = code;
-  currentPreviewType = type;
+  if (!currentPreviewFile) return;
 
   const modal = document.getElementById("filePreviewModal");
   const frame = document.getElementById("previewFrame");
 
+  const file = currentPreviewFile;
   const ext = file.name.split(".").pop().toLowerCase();
 
   frame.innerHTML = `
@@ -231,21 +221,12 @@ function closePreview() {
   currentPreviewFile = null;
   currentPreviewCode = null;
   currentPreviewType = null;
-
-  // ✅ CLEAR ALL TEMP FILES
-  Object.keys(window).forEach(key => {
-    if (key.startsWith("temp_")) {
-      delete window[key];
-    }
-  });
 }
 
 /* =========================
-   SUBMIT (NO DOUBLE CLICK)
+   SUBMIT
 ========================= */
-async function submitFile() {
-
-  const btn = document.getElementById("submitBtn");
+async function submitFile(btn) {
 
   if (btn) {
     btn.disabled = true;
@@ -281,9 +262,7 @@ async function submitFile() {
 
     showMessage("UPLOAD SUCCESSFUL");
 
-    closePreview(); // ✅ full reset
-
-    // ✅ FORCE FULL UI REFRESH (CRITICAL FIX)
+    closePreview();
     await loadData();
 
   } catch (err) {

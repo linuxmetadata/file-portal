@@ -2,6 +2,7 @@ let fullData = [];
 let activeCardFilter = null;
 
 let currentPreviewFile = null;
+let currentPreviewFiles = []; // ✅ NEW
 let currentPreviewCode = null;
 let currentPreviewType = null;
 
@@ -108,23 +109,27 @@ function getUploadUI(row, code, type) {
 }
 
 /* =========================
-   CHOOSE FILE
+   CHOOSE FILE (MULTIPLE)
 ========================= */
 function chooseFile(code, type) {
 
   currentPreviewFile = null;
+  currentPreviewFiles = [];
   currentPreviewCode = null;
   currentPreviewType = null;
 
   const input = document.createElement("input");
   input.type = "file";
+  input.multiple = true; // ✅ MULTIPLE ENABLED
 
   input.onchange = async () => {
 
-    const file = input.files[0];
-    if (!file) return;
+    const files = Array.from(input.files);
+    if (!files.length) return;
 
-    currentPreviewFile = file;
+    currentPreviewFiles = files;
+    currentPreviewFile = files[0]; // for compatibility
+
     currentPreviewCode = code;
     currentPreviewType = type;
 
@@ -135,78 +140,43 @@ function chooseFile(code, type) {
 }
 
 /* =========================
-   PREVIEW
+   PREVIEW (MULTIPLE)
 ========================= */
 function openPreview() {
 
-  if (!currentPreviewFile) return;
+  if (!currentPreviewFiles.length) return;
 
   const modal = document.getElementById("filePreviewModal");
   const frame = document.getElementById("previewFrame");
 
-  const file = currentPreviewFile;
-  const ext = file.name.split(".").pop().toLowerCase();
+  frame.innerHTML = "";
 
-  frame.innerHTML = `
-    <div style="text-align:center;padding:40px">
-      <div class="spinner"></div>
-      <p>Loading preview...</p>
-    </div>
-  `;
+  currentPreviewFiles.forEach(file => {
 
-  const loadPreview = () => {
-    frame.innerHTML = "";
-  };
+    const ext = file.name.split(".").pop().toLowerCase();
 
-  if (ext === "pdf") {
-    const url = URL.createObjectURL(file);
-    frame.innerHTML = `<embed src="${url}" type="application/pdf" width="100%" height="600px">`;
-  }
+    const container = document.createElement("div");
+    container.style.marginBottom = "20px";
 
-  else if (ext === "xlsx" || ext === "xls") {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      loadPreview();
-      const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: "array" });
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      frame.innerHTML = XLSX.utils.sheet_to_html(sheet);
-    };
-    reader.readAsArrayBuffer(file);
-  }
+    if (ext === "pdf") {
+      const url = URL.createObjectURL(file);
+      container.innerHTML = `<embed src="${url}" type="application/pdf" width="100%" height="400px">`;
+    }
 
-  else if (ext === "docx") {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      loadPreview();
-      mammoth.convertToHtml({ arrayBuffer: e.target.result })
-        .then(result => frame.innerHTML = result.value)
-        .catch(() => frame.innerHTML = "<h3>Preview not available</h3>");
-    };
-    reader.readAsArrayBuffer(file);
-  }
+    else if (ext === "txt") {
+      const reader = new FileReader();
+      reader.onload = e => {
+        container.innerHTML = `<pre>${e.target.result}</pre>`;
+      };
+      reader.readAsText(file);
+    }
 
-  else if (ext === "html") {
-    const reader = new FileReader();
-    reader.onload = e => {
-      loadPreview();
-      frame.innerHTML = e.target.result;
-    };
-    reader.readAsText(file);
-  }
+    else {
+      container.innerHTML = `<p>${file.name} (Preview not available)</p>`;
+    }
 
-  else if (ext === "txt") {
-    const reader = new FileReader();
-    reader.onload = e => {
-      loadPreview();
-      frame.innerHTML = `<pre>${e.target.result}</pre>`;
-    };
-    reader.readAsText(file);
-  }
-
-  else {
-    frame.innerHTML = "<h3>Preview not available</h3>";
-  }
+    frame.appendChild(container);
+  });
 
   modal.classList.remove("hidden");
 }
@@ -219,12 +189,13 @@ function closePreview() {
   document.getElementById("filePreviewModal").classList.add("hidden");
 
   currentPreviewFile = null;
+  currentPreviewFiles = [];
   currentPreviewCode = null;
   currentPreviewType = null;
 }
 
 /* =========================
-   SUBMIT
+   SUBMIT (MULTIPLE UPLOAD)
 ========================= */
 async function submitFile(btn) {
 
@@ -233,44 +204,45 @@ async function submitFile(btn) {
     btn.innerText = "Uploading...";
   }
 
-  if (!currentPreviewFile) {
+  if (!currentPreviewFiles.length) {
     showMessage("No file selected", true);
     return;
   }
 
-  const form = new FormData();
-  form.append("file", currentPreviewFile);
-  form.append("code", currentPreviewCode);
-  form.append("type", currentPreviewType);
-
   try {
-    const res = await fetch("/data/upload", {
-      method: "POST",
-      body: form
-    });
 
-    const data = await res.json();
+    for (let file of currentPreviewFiles) {
 
-    if (!res.ok) {
-      showMessage(data.error || "Upload failed", true);
-      if (btn) {
-        btn.disabled = false;
-        btn.innerText = "Submit";
+      const form = new FormData();
+      form.append("file", file);
+      form.append("code", currentPreviewCode);
+      form.append("type", currentPreviewType);
+
+      const res = await fetch("/data/upload", {
+        method: "POST",
+        body: form
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showMessage(data.error || "Upload failed", true);
+        break;
       }
-      return;
     }
 
-    showMessage("UPLOAD SUCCESSFUL");
+    showMessage("UPLOAD COMPLETED");
 
     closePreview();
     await loadData();
 
   } catch (err) {
     showMessage("Upload error", true);
-    if (btn) {
-      btn.disabled = false;
-      btn.innerText = "Submit";
-    }
+  }
+
+  if (btn) {
+    btn.disabled = false;
+    btn.innerText = "Submit";
   }
 }
 

@@ -109,7 +109,7 @@ router.post("/validate", upload.single("file"), async (req, res) => {
 });
 
 /* =========================
-   LIST DATA
+   LIST DATA (UNCHANGED FOR NOW)
 ========================= */
 router.get("/list", async (req, res) => {
 
@@ -138,8 +138,8 @@ router.get("/list", async (req, res) => {
         name: row["Stockist Name"] || row.Name || "",
 
         sales: match[4] || "",
-        awsFile: match[2] ? `https://drive.google.com/file/d/${match[2]}/view` : null,
-        sssFile: match[3] ? `https://drive.google.com/file/d/${match[3]}/view` : null
+        awsFile: match[2] ? `https://drive.google.com/file/d/${match[2].split(",").pop()}/view` : null,
+        sssFile: match[3] ? `https://drive.google.com/file/d/${match[3].split(",").pop()}/view` : null
       };
     });
 
@@ -152,7 +152,7 @@ router.get("/list", async (req, res) => {
 });
 
 /* =========================
-   UPLOAD (MULTIPLE FILE SUPPORT)
+   UPLOAD (UPDATED FOR HISTORY)
 ========================= */
 router.post("/upload", upload.single("file"), async (req, res) => {
 
@@ -168,8 +168,6 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       return res.status(429).json({ error: "Upload already in progress" });
     }
     uploadLocks[lockKey] = true;
-
-    // ✅ REMOVED restriction blocking multiple uploads
 
     const excelData = loadExcel();
     const rowData = excelData.find(r => String(r.Code || r.CODE) === String(code));
@@ -188,8 +186,21 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       fs.unlinkSync(req.file.path);
     }
 
-    // ✅ This will overwrite or update latest file
-    await updateRow(code, name, type, driveFile.fileId, sales);
+    // 🔥 NEW: APPEND FILE IDS
+    const sheetRows = await getSheetData();
+    const existing = sheetRows.find(r => String(r[0]) === String(code));
+
+    let existingFiles = "";
+
+    if (existing) {
+      existingFiles = type === "aws" ? existing[2] || "" : existing[3] || "";
+    }
+
+    const updatedFiles = existingFiles
+      ? `${existingFiles},${driveFile.fileId}`
+      : driveFile.fileId;
+
+    await updateRow(code, name, type, updatedFiles, sales);
 
     delete uploadLocks[lockKey];
 

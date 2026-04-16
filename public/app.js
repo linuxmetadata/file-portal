@@ -2,7 +2,7 @@ let fullData = [];
 let activeCardFilter = null;
 
 let currentPreviewFile = null;
-let currentPreviewFiles = []; // ✅ NEW
+let currentPreviewFiles = [];
 let currentPreviewCode = null;
 let currentPreviewType = null;
 
@@ -92,20 +92,31 @@ function updateSales(code, value) {
 }
 
 /* =========================
-   UPLOAD UI
+   UPLOAD UI (UPDATED FOR HISTORY)
 ========================= */
 function getUploadUI(row, code, type) {
 
-  const fileKey = type === "aws" ? row.awsFile : row.sssFile;
+  const fileString = type === "aws" ? row.awsFile : row.sssFile;
 
-  if (fileKey) {
-    return `
-      <button onclick="viewFile('${fileKey}')">View</button>
-      ${isAdmin() ? `<button onclick="deleteFile('${code}','${type}')">Delete</button>` : ""}
-    `;
+  let buttons = "";
+
+  if (fileString) {
+
+    const fileIds = fileString.split(",");
+
+    buttons += fileIds.map(id => {
+      const url = `https://drive.google.com/file/d/${id}/view`;
+      return `<button onclick="viewFile('${url}')">View</button>`;
+    }).join(" ");
+
+    if (isAdmin()) {
+      buttons += `<button onclick="deleteFile('${code}','${type}')">Delete</button>`;
+    }
   }
 
-  return `<button onclick="chooseFile('${code}','${type}')">Upload</button>`;
+  buttons += `<button onclick="chooseFile('${code}','${type}')">Upload</button>`;
+
+  return buttons;
 }
 
 /* =========================
@@ -120,7 +131,7 @@ function chooseFile(code, type) {
 
   const input = document.createElement("input");
   input.type = "file";
-  input.multiple = true; // ✅ MULTIPLE ENABLED
+  input.multiple = true;
 
   input.onchange = async () => {
 
@@ -128,7 +139,7 @@ function chooseFile(code, type) {
     if (!files.length) return;
 
     currentPreviewFiles = files;
-    currentPreviewFile = files[0]; // for compatibility
+    currentPreviewFile = files[0];
 
     currentPreviewCode = code;
     currentPreviewType = type;

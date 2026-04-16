@@ -152,7 +152,7 @@ router.get("/list", async (req, res) => {
 });
 
 /* =========================
-   UPLOAD (VALIDATION DISABLED ONLY HERE)
+   UPLOAD (MULTIPLE FILE SUPPORT)
 ========================= */
 router.post("/upload", upload.single("file"), async (req, res) => {
 
@@ -169,23 +169,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     }
     uploadLocks[lockKey] = true;
 
-    const existingRows = await getSheetData();
-    const existing = existingRows.find(r => String(r[0]) === String(code));
-
-    if (existing) {
-      const alreadyUploaded = (type === "aws" && existing[2]) || (type === "sss" && existing[3]);
-
-      if (alreadyUploaded) {
-        if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
-        delete uploadLocks[lockKey];
-
-        return res.status(400).json({
-          error: `${type.toUpperCase()} already uploaded`
-        });
-      }
-    }
-
-    // 🚫 VALIDATION DISABLED HERE ONLY
+    // ✅ REMOVED restriction blocking multiple uploads
 
     const excelData = loadExcel();
     const rowData = excelData.find(r => String(r.Code || r.CODE) === String(code));
@@ -204,6 +188,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       fs.unlinkSync(req.file.path);
     }
 
+    // ✅ This will overwrite or update latest file
     await updateRow(code, name, type, driveFile.fileId, sales);
 
     delete uploadLocks[lockKey];

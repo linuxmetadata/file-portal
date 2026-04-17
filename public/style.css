@@ -170,7 +170,7 @@ button:hover {
 }
 
 /* =========================
-   ✅ FILE PREVIEW MODAL
+   FILE PREVIEW MODAL
 ========================= */
 
 .preview-modal {
@@ -214,16 +214,34 @@ button:hover {
   align-items: center;
 }
 
-/* BODY */
+/* BODY (🔥 FIX ADDED) */
 .preview-body {
   flex: 1;
   background: #f8f9fc;
+
+  /* ✅ FIX */
+  overflow: auto;
+  padding: 10px;
 }
 
-.preview-body iframe {
+/* TABLE INSIDE PREVIEW (🔥 NEW) */
+.preview-body table {
+  border-collapse: collapse;
   width: 100%;
-  height: 100%;
-  border: none;
+  font-size: 12px;
+}
+
+.preview-body th,
+.preview-body td {
+  border: 1px solid #ccc;
+  padding: 6px;
+  text-align: left;
+}
+
+/* PREVIEW WRAPPER (🔥 NEW) */
+.preview-body div {
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 /* FOOTER */

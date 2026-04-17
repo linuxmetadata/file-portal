@@ -43,7 +43,7 @@ function showMessage(message, isError = false) {
 }
 
 /* =========================
-   FILTER (UPDATED)
+   FILTER
 ========================= */
 function applyFilters() {
 
@@ -54,7 +54,6 @@ function applyFilters() {
   const name = document.querySelector("input[placeholder='Name']")?.value.toLowerCase() || "";
 
   const filtered = fullData.filter(row => {
-
     return (
       (row.division || "").toLowerCase().includes(division) &&
       (row.state || "").toLowerCase().includes(state) &&
@@ -110,7 +109,7 @@ function updateSales(code, value) {
 }
 
 /* =========================
-   UPLOAD UI (UNCHANGED)
+   UPLOAD UI
 ========================= */
 function getUploadUI(row, code, type) {
 
@@ -144,7 +143,7 @@ function getUploadUI(row, code, type) {
 }
 
 /* =========================
-   CHOOSE FILE (UNCHANGED)
+   CHOOSE FILE
 ========================= */
 function chooseFile(code, type) {
 
@@ -175,7 +174,7 @@ function chooseFile(code, type) {
 }
 
 /* =========================
-   PREVIEW (UNCHANGED)
+   PREVIEW (FIXED)
 ========================= */
 function openPreview() {
 
@@ -205,7 +204,22 @@ function openPreview() {
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: "array" });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        container.innerHTML = XLSX.utils.sheet_to_html(sheet);
+
+        const tableHTML = XLSX.utils.sheet_to_html(sheet);
+
+        container.innerHTML = `
+          <div style="
+            max-width:100%;
+            max-height:400px;
+            overflow:auto;
+            border:1px solid #ddd;
+            background:#fff;
+          ">
+            <div style="min-width:800px">
+              ${tableHTML}
+            </div>
+          </div>
+        `;
       };
 
       reader.readAsArrayBuffer(file);
@@ -243,7 +257,7 @@ function closePreview() {
 }
 
 /* =========================
-   SUBMIT (UNCHANGED)
+   SUBMIT
 ========================= */
 async function submitFile(btn) {
 
@@ -325,7 +339,7 @@ function updateCards(data) {
 }
 
 /* =========================
-   🔥 AUTO FILTER LISTENER (NEW)
+   FILTER LISTENER
 ========================= */
 document.addEventListener("input", function(e) {
   if (e.target.closest("thead")) {

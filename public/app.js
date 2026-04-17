@@ -43,11 +43,29 @@ function showMessage(message, isError = false) {
 }
 
 /* =========================
-   FILTER
+   FILTER (UPDATED)
 ========================= */
 function applyFilters() {
-  renderTable(fullData);
-  updateCards(fullData);
+
+  const division = document.querySelector("input[placeholder='Division']")?.value.toLowerCase() || "";
+  const state = document.querySelector("input[placeholder='State']")?.value.toLowerCase() || "";
+  const bmhq = document.querySelector("input[placeholder='BM HQ']")?.value.toLowerCase() || "";
+  const code = document.querySelector("input[placeholder='Code']")?.value.toLowerCase() || "";
+  const name = document.querySelector("input[placeholder='Name']")?.value.toLowerCase() || "";
+
+  const filtered = fullData.filter(row => {
+
+    return (
+      (row.division || "").toLowerCase().includes(division) &&
+      (row.state || "").toLowerCase().includes(state) &&
+      (row.bmhq || "").toLowerCase().includes(bmhq) &&
+      String(row.code || "").toLowerCase().includes(code) &&
+      (row.name || "").toLowerCase().includes(name)
+    );
+  });
+
+  renderTable(filtered);
+  updateCards(filtered);
 }
 
 /* =========================
@@ -92,7 +110,7 @@ function updateSales(code, value) {
 }
 
 /* =========================
-   UPLOAD UI (FIXED URL + HISTORY)
+   UPLOAD UI (UNCHANGED)
 ========================= */
 function getUploadUI(row, code, type) {
 
@@ -108,7 +126,6 @@ function getUploadUI(row, code, type) {
 
       let url = id.trim();
 
-      // ✅ FIX: handle both ID and full URL
       if (!url.startsWith("http")) {
         url = `https://drive.google.com/file/d/${url}/view`;
       }
@@ -127,7 +144,7 @@ function getUploadUI(row, code, type) {
 }
 
 /* =========================
-   CHOOSE FILE (MULTIPLE)
+   CHOOSE FILE (UNCHANGED)
 ========================= */
 function chooseFile(code, type) {
 
@@ -158,7 +175,7 @@ function chooseFile(code, type) {
 }
 
 /* =========================
-   PREVIEW (MULTIPLE + EXCEL FIX)
+   PREVIEW (UNCHANGED)
 ========================= */
 function openPreview() {
 
@@ -226,7 +243,7 @@ function closePreview() {
 }
 
 /* =========================
-   SUBMIT (MULTIPLE UPLOAD)
+   SUBMIT (UNCHANGED)
 ========================= */
 async function submitFile(btn) {
 
@@ -306,5 +323,14 @@ function isAdmin() {
 function updateCards(data) {
   document.getElementById("total").innerText = data.length;
 }
+
+/* =========================
+   🔥 AUTO FILTER LISTENER (NEW)
+========================= */
+document.addEventListener("input", function(e) {
+  if (e.target.closest("thead")) {
+    applyFilters();
+  }
+});
 
 window.onload = loadData;

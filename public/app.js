@@ -92,7 +92,7 @@ function updateSales(code, value) {
 }
 
 /* =========================
-   UPLOAD UI (UPDATED FOR HISTORY)
+   UPLOAD UI (FIXED URL + HISTORY)
 ========================= */
 function getUploadUI(row, code, type) {
 
@@ -105,7 +105,14 @@ function getUploadUI(row, code, type) {
     const fileIds = fileString.split(",");
 
     buttons += fileIds.map(id => {
-      const url = `https://drive.google.com/file/d/${id}/view`;
+
+      let url = id.trim();
+
+      // ✅ FIX: handle both ID and full URL
+      if (!url.startsWith("http")) {
+        url = `https://drive.google.com/file/d/${url}/view`;
+      }
+
       return `<button onclick="viewFile('${url}')">View</button>`;
     }).join(" ");
 
@@ -151,7 +158,7 @@ function chooseFile(code, type) {
 }
 
 /* =========================
-   PREVIEW (MULTIPLE)
+   PREVIEW (MULTIPLE + EXCEL FIX)
 ========================= */
 function openPreview() {
 
@@ -172,6 +179,19 @@ function openPreview() {
     if (ext === "pdf") {
       const url = URL.createObjectURL(file);
       container.innerHTML = `<embed src="${url}" type="application/pdf" width="100%" height="400px">`;
+    }
+
+    else if (ext === "xlsx" || ext === "xls") {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        container.innerHTML = XLSX.utils.sheet_to_html(sheet);
+      };
+
+      reader.readAsArrayBuffer(file);
     }
 
     else if (ext === "txt") {

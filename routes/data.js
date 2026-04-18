@@ -60,8 +60,6 @@ async function validateFile(file) {
 
       const textLength = data.text ? data.text.trim().length : 0;
 
-      console.log("PDF text length:", textLength);
-
       if (textLength < 20) {
         throw new Error("INVALID PDF");
       }
@@ -73,7 +71,7 @@ async function validateFile(file) {
 }
 
 /* =========================
-   VALIDATE BEFORE PREVIEW (UNCHANGED)
+   VALIDATE BEFORE PREVIEW
 ========================= */
 router.post("/validate", upload.single("file"), async (req, res) => {
   try {
@@ -96,20 +94,12 @@ router.post("/validate", upload.single("file"), async (req, res) => {
       fs.unlinkSync(req.file.path);
     }
 
-    if (err.message === "INVALID PDF") {
-      return res.status(400).json({ error: "INVALID PDF" });
-    }
-
-    if (err.message === "INVALID FORMAT") {
-      return res.status(400).json({ error: "INVALID FORMAT" });
-    }
-
-    return res.status(400).json({ error: "VALIDATION FAILED" });
+    return res.status(400).json({ error: err.message });
   }
 });
 
 /* =========================
-   LIST DATA (FIXED HERE ONLY)
+   LIST DATA (FIXED)
 ========================= */
 router.get("/list", async (req, res) => {
 
@@ -127,7 +117,13 @@ router.get("/list", async (req, res) => {
     const finalData = excelData.map((row, index) => {
 
       const code = row.Code || row.CODE || "";
-      const match = sheetRows.find(r => String(r[0]) === String(code)) || [];
+
+      /* ✅ FIXED MATCH LOGIC */
+      const match = sheetRows.find(r => {
+        const sheetCode = String(r[0] || "").replace(/\s/g, "").toLowerCase();
+        const rowCode = String(code || "").replace(/\s/g, "").toLowerCase();
+        return sheetCode === rowCode;
+      }) || [];
 
       return {
         id: index,
@@ -139,7 +135,6 @@ router.get("/list", async (req, res) => {
 
         sales: match[4] || "",
 
-        /* ✅ FIX: send raw file IDs instead of only last URL */
         awsFile: match[2] || "",
         sssFile: match[3] || ""
       };
@@ -208,8 +203,6 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     res.json({ success: true });
 
   } catch (err) {
-
-    console.error("Upload Error:", err.message);
 
     if (req.file && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);

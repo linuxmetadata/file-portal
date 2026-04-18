@@ -34,7 +34,7 @@ function loadExcel() {
 }
 
 /* =========================
-   FILE VALIDATION (UNCHANGED)
+   FILE VALIDATION
 ========================= */
 async function validateFile(file) {
 
@@ -99,7 +99,18 @@ router.post("/validate", upload.single("file"), async (req, res) => {
 });
 
 /* =========================
-   LIST DATA (FIXED)
+   COMMON MATCH FUNCTION ✅
+========================= */
+function matchRow(sheetRows, code) {
+  return sheetRows.find(r => {
+    const sheetCode = String(r[1] || "").replace(/\s/g, "").toLowerCase();
+    const rowCode = String(code || "").replace(/\s/g, "").toLowerCase();
+    return sheetCode === rowCode;
+  }) || [];
+}
+
+/* =========================
+   LIST DATA
 ========================= */
 router.get("/list", async (req, res) => {
 
@@ -118,12 +129,7 @@ router.get("/list", async (req, res) => {
 
       const code = row.Code || row.CODE || "";
 
-      /* ✅ FIXED MATCH LOGIC */
-      const match = sheetRows.find(r => {
-        const sheetCode = String(r[0] || "").replace(/\s/g, "").toLowerCase();
-        const rowCode = String(code || "").replace(/\s/g, "").toLowerCase();
-        return sheetCode === rowCode;
-      }) || [];
+      const match = matchRow(sheetRows, code);
 
       return {
         id: index,
@@ -134,7 +140,6 @@ router.get("/list", async (req, res) => {
         name: row["Stockist Name"] || row.Name || "",
 
         sales: match[4] || "",
-
         awsFile: match[2] || "",
         sssFile: match[3] || ""
       };
@@ -149,7 +154,7 @@ router.get("/list", async (req, res) => {
 });
 
 /* =========================
-   UPLOAD (UNCHANGED)
+   UPLOAD (FIXED MATCH)
 ========================= */
 router.post("/upload", upload.single("file"), async (req, res) => {
 
@@ -184,11 +189,13 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     }
 
     const sheetRows = await getSheetData();
-    const existing = sheetRows.find(r => String(r[0]) === String(code));
+
+    /* ✅ FIXED MATCH HERE */
+    const existing = matchRow(sheetRows, code);
 
     let existingFiles = "";
 
-    if (existing) {
+    if (existing.length) {
       existingFiles = type === "aws" ? existing[2] || "" : existing[3] || "";
     }
 

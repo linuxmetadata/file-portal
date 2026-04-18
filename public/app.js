@@ -109,7 +109,7 @@ function updateSales(code, value) {
 }
 
 /* =========================
-   UPLOAD UI (FIXED ONLY HERE)
+   UPLOAD UI (UNCHANGED)
 ========================= */
 function getUploadUI(row, code, type) {
 
@@ -138,7 +138,6 @@ function getUploadUI(row, code, type) {
 
   } else {
 
-    /* ✅ ONLY CHANGE: Upload shown only if no file */
     buttons += `<button onclick="chooseFile('${code}','${type}')">Upload</button>`;
   }
 
@@ -177,7 +176,7 @@ function chooseFile(code, type) {
 }
 
 /* =========================
-   PREVIEW (FINAL)
+   PREVIEW (UNCHANGED)
 ========================= */
 function openPreview() {
 
@@ -373,7 +372,44 @@ function isAdmin() {
   return localStorage.getItem("role") === "admin";
 }
 
+/* =========================
+   ✅ FIXED CARDS FUNCTION
+========================= */
 function updateCards(data) {
+
+  let awsSubmitted = 0;
+  let awsPending = 0;
+  let sssSubmitted = 0;
+  let sssPending = 0;
+
+  data.forEach(row => {
+
+    if (row.awsFile) awsSubmitted++;
+    else awsPending++;
+
+    if (row.sssFile) sssSubmitted++;
+    else sssPending++;
+  });
+
+  const total = data.length || 1;
+
+  const awsSubmittedPct = ((awsSubmitted / total) * 100).toFixed(0);
+  const awsPendingPct = ((awsPending / total) * 100).toFixed(0);
+  const sssSubmittedPct = ((sssSubmitted / total) * 100).toFixed(0);
+  const sssPendingPct = ((sssPending / total) * 100).toFixed(0);
+
+  document.getElementById("awsSubmitted").innerText =
+    `${awsSubmitted} (${awsSubmittedPct}%)`;
+
+  document.getElementById("awsPending").innerText =
+    `${awsPending} (${awsPendingPct}%)`;
+
+  document.getElementById("sssSubmitted").innerText =
+    `${sssSubmitted} (${sssSubmittedPct}%)`;
+
+  document.getElementById("sssPending").innerText =
+    `${sssPending} (${sssPendingPct}%)`;
+
   document.getElementById("total").innerText = data.length;
 }
 

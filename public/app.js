@@ -109,7 +109,7 @@ function updateSales(code, value) {
 }
 
 /* =========================
-   UPLOAD UI
+   UPLOAD UI (FIXED ONLY HERE)
 ========================= */
 function getUploadUI(row, code, type) {
 
@@ -135,9 +135,12 @@ function getUploadUI(row, code, type) {
     if (isAdmin()) {
       buttons += `<button onclick="deleteFile('${code}','${type}')">Delete</button>`;
     }
-  }
 
-  buttons += `<button onclick="chooseFile('${code}','${type}')">Upload</button>`;
+  } else {
+
+    /* ✅ ONLY CHANGE: Upload shown only if no file */
+    buttons += `<button onclick="chooseFile('${code}','${type}')">Upload</button>`;
+  }
 
   return buttons;
 }
@@ -243,7 +246,6 @@ function openPreview() {
       reader.readAsArrayBuffer(file);
     }
 
-    /* ✅ NEW: HTML SUPPORT */
     else if (ext === "html" || ext === "htm") {
 
       const reader = new FileReader();

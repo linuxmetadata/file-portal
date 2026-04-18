@@ -109,7 +109,7 @@ router.post("/validate", upload.single("file"), async (req, res) => {
 });
 
 /* =========================
-   LIST DATA (UNCHANGED FOR NOW)
+   LIST DATA (FIXED HERE ONLY)
 ========================= */
 router.get("/list", async (req, res) => {
 
@@ -138,8 +138,10 @@ router.get("/list", async (req, res) => {
         name: row["Stockist Name"] || row.Name || "",
 
         sales: match[4] || "",
-        awsFile: match[2] ? `https://drive.google.com/file/d/${match[2].split(",").pop()}/view` : null,
-        sssFile: match[3] ? `https://drive.google.com/file/d/${match[3].split(",").pop()}/view` : null
+
+        /* ✅ FIX: send raw file IDs instead of only last URL */
+        awsFile: match[2] || "",
+        sssFile: match[3] || ""
       };
     });
 
@@ -152,7 +154,7 @@ router.get("/list", async (req, res) => {
 });
 
 /* =========================
-   UPLOAD (UPDATED FOR HISTORY)
+   UPLOAD (UNCHANGED)
 ========================= */
 router.post("/upload", upload.single("file"), async (req, res) => {
 
@@ -186,7 +188,6 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       fs.unlinkSync(req.file.path);
     }
 
-    // 🔥 NEW: APPEND FILE IDS
     const sheetRows = await getSheetData();
     const existing = sheetRows.find(r => String(r[0]) === String(code));
 

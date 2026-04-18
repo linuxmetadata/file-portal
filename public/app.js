@@ -174,7 +174,7 @@ function chooseFile(code, type) {
 }
 
 /* =========================
-   PREVIEW (FIXED)
+   PREVIEW (UPDATED WITH DOCX)
 ========================= */
 function openPreview() {
 
@@ -208,18 +208,38 @@ function openPreview() {
         const tableHTML = XLSX.utils.sheet_to_html(sheet);
 
         container.innerHTML = `
-          <div style="
-            max-width:100%;
-            max-height:400px;
-            overflow:auto;
-            border:1px solid #ddd;
-            background:#fff;
-          ">
+          <div style="max-width:100%; max-height:400px; overflow:auto; border:1px solid #ddd; background:#fff;">
             <div style="min-width:800px">
               ${tableHTML}
             </div>
           </div>
         `;
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
+
+    else if (ext === "docx") {
+
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+
+        const arrayBuffer = e.target.result;
+
+        mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
+          .then(result => {
+
+            container.innerHTML = `
+              <div style="max-height:400px; overflow:auto; padding:10px; background:#fff; border:1px solid #ddd;">
+                ${result.value}
+              </div>
+            `;
+
+          })
+          .catch(() => {
+            container.innerHTML = `<p>${file.name} (Preview failed)</p>`;
+          });
       };
 
       reader.readAsArrayBuffer(file);

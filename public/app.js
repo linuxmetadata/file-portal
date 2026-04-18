@@ -174,7 +174,7 @@ function chooseFile(code, type) {
 }
 
 /* =========================
-   PREVIEW (UPDATED WITH DOCX)
+   PREVIEW (FINAL)
 ========================= */
 function openPreview() {
 
@@ -225,9 +225,7 @@ function openPreview() {
 
       reader.onload = function (e) {
 
-        const arrayBuffer = e.target.result;
-
-        mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
+        mammoth.convertToHtml({ arrayBuffer: e.target.result })
           .then(result => {
 
             container.innerHTML = `
@@ -243,6 +241,25 @@ function openPreview() {
       };
 
       reader.readAsArrayBuffer(file);
+    }
+
+    /* ✅ NEW: HTML SUPPORT */
+    else if (ext === "html" || ext === "htm") {
+
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        const safeHtml = e.target.result.replace(/"/g, '&quot;');
+
+        container.innerHTML = `
+          <iframe 
+            srcdoc="${safeHtml}"
+            style="width:100%; height:400px; border:1px solid #ddd; background:#fff;">
+          </iframe>
+        `;
+      };
+
+      reader.readAsText(file);
     }
 
     else if (ext === "txt") {

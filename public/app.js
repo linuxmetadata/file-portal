@@ -373,7 +373,7 @@ function isAdmin() {
 }
 
 /* =========================
-   ✅ FIXED CARDS FUNCTION
+   FINAL FIXED CARDS
 ========================= */
 function updateCards(data) {
 
@@ -383,7 +383,6 @@ function updateCards(data) {
   let sssPending = 0;
 
   data.forEach(row => {
-
     if (row.awsFile) awsSubmitted++;
     else awsPending++;
 
@@ -393,24 +392,20 @@ function updateCards(data) {
 
   const total = data.length || 1;
 
-  const awsSubmittedPct = ((awsSubmitted / total) * 100).toFixed(0);
-  const awsPendingPct = ((awsPending / total) * 100).toFixed(0);
-  const sssSubmittedPct = ((sssSubmitted / total) * 100).toFixed(0);
-  const sssPendingPct = ((sssPending / total) * 100).toFixed(0);
+  const awsSubEl = document.getElementById("awsSubmitted");
+  if (awsSubEl) awsSubEl.innerText = `${awsSubmitted} (${((awsSubmitted / total) * 100).toFixed(0)}%)`;
 
-  document.getElementById("awsSubmitted").innerText =
-    `${awsSubmitted} (${awsSubmittedPct}%)`;
+  const awsPenEl = document.getElementById("awsPending");
+  if (awsPenEl) awsPenEl.innerText = `${awsPending} (${((awsPending / total) * 100).toFixed(0)}%)`;
 
-  document.getElementById("awsPending").innerText =
-    `${awsPending} (${awsPendingPct}%)`;
+  const sssSubEl = document.getElementById("sssSubmitted");
+  if (sssSubEl) sssSubEl.innerText = `${sssSubmitted} (${((sssSubmitted / total) * 100).toFixed(0)}%)`;
 
-  document.getElementById("sssSubmitted").innerText =
-    `${sssSubmitted} (${sssSubmittedPct}%)`;
+  const sssPenEl = document.getElementById("sssPending");
+  if (sssPenEl) sssPenEl.innerText = `${sssPending} (${((sssPending / total) * 100).toFixed(0)}%)`;
 
-  document.getElementById("sssPending").innerText =
-    `${sssPending} (${sssPendingPct}%)`;
-
-  document.getElementById("total").innerText = data.length;
+  const totalEl = document.getElementById("total");
+  if (totalEl) totalEl.innerText = data.length;
 }
 
 /* =========================

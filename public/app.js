@@ -53,15 +53,27 @@ function applyFilters() {
   const code = document.querySelector("input[placeholder='Code']")?.value.toLowerCase() || "";
   const name = document.querySelector("input[placeholder='Name']")?.value.toLowerCase() || "";
 
-  const filtered = fullData.filter(row => {
-    return (
-      (row.division || "").toLowerCase().includes(division) &&
-      (row.state || "").toLowerCase().includes(state) &&
-      (row.bmhq || "").toLowerCase().includes(bmhq) &&
-      String(row.code || "").toLowerCase().includes(code) &&
-      (row.name || "").toLowerCase().includes(name)
-    );
-  });
+const filtered = fullData.filter(row => {
+
+  const matchesText =
+    (row.division || "").toLowerCase().includes(division) &&
+    (row.state || "").toLowerCase().includes(state) &&
+    (row.bmhq || "").toLowerCase().includes(bmhq) &&
+    String(row.code || "").toLowerCase().includes(code) &&
+    (row.name || "").toLowerCase().includes(name);
+
+  if (!matchesText) return false;
+
+  const aws = (row.awsFile || "").toString().trim();
+  const sss = (row.sssFile || "").toString().trim();
+
+  if (activeCardFilter === "awsSubmitted") return aws !== "";
+  if (activeCardFilter === "awsPending") return aws === "";
+  if (activeCardFilter === "sssSubmitted") return sss !== "";
+  if (activeCardFilter === "sssPending") return sss === "";
+
+  return true;
+});
 
   renderTable(filtered);
   updateCards(filtered);
@@ -426,5 +438,47 @@ function bindHeaderFilters() {
   inputs.forEach(input => {
     input.oninput = applyFilters; // direct binding, no duplicates
   });
+}
+/* =========================
+   CLEAR FILTERS
+========================= */
+function clearFilters() {
+
+  document.getElementById("globalSearch").value = "";
+
+  document.getElementById("f_division").value = "";
+  document.getElementById("f_state").value = "";
+  document.getElementById("f_bmhq").value = "";
+  document.getElementById("f_code").value = "";
+  document.getElementById("f_name").value = "";
+
+  applyFilters();
+}
+
+/* =========================
+   DOWNLOAD EXCEL
+========================= */
+function downloadExcel() {
+
+  const ws = XLSX.utils.json_to_sheet(fullData);
+  const wb = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(wb, ws, "Data");
+
+  XLSX.writeFile(wb, "dashboard_data.xlsx");
+}
+
+/* =========================
+   LOGOUT
+========================= */
+function logout() {
+
+  localStorage.removeItem("role");
+
+  window.location.href = "index.html";
+}
+function setCardFilter(type) {
+  activeCardFilter = type;
+  applyFilters();
 }
 window.onload = loadData;

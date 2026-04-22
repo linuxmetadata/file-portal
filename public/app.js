@@ -188,6 +188,38 @@ function chooseFile(code, type) {
     const files = Array.from(input.files);
     if (!files.length) return;
 
+    // ✅ Allowed formats
+    const allowed = ["xlsx", "xls", "docx", "txt", "html", "htm", "pdf"];
+
+    for (let file of files) {
+
+      const ext = file.name.split(".").pop().toLowerCase();
+
+      // ❌ INVALID FORMAT
+      if (!allowed.includes(ext)) {
+        showMessage("INVALID FORMAT", true);
+        return;
+      }
+
+      // ❌ INVALID PDF (basic scanned check)
+      if (ext === "pdf") {
+        try {
+          const text = await file.text();
+
+          // if no readable text → likely scanned
+          if (!text || text.trim().length < 50) {
+            showMessage("INVALID PDF", true);
+            return;
+          }
+
+        } catch (err) {
+          showMessage("INVALID PDF", true);
+          return;
+        }
+      }
+    }
+
+    // ✅ IF ALL FILES VALID → CONTINUE (NO CHANGE BELOW)
     currentPreviewFiles = files;
     currentPreviewFile = files[0];
 

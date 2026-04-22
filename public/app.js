@@ -473,12 +473,33 @@ function bindHeaderFilters() {
 /* =========================
    DOWNLOAD EXCEL
 ========================= */
-function downloadExcel() {
+  function downloadExcel() {
 
-  const ws = XLSX.utils.json_to_sheet(fullData);
+  // 🔄 Transform data before export
+  const exportData = fullData.map((row, index) => {
+
+    const aws = (row.awsFile || "").toString().trim();
+    const sss = (row.sssFile || "").toString().trim();
+
+    return {
+      ID: index + 1, // ✅ Serial number starts from 1
+      Division: row.division || "",
+      State: row.state || "",
+      BM_HQ: row.bmhq || "",
+      Code: row.code || "",
+      Name: row.name || "",
+      Sales: row.sales || "",
+
+      // ✅ Convert file → status
+      AWS: aws ? "Submitted" : "Pending",
+      SSS: sss ? "Submitted" : "Pending"
+    };
+  });
+
+  const ws = XLSX.utils.json_to_sheet(exportData);
   const wb = XLSX.utils.book_new();
 
-  XLSX.utils.book_append_sheet(wb, ws, "Data");
+  XLSX.utils.book_append_sheet(wb, ws, "Dashboard");
 
   XLSX.writeFile(wb, "dashboard_data.xlsx");
 }

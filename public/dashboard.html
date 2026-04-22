@@ -74,11 +74,27 @@
 </div>
 
 <div class="cards">
-  <div class="card green"><h3 id="awsDone">0</h3><p>AWS Submitted</p></div>
-  <div class="card red"><h3 id="awsPending">0</h3><p>AWS Pending</p></div>
-  <div class="card green"><h3 id="sssDone">0</h3><p>SSS Submitted</p></div>
-  <div class="card red"><h3 id="sssPending">0</h3><p>SSS Pending</p></div>
-  <div class="card blue"><h3 id="total">0</h3><p>Total</p></div>
+
+  <div class="card green" onclick="setCardFilter('awsSubmitted')">
+    <h3 id="awsDone">0</h3><p>AWS Submitted</p>
+  </div>
+
+  <div class="card red" onclick="setCardFilter('awsPending')">
+    <h3 id="awsPending">0</h3><p>AWS Pending</p>
+  </div>
+
+  <div class="card green" onclick="setCardFilter('sssSubmitted')">
+    <h3 id="sssDone">0</h3><p>SSS Submitted</p>
+  </div>
+
+  <div class="card red" onclick="setCardFilter('sssPending')">
+    <h3 id="sssPending">0</h3><p>SSS Pending</p>
+  </div>
+
+  <div class="card blue" onclick="setCardFilter(null)">
+    <h3 id="total">0</h3><p>Total</p>
+  </div>
+
 </div>
 
 <div style="overflow:auto; max-height:70vh;">

@@ -53,26 +53,39 @@ function applyFilters() {
   const code = document.querySelector("input[placeholder='Code']")?.value.toLowerCase() || "";
   const name = document.querySelector("input[placeholder='Name']")?.value.toLowerCase() || "";
 
-const filtered = fullData.filter(row => {
+  const filtered = fullData.filter(row => {
 
-  const matchesText =
-    (row.division || "").toLowerCase().includes(division) &&
-    (row.state || "").toLowerCase().includes(state) &&
-    (row.bmhq || "").toLowerCase().includes(bmhq) &&
-    String(row.code || "").toLowerCase().includes(code) &&
-    (row.name || "").toLowerCase().includes(name);
+  // TEXT FILTER
+  if (
+    !(row.division || "").toLowerCase().includes(division) ||
+    !(row.state || "").toLowerCase().includes(state) ||
+    !(row.bmhq || "").toLowerCase().includes(bmhq) ||
+    !String(row.code || "").toLowerCase().includes(code) ||
+    !(row.name || "").toLowerCase().includes(name)
+  ) {
+    return false;
+  }
 
-  if (!matchesText) return false;
-
+  // CARD FILTER
   const aws = (row.awsFile || "").toString().trim();
   const sss = (row.sssFile || "").toString().trim();
 
-  if (activeCardFilter === "awsSubmitted") return aws !== "";
-  if (activeCardFilter === "awsPending") return aws === "";
-  if (activeCardFilter === "sssSubmitted") return sss !== "";
-  if (activeCardFilter === "sssPending") return sss === "";
+  switch (activeCardFilter) {
+    case "awsSubmitted":
+      return aws !== "";
 
-  return true;
+    case "awsPending":
+      return aws === "";
+
+    case "sssSubmitted":
+      return sss !== "";
+
+    case "sssPending":
+      return sss === "";
+
+    default:
+      return true;
+  }
 });
 
   renderTable(filtered);
@@ -442,7 +455,9 @@ function bindHeaderFilters() {
 /* =========================
    CLEAR FILTERS
 ========================= */
-function clearFilters() {
+  function clearFilters() {
+
+  activeCardFilter = null; // ✅ ADD THIS LINE
 
   document.getElementById("globalSearch").value = "";
 

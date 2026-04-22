@@ -117,7 +117,7 @@ function getUploadUI(row, code, type) {
 
   let buttons = "";
 
-  if (fileString) {
+  if (fileString && fileString.toString().trim() !== "") {
 
     const fileIds = fileString.split(",");
 
@@ -373,7 +373,7 @@ function isAdmin() {
 }
 
 /* =========================
-   FINAL FIXED CARDS
+   FINAL FIXED CARDS (UPDATED ONLY HERE)
 ========================= */
 function updateCards(data) {
 
@@ -383,26 +383,30 @@ function updateCards(data) {
   let sssPending = 0;
 
   data.forEach(row => {
-    if (row.awsFile) awsSubmitted++;
+
+    const aws = (row.awsFile || "").toString().trim();
+    const sss = (row.sssFile || "").toString().trim();
+
+    if (aws !== "") awsSubmitted++;
     else awsPending++;
 
-    if (row.sssFile) sssSubmitted++;
+    if (sss !== "") sssSubmitted++;
     else sssPending++;
   });
 
   const total = data.length || 1;
 
-  const awsSubEl = document.getElementById("awsSubmitted");
-  if (awsSubEl) awsSubEl.innerText = `${awsSubmitted} (${((awsSubmitted / total) * 100).toFixed(0)}%)`;
+  const awsDoneEl = document.getElementById("awsDone");
+  if (awsDoneEl) awsDoneEl.innerText = awsSubmitted;
 
   const awsPenEl = document.getElementById("awsPending");
-  if (awsPenEl) awsPenEl.innerText = `${awsPending} (${((awsPending / total) * 100).toFixed(0)}%)`;
+  if (awsPenEl) awsPenEl.innerText = `${awsPending} (${Math.round((awsPending / total) * 100)}%)`;
 
-  const sssSubEl = document.getElementById("sssSubmitted");
-  if (sssSubEl) sssSubEl.innerText = `${sssSubmitted} (${((sssSubmitted / total) * 100).toFixed(0)}%)`;
+  const sssDoneEl = document.getElementById("sssDone");
+  if (sssDoneEl) sssDoneEl.innerText = sssSubmitted;
 
   const sssPenEl = document.getElementById("sssPending");
-  if (sssPenEl) sssPenEl.innerText = `${sssPending} (${((sssPending / total) * 100).toFixed(0)}%)`;
+  if (sssPenEl) sssPenEl.innerText = `${sssPending} (${Math.round((sssPending / total) * 100)}%)`;
 
   const totalEl = document.getElementById("total");
   if (totalEl) totalEl.innerText = data.length;

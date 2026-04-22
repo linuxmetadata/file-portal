@@ -99,12 +99,12 @@ router.post("/validate", upload.single("file"), async (req, res) => {
 });
 
 /* =========================
-   COMMON MATCH FUNCTION ✅
+   COMMON MATCH FUNCTION (FIXED)
 ========================= */
 function matchRow(sheetRows, code) {
   return sheetRows.find(r => {
-    const sheetCode = String(r[1] || "").replace(/\s/g, "").toLowerCase();
-    const rowCode = String(code || "").replace(/\s/g, "").toLowerCase();
+    const sheetCode = String(r[0] || "").trim().toUpperCase();  // ✅ FIXED HERE
+    const rowCode = String(code || "").trim().toUpperCase();
     return sheetCode === rowCode;
   }) || [];
 }
@@ -154,7 +154,7 @@ router.get("/list", async (req, res) => {
 });
 
 /* =========================
-   UPLOAD (FIXED MATCH)
+   UPLOAD
 ========================= */
 router.post("/upload", upload.single("file"), async (req, res) => {
 
@@ -190,7 +190,6 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 
     const sheetRows = await getSheetData();
 
-    /* ✅ FIXED MATCH HERE */
     const existing = matchRow(sheetRows, code);
 
     let existingFiles = "";

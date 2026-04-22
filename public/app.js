@@ -415,8 +415,16 @@ function updateCards(data) {
 /* =========================
    ✅ FIXED FILTER LISTENER
 ========================= */
-document.addEventListener("input", function(e) {
-  applyFilters();
-});
-
+function bindHeaderFilters() {
+  const inputs = document.querySelectorAll(
+    "input[placeholder='Division'], \
+     input[placeholder='State'], \
+     input[placeholder='BM HQ'], \
+     input[placeholder='Code'], \
+     input[placeholder='Name']"
+  );
+  inputs.forEach(input => {
+    input.oninput = applyFilters; // direct binding, no duplicates
+  });
+}
 window.onload = loadData;

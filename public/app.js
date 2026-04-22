@@ -373,7 +373,7 @@ function isAdmin() {
 }
 
 /* =========================
-   FINAL FIXED CARDS (UPDATED ONLY HERE)
+   CARDS (UNCHANGED)
 ========================= */
 function updateCards(data) {
 
@@ -413,12 +413,10 @@ function updateCards(data) {
 }
 
 /* =========================
-   FILTER LISTENER
+   ✅ FIXED FILTER LISTENER
 ========================= */
 document.addEventListener("input", function(e) {
-  if (e.target.closest("thead")) {
-    applyFilters();
-  }
+  applyFilters();
 });
 
 window.onload = loadData;

@@ -20,6 +20,8 @@ let currentPreviewType = null;
 
     const data = await res.json();
 
+    console.log("SAMPLE DATA:", data[0]); // DEBUG
+
     const user = (localStorage.getItem("user") || "").toLowerCase();
     const role = localStorage.getItem("role");
 
@@ -28,11 +30,11 @@ let currentPreviewType = null;
     } else {
       fullData = data.filter(row => {
         return (
-          (row.BH_ID || "").toLowerCase() === user ||
-          (row.SM_ID || "").toLowerCase() === user ||
-          (row.ZBM_ID || "").toLowerCase() === user ||
-          (row.RBM_ID || "").toLowerCase() === user ||
-          (row.ABM_ID || "").toLowerCase() === user
+          (row.bh_id || "").toLowerCase().includes(user) ||
+          (row.sm_id || "").toLowerCase().includes(user) ||
+          (row.zbm_id || "").toLowerCase().includes(user) ||
+          (row.rbm_id || "").toLowerCase().includes(user) ||
+          (row.abm_id || "").toLowerCase().includes(user)
         );
       });
     }

@@ -20,22 +20,20 @@ let currentPreviewType = null;
 
     const data = await res.json();
 
-    console.log("SAMPLE DATA:", data[0]); // DEBUG
-
     console.log("USER:", localStorage.getItem("user"));
-    console.log("ROLE:", localStorage.getItem("role"));
-    console.log("FULL DATA SAMPLE:", data[0]);
+    console.log("DATA SAMPLE:", data[0]);
+
+    const role = localStorage.getItem("role");
 
     if (role === "admin") {
       fullData = data;
     } else {
       fullData = data.filter(row => {
-        return (
-          (row.bh_id || "").toLowerCase().includes(user) ||
-          (row.sm_id || "").toLowerCase().includes(user) ||
-          (row.zbm_id || "").toLowerCase().includes(user) ||
-          (row.rbm_id || "").toLowerCase().includes(user) ||
-          (row.abm_id || "").toLowerCase().includes(user)
+
+        const user = (localStorage.getItem("user") || "").toLowerCase();
+
+        return Object.values(row).some(val =>
+          (val || "").toString().toLowerCase().includes(user)
         );
       });
     }

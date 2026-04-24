@@ -9,7 +9,7 @@ let currentPreviewType = null;
 /* =========================
    LOAD DATA
 ========================= */
-async function loadData() {
+  async function loadData() {
   try {
     const res = await fetch("/data/list");
 
@@ -18,7 +18,25 @@ async function loadData() {
       return;
     }
 
-    fullData = await res.json();
+    const data = await res.json();
+
+    const user = (localStorage.getItem("user") || "").toLowerCase();
+    const role = localStorage.getItem("role");
+
+    if (role === "admin") {
+      fullData = data;
+    } else {
+      fullData = data.filter(row => {
+        return (
+          (row.BH_ID || "").toLowerCase() === user ||
+          (row.SM_ID || "").toLowerCase() === user ||
+          (row.ZBM_ID || "").toLowerCase() === user ||
+          (row.RBM_ID || "").toLowerCase() === user ||
+          (row.ABM_ID || "").toLowerCase() === user
+        );
+      });
+    }
+
     applyFilters();
 
   } catch (err) {

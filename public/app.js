@@ -20,20 +20,23 @@ let currentPreviewType = null;
 
     const data = await res.json();
 
-    console.log("USER:", localStorage.getItem("user"));
-    console.log("DATA SAMPLE:", data[0]);
-
+    const user = (localStorage.getItem("user") || "").toLowerCase();
     const role = localStorage.getItem("role");
+
+    console.log("USER:", user); // debug
+    console.log("DATA SAMPLE:", data[0]); // debug
 
     if (role === "admin") {
       fullData = data;
     } else {
       fullData = data.filter(row => {
 
-        const user = (localStorage.getItem("user") || "").toLowerCase();
-
-        return Object.values(row).some(val =>
-          (val || "").toString().toLowerCase().includes(user)
+        return (
+          (row.BH_ID || row.bh_id || "").toString().toLowerCase().includes(user) ||
+          (row.SM_ID || row.sm_id || "").toString().toLowerCase().includes(user) ||
+          (row.ZBM_ID || row.zbm_id || "").toString().toLowerCase().includes(user) ||
+          (row.RBM_ID || row.rbm_id || "").toString().toLowerCase().includes(user) ||
+          (row.ABM_ID || row.abm_id || "").toString().toLowerCase().includes(user)
         );
       });
     }

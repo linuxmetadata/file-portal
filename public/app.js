@@ -22,8 +22,9 @@ let currentPreviewType = null;
 
     console.log("SAMPLE DATA:", data[0]); // DEBUG
 
-    const user = (localStorage.getItem("user") || "").toLowerCase();
-    const role = localStorage.getItem("role");
+    console.log("USER:", localStorage.getItem("user"));
+    console.log("ROLE:", localStorage.getItem("role"));
+    console.log("FULL DATA SAMPLE:", data[0]);
 
     if (role === "admin") {
       fullData = data;

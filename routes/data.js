@@ -112,6 +112,9 @@ function matchRow(sheetRows, code) {
 /* =========================
    LIST DATA
 ========================= */
+/* =========================
+   LIST DATA
+========================= */
 router.get("/list", async (req, res) => {
 
   try {
@@ -124,6 +127,10 @@ router.get("/list", async (req, res) => {
     } catch {
       console.log("Sheet fallback mode");
     }
+
+    // ✅ GET USER + ROLE
+    const user = (req.query.user || "").toLowerCase().trim();
+    const role = req.query.role;
 
     const finalData = excelData.map((row, index) => {
 
@@ -139,13 +146,38 @@ router.get("/list", async (req, res) => {
         code: code,
         name: row["Stockist Name"] || row.Name || "",
 
+        // ✅ ADD THESE FOR FILTERING (IMPORTANT)
+        bh_id: (row["BH_ID"] || row["BH ID"] || "").toString(),
+        sm_id: (row["SM_ID"] || row["SM ID"] || "").toString(),
+        zbm_id: (row["ZBM_ID"] || row["ZBM ID"] || "").toString(),
+        rbm_id: (row["RBM_ID"] || row["RBM ID"] || "").toString(),
+        abm_id: (row["ABM_ID"] || row["ABM ID"] || "").toString(),
+
         sales: match[4] || "",
         awsFile: match[2] || "",
         sssFile: match[3] || ""
       };
     });
 
-    res.json(finalData);
+    // ✅ APPLY FILTER ONLY FOR NON-ADMIN
+    let filteredData = finalData;
+
+    if (role !== "admin") {
+
+      filteredData = finalData.filter(row => {
+
+        return (
+          (row.bh_id || "").toLowerCase().trim() === user ||
+          (row.sm_id || "").toLowerCase().trim() === user ||
+          (row.zbm_id || "").toLowerCase().trim() === user ||
+          (row.rbm_id || "").toLowerCase().trim() === user ||
+          (row.abm_id || "").toLowerCase().trim() === user
+        );
+
+      });
+    }
+
+    res.json(filteredData);
 
   } catch (err) {
     console.error(err);

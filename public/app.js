@@ -9,38 +9,20 @@ let currentPreviewType = null;
 /* =========================
    LOAD DATA
 ========================= */
-  async function loadData() {
+ async function loadData() {
   try {
-    const res = await fetch("/data/list");
+
+    const user = localStorage.getItem("user");
+    const role = localStorage.getItem("role");
+
+    const res = await fetch(`/data/list?user=${user}&role=${role}`);
 
     if (!res.ok) {
       console.error("API failed");
       return;
     }
 
-    const data = await res.json();
-
-    const user = (localStorage.getItem("user") || "").toLowerCase().trim();
-    const role = localStorage.getItem("role");
-
-    console.log("USER:", user);
-    console.log("DATA SAMPLE:", data[0]);
-
-    if (role === "admin") {
-      fullData = data;
-    } else {
-      fullData = data.filter(row => {
-
-        const fields = [
-          row.BH_ID, row.SM_ID, row.ZBM_ID, row.RBM_ID, row.ABM_ID,
-          row.bh_id, row.sm_id, row.zbm_id, row.rbm_id, row.abm_id
-        ];
-
-        return fields.some(val =>
-          (val || "").toString().toLowerCase().trim() === user
-        );
-      });
-    }
+    fullData = await res.json();
 
     applyFilters();
 

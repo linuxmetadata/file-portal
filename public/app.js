@@ -20,23 +20,24 @@ let currentPreviewType = null;
 
     const data = await res.json();
 
-    const user = (localStorage.getItem("user") || "").toLowerCase();
+    const user = (localStorage.getItem("user") || "").toLowerCase().trim();
     const role = localStorage.getItem("role");
 
-    console.log("USER:", user); // debug
-    console.log("DATA SAMPLE:", data[0]); // debug
+    console.log("USER:", user);
+    console.log("DATA SAMPLE:", data[0]);
 
     if (role === "admin") {
       fullData = data;
     } else {
       fullData = data.filter(row => {
 
-        return (
-          (row.BH_ID || row.bh_id || "").toString().toLowerCase().includes(user) ||
-          (row.SM_ID || row.sm_id || "").toString().toLowerCase().includes(user) ||
-          (row.ZBM_ID || row.zbm_id || "").toString().toLowerCase().includes(user) ||
-          (row.RBM_ID || row.rbm_id || "").toString().toLowerCase().includes(user) ||
-          (row.ABM_ID || row.abm_id || "").toString().toLowerCase().includes(user)
+        const fields = [
+          row.BH_ID, row.SM_ID, row.ZBM_ID, row.RBM_ID, row.ABM_ID,
+          row.bh_id, row.sm_id, row.zbm_id, row.rbm_id, row.abm_id
+        ];
+
+        return fields.some(val =>
+          (val || "").toString().toLowerCase().trim() === user
         );
       });
     }

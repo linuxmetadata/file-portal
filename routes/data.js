@@ -113,6 +113,7 @@ function matchRow(sheetRows, code) {
    LIST DATA
 ========================= */
 /* =========================
+   /* =========================
    LIST DATA
 ========================= */
 router.get("/list", async (req, res) => {
@@ -146,7 +147,6 @@ router.get("/list", async (req, res) => {
         code: code,
         name: row["Stockist Name"] || row.Name || "",
 
-        // ✅ ADD THESE FOR FILTERING (IMPORTANT)
         bh_id: (row["BH_ID"] || row["BH ID"] || "").toString(),
         sm_id: (row["SM_ID"] || row["SM ID"] || "").toString(),
         zbm_id: (row["ZBM_ID"] || row["ZBM ID"] || "").toString(),
@@ -162,19 +162,23 @@ router.get("/list", async (req, res) => {
     // ✅ APPLY FILTER ONLY FOR NON-ADMIN
     let filteredData = finalData;
 
-    if (role !== "admin") {
+    if (role !== "admin" && user) {
 
-      filteredData = finalData.filter(row => {
+      const temp = finalData.filter(row => {
 
         return (
-          (row.bh_id || "").toLowerCase().trim() === user ||
-          (row.sm_id || "").toLowerCase().trim() === user ||
-          (row.zbm_id || "").toLowerCase().trim() === user ||
-          (row.rbm_id || "").toLowerCase().trim() === user ||
-          (row.abm_id || "").toLowerCase().trim() === user
+          (row.bh_id || "").toLowerCase().includes(user) ||
+          (row.sm_id || "").toLowerCase().includes(user) ||
+          (row.zbm_id || "").toLowerCase().includes(user) ||
+          (row.rbm_id || "").toLowerCase().includes(user) ||
+          (row.abm_id || "").toLowerCase().includes(user) ||
+          (row.bmhq || "").toLowerCase().includes(user)   // ✅ IMPORTANT ADD
         );
 
       });
+
+      // ✅ fallback (avoid blank screen)
+      filteredData = temp.length > 0 ? temp : finalData;
     }
 
     res.json(filteredData);

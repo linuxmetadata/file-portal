@@ -175,92 +175,44 @@ function getUploadUI(row, code, type) {
   return buttons;
 }
 
-/* =========================
-   CHOOSE FILE
-========================= */
-function chooseFile(code, type) {
+// ✅ RESET VALID FLAG
+isValidFile = true;
 
-  currentPreviewFile = null;
-  currentPreviewFiles = [];
-  currentPreviewCode = null;
-  currentPreviewType = null;
+// ✅ SET FILE FIRST
+currentPreviewFiles = files;
+currentPreviewFile = files[0];
 
-  const input = document.createElement("input");
-  input.type = "file";
-  input.multiple = true;
+currentPreviewCode = code;
+currentPreviewType = type;
 
-  input.onchange = async () => {
+// ✅ OPEN PREVIEW IMMEDIATELY
+openPreview();
 
-    const files = Array.from(input.files);
-    if (!files.length) return;
+// ✅ RUN VALIDATION IN BACKGROUND (DO NOT BLOCK UI)
+(async () => {
+  try {
+    const form = new FormData();
+    form.append("file", files[0]);
 
-    // ✅ Allowed formats
-    const allowed = ["xlsx", "xls", "docx", "txt", "html", "htm", "pdf"];
+    const validateRes = await fetch("/validate", {
+      method: "POST",
+      body: form
+    });
 
-    for (let file of files) {
+    const validateData = await validateRes.json();
 
-      const ext = file.name.split(".").pop().toLowerCase();
+    isValidFile = validateRes.ok;
 
-      // ❌ INVALID FORMAT
-      if (!allowed.includes(ext)) {
-        showMessage("INVALID FORMAT", true);
-        return;
-      }
-
-      // ❌ INVALID PDF (basic scanned check)
-      if (ext === "pdf") {
-        try {
-          const text = await file.text();
-
-          // if no readable text → likely scanned
-          if (!text || text.trim().length < 50) {
-            showMessage("INVALID PDF", true);
-            return;
-          }
-
-        } catch (err) {
-          showMessage("INVALID PDF", true);
-          return;
-        }
-      }
+    if (!validateRes.ok) {
+      showMessage(validateData.error || "VALIDATION FAILED", true);
     }
 
-    // ✅ CALL VALIDATION API BEFORE PREVIEW
-  const form = new FormData();
-  form.append("file", files[0]);
-
-  const validateRes = await fetch("/validate", {
-  method: "POST",
-  body: form
-});
-
-  const validateData = await validateRes.json();
-
-  // ✅ STORE RESULT
-  isValidFile = validateRes.ok;
-
-  if (!validateRes.ok) {
-  showMessage(validateData.error || "VALIDATION FAILED", true);
-}
-
-  const data = await res.json();
-
-  if (!res.ok) {
-  showMessage(data.error || "VALIDATION FAILED", true);
-}
-
-  // ✅ IF VALID → CONTINUE
-  currentPreviewFiles = files;
-  currentPreviewFile = files[0];
-
-  currentPreviewCode = code;
-  currentPreviewType = type;
-
-  openPreview();
-  };
-
-  input.click();
-}
+  } catch (err) {
+    console.log("Validation error:", err);
+    isValidFile = false;
+    showMessage("Validation failed", true);
+  }
+})();
 
 /* =========================
    PREVIEW (UNCHANGED)

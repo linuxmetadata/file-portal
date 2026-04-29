@@ -206,17 +206,13 @@ function chooseFile(code, type) {
         return;
       }
 
-      // ❌ INVALID PDF (UPDATED FIX)
+      // ❌ INVALID PDF (basic scanned check)
       if (ext === "pdf") {
         try {
-          const buffer = await file.arrayBuffer();
-          const bytes = new Uint8Array(buffer);
+          const text = await file.text();
 
-          const header = new TextDecoder().decode(bytes.slice(0, 5000));
-
-          const hasText = header.includes("BT") || header.includes("Tj") || header.includes("TJ");
-
-          if (!hasText) {
+          // if no readable text → likely scanned
+          if (!text || text.trim().length < 50) {
             showMessage("INVALID PDF", true);
             return;
           }
@@ -228,7 +224,7 @@ function chooseFile(code, type) {
       }
     }
 
-    // ✅ IF ALL FILES VALID → CONTINUE
+    // ✅ IF ALL FILES VALID → CONTINUE (NO CHANGE BELOW)
     currentPreviewFiles = files;
     currentPreviewFile = files[0];
 

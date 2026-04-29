@@ -224,6 +224,7 @@ function chooseFile(code, type) {
         }
       }
     }
+  }
 
     // ✅ CALL VALIDATION API BEFORE PREVIEW
   const form = new FormData();

@@ -178,8 +178,11 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     const { code, type, sales } = req.body;
 
     if (!code || !type || !req.file) {
-      return res.status(400).json({ error: "UPLOAD FAILED" });
-    }
+      console.error("UPLOAD ERROR:", err);
+      return res.status(400).json({ 
+      error: err.message || "UPLOAD FAILED" 
+  });
+}
 
     // ✅ SAFE PDF VALIDATION
     if (req.file.mimetype === "application/pdf" && pdfParse) {

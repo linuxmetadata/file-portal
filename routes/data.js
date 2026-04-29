@@ -192,7 +192,7 @@ router.get("/list", async (req, res) => {
 /* =========================
    UPLOAD
 ========================= */
-    router.post("/upload", upload.single("file"), async (req, res) => {
+router.post("/upload", upload.single("file"), async (req, res) => {
 
   try {
     const { code, type, sales } = req.body;
@@ -201,25 +201,28 @@ router.get("/list", async (req, res) => {
       return res.status(400).json({ error: "UPLOAD FAILED" });
     }
 
-    // ✅ NEW: SCANNED PDF VALIDATION (SAFE INSERT)
-    // ✅ SCANNED PDF CHECK
-if (req.file.mimetype === "application/pdf") {
-  try {
-    const buffer = fs.readFileSync(req.file.path);
-    const data = await pdfParse(buffer);
+    // ✅ FIXED PDF VALIDATION (SAFE + COMPLETE)
+    if (req.file.mimetype === "application/pdf") {
+      try {
+        const buffer = fs.readFileSync(req.file.path);
 
-    const text = data.text || "";
+        if (pdfParse) {
+          const data = await pdfParse(buffer);
+          const text = data.text || "";
 
-    if (text.trim().length === 0) {
-      fs.unlinkSync(req.file.path);
-      return res.status(400).json({ error: "INVALID PDF" });
+          // ⚠️ ONLY block completely empty PDFs
+          if (text.trim().length === 0) {
+            fs.unlinkSync(req.file.path);
+            return res.status(400).json({ error: "INVALID PDF" });
+          }
+        }
+
+      } catch (err) {
+        fs.unlinkSync(req.file.path);
+        return res.status(400).json({ error: "INVALID PDF" });
+      }
     }
-
-  } catch (err) {
-    fs.unlinkSync(req.file.path);
-    return res.status(400).json({ error: "INVALID PDF" });
-  }
-}
+    // ✅ END FIX
 
     const lockKey = `${code}_${type}`;
     if (uploadLocks[lockKey]) {
@@ -278,5 +281,3 @@ if (req.file.mimetype === "application/pdf") {
     return res.status(400).json({ error: "UPLOAD FAILED" });
   }
 });
-
-module.exports = router;

@@ -178,17 +178,6 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "UPLOAD FAILED" });
     }
 
-    // ✅ SAFE PDF VALIDATION
-    if (req.file.mimetype === "application/pdf" && pdfParse) {
-      try {
-        const buffer = fs.readFileSync(req.file.path);
-        await pdfParse(buffer);
-      } catch {
-        fs.unlinkSync(req.file.path);
-        return res.status(400).json({ error: "INVALID PDF" });
-      }
-    }
-
     const lockKey = `${code}_${type}`;
     if (uploadLocks[lockKey]) {
       return res.status(429).json({ error: "Upload already in progress" });

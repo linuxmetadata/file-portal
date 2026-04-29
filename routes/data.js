@@ -17,7 +17,6 @@ const { updateRow, getSheetData, deleteFileFromSheet } = require("../googleSheet
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
 
-// 🔒 Prevent double upload (memory lock)
 const uploadLocks = {};
 
 /* =========================
@@ -56,13 +55,7 @@ async function validateFile(file) {
 
     try {
       const buffer = fs.readFileSync(file.path);
-      const data = await pdfParse(buffer);
-
-      const textLength = data.text ? data.text.trim().length : 0;
-
-      if (textLength < 20) {
-        throw new Error("INVALID PDF");
-      }
+      await pdfParse(buffer); // only check if readable
 
     } catch (err) {
       throw new Error("INVALID PDF");
@@ -99,21 +92,17 @@ router.post("/validate", upload.single("file"), async (req, res) => {
 });
 
 /* =========================
-   COMMON MATCH FUNCTION (FIXED)
+   MATCH ROW
 ========================= */
 function matchRow(sheetRows, code) {
   return sheetRows.find(r => {
-    const sheetCode = String(r[0] || "").trim().toUpperCase();  // ✅ FIXED HERE
+    const sheetCode = String(r[0] || "").trim().toUpperCase();
     const rowCode = String(code || "").trim().toUpperCase();
     return sheetCode === rowCode;
   }) || [];
 }
 
 /* =========================
-   LIST DATA
-========================= */
-/* =========================
-   /* =========================
    LIST DATA
 ========================= */
 router.get("/list", async (req, res) => {
@@ -129,14 +118,12 @@ router.get("/list", async (req, res) => {
       console.log("Sheet fallback mode");
     }
 
-    // ✅ GET USER + ROLE
     const user = (req.query.user || "").toLowerCase().trim();
     const role = req.query.role;
 
     const finalData = excelData.map((row, index) => {
 
       const code = row.Code || row.CODE || "";
-
       const match = matchRow(sheetRows, code);
 
       return {
@@ -159,25 +146,18 @@ router.get("/list", async (req, res) => {
       };
     });
 
-    // ✅ APPLY FILTER ONLY FOR NON-ADMIN
     let filteredData = finalData;
 
     if (role !== "admin" && user) {
+      const temp = finalData.filter(row =>
+        (row.bh_id || "").toLowerCase().includes(user) ||
+        (row.sm_id || "").toLowerCase().includes(user) ||
+        (row.zbm_id || "").toLowerCase().includes(user) ||
+        (row.rbm_id || "").toLowerCase().includes(user) ||
+        (row.abm_id || "").toLowerCase().includes(user) ||
+        (row.bmhq || "").toLowerCase().includes(user)
+      );
 
-      const temp = finalData.filter(row => {
-
-        return (
-          (row.bh_id || "").toLowerCase().includes(user) ||
-          (row.sm_id || "").toLowerCase().includes(user) ||
-          (row.zbm_id || "").toLowerCase().includes(user) ||
-          (row.rbm_id || "").toLowerCase().includes(user) ||
-          (row.abm_id || "").toLowerCase().includes(user) ||
-          (row.bmhq || "").toLowerCase().includes(user)   // ✅ IMPORTANT ADD
-        );
-
-      });
-
-      // ✅ fallback (avoid blank screen)
       filteredData = temp.length > 0 ? temp : finalData;
     }
 
@@ -201,28 +181,16 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "UPLOAD FAILED" });
     }
 
-    // ✅ FIXED PDF VALIDATION (SAFE + COMPLETE)
-    if (req.file.mimetype === "application/pdf") {
+    // ✅ SAFE PDF VALIDATION
+    if (req.file.mimetype === "application/pdf" && pdfParse) {
       try {
         const buffer = fs.readFileSync(req.file.path);
-
-        if (pdfParse) {
-          const data = await pdfParse(buffer);
-          const text = data.text || "";
-
-          // ⚠️ ONLY block completely empty PDFs
-          if (text.trim().length === 0) {
-            fs.unlinkSync(req.file.path);
-            return res.status(400).json({ error: "INVALID PDF" });
-          }
-        }
-
-      } catch (err) {
+        await pdfParse(buffer);
+      } catch {
         fs.unlinkSync(req.file.path);
         return res.status(400).json({ error: "INVALID PDF" });
       }
     }
-    // ✅ END FIX
 
     const lockKey = `${code}_${type}`;
     if (uploadLocks[lockKey]) {
@@ -248,7 +216,6 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     }
 
     const sheetRows = await getSheetData();
-
     const existing = matchRow(sheetRows, code);
 
     let existingFiles = "";
@@ -281,3 +248,5 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     return res.status(400).json({ error: "UPLOAD FAILED" });
   }
 });
+
+module.exports = router;

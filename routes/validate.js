@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const fs = require("fs");
+const path = require("path");
 
 let pdfParse;
 try {
@@ -23,39 +24,49 @@ router.post("/", upload.single("file"), async (req, res) => {
     }
 
     const file = req.file;
-    const ext = file.originalname.split(".").pop().toLowerCase();
 
-    const allowed = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html"];
+    // ✅ GET EXTENSION
+    const ext = path.extname(file.originalname).toLowerCase().replace(".", "");
 
-    // ❌ FORMAT VALIDATION
+    // ✅ ALLOWED FORMATS
+    const allowed = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html", "htm"];
+
+    // ❌ INVALID FORMAT
     if (!allowed.includes(ext)) {
       fs.unlinkSync(file.path);
       return res.status(400).json({ error: "INVALID FORMAT" });
     }
 
-    // ❌ PDF VALIDATION (STRICT)
+    /* =========================
+       PDF VALIDATION
+    ========================= */
     if (ext === "pdf") {
 
+      // If pdf-parse not installed → skip strict validation
       if (!pdfParse) {
-        fs.unlinkSync(file.path);
-        return res.status(400).json({ error: "PDF ENGINE NOT AVAILABLE" });
-      }
+        console.log("pdf-parse not available, skipping PDF validation");
+      } else {
+        try {
+          const buffer = fs.readFileSync(file.path);
+          const data = await pdfParse(buffer);
 
-      try {
-        const buffer = fs.readFileSync(file.path);
-        const data = await pdfParse(buffer);
+          const text = data.text || "";
 
-        const text = data.text || "";
+          // 🔍 LOG FOR DEBUG
+          console.log("PDF TEXT LENGTH:", text.length);
 
-        // 🔥 STRICT RULE (scanned = no text)
-        if (text.trim().length < 20) {
+          // ❌ ONLY reject completely empty PDFs
+          if (text.trim().length === 0) {
+            fs.unlinkSync(file.path);
+            return res.status(400).json({ error: "INVALID PDF" });
+          }
+
+        } catch (err) {
+          console.log("PDF PARSE ERROR:", err.message);
+
           fs.unlinkSync(file.path);
           return res.status(400).json({ error: "INVALID PDF" });
         }
-
-      } catch (err) {
-        fs.unlinkSync(file.path);
-        return res.status(400).json({ error: "INVALID PDF" });
       }
     }
 
@@ -67,6 +78,8 @@ router.post("/", upload.single("file"), async (req, res) => {
     return res.json({ success: true });
 
   } catch (err) {
+
+    console.error("VALIDATION ERROR:", err);
 
     if (req.file && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);

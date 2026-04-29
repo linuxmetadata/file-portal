@@ -192,7 +192,9 @@ router.get("/list", async (req, res) => {
 /* =========================
    UPLOAD
 ========================= */
-router.post("/upload", upload.single("file"), async (req, res) => {
+  const pdfParse = require("pdf-parse"); // ✅ ADD THIS LINE (top of file if not already)
+
+  router.post("/upload", upload.single("file"), async (req, res) => {
 
   try {
     const { code, type, sales } = req.body;
@@ -200,6 +202,25 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     if (!code || !type || !req.file) {
       return res.status(400).json({ error: "UPLOAD FAILED" });
     }
+
+    // ✅ NEW: SCANNED PDF VALIDATION (SAFE INSERT)
+    if (req.file.mimetype === "application/pdf") {
+      try {
+        const buffer = fs.readFileSync(req.file.path);
+        const data = await pdfParse(buffer);
+
+        // ❌ No readable text → scanned PDF
+        if (!data.text || data.text.trim().length < 20) {
+          fs.unlinkSync(req.file.path); // clean temp file
+          return res.status(400).json({ error: "INVALID PDF" });
+        }
+
+      } catch (err) {
+        fs.unlinkSync(req.file.path);
+        return res.status(400).json({ error: "INVALID PDF" });
+      }
+    }
+    // ✅ END OF INSERT
 
     const lockKey = `${code}_${type}`;
     if (uploadLocks[lockKey]) {

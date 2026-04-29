@@ -202,18 +202,23 @@ router.get("/list", async (req, res) => {
     }
 
     // ✅ NEW: SCANNED PDF VALIDATION (SAFE INSERT)
-    if (req.file.mimetype === "application/pdf") {
-      try {
-        const buffer = fs.readFileSync(req.file.path);
-        const data = await pdfParse(buffer);
+    // ✅ SCANNED PDF CHECK
+if (req.file.mimetype === "application/pdf") {
+  try {
+    const buffer = fs.readFileSync(req.file.path);
+    const data = await pdfParse(buffer);
 
-        // ❌ No readable text → scanned PDF
-        const text = data.text || "";
+    const text = data.text || "";
 
-// allow small text PDFs also
-if (text.trim().length === 0) {
-  fs.unlinkSync(req.file.path);
-  return res.status(400).json({ error: "INVALID PDF" });
+    if (text.trim().length === 0) {
+      fs.unlinkSync(req.file.path);
+      return res.status(400).json({ error: "INVALID PDF" });
+    }
+
+  } catch (err) {
+    fs.unlinkSync(req.file.path);
+    return res.status(400).json({ error: "INVALID PDF" });
+  }
 }
 
     const lockKey = `${code}_${type}`;

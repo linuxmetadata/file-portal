@@ -224,14 +224,30 @@ function chooseFile(code, type) {
       }
     }
 
-    // ✅ IF ALL FILES VALID → CONTINUE (NO CHANGE BELOW)
-    currentPreviewFiles = files;
-    currentPreviewFile = files[0];
+    // ✅ CALL VALIDATION API BEFORE PREVIEW
+  const form = new FormData();
+  form.append("file", files[0]);
 
-    currentPreviewCode = code;
-    currentPreviewType = type;
+  const res = await fetch("/validate", {
+  method: "POST",
+  body: form
+});
 
-    openPreview();
+  const data = await res.json();
+
+  if (!res.ok) {
+  showMessage(data.error || "VALIDATION FAILED", true);
+  return;
+}
+
+  // ✅ IF VALID → CONTINUE
+  currentPreviewFiles = files;
+  currentPreviewFile = files[0];
+
+  currentPreviewCode = code;
+  currentPreviewType = type;
+
+  openPreview();
   };
 
   input.click();

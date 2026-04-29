@@ -16,6 +16,7 @@ app.use(express.static("public"));
 /* ROUTES */
 app.use("/auth", require("./routes/auth"));   // ✅ FIXED
 app.use("/data", require("./routes/data"));   // ✅ CLEAN
+app.use("/validate", require("./routes/validate"));
 
 /* START */
 const PORT = process.env.PORT || 5000;

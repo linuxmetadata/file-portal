@@ -208,17 +208,13 @@ router.get("/list", async (req, res) => {
         const data = await pdfParse(buffer);
 
         // ❌ No readable text → scanned PDF
-        if (!data.text || data.text.trim().length < 20) {
-          fs.unlinkSync(req.file.path); // clean temp file
-          return res.status(400).json({ error: "INVALID PDF" });
-        }
+        const text = data.text || "";
 
-      } catch (err) {
-        fs.unlinkSync(req.file.path);
-        return res.status(400).json({ error: "INVALID PDF" });
-      }
-    }
-    // ✅ END OF INSERT
+// allow small text PDFs also
+if (text.trim().length === 0) {
+  fs.unlinkSync(req.file.path);
+  return res.status(400).json({ error: "INVALID PDF" });
+}
 
     const lockKey = `${code}_${type}`;
     if (uploadLocks[lockKey]) {

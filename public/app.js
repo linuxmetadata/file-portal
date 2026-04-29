@@ -237,7 +237,6 @@ function chooseFile(code, type) {
 
   if (!res.ok) {
   showMessage(data.error || "VALIDATION FAILED", true);
-  return;
 }
 
   // ✅ IF VALID → CONTINUE

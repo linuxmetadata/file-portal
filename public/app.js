@@ -229,10 +229,19 @@ function chooseFile(code, type) {
   const form = new FormData();
   form.append("file", files[0]);
 
-  const res = await fetch("/validate", {
+  const validateRes = await fetch("/validate", {
   method: "POST",
   body: form
 });
+
+  const validateData = await validateRes.json();
+
+  // ✅ STORE RESULT
+  isValidFile = validateRes.ok;
+
+  if (!validateRes.ok) {
+  showMessage(validateData.error || "VALIDATION FAILED", true);
+}
 
   const data = await res.json();
 

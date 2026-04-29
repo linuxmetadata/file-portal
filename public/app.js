@@ -5,6 +5,7 @@ let currentPreviewFile = null;
 let currentPreviewFiles = [];
 let currentPreviewCode = null;
 let currentPreviewType = null;
+let isValidFile = true;
 
 /* =========================
    LOAD DATA
@@ -235,11 +236,14 @@ function chooseFile(code, type) {
 
   const data = await res.json();
 
+  // ✅ STORE VALIDATION RESULT
+  isValidFile = res.ok;
+
   if (!res.ok) {
   showMessage(data.error || "VALIDATION FAILED", true);
 }
 
-  // ✅ IF VALID → CONTINUE
+  // ✅ ALWAYS ALLOW PREVIEW
   currentPreviewFiles = files;
   currentPreviewFile = files[0];
 
@@ -247,7 +251,6 @@ function chooseFile(code, type) {
   currentPreviewType = type;
 
   openPreview();
-  };
 
   input.click();
 }

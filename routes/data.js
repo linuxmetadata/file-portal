@@ -48,16 +48,12 @@ async function validateFile(file) {
   }
 
   if (ext === ".pdf") {
-
-    if (!pdfParse) {
-      throw new Error("INVALID PDF");
-    }
+    if (!pdfParse) throw new Error("INVALID PDF");
 
     try {
       const buffer = fs.readFileSync(file.path);
-      await pdfParse(buffer); // only check if readable
-
-    } catch (err) {
+      await pdfParse(buffer);
+    } catch {
       throw new Error("INVALID PDF");
     }
   }
@@ -177,12 +173,10 @@ router.post("/upload", upload.single("file"), async (req, res) => {
   try {
     const { code, type, sales } = req.body;
 
+    // ✅ FIXED (NO err HERE)
     if (!code || !type || !req.file) {
-      console.error("UPLOAD ERROR:", err);
-      return res.status(400).json({ 
-      error: err.message || "UPLOAD FAILED" 
-  });
-}
+      return res.status(400).json({ error: "UPLOAD FAILED" });
+    }
 
     // ✅ SAFE PDF VALIDATION
     if (req.file.mimetype === "application/pdf" && pdfParse) {
@@ -239,6 +233,8 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 
   } catch (err) {
 
+    console.error("UPLOAD ERROR:", err);
+
     if (req.file && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }
@@ -248,7 +244,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       delete uploadLocks[lockKey];
     }
 
-    return res.status(400).json({ error: "UPLOAD FAILED" });
+    return res.status(400).json({ error: err.message || "UPLOAD FAILED" });
   }
 });
 

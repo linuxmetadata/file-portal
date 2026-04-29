@@ -224,7 +224,6 @@ function chooseFile(code, type) {
         }
       }
     }
-  }
 
     // ✅ CALL VALIDATION API BEFORE PREVIEW
   const form = new FormData();
@@ -237,14 +236,11 @@ function chooseFile(code, type) {
 
   const data = await res.json();
 
-  // ✅ STORE VALIDATION RESULT
-  isValidFile = res.ok;
-
   if (!res.ok) {
   showMessage(data.error || "VALIDATION FAILED", true);
 }
 
-  // ✅ ALWAYS ALLOW PREVIEW
+  // ✅ IF VALID → CONTINUE
   currentPreviewFiles = files;
   currentPreviewFile = files[0];
 
@@ -252,6 +248,7 @@ function chooseFile(code, type) {
   currentPreviewType = type;
 
   openPreview();
+  };
 
   input.click();
 }

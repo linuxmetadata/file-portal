@@ -5,14 +5,12 @@ let currentPreviewFile = null;
 let currentPreviewFiles = [];
 let currentPreviewCode = null;
 let currentPreviewType = null;
-let isValidFile = true;
 
 /* =========================
    LOAD DATA
 ========================= */
- async function loadData() {
+async function loadData() {
   try {
-
     const user = localStorage.getItem("user");
     const role = localStorage.getItem("role");
 
@@ -24,7 +22,6 @@ let isValidFile = true;
     }
 
     fullData = await res.json();
-
     applyFilters();
 
   } catch (err) {
@@ -36,7 +33,6 @@ let isValidFile = true;
    MESSAGE
 ========================= */
 function showMessage(message, isError = false) {
-
   const card = document.getElementById("errorCard");
 
   card.innerText = message;
@@ -61,38 +57,27 @@ function applyFilters() {
 
   const filtered = fullData.filter(row => {
 
-  // TEXT FILTER
-  if (
-    !(row.division || "").toLowerCase().includes(division) ||
-    !(row.state || "").toLowerCase().includes(state) ||
-    !(row.bmhq || "").toLowerCase().includes(bmhq) ||
-    !String(row.code || "").toLowerCase().includes(code) ||
-    !(row.name || "").toLowerCase().includes(name)
-  ) {
-    return false;
-  }
+    if (
+      !(row.division || "").toLowerCase().includes(division) ||
+      !(row.state || "").toLowerCase().includes(state) ||
+      !(row.bmhq || "").toLowerCase().includes(bmhq) ||
+      !String(row.code || "").toLowerCase().includes(code) ||
+      !(row.name || "").toLowerCase().includes(name)
+    ) {
+      return false;
+    }
 
-  // CARD FILTER
-  const aws = (row.awsFile || "").toString().trim();
-  const sss = (row.sssFile || "").toString().trim();
+    const aws = (row.awsFile || "").toString().trim();
+    const sss = (row.sssFile || "").toString().trim();
 
-  switch (activeCardFilter) {
-    case "awsSubmitted":
-      return aws !== "";
-
-    case "awsPending":
-      return aws === "";
-
-    case "sssSubmitted":
-      return sss !== "";
-
-    case "sssPending":
-      return sss === "";
-
-    default:
-      return true;
-  }
-});
+    switch (activeCardFilter) {
+      case "awsSubmitted": return aws !== "";
+      case "awsPending": return aws === "";
+      case "sssSubmitted": return sss !== "";
+      case "sssPending": return sss === "";
+      default: return true;
+    }
+  });
 
   renderTable(filtered);
   updateCards(filtered);
@@ -140,7 +125,7 @@ function updateSales(code, value) {
 }
 
 /* =========================
-   UPLOAD UI (UNCHANGED)
+   UPLOAD UI
 ========================= */
 function getUploadUI(row, code, type) {
 
@@ -168,54 +153,56 @@ function getUploadUI(row, code, type) {
     }
 
   } else {
-
     buttons += `<button onclick="chooseFile('${code}','${type}')">Upload</button>`;
   }
 
   return buttons;
 }
 
-// ✅ RESET VALID FLAG
-isValidFile = true;
+/* =========================
+   CHOOSE FILE
+========================= */
+function chooseFile(code, type) {
 
-// ✅ SET FILE FIRST
-currentPreviewFiles = files;
-currentPreviewFile = files[0];
+  currentPreviewFile = null;
+  currentPreviewFiles = [];
+  currentPreviewCode = null;
+  currentPreviewType = null;
 
-currentPreviewCode = code;
-currentPreviewType = type;
+  const input = document.createElement("input");
+  input.type = "file";
+  input.multiple = true;
 
-// ✅ OPEN PREVIEW IMMEDIATELY
-openPreview();
+  input.onchange = () => {
 
-// ✅ RUN VALIDATION IN BACKGROUND (DO NOT BLOCK UI)
-(async () => {
-  try {
-    const form = new FormData();
-    form.append("file", files[0]);
+    const files = Array.from(input.files);
+    if (!files.length) return;
 
-    const validateRes = await fetch("/validate", {
-      method: "POST",
-      body: form
-    });
+    const allowed = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html", "htm"];
 
-    const validateData = await validateRes.json();
+    for (let file of files) {
+      const ext = file.name.split(".").pop().toLowerCase();
 
-    isValidFile = validateRes.ok;
-
-    if (!validateRes.ok) {
-      showMessage(validateData.error || "VALIDATION FAILED", true);
+      if (!allowed.includes(ext)) {
+        showMessage("INVALID FORMAT", true);
+        return;
+      }
     }
 
-  } catch (err) {
-    console.log("Validation error:", err);
-    isValidFile = false;
-    showMessage("Validation failed", true);
-  }
-})();
+    currentPreviewFiles = files;
+    currentPreviewFile = files[0];
+
+    currentPreviewCode = code;
+    currentPreviewType = type;
+
+    openPreview();
+  };
+
+  input.click();
+}
 
 /* =========================
-   PREVIEW (UNCHANGED)
+   PREVIEW
 ========================= */
 function openPreview() {
 
@@ -229,7 +216,6 @@ function openPreview() {
   currentPreviewFiles.forEach(file => {
 
     const ext = file.name.split(".").pop().toLowerCase();
-
     const container = document.createElement("div");
     container.style.marginBottom = "20px";
 
@@ -240,73 +226,28 @@ function openPreview() {
 
     else if (ext === "xlsx" || ext === "xls") {
       const reader = new FileReader();
-
       reader.onload = function (e) {
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: "array" });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
-
-        const tableHTML = XLSX.utils.sheet_to_html(sheet);
-
-        container.innerHTML = `
-          <div style="max-width:100%; max-height:400px; overflow:auto; border:1px solid #ddd; background:#fff;">
-            <div style="min-width:800px">
-              ${tableHTML}
-            </div>
-          </div>
-        `;
+        container.innerHTML = XLSX.utils.sheet_to_html(sheet);
       };
-
       reader.readAsArrayBuffer(file);
     }
 
     else if (ext === "docx") {
-
       const reader = new FileReader();
-
       reader.onload = function (e) {
-
         mammoth.convertToHtml({ arrayBuffer: e.target.result })
-          .then(result => {
-
-            container.innerHTML = `
-              <div style="max-height:400px; overflow:auto; padding:10px; background:#fff; border:1px solid #ddd;">
-                ${result.value}
-              </div>
-            `;
-
-          })
-          .catch(() => {
-            container.innerHTML = `<p>${file.name} (Preview failed)</p>`;
-          });
+          .then(result => container.innerHTML = result.value)
+          .catch(() => container.innerHTML = `<p>${file.name} (Preview failed)</p>`);
       };
-
       reader.readAsArrayBuffer(file);
-    }
-
-    else if (ext === "html" || ext === "htm") {
-
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-        const safeHtml = e.target.result.replace(/"/g, '&quot;');
-
-        container.innerHTML = `
-          <iframe 
-            srcdoc="${safeHtml}"
-            style="width:100%; height:400px; border:1px solid #ddd; background:#fff;">
-          </iframe>
-        `;
-      };
-
-      reader.readAsText(file);
     }
 
     else if (ext === "txt") {
       const reader = new FileReader();
-      reader.onload = e => {
-        container.innerHTML = `<pre>${e.target.result}</pre>`;
-      };
+      reader.onload = e => container.innerHTML = `<pre>${e.target.result}</pre>`;
       reader.readAsText(file);
     }
 
@@ -321,20 +262,7 @@ function openPreview() {
 }
 
 /* =========================
-   CLOSE
-========================= */
-function closePreview() {
-  document.getElementById("previewFrame").innerHTML = "";
-  document.getElementById("filePreviewModal").classList.add("hidden");
-
-  currentPreviewFile = null;
-  currentPreviewFiles = [];
-  currentPreviewCode = null;
-  currentPreviewType = null;
-}
-
-/* =========================
-   SUBMIT
+   SUBMIT (VALIDATION HERE)
 ========================= */
 async function submitFile(btn) {
 
@@ -350,8 +278,35 @@ async function submitFile(btn) {
 
   try {
 
-    for (let file of currentPreviewFiles) {
+    const allowed = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html", "htm"];
 
+    for (let file of currentPreviewFiles) {
+      const ext = file.name.split(".").pop().toLowerCase();
+
+      if (!allowed.includes(ext)) {
+        showMessage("INVALID FORMAT", true);
+        return;
+      }
+
+      if (ext === "pdf") {
+        const form = new FormData();
+        form.append("file", file);
+
+        const res = await fetch("/validate", {
+          method: "POST",
+          body: form
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          showMessage(data.error || "INVALID PDF", true);
+          return;
+        }
+      }
+    }
+
+    for (let file of currentPreviewFiles) {
       const form = new FormData();
       form.append("file", file);
       form.append("code", currentPreviewCode);
@@ -371,7 +326,6 @@ async function submitFile(btn) {
     }
 
     showMessage("UPLOAD COMPLETED");
-
     closePreview();
     await loadData();
 
@@ -386,149 +340,30 @@ async function submitFile(btn) {
 }
 
 /* =========================
-   DELETE
+   DELETE / VIEW / UTIL
 ========================= */
 function deleteFile(code, type) {
   if (!confirm("Delete file?")) return;
-
   fetch(`/data/delete/${code}/${type}`, { method: "DELETE" });
-
-  applyFilters();
   setTimeout(loadData, 300);
 }
 
-/* =========================
-   VIEW
-========================= */
 function viewFile(url) {
   window.open(url);
 }
 
-/* =========================
-   UTIL
-========================= */
 function isAdmin() {
   return localStorage.getItem("role") === "admin";
 }
 
 /* =========================
-   CARDS (UNCHANGED)
+   CARDS
 ========================= */
 function updateCards(data) {
-
-  let awsSubmitted = 0;
-  let awsPending = 0;
-  let sssSubmitted = 0;
-  let sssPending = 0;
-
-  data.forEach(row => {
-
-    const aws = (row.awsFile || "").toString().trim();
-    const sss = (row.sssFile || "").toString().trim();
-
-    if (aws !== "") awsSubmitted++;
-    else awsPending++;
-
-    if (sss !== "") sssSubmitted++;
-    else sssPending++;
-  });
-
-  const total = data.length || 1;
-
-  const awsDoneEl = document.getElementById("awsDone");
-  if (awsDoneEl) awsDoneEl.innerText = awsSubmitted;
-
-  const awsPenEl = document.getElementById("awsPending");
-  if (awsPenEl) awsPenEl.innerText = `${awsPending} (${Math.round((awsPending / total) * 100)}%)`;
-
-  const sssDoneEl = document.getElementById("sssDone");
-  if (sssDoneEl) sssDoneEl.innerText = sssSubmitted;
-
-  const sssPenEl = document.getElementById("sssPending");
-  if (sssPenEl) sssPenEl.innerText = `${sssPending} (${Math.round((sssPending / total) * 100)}%)`;
-
-  const totalEl = document.getElementById("total");
-  if (totalEl) totalEl.innerText = data.length;
+  document.getElementById("total").innerText = data.length;
 }
 
 /* =========================
-   ✅ FIXED FILTER LISTENER
+   INIT
 ========================= */
-function bindHeaderFilters() {
-  const inputs = document.querySelectorAll(
-    "input[placeholder='Division'], \
-     input[placeholder='State'], \
-     input[placeholder='BM HQ'], \
-     input[placeholder='Code'], \
-     input[placeholder='Name']"
-  );
-  inputs.forEach(input => {
-    input.oninput = applyFilters; // direct binding, no duplicates
-  });
-}
-/* =========================
-   CLEAR FILTERS
-========================= */
-  function clearFilters() {
-
-  activeCardFilter = null; // ✅ ADD THIS LINE
-
-  document.getElementById("globalSearch").value = "";
-
-  document.getElementById("f_division").value = "";
-  document.getElementById("f_state").value = "";
-  document.getElementById("f_bmhq").value = "";
-  document.getElementById("f_code").value = "";
-  document.getElementById("f_name").value = "";
-
-  applyFilters();
-}
-
-/* =========================
-   DOWNLOAD EXCEL
-========================= */
-  function downloadExcel() {
-
-  // 🔄 Transform data before export
-  const exportData = fullData.map((row, index) => {
-
-    const aws = (row.awsFile || "").toString().trim();
-    const sss = (row.sssFile || "").toString().trim();
-
-    return {
-      ID: index + 1, // ✅ Serial number starts from 1
-      Division: row.division || "",
-      State: row.state || "",
-      BM_HQ: row.bmhq || "",
-      Code: row.code || "",
-      Name: row.name || "",
-      Sales: row.sales || "",
-
-      // ✅ Convert file → status
-      AWS: aws ? "Submitted" : "Pending",
-      SSS: sss ? "Submitted" : "Pending"
-    };
-  });
-
-  const ws = XLSX.utils.json_to_sheet(exportData);
-  const wb = XLSX.utils.book_new();
-
-  XLSX.utils.book_append_sheet(wb, ws, "Dashboard");
-
-  XLSX.writeFile(wb, "dashboard_data.xlsx");
-}
-
-/* =========================
-   LOGOUT
-========================= */
-function logout() {
-
-  localStorage.removeItem("role");
-
-  window.location.href = "index.html";
-}
-function setCardFilter(type) {
-  activeCardFilter = type;
-  applyFilters();
-}
 window.onload = loadData;

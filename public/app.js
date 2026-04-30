@@ -11,6 +11,7 @@ let currentPreviewType = null;
 ========================= */
 async function loadData() {
   try {
+
     const user = localStorage.getItem("user");
     const role = localStorage.getItem("role");
 
@@ -33,6 +34,7 @@ async function loadData() {
    MESSAGE
 ========================= */
 function showMessage(message, isError = false) {
+
   const card = document.getElementById("errorCard");
 
   card.innerText = message;
@@ -63,9 +65,7 @@ function applyFilters() {
       !(row.bmhq || "").toLowerCase().includes(bmhq) ||
       !String(row.code || "").toLowerCase().includes(code) ||
       !(row.name || "").toLowerCase().includes(name)
-    ) {
-      return false;
-    }
+    ) return false;
 
     const aws = (row.awsFile || "").toString().trim();
     const sss = (row.sssFile || "").toString().trim();
@@ -153,6 +153,7 @@ function getUploadUI(row, code, type) {
     }
 
   } else {
+
     buttons += `<button onclick="chooseFile('${code}','${type}')">Upload</button>`;
   }
 
@@ -160,7 +161,7 @@ function getUploadUI(row, code, type) {
 }
 
 /* =========================
-   CHOOSE FILE
+   CHOOSE FILE (FIXED)
 ========================= */
 function chooseFile(code, type) {
 
@@ -191,7 +192,6 @@ function chooseFile(code, type) {
 
     currentPreviewFiles = files;
     currentPreviewFile = files[0];
-
     currentPreviewCode = code;
     currentPreviewType = type;
 
@@ -262,14 +262,22 @@ function openPreview() {
 }
 
 /* =========================
-   SUBMIT (VALIDATION HERE)
+   CLOSE
+========================= */
+function closePreview() {
+  document.getElementById("previewFrame").innerHTML = "";
+  document.getElementById("filePreviewModal").classList.add("hidden");
+
+  currentPreviewFile = null;
+  currentPreviewFiles = [];
+  currentPreviewCode = null;
+  currentPreviewType = null;
+}
+
+/* =========================
+   SUBMIT (VALIDATION ADDED)
 ========================= */
 async function submitFile(btn) {
-
-  if (btn) {
-    btn.disabled = true;
-    btn.innerText = "Uploading...";
-  }
 
   if (!currentPreviewFiles.length) {
     showMessage("No file selected", true);
@@ -281,6 +289,7 @@ async function submitFile(btn) {
     const allowed = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html", "htm"];
 
     for (let file of currentPreviewFiles) {
+
       const ext = file.name.split(".").pop().toLowerCase();
 
       if (!allowed.includes(ext)) {
@@ -307,6 +316,7 @@ async function submitFile(btn) {
     }
 
     for (let file of currentPreviewFiles) {
+
       const form = new FormData();
       form.append("file", file);
       form.append("code", currentPreviewCode);
@@ -321,7 +331,7 @@ async function submitFile(btn) {
 
       if (!res.ok) {
         showMessage(data.error || "Upload failed", true);
-        break;
+        return;
       }
     }
 
@@ -332,38 +342,13 @@ async function submitFile(btn) {
   } catch (err) {
     showMessage("Upload error", true);
   }
-
-  if (btn) {
-    btn.disabled = false;
-    btn.innerText = "Submit";
-  }
 }
 
 /* =========================
-   DELETE / VIEW / UTIL
+   UTIL
 ========================= */
-function deleteFile(code, type) {
-  if (!confirm("Delete file?")) return;
-  fetch(`/data/delete/${code}/${type}`, { method: "DELETE" });
-  setTimeout(loadData, 300);
-}
-
-function viewFile(url) {
-  window.open(url);
-}
-
 function isAdmin() {
   return localStorage.getItem("role") === "admin";
 }
 
-/* =========================
-   CARDS
-========================= */
-function updateCards(data) {
-  document.getElementById("total").innerText = data.length;
-}
-
-/* =========================
-   INIT
-========================= */
 window.onload = loadData;

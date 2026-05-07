@@ -120,7 +120,7 @@ function renderTable(data) {
 
         <td>
           <input value="${row.sales || ""}"
-          oninput="updateSales('${code}', this.value)">
+          oninput="updateSales(\`${code}\`, this.value)">
         </td>
 
         <td>${getUploadUI(row, code, "aws")}</td>
@@ -190,7 +190,7 @@ function getUploadUI(row, code, type) {
   input.type = "file";
   input.multiple = true;
 
-  input.onchange = () => {
+  input.onchange = async () => {
 
     const files = Array.from(input.files);
     if (!files.length) return;
@@ -206,7 +206,23 @@ function getUploadUI(row, code, type) {
       }
     }
 
-    // ✅ ONLY PREVIEW
+    // ✅ VALIDATE BEFORE PREVIEW
+    const form = new FormData();
+    form.append("file", files[0]);
+
+    const validateRes = await fetch("/validate", {
+    method: "POST",
+    body: form
+  });
+
+    const validateData = await validateRes.json();
+
+    if (!validateRes.ok) {
+    showMessage(validateData.error || "INVALID FILE", true);
+    return;
+  }
+
+    // ✅ PREVIEW AFTER VALIDATION
     currentPreviewFiles = files;
     currentPreviewFile = files[0];
     currentPreviewCode = code;
@@ -347,9 +363,9 @@ async function submitFile(btn) {
     btn.innerText = "Uploading...";
   }
 
-  if (!currentPreviewFiles.length) {
-    showMessage("No file selected", true);
-    return;
+  if (btn) {
+    btn.disabled = false;
+    btn.innerText = "Submit";
   }
 
   try {
@@ -395,10 +411,8 @@ async function submitFile(btn) {
 function deleteFile(code, type) {
   if (!confirm("Delete file?")) return;
 
-  fetch(`/data/delete/${code}/${type}`, { method: "DELETE" });
-
-  applyFilters();
-  setTimeout(loadData, 300);
+  await fetch(...
+  )
 }
 
 /* =========================

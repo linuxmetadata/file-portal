@@ -56,9 +56,9 @@ router.post("/", upload.single("file"), async (req, res) => {
           console.log("PDF TEXT LENGTH:", text.length);
 
           // ❌ ONLY reject completely empty PDFs
-          if (text.trim().length === 0) {
+          if (text.replace(/\s/g, "").length < 20) {
             fs.unlinkSync(file.path);
-            return res.status(400).json({ error: "INVALID PDF" });
+            return res.status(400).json({ error: "SCANNED PDF NOT ALLOWED" });
           }
 
         } catch (err) {

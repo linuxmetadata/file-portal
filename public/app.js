@@ -13,8 +13,8 @@ let isValidFile = true;
  async function loadData() {
   try {
 
-    const user = localStorage.getItem("user");
-    const role = localStorage.getItem("role");
+    const user = localStorage.getItem("user") || "";
+    const role = localStorage.getItem("role") || "";
 
     const res = await fetch(`/data/list?user=${user}&role=${role}`);
 
@@ -38,7 +38,8 @@ let isValidFile = true;
 function showMessage(message, isError = false) {
 
   const card = document.getElementById("errorCard");
-
+  if (!card) return;
+  
   card.innerText = message;
   card.className = "message-card " + (isError ? "error" : "success");
   card.style.display = "block";
@@ -178,16 +179,6 @@ function getUploadUI(row, code, type) {
 /* =========================
    CHOOSE FILE
 ========================= */
-  const allowed = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html", "htm"];
-
-for (let file of files) {
-  const ext = file.name.split(".").pop().toLowerCase();
-
-  if (!allowed.includes(ext)) {
-    showMessage("INVALID FORMAT", true);
-    return;
-  }
-}
   function chooseFile(code, type) {
 
   currentPreviewFile = null;
@@ -199,74 +190,29 @@ for (let file of files) {
   input.type = "file";
   input.multiple = true;
 
-  input.onchange = async () => {
+  input.onchange = () => {
 
     const files = Array.from(input.files);
     if (!files.length) return;
 
-    // ✅ Allowed formats
-    const allowed = ["xlsx", "xls", "docx", "txt", "html", "htm", "pdf"];
+    const allowed = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html", "htm"];
 
     for (let file of files) {
-
       const ext = file.name.split(".").pop().toLowerCase();
 
-      // ❌ INVALID FORMAT
       if (!allowed.includes(ext)) {
         showMessage("INVALID FORMAT", true);
         return;
       }
-
-      // ❌ INVALID PDF (basic scanned check)
-      if (ext === "pdf") {
-        try {
-          const text = await file.text();
-
-          // if no readable text → likely scanned
-          if (!text || text.trim().length < 50) {
-            showMessage("INVALID PDF", true);
-            return;
-          }
-
-        } catch (err) {
-          showMessage("INVALID PDF", true);
-          return;
-        }
-      }
     }
 
-    // ✅ CALL VALIDATION API BEFORE PREVIEW
-  const form = new FormData();
-  form.append("file", files[0]);
+    // ✅ ONLY PREVIEW
+    currentPreviewFiles = files;
+    currentPreviewFile = files[0];
+    currentPreviewCode = code;
+    currentPreviewType = type;
 
-  const validateRes = await fetch("/validate", {
-  method: "POST",
-  body: form
-});
-
-  const validateData = await validateRes.json();
-
-  // ✅ STORE RESULT
-  isValidFile = validateRes.ok;
-
-  if (!validateRes.ok) {
-  showMessage(validateData.error || "VALIDATION FAILED", true);
-}
-
-  const data = await res.json();
-
-  if (!res.ok) {
-  showMessage(data.error || "VALIDATION FAILED", true);
-}
-
-  // ✅ IF VALID → CONTINUE
-  currentPreviewFiles = files;
-  currentPreviewFile = files[0];
-
-  currentPreviewCode = code;
-  currentPreviewType = type;
-
-  openPreview();
+    openPreview();
   };
 
   input.click();

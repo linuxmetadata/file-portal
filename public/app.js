@@ -37,36 +37,8 @@ let isValidFile = true;
 ========================= */
 function showMessage(message, isError = false) {
 
-  const oldToast = document.querySelector(".custom-toast");
-  if (oldToast) oldToast.remove();
+  alert(message);
 
-  const toast = document.createElement("div");
-
-  toast.className = "custom-toast";
-  toast.innerText = message;
-
-  toast.style.position = "fixed";
-  toast.style.top = "20px";
-  toast.style.right = "20px";
-  toast.style.zIndex = "999999";
-  toast.style.padding = "14px 20px";
-  toast.style.borderRadius = "8px";
-  toast.style.fontWeight = "600";
-  toast.style.fontSize = "14px";
-  toast.style.color = "#fff";
-  toast.style.boxShadow = "0 4px 12px rgba(0,0,0,0.25)";
-
-  if (isError) {
-    toast.style.background = "#dc2626";
-  } else {
-    toast.style.background = "#16a34a";
-  }
-
-  document.body.appendChild(toast);
-
-  setTimeout(() => {
-    toast.remove();
-  }, 4000);
 }
 
 /* =========================

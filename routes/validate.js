@@ -4,12 +4,6 @@ const fs = require("fs");
 const path = require("path");
 const pdfParse = require("pdf-parse");
 
-let pdfParse;
-try {
-  pdfParse = require("pdf-parse");
-} catch (e) {
-  pdfParse = null;
-}
 
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });

@@ -5,12 +5,6 @@ const path = require("path");
 const fs = require("fs");
 const pdfParse = require("pdf-parse");
 
-let pdfParse;
-try {
-  pdfParse = require("pdf-parse");
-} catch (e) {
-  pdfParse = null;
-}
 
 const { uploadToDrive, deleteFromDrive } = require("../services/drive");
 const { updateRow, getSheetData, deleteFileFromSheet } = require("../googleSheet");

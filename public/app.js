@@ -378,21 +378,17 @@ function closePreview() {
 ========================= */
 async function submitFile(btn) {
 
-  if (btn) {
-    btn.disabled = true;
-    btn.innerText = "Uploading...";
-  }
-
-  if (btn) {
-    btn.disabled = false;
-    btn.innerText = "Submit";
-  }
-
   try {
+
+    if (btn) {
+      btn.disabled = true;
+      btn.innerText = "Uploading...";
+    }
 
     for (let file of currentPreviewFiles) {
 
       const form = new FormData();
+
       form.append("file", file);
       form.append("code", currentPreviewCode);
       form.append("type", currentPreviewType);
@@ -406,22 +402,34 @@ async function submitFile(btn) {
 
       if (!res.ok) {
         showMessage(data.error || "Upload failed", true);
-        break;
+
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = "Submit";
+        }
+
+        return;
       }
     }
 
     showMessage("UPLOAD COMPLETED");
 
     closePreview();
+
     await loadData();
 
   } catch (err) {
-    showMessage("Upload error", true);
-  }
 
-  if (btn) {
-    btn.disabled = false;
-    btn.innerText = "Submit";
+    console.error(err);
+
+    showMessage("Upload error", true);
+
+  } finally {
+
+    if (btn) {
+      btn.disabled = false;
+      btn.innerText = "Submit";
+    }
   }
 }
 

@@ -246,7 +246,7 @@ function openPreview() {
 
   frame.innerHTML = "";
 
-  currentPreviewFiles.forEach(file => {
+    currentPreviewFiles.forEach(file => {
 
     const ext = file.name.split(".").pop().toLowerCase();
 
@@ -408,11 +408,16 @@ async function submitFile(btn) {
 /* =========================
    DELETE
 ========================= */
-function deleteFile(code, type) {
+  async function deleteFile(code, type) {
+
   if (!confirm("Delete file?")) return;
 
-  await fetch(...
-  )
+  await fetch(`/data/delete/${code}/${type}`, {
+    method: "DELETE"
+  });
+
+  applyFilters();
+  setTimeout(loadData, 300);
 }
 
 /* =========================

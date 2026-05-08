@@ -3,6 +3,7 @@ const multer = require("multer");
 const XLSX = require("xlsx");
 const path = require("path");
 const fs = require("fs");
+const pdfParse = require("pdf-parse");
 
 let pdfParse;
 try {

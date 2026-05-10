@@ -348,7 +348,7 @@ function chooseFile(code, type) {
       }
 
       if (!validateRes.ok) {
-
+        openPreview();
         showPreviewError(
           validateData.error || "INVALID FILE"
         );

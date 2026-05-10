@@ -253,7 +253,7 @@ function getUploadUI(row, code, type) {
 
     if (!allowed.includes(ext)) {
 
-    alert("INVALID FORMAT");
+    showMessage("INVALID FORMAT", true);
 
     return;
   }
@@ -283,7 +283,7 @@ function getUploadUI(row, code, type) {
 
     console.error("VALIDATE ERROR:", err);
 
-    alert("Validation failed");
+    showMessage("Validation failed", true);
 
     return;
 }

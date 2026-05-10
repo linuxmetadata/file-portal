@@ -190,13 +190,21 @@ function getUploadUI(row, code, type) {
     const allowed = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html", "htm"];
 
     for (let file of files) {
-      const ext = file.name.split(".").pop().toLowerCase();
 
-      if (!allowed.includes(ext)) {
-        showMessage("INVALID FORMAT", true);
-        return;
-      }
-    }
+    if (!file.name || !file.name.includes(".")) {
+    alert("INVALID FORMAT");
+    return;
+  }
+
+    const ext = file.name.split(".").pop().toLowerCase();
+
+    if (!allowed.includes(ext)) {
+
+    alert("INVALID FORMAT");
+
+    return;
+  }
+}
 
     // ✅ VALIDATE BEFORE PREVIEW
     const form = new FormData();

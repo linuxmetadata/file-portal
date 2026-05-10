@@ -69,7 +69,8 @@ function showMessage(message, isError = false) {
   toast.style.fontFamily = "Arial, sans-serif";
   toast.style.fontSize = "14px";
   toast.style.fontWeight = "500";
-  toast.style.zIndex = "999999999";
+  toast.style.zIndex = "2147483647";
+  toast.style.pointerEvents = "none";
   toast.style.boxShadow = "0 4px 16px rgba(0,0,0,0.3)";
 
   if (isError) {
@@ -78,7 +79,7 @@ function showMessage(message, isError = false) {
     toast.style.background = "#16a34a";
   }
 
-  document.body.appendChild(toast);
+  document.documentElement.appendChild(toast);
 
   setTimeout(() => {
     toast.remove();

@@ -35,10 +35,16 @@ let isValidFile = true;
 /* =========================
    MESSAGE
 ========================= */
-function showMessage(message, isError = false) {
+const validateRes = await fetch("/validate", {
+  method: "POST",
+  body: form
+});
 
-  alert(message);
+const validateData = await validateRes.json();
 
+if (!validateRes.ok) {
+  showMessage(validateData.error || "INVALID FILE", true);
+  return;
 }
 
 /* =========================

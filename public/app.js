@@ -35,10 +35,63 @@ let isValidFile = true;
 /* =========================
    MESSAGE
 ========================= */
-function showMessage(message, isError = false) {
+  function showMessage(message, isError = false) {
 
-  alert(message);
+  const oldToast = document.querySelector(".custom-toast");
 
+  if (oldToast) {
+    oldToast.remove();
+  }
+
+  const toast = document.createElement("div");
+
+  toast.className = "custom-toast";
+  toast.innerHTML = `
+    <div style="font-size:16px; font-weight:600; margin-bottom:4px;">
+      ${isError ? "⚠ Error" : "✓ Success"}
+    </div>
+    <div style="font-size:14px;">
+      ${message}
+    </div>
+  `;
+
+  toast.style.position = "fixed";
+  toast.style.top = "25px";
+  toast.style.right = "25px";
+  toast.style.minWidth = "280px";
+  toast.style.maxWidth = "350px";
+  toast.style.padding = "16px 18px";
+  toast.style.borderRadius = "12px";
+  toast.style.color = "#fff";
+  toast.style.fontFamily = "Arial, sans-serif";
+  toast.style.boxShadow = "0 8px 24px rgba(0,0,0,0.25)";
+  toast.style.zIndex = "999999";
+  toast.style.opacity = "0";
+  toast.style.transform = "translateY(-10px)";
+  toast.style.transition = "all 0.3s ease";
+
+  if (isError) {
+    toast.style.background = "linear-gradient(135deg, #dc2626, #991b1b)";
+  } else {
+    toast.style.background = "linear-gradient(135deg, #16a34a, #166534)";
+  }
+
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = "1";
+    toast.style.transform = "translateY(0)";
+  }, 50);
+
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    toast.style.transform = "translateY(-10px)";
+
+    setTimeout(() => {
+      toast.remove();
+    }, 300);
+
+  }, 4000);
 }
 
 /* =========================

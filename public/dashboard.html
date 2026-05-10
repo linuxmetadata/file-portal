@@ -76,28 +76,34 @@
 <div class="cards">
 
   <div class="card green" onclick="setCardFilter('awsSubmitted')">
-    <h3 id="awsDone">0</h3><p>AWS Submitted</p>
+    <h3 id="awsDone">0</h3>
+    <p>AWS Submitted</p>
   </div>
 
   <div class="card red" onclick="setCardFilter('awsPending')">
-    <h3 id="awsPending">0</h3><p>AWS Pending</p>
+    <h3 id="awsPending">0</h3>
+    <p>AWS Pending</p>
   </div>
 
   <div class="card green" onclick="setCardFilter('sssSubmitted')">
-    <h3 id="sssDone">0</h3><p>SSS Submitted</p>
+    <h3 id="sssDone">0</h3>
+    <p>SSS Submitted</p>
   </div>
 
   <div class="card red" onclick="setCardFilter('sssPending')">
-    <h3 id="sssPending">0</h3><p>SSS Pending</p>
+    <h3 id="sssPending">0</h3>
+    <p>SSS Pending</p>
   </div>
 
   <div class="card blue" onclick="setCardFilter(null)">
-    <h3 id="total">0</h3><p>Total</p>
+    <h3 id="total">0</h3>
+    <p>Total</p>
   </div>
 
 </div>
 
 <div style="overflow:auto; max-height:70vh;">
+
 <table>
 <thead>
 <tr>
@@ -111,47 +117,110 @@
   <th>SSS</th>
 </tr>
 </thead>
+
 <tbody id="tableData"></tbody>
 </table>
+
 </div>
 
+<!-- FILE PREVIEW MODAL -->
 <div id="filePreviewModal" class="preview-modal hidden">
-  <div class="preview-container" style="display:flex;flex-direction:column;max-height:80vh;">
 
-    <div class="preview-header">
+  <div class="preview-container" style="
+    display:flex;
+    flex-direction:column;
+    max-height:80vh;
+    background:#fff;
+    border-radius:10px;
+    overflow:hidden;
+  ">
+
+    <!-- HEADER -->
+    <div class="preview-header" style="
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:12px 16px;
+      border-bottom:1px solid #ddd;
+      background:#f5f5f5;
+      font-weight:600;
+    ">
       <span>File Preview</span>
-      <button onclick="closePreview()">✖</button>
+
+      <button onclick="closePreview()" style="
+        border:none;
+        background:none;
+        font-size:18px;
+        cursor:pointer;
+      ">
+        ✖
+      </button>
     </div>
 
-    <div id="previewError" style="
-    display:none;
-    background:#dc2626;
-    color:#fff;
-    padding:12px 16px;
-    border-radius:8px;
-    margin-bottom:15px;
-    font-weight:600;
-    font-size:14px;
-  "></div>
+    <!-- BODY -->
+    <div class="preview-body" style="
+      flex:1;
+      overflow:auto;
+      padding:15px;
+      background:#fafafa;
+    ">
 
-    <div class="preview-footer" style="padding:10px;text-align:right;">
-      <button id="submitBtn" onclick="submitFile()" class="submit-btn">Submit</button>
+      <!-- ERROR -->
+      <div id="previewError" style="
+        display:none;
+        background:#dc2626;
+        color:#fff;
+        padding:12px 16px;
+        border-radius:8px;
+        margin-bottom:15px;
+        font-weight:600;
+        font-size:14px;
+      "></div>
+
+      <!-- PREVIEW CONTENT -->
+      <div id="previewFrame"></div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="preview-footer" style="
+      padding:10px;
+      text-align:right;
+      border-top:1px solid #ddd;
+      background:#fff;
+    ">
+      <button
+        id="submitBtn"
+        onclick="submitFile(this)"
+        class="submit-btn"
+      >
+        Submit
+      </button>
     </div>
 
   </div>
+
 </div>
 
 <script src="app.js"></script>
 
 <script>
+
 const role = localStorage.getItem("role");
+
 document.getElementById("pageTitle").innerText =
-  role === "admin" ? "Admin Dashboard" : "User Dashboard";
+  role === "admin"
+    ? "Admin Dashboard"
+    : "User Dashboard";
 
 function showMessage(msg, type = "success") {
+
   const card = document.getElementById("errorCard");
+
   card.innerText = msg;
+
   card.className = "message-card " + type;
+
   card.style.display = "block";
 
   setTimeout(() => {
@@ -160,11 +229,19 @@ function showMessage(msg, type = "success") {
 }
 
 function closePreview() {
-  document.getElementById("filePreviewModal").classList.add("hidden");
-  document.getElementById("previewFrame").innerHTML = "";
+
+  document
+    .getElementById("filePreviewModal")
+    .classList.add("hidden");
+
+  document
+    .getElementById("previewFrame")
+    .innerHTML = "";
 }
+
 </script>
 
 <div id="toastMessage"></div>
+
 </body>
 </html>

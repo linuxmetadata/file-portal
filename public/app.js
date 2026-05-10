@@ -10,7 +10,8 @@ let isValidFile = true;
 /* =========================
    LOAD DATA
 ========================= */
- async function loadData() {
+async function loadData() {
+
   try {
 
     const user = localStorage.getItem("user") || "";
@@ -28,15 +29,15 @@ let isValidFile = true;
     applyFilters();
 
   } catch (err) {
+
     console.error("Load error:", err);
   }
 }
 
-
 /* =========================
    MESSAGE
 ========================= */
-  function showMessage(message, isError = false) {
+function showMessage(message, isError = false) {
 
   const toast = document.getElementById("toastMessage");
 
@@ -49,12 +50,24 @@ let isValidFile = true;
     <div style="font-size:16px;font-weight:600;margin-bottom:5px;">
       ${isError ? "⚠ Error" : "✓ Success"}
     </div>
+
     <div>${message}</div>
   `;
 
-  toast.style.background = isError ? "#dc2626" : "#16a34a";
-
+  toast.style.position = "fixed";
+  toast.style.top = "20px";
+  toast.style.right = "20px";
+  toast.style.padding = "14px 20px";
+  toast.style.borderRadius = "8px";
+  toast.style.color = "#fff";
+  toast.style.fontWeight = "600";
+  toast.style.zIndex = "999999";
   toast.style.display = "block";
+
+  toast.style.background =
+    isError
+      ? "#dc2626"
+      : "#16a34a";
 
   clearTimeout(window.toastTimer);
 
@@ -62,24 +75,27 @@ let isValidFile = true;
     toast.style.display = "none";
   }, 4000);
 }
-  function showPreviewError(message) {
+
+function showPreviewError(message) {
 
   const errorDiv = document.getElementById("previewError");
 
   if (!errorDiv) return;
 
   errorDiv.innerText = message;
+
   errorDiv.style.display = "block";
 }
 
-  function clearPreviewError() {
+function clearPreviewError() {
 
   const errorDiv = document.getElementById("previewError");
 
   if (!errorDiv) return;
 
-  errorDiv.style.display = "none";
   errorDiv.innerText = "";
+
+  errorDiv.style.display = "none";
 }
 
 /* =========================
@@ -87,48 +103,57 @@ let isValidFile = true;
 ========================= */
 function applyFilters() {
 
-  const division = document.querySelector("input[placeholder='Division']")?.value.toLowerCase() || "";
-  const state = document.querySelector("input[placeholder='State']")?.value.toLowerCase() || "";
-  const bmhq = document.querySelector("input[placeholder='BM HQ']")?.value.toLowerCase() || "";
-  const code = document.querySelector("input[placeholder='Code']")?.value.toLowerCase() || "";
-  const name = document.querySelector("input[placeholder='Name']")?.value.toLowerCase() || "";
+  const division =
+    document.querySelector("input[placeholder='Division']")?.value.toLowerCase() || "";
+
+  const state =
+    document.querySelector("input[placeholder='State']")?.value.toLowerCase() || "";
+
+  const bmhq =
+    document.querySelector("input[placeholder='BM HQ']")?.value.toLowerCase() || "";
+
+  const code =
+    document.querySelector("input[placeholder='Code']")?.value.toLowerCase() || "";
+
+  const name =
+    document.querySelector("input[placeholder='Name']")?.value.toLowerCase() || "";
 
   const filtered = fullData.filter(row => {
 
-  // TEXT FILTER
-  if (
-    !(row.division || "").toLowerCase().includes(division) ||
-    !(row.state || "").toLowerCase().includes(state) ||
-    !(row.bmhq || "").toLowerCase().includes(bmhq) ||
-    !String(row.code || "").toLowerCase().includes(code) ||
-    !(row.name || "").toLowerCase().includes(name)
-  ) {
-    return false;
-  }
+    if (
+      !(row.division || "").toLowerCase().includes(division) ||
+      !(row.state || "").toLowerCase().includes(state) ||
+      !(row.bmhq || "").toLowerCase().includes(bmhq) ||
+      !String(row.code || "").toLowerCase().includes(code) ||
+      !(row.name || "").toLowerCase().includes(name)
+    ) {
+      return false;
+    }
 
-  // CARD FILTER
-  const aws = (row.awsFile || "").toString().trim();
-  const sss = (row.sssFile || "").toString().trim();
+    const aws = (row.awsFile || "").toString().trim();
+    const sss = (row.sssFile || "").toString().trim();
 
-  switch (activeCardFilter) {
-    case "awsSubmitted":
-      return aws !== "";
+    switch (activeCardFilter) {
 
-    case "awsPending":
-      return aws === "";
+      case "awsSubmitted":
+        return aws !== "";
 
-    case "sssSubmitted":
-      return sss !== "";
+      case "awsPending":
+        return aws === "";
 
-    case "sssPending":
-      return sss === "";
+      case "sssSubmitted":
+        return sss !== "";
 
-    default:
-      return true;
-  }
-});
+      case "sssPending":
+        return sss === "";
+
+      default:
+        return true;
+    }
+  });
 
   renderTable(filtered);
+
   updateCards(filtered);
 }
 
@@ -145,6 +170,7 @@ function renderTable(data) {
 
     html += `
       <tr>
+
         <td>${row.division || ""}</td>
         <td>${row.state || ""}</td>
         <td>${row.bmhq || ""}</td>
@@ -152,12 +178,16 @@ function renderTable(data) {
         <td>${row.name || ""}</td>
 
         <td>
-          <input value="${row.sales || ""}"
-          oninput="updateSales(\`${code}\`, this.value)">
+          <input
+            value="${row.sales || ""}"
+            oninput="updateSales(\`${code}\`, this.value)"
+          >
         </td>
 
         <td>${getUploadUI(row, code, "aws")}</td>
+
         <td>${getUploadUI(row, code, "sss")}</td>
+
       </tr>
     `;
   });
@@ -169,16 +199,24 @@ function renderTable(data) {
    SALES
 ========================= */
 function updateSales(code, value) {
-  let row = fullData.find(r => String(r.code) === String(code));
-  if (row) row.sales = value;
+
+  let row =
+    fullData.find(r => String(r.code) === String(code));
+
+  if (row) {
+    row.sales = value;
+  }
 }
 
 /* =========================
-   UPLOAD UI (UNCHANGED)
+   UPLOAD UI
 ========================= */
 function getUploadUI(row, code, type) {
 
-  const fileString = type === "aws" ? row.awsFile : row.sssFile;
+  const fileString =
+    type === "aws"
+      ? row.awsFile
+      : row.sssFile;
 
   let buttons = "";
 
@@ -194,16 +232,29 @@ function getUploadUI(row, code, type) {
         url = `https://drive.google.com/file/d/${url}/view`;
       }
 
-      return `<button onclick="viewFile('${url}')">View</button>`;
+      return `
+        <button onclick="viewFile('${url}')">
+          View
+        </button>
+      `;
     }).join(" ");
 
     if (isAdmin()) {
-      buttons += `<button onclick="deleteFile('${code}','${type}')">Delete</button>`;
+
+      buttons += `
+        <button onclick="deleteFile('${code}','${type}')">
+          Delete
+        </button>
+      `;
     }
 
   } else {
 
-    buttons += `<button onclick="chooseFile('${code}','${type}')">Upload</button>`;
+    buttons += `
+      <button onclick="chooseFile('${code}','${type}')">
+        Upload
+      </button>
+    `;
   }
 
   return buttons;
@@ -212,47 +263,26 @@ function getUploadUI(row, code, type) {
 /* =========================
    CHOOSE FILE
 ========================= */
-  /* =========================
-   CHOOSE FILE
-========================= */
 function chooseFile(code, type) {
 
-  /* =========================
-     RESET PREVIEW STATE
-  ========================== */
   currentPreviewFile = null;
   currentPreviewFiles = [];
   currentPreviewCode = null;
   currentPreviewType = null;
 
-  /* =========================
-     FILE INPUT
-  ========================== */
   const input = document.createElement("input");
 
   input.type = "file";
   input.multiple = true;
 
-  /* =========================
-     FILE CHANGE
-  ========================== */
   input.onchange = async () => {
 
-    /* =========================
-       CLEAR OLD ERRORS
-    ========================== */
     clearPreviewError();
 
-    /* =========================
-       GET FILES
-    ========================== */
     const files = Array.from(input.files);
 
     if (!files.length) return;
 
-    /* =========================
-       ALLOWED FILE TYPES
-    ========================== */
     const allowed = [
       "pdf",
       "xlsx",
@@ -265,13 +295,10 @@ function chooseFile(code, type) {
     ];
 
     /* =========================
-       LOCAL FILE VALIDATION
+       LOCAL VALIDATION
     ========================== */
     for (let file of files) {
 
-      /* =========================
-         INVALID NAME
-      ========================== */
       if (!file.name || !file.name.includes(".")) {
 
         showPreviewError("INVALID FORMAT");
@@ -279,17 +306,12 @@ function chooseFile(code, type) {
         return;
       }
 
-      /* =========================
-         FILE EXTENSION
-      ========================== */
-      const ext = file.name
-        .split(".")
-        .pop()
-        .toLowerCase();
+      const ext =
+        file.name
+          .split(".")
+          .pop()
+          .toLowerCase();
 
-      /* =========================
-         INVALID FORMAT
-      ========================== */
       if (!allowed.includes(ext)) {
 
         showPreviewError("INVALID FORMAT");
@@ -307,17 +329,11 @@ function chooseFile(code, type) {
 
     try {
 
-      /* =========================
-         VALIDATE API
-      ========================== */
       const validateRes = await fetch("/validate", {
         method: "POST",
         body: form
       });
 
-      /* =========================
-         SAFE JSON PARSE
-      ========================== */
       let validateData = {};
 
       try {
@@ -331,9 +347,6 @@ function chooseFile(code, type) {
         };
       }
 
-      /* =========================
-         VALIDATION FAILED
-      ========================== */
       if (!validateRes.ok) {
 
         showPreviewError(
@@ -345,9 +358,6 @@ function chooseFile(code, type) {
 
     } catch (err) {
 
-      /* =========================
-         FETCH ERROR
-      ========================== */
       console.error("VALIDATE ERROR:", err);
 
       showPreviewError("Validation failed");
@@ -355,62 +365,84 @@ function chooseFile(code, type) {
       return;
     }
 
-    /* =========================
-       STORE PREVIEW DATA
-    ========================== */
     currentPreviewFiles = files;
     currentPreviewFile = files[0];
     currentPreviewCode = code;
     currentPreviewType = type;
 
-    /* =========================
-       OPEN PREVIEW
-    ========================== */
     openPreview();
   };
 
-  /* =========================
-     OPEN FILE PICKER
-  ========================== */
   input.click();
 }
 
 /* =========================
-   PREVIEW (UNCHANGED)
+   PREVIEW
 ========================= */
 function openPreview() {
 
   if (!currentPreviewFiles.length) return;
 
-  const modal = document.getElementById("filePreviewModal");
-  const frame = document.getElementById("previewFrame");
+  const modal =
+    document.getElementById("filePreviewModal");
+
+  const frame =
+    document.getElementById("previewFrame");
 
   frame.innerHTML = "";
 
-    currentPreviewFiles.forEach(file => {
+  currentPreviewFiles.forEach(file => {
 
-    const ext = file.name.split(".").pop().toLowerCase();
+    const ext =
+      file.name.split(".").pop().toLowerCase();
 
-    const container = document.createElement("div");
+    const container =
+      document.createElement("div");
+
     container.style.marginBottom = "20px";
 
+    /* PDF */
     if (ext === "pdf") {
+
       const url = URL.createObjectURL(file);
-      container.innerHTML = `<embed src="${url}" type="application/pdf" width="100%" height="400px">`;
+
+      container.innerHTML = `
+        <embed
+          src="${url}"
+          type="application/pdf"
+          width="100%"
+          height="400px"
+        >
+      `;
     }
 
+    /* EXCEL */
     else if (ext === "xlsx" || ext === "xls") {
+
       const reader = new FileReader();
 
       reader.onload = function (e) {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: "array" });
-        const sheet = workbook.Sheets[workbook.SheetNames[0]];
 
-        const tableHTML = XLSX.utils.sheet_to_html(sheet);
+        const data =
+          new Uint8Array(e.target.result);
+
+        const workbook =
+          XLSX.read(data, { type: "array" });
+
+        const sheet =
+          workbook.Sheets[workbook.SheetNames[0]];
+
+        const tableHTML =
+          XLSX.utils.sheet_to_html(sheet);
 
         container.innerHTML = `
-          <div style="max-width:100%; max-height:400px; overflow:auto; border:1px solid #ddd; background:#fff;">
+          <div style="
+            max-width:100%;
+            max-height:400px;
+            overflow:auto;
+            border:1px solid #ddd;
+            background:#fff;
+          ">
             <div style="min-width:800px">
               ${tableHTML}
             </div>
@@ -421,41 +453,62 @@ function openPreview() {
       reader.readAsArrayBuffer(file);
     }
 
+    /* DOCX */
     else if (ext === "docx") {
 
       const reader = new FileReader();
 
       reader.onload = function (e) {
 
-        mammoth.convertToHtml({ arrayBuffer: e.target.result })
-          .then(result => {
+        mammoth.convertToHtml({
+          arrayBuffer: e.target.result
+        })
 
-            container.innerHTML = `
-              <div style="max-height:400px; overflow:auto; padding:10px; background:#fff; border:1px solid #ddd;">
-                ${result.value}
-              </div>
-            `;
+        .then(result => {
 
-          })
-          .catch(() => {
-            container.innerHTML = `<p>${file.name} (Preview failed)</p>`;
-          });
+          container.innerHTML = `
+            <div style="
+              max-height:400px;
+              overflow:auto;
+              padding:10px;
+              background:#fff;
+              border:1px solid #ddd;
+            ">
+              ${result.value}
+            </div>
+          `;
+        })
+
+        .catch(() => {
+
+          container.innerHTML = `
+            <p>${file.name} (Preview failed)</p>
+          `;
+        });
       };
 
       reader.readAsArrayBuffer(file);
     }
 
+    /* HTML */
     else if (ext === "html" || ext === "htm") {
 
       const reader = new FileReader();
 
       reader.onload = function (e) {
-        const safeHtml = e.target.result.replace(/"/g, '&quot;');
+
+        const safeHtml =
+          e.target.result.replace(/"/g, '&quot;');
 
         container.innerHTML = `
-          <iframe 
+          <iframe
             srcdoc="${safeHtml}"
-            style="width:100%; height:400px; border:1px solid #ddd; background:#fff;">
+            style="
+              width:100%;
+              height:400px;
+              border:1px solid #ddd;
+              background:#fff;
+            ">
           </iframe>
         `;
       };
@@ -463,16 +516,27 @@ function openPreview() {
       reader.readAsText(file);
     }
 
+    /* TEXT */
     else if (ext === "txt") {
+
       const reader = new FileReader();
+
       reader.onload = e => {
-        container.innerHTML = `<pre>${e.target.result}</pre>`;
+
+        container.innerHTML = `
+          <pre>${e.target.result}</pre>
+        `;
       };
+
       reader.readAsText(file);
     }
 
+    /* UNKNOWN */
     else {
-      container.innerHTML = `<p>${file.name} (Preview not available)</p>`;
+
+      container.innerHTML = `
+        <p>${file.name} (Preview not available)</p>
+      `;
     }
 
     frame.appendChild(container);
@@ -485,8 +549,14 @@ function openPreview() {
    CLOSE
 ========================= */
 function closePreview() {
-  document.getElementById("previewFrame").innerHTML = "";
-  document.getElementById("filePreviewModal").classList.add("hidden");
+
+  document
+    .getElementById("previewFrame")
+    .innerHTML = "";
+
+  document
+    .getElementById("filePreviewModal")
+    .classList.add("hidden");
 
   currentPreviewFile = null;
   currentPreviewFiles = [];
@@ -522,7 +592,11 @@ async function submitFile(btn) {
       const data = await res.json();
 
       if (!res.ok) {
-        showMessage(data.error || "Upload failed", true);
+
+        showMessage(
+          data.error || "Upload failed",
+          true
+        );
 
         if (btn) {
           btn.disabled = false;
@@ -557,7 +631,7 @@ async function submitFile(btn) {
 /* =========================
    DELETE
 ========================= */
-  async function deleteFile(code, type) {
+async function deleteFile(code, type) {
 
   if (!confirm("Delete file?")) return;
 
@@ -566,6 +640,7 @@ async function submitFile(btn) {
   });
 
   applyFilters();
+
   setTimeout(loadData, 300);
 }
 
@@ -584,7 +659,7 @@ function isAdmin() {
 }
 
 /* =========================
-   CARDS (UNCHANGED)
+   CARDS
 ========================= */
 function updateCards(data) {
 
@@ -595,8 +670,11 @@ function updateCards(data) {
 
   data.forEach(row => {
 
-    const aws = (row.awsFile || "").toString().trim();
-    const sss = (row.sssFile || "").toString().trim();
+    const aws =
+      (row.awsFile || "").toString().trim();
+
+    const sss =
+      (row.sssFile || "").toString().trim();
 
     if (aws !== "") awsSubmitted++;
     else awsPending++;
@@ -607,26 +685,44 @@ function updateCards(data) {
 
   const total = data.length || 1;
 
-  const awsDoneEl = document.getElementById("awsDone");
-  if (awsDoneEl) awsDoneEl.innerText = awsSubmitted;
+  const awsDoneEl =
+    document.getElementById("awsDone");
 
-  const awsPenEl = document.getElementById("awsPending");
-  if (awsPenEl) awsPenEl.innerText = `${awsPending} (${Math.round((awsPending / total) * 100)}%)`;
+  if (awsDoneEl)
+    awsDoneEl.innerText = awsSubmitted;
 
-  const sssDoneEl = document.getElementById("sssDone");
-  if (sssDoneEl) sssDoneEl.innerText = sssSubmitted;
+  const awsPenEl =
+    document.getElementById("awsPending");
 
-  const sssPenEl = document.getElementById("sssPending");
-  if (sssPenEl) sssPenEl.innerText = `${sssPending} (${Math.round((sssPending / total) * 100)}%)`;
+  if (awsPenEl)
+    awsPenEl.innerText =
+      `${awsPending} (${Math.round((awsPending / total) * 100)}%)`;
 
-  const totalEl = document.getElementById("total");
-  if (totalEl) totalEl.innerText = data.length;
+  const sssDoneEl =
+    document.getElementById("sssDone");
+
+  if (sssDoneEl)
+    sssDoneEl.innerText = sssSubmitted;
+
+  const sssPenEl =
+    document.getElementById("sssPending");
+
+  if (sssPenEl)
+    sssPenEl.innerText =
+      `${sssPending} (${Math.round((sssPending / total) * 100)}%)`;
+
+  const totalEl =
+    document.getElementById("total");
+
+  if (totalEl)
+    totalEl.innerText = data.length;
 }
 
 /* =========================
-   ✅ FIXED FILTER LISTENER
+   FILTER LISTENER
 ========================= */
 function bindHeaderFilters() {
+
   const inputs = document.querySelectorAll(
     "input[placeholder='Division'], \
      input[placeholder='State'], \
@@ -634,16 +730,19 @@ function bindHeaderFilters() {
      input[placeholder='Code'], \
      input[placeholder='Name']"
   );
+
   inputs.forEach(input => {
-    input.oninput = applyFilters; // direct binding, no duplicates
+
+    input.oninput = applyFilters;
   });
 }
+
 /* =========================
    CLEAR FILTERS
 ========================= */
-  function clearFilters() {
+function clearFilters() {
 
-  activeCardFilter = null; // ✅ ADD THIS LINE
+  activeCardFilter = null;
 
   document.getElementById("globalSearch").value = "";
 
@@ -659,35 +758,59 @@ function bindHeaderFilters() {
 /* =========================
    DOWNLOAD EXCEL
 ========================= */
-  function downloadExcel() {
+function downloadExcel() {
 
-  // 🔄 Transform data before export
-  const exportData = fullData.map((row, index) => {
+  const exportData =
+    fullData.map((row, index) => {
 
-    const aws = (row.awsFile || "").toString().trim();
-    const sss = (row.sssFile || "").toString().trim();
+      const aws =
+        (row.awsFile || "").toString().trim();
 
-    return {
-      ID: index + 1, // ✅ Serial number starts from 1
-      Division: row.division || "",
-      State: row.state || "",
-      BM_HQ: row.bmhq || "",
-      Code: row.code || "",
-      Name: row.name || "",
-      Sales: row.sales || "",
+      const sss =
+        (row.sssFile || "").toString().trim();
 
-      // ✅ Convert file → status
-      AWS: aws ? "Submitted" : "Pending",
-      SSS: sss ? "Submitted" : "Pending"
-    };
-  });
+      return {
 
-  const ws = XLSX.utils.json_to_sheet(exportData);
-  const wb = XLSX.utils.book_new();
+        ID: index + 1,
 
-  XLSX.utils.book_append_sheet(wb, ws, "Dashboard");
+        Division: row.division || "",
 
-  XLSX.writeFile(wb, "dashboard_data.xlsx");
+        State: row.state || "",
+
+        BM_HQ: row.bmhq || "",
+
+        Code: row.code || "",
+
+        Name: row.name || "",
+
+        Sales: row.sales || "",
+
+        AWS: aws
+          ? "Submitted"
+          : "Pending",
+
+        SSS: sss
+          ? "Submitted"
+          : "Pending"
+      };
+    });
+
+  const ws =
+    XLSX.utils.json_to_sheet(exportData);
+
+  const wb =
+    XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(
+    wb,
+    ws,
+    "Dashboard"
+  );
+
+  XLSX.writeFile(
+    wb,
+    "dashboard_data.xlsx"
+  );
 }
 
 /* =========================
@@ -699,8 +822,15 @@ function logout() {
 
   window.location.href = "index.html";
 }
+
+/* =========================
+   CARD FILTER
+========================= */
 function setCardFilter(type) {
+
   activeCardFilter = type;
+
   applyFilters();
 }
+
 window.onload = loadData;

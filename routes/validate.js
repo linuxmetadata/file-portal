@@ -4,84 +4,148 @@ const fs = require("fs");
 const path = require("path");
 const pdfParse = require("pdf-parse");
 
-
 const router = express.Router();
-const upload = multer({ dest: "uploads/" });
+
+const upload = multer({
+  dest: "uploads/"
+});
 
 /* =========================
    VALIDATE FILE
 ========================= */
-router.post("/", upload.single("file"), async (req, res) => {
+router.post(
+  "/",
+  upload.single("file"),
 
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: "NO FILE" });
-    }
+  async (req, res) => {
 
-    const file = req.file;
+    try {
 
-    // ✅ GET EXTENSION
-    const ext = path.extname(file.originalname).toLowerCase().replace(".", "");
+      /* NO FILE */
+      if (!req.file) {
 
-    // ✅ ALLOWED FORMATS
-    const allowed = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html", "htm"];
+        return res.status(400).json({
+          error: "NO FILE"
+        });
+      }
 
-    // ❌ INVALID FORMAT
-    if (!allowed.includes(ext)) {
-      fs.unlinkSync(file.path);
-      return res.status(400).json({ error: "INVALID FORMAT" });
-    }
+      const file = req.file;
 
-    /* =========================
-       PDF VALIDATION
-    ========================= */
-    if (ext === "pdf") {
+      /* EXTENSION */
+      const ext =
+        path.extname(file.originalname)
+          .toLowerCase()
+          .replace(".", "");
 
-      // If pdf-parse not installed → skip strict validation
-      if (!pdfParse) {
-        console.log("pdf-parse not available, skipping PDF validation");
-      } else {
+      /* ALLOWED */
+      const allowed = [
+        "pdf",
+        "xlsx",
+        "xls",
+        "doc",
+        "docx",
+        "txt",
+        "html",
+        "htm"
+      ];
+
+      /* INVALID FORMAT */
+      if (!allowed.includes(ext)) {
+
+        if (fs.existsSync(file.path)) {
+          fs.unlinkSync(file.path);
+        }
+
+        return res.status(400).json({
+          error: "INVALID FORMAT"
+        });
+      }
+
+      /* =========================
+         PDF VALIDATION
+      ========================= */
+      if (ext === "pdf") {
+
         try {
-          const buffer = fs.readFileSync(file.path);
-          const data = await pdfParse(buffer);
 
-          const text = data.text || "";
+          const buffer =
+            fs.readFileSync(file.path);
 
-          // 🔍 LOG FOR DEBUG
-          console.log("PDF TEXT LENGTH:", text.length);
+          const data =
+            await pdfParse(buffer);
 
-          // ❌ ONLY reject completely empty PDFs
-          if (text.replace(/\s/g, "").length < 20) {
-            fs.unlinkSync(file.path);
-            return res.status(400).json({ error: "SCANNED PDF NOT ALLOWED" });
+          const text =
+            (data.text || "").trim();
+
+          console.log(
+            "PDF TEXT LENGTH:",
+            text.length
+          );
+
+          /* SCANNED PDF */
+          if (
+            !text ||
+            text.replace(/\s/g, "").length < 20
+          ) {
+
+            if (fs.existsSync(file.path)) {
+              fs.unlinkSync(file.path);
+            }
+
+            return res.status(400).json({
+              error: "SCANNED PDF NOT ALLOWED"
+            });
           }
 
         } catch (err) {
-          console.log("PDF PARSE ERROR:", err.message);
 
-          fs.unlinkSync(file.path);
-          return res.status(400).json({ error: "INVALID PDF" });
+          console.log(
+            "PDF PARSE ERROR:",
+            err.message
+          );
+
+          if (fs.existsSync(file.path)) {
+            fs.unlinkSync(file.path);
+          }
+
+          return res.status(400).json({
+            error: "INVALID PDF"
+          });
         }
       }
+
+      /* CLEAN TEMP FILE */
+      if (fs.existsSync(file.path)) {
+
+        fs.unlinkSync(file.path);
+      }
+
+      return res.json({
+        success: true
+      });
+
+    } catch (err) {
+
+      console.error(
+        "VALIDATION ERROR:",
+        err
+      );
+
+      if (
+        req.file &&
+        fs.existsSync(req.file.path)
+      ) {
+
+        fs.unlinkSync(req.file.path);
+      }
+
+      return res.status(400).json({
+        error:
+          err.message ||
+          "VALIDATION FAILED"
+      });
     }
-
-    // ✅ CLEAN TEMP FILE
-    if (fs.existsSync(file.path)) {
-      fs.unlinkSync(file.path);
-    }
-
-    return res.json({ success: true });
-
-  } catch (err) {
-
-    console.error("VALIDATION ERROR:", err);
-
-    if (req.file && fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
-    }
-
-    return res.status(400).json({ error: err.message || "VALIDATION FAILED" });
   }
-});
+);
 
 module.exports = router;

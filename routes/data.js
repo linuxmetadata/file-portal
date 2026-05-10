@@ -5,12 +5,22 @@ const path = require("path");
 const fs = require("fs");
 const pdfParse = require("pdf-parse");
 
+const {
+  uploadToDrive,
+  deleteFromDrive
+} = require("../services/drive");
 
-const { uploadToDrive, deleteFromDrive } = require("../services/drive");
-const { updateRow, getSheetData, deleteFileFromSheet } = require("../googleSheet");
+const {
+  updateRow,
+  getSheetData,
+  deleteFileFromSheet
+} = require("../googleSheet");
 
 const router = express.Router();
-const upload = multer({ dest: "uploads/" });
+
+const upload = multer({
+  dest: "uploads/"
+});
 
 const uploadLocks = {};
 
@@ -18,12 +28,20 @@ const uploadLocks = {};
    LOAD EXCEL
 ========================= */
 function loadExcel() {
-  const filePath = path.join(__dirname, "../data/source.xlsx");
 
-  if (!fs.existsSync(filePath)) return [];
+  const filePath =
+    path.join(__dirname, "../data/source.xlsx");
 
-  const workbook = XLSX.readFile(filePath);
-  const sheet = workbook.Sheets[workbook.SheetNames[0]];
+  if (!fs.existsSync(filePath)) {
+    return [];
+  }
+
+  const workbook =
+    XLSX.readFile(filePath);
+
+  const sheet =
+    workbook.Sheets[workbook.SheetNames[0]];
+
   return XLSX.utils.sheet_to_json(sheet);
 }
 
@@ -32,24 +50,55 @@ function loadExcel() {
 ========================= */
 async function validateFile(file) {
 
-  const ext = path.extname(file.originalname).toLowerCase();
+  const ext =
+    path.extname(file.originalname).toLowerCase();
 
   const allowedExt = [
-    ".pdf", ".xlsx", ".xls", ".doc", ".docx", ".txt", ".html"
+    ".pdf",
+    ".xlsx",
+    ".xls",
+    ".doc",
+    ".docx",
+    ".txt",
+    ".html"
   ];
 
+  /* INVALID FORMAT */
   if (!allowedExt.includes(ext)) {
+
     throw new Error("INVALID FORMAT");
   }
 
+  /* PDF VALIDATION */
   if (ext === ".pdf") {
-    if (!pdfParse) throw new Error("INVALID PDF");
 
     try {
-      const buffer = fs.readFileSync(file.path);
-      await pdfParse(buffer);
-    } catch {
-      throw new Error("INVALID PDF");
+
+      const buffer =
+        fs.readFileSync(file.path);
+
+      const data =
+        await pdfParse(buffer);
+
+      const text =
+        (data.text || "").trim();
+
+      /* SCANNED PDF */
+      if (!text || text.length < 5) {
+
+        throw new Error("Scanned PDF not allowed");
+      }
+
+    } catch (err) {
+
+      console.error(
+        "PDF VALIDATION ERROR:",
+        err
+      );
+
+      throw new Error(
+        "Scanned PDF not allowed"
+      );
     }
   }
 }
@@ -57,39 +106,78 @@ async function validateFile(file) {
 /* =========================
    VALIDATE BEFORE PREVIEW
 ========================= */
-router.post("/validate", upload.single("file"), async (req, res) => {
-  try {
+router.post(
+  "/validate",
+  upload.single("file"),
 
-    if (!req.file) {
-      return res.status(400).json({ error: "NO FILE" });
+  async (req, res) => {
+
+    try {
+
+      if (!req.file) {
+
+        return res.status(400).json({
+          error: "NO FILE"
+        });
+      }
+
+      await validateFile(req.file);
+
+      if (
+        req.file &&
+        fs.existsSync(req.file.path)
+      ) {
+
+        fs.unlinkSync(req.file.path);
+      }
+
+      return res.json({
+        success: true
+      });
+
+    } catch (err) {
+
+      console.error(
+        "VALIDATE ERROR:",
+        err
+      );
+
+      if (
+        req.file &&
+        fs.existsSync(req.file.path)
+      ) {
+
+        fs.unlinkSync(req.file.path);
+      }
+
+      return res.status(400).json({
+        error:
+          err.message ||
+          "VALIDATION FAILED"
+      });
     }
-
-    await validateFile(req.file);
-
-    if (fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
-    }
-
-    return res.json({ success: true });
-
-  } catch (err) {
-
-    if (req.file && fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
-    }
-
-    return res.status(400).json({ error: err.message });
   }
-});
+);
 
 /* =========================
    MATCH ROW
 ========================= */
 function matchRow(sheetRows, code) {
+
   return sheetRows.find(r => {
-    const sheetCode = String(r[0] || "").trim().toUpperCase();
-    const rowCode = String(code || "").trim().toUpperCase();
+
+    const sheetCode =
+      String(r[0] || "")
+        .trim()
+        .toUpperCase();
+
+    const rowCode =
+      String(code || "")
+        .trim()
+        .toUpperCase();
+
     return sheetCode === rowCode;
+
   }) || [];
 }
 
@@ -99,137 +187,313 @@ function matchRow(sheetRows, code) {
 router.get("/list", async (req, res) => {
 
   try {
+
     const excelData = loadExcel();
 
     let sheetRows = [];
 
     try {
-      sheetRows = await getSheetData();
+
+      sheetRows =
+        await getSheetData();
+
     } catch {
+
       console.log("Sheet fallback mode");
     }
 
-    const user = (req.query.user || "").toLowerCase().trim();
-    const role = req.query.role;
+    const user =
+      (req.query.user || "")
+        .toLowerCase()
+        .trim();
 
-    const finalData = excelData.map((row, index) => {
+    const role =
+      req.query.role;
 
-      const code = row.Code || row.CODE || "";
-      const match = matchRow(sheetRows, code);
+    const finalData =
+      excelData.map((row, index) => {
 
-      return {
-        id: index,
-        division: row.Division || "",
-        state: row.STATE || "",
-        bmhq: row["BM HQ"] || row.BM_HQ || "",
-        code: code,
-        name: row["Stockist Name"] || row.Name || "",
+        const code =
+          row.Code ||
+          row.CODE ||
+          "";
 
-        bh_id: (row["BH_ID"] || row["BH ID"] || "").toString(),
-        sm_id: (row["SM_ID"] || row["SM ID"] || "").toString(),
-        zbm_id: (row["ZBM_ID"] || row["ZBM ID"] || "").toString(),
-        rbm_id: (row["RBM_ID"] || row["RBM ID"] || "").toString(),
-        abm_id: (row["ABM_ID"] || row["ABM ID"] || "").toString(),
+        const match =
+          matchRow(sheetRows, code);
 
-        sales: match[4] || "",
-        awsFile: match[2] || "",
-        sssFile: match[3] || ""
-      };
-    });
+        return {
 
-    let filteredData = finalData;
+          id: index,
+
+          division:
+            row.Division || "",
+
+          state:
+            row.STATE || "",
+
+          bmhq:
+            row["BM HQ"] ||
+            row.BM_HQ ||
+            "",
+
+          code: code,
+
+          name:
+            row["Stockist Name"] ||
+            row.Name ||
+            "",
+
+          bh_id:
+            (
+              row["BH_ID"] ||
+              row["BH ID"] ||
+              ""
+            ).toString(),
+
+          sm_id:
+            (
+              row["SM_ID"] ||
+              row["SM ID"] ||
+              ""
+            ).toString(),
+
+          zbm_id:
+            (
+              row["ZBM_ID"] ||
+              row["ZBM ID"] ||
+              ""
+            ).toString(),
+
+          rbm_id:
+            (
+              row["RBM_ID"] ||
+              row["RBM ID"] ||
+              ""
+            ).toString(),
+
+          abm_id:
+            (
+              row["ABM_ID"] ||
+              row["ABM ID"] ||
+              ""
+            ).toString(),
+
+          sales:
+            match[4] || "",
+
+          awsFile:
+            match[2] || "",
+
+          sssFile:
+            match[3] || ""
+        };
+      });
+
+    let filteredData =
+      finalData;
 
     if (role !== "admin" && user) {
-      const temp = finalData.filter(row =>
-        (row.bh_id || "").toLowerCase().includes(user) ||
-        (row.sm_id || "").toLowerCase().includes(user) ||
-        (row.zbm_id || "").toLowerCase().includes(user) ||
-        (row.rbm_id || "").toLowerCase().includes(user) ||
-        (row.abm_id || "").toLowerCase().includes(user) ||
-        (row.bmhq || "").toLowerCase().includes(user)
-      );
 
-      filteredData = temp.length > 0 ? temp : finalData;
+      const temp =
+        finalData.filter(row =>
+
+          (row.bh_id || "")
+            .toLowerCase()
+            .includes(user)
+
+          ||
+
+          (row.sm_id || "")
+            .toLowerCase()
+            .includes(user)
+
+          ||
+
+          (row.zbm_id || "")
+            .toLowerCase()
+            .includes(user)
+
+          ||
+
+          (row.rbm_id || "")
+            .toLowerCase()
+            .includes(user)
+
+          ||
+
+          (row.abm_id || "")
+            .toLowerCase()
+            .includes(user)
+
+          ||
+
+          (row.bmhq || "")
+            .toLowerCase()
+            .includes(user)
+        );
+
+      filteredData =
+        temp.length > 0
+          ? temp
+          : finalData;
     }
 
     res.json(filteredData);
 
   } catch (err) {
+
     console.error(err);
-    res.status(500).json({ error: "FAILED TO LOAD DATA" });
+
+    res.status(500).json({
+      error: "FAILED TO LOAD DATA"
+    });
   }
 });
 
 /* =========================
    UPLOAD
 ========================= */
-router.post("/upload", upload.single("file"), async (req, res) => {
+router.post(
+  "/upload",
+  upload.single("file"),
 
-  try {
-    const { code, type, sales } = req.body;
+  async (req, res) => {
 
-    // ✅ FIXED (NO err HERE)
-    if (!code || !type || !req.file) {
-      return res.status(400).json({ error: "UPLOAD FAILED" });
-    }
+    try {
 
-    const lockKey = `${code}_${type}`;
-    if (uploadLocks[lockKey]) {
-      return res.status(429).json({ error: "Upload already in progress" });
-    }
-    uploadLocks[lockKey] = true;
+      const {
+        code,
+        type,
+        sales
+      } = req.body;
 
-    const excelData = loadExcel();
-    const rowData = excelData.find(r => String(r.Code || r.CODE) === String(code));
+      /* INVALID */
+      if (
+        !code ||
+        !type ||
+        !req.file
+      ) {
 
-    const state = rowData?.STATE || "General";
-    const name = rowData?.["Stockist Name"] || rowData?.Name || "";
+        return res.status(400).json({
+          error: "UPLOAD FAILED"
+        });
+      }
 
-    const driveFile = await uploadToDrive(
-      req.file.path,
-      req.file.originalname,
-      type,
-      state
-    );
+      const lockKey =
+        `${code}_${type}`;
 
-    if (fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
-    }
+      /* DUPLICATE UPLOAD */
+      if (uploadLocks[lockKey]) {
 
-    const sheetRows = await getSheetData();
-    const existing = matchRow(sheetRows, code);
+        return res.status(429).json({
+          error:
+            "Upload already in progress"
+        });
+      }
 
-    let existingFiles = "";
+      uploadLocks[lockKey] = true;
 
-    if (existing.length) {
-      existingFiles = type === "aws" ? existing[2] || "" : existing[3] || "";
-    }
+      const excelData =
+        loadExcel();
 
-    const updatedFiles = existingFiles
-      ? `${existingFiles},${driveFile.fileId}`
-      : driveFile.fileId;
+      const rowData =
+        excelData.find(r =>
+          String(r.Code || r.CODE)
+            === String(code)
+        );
 
-    await updateRow(code, name, type, updatedFiles, sales);
+      const state =
+        rowData?.STATE ||
+        "General";
 
-    delete uploadLocks[lockKey];
+      const name =
+        rowData?.["Stockist Name"] ||
+        rowData?.Name ||
+        "";
 
-    res.json({ success: true });
+      /* DRIVE */
+      const driveFile =
+        await uploadToDrive(
+          req.file.path,
+          req.file.originalname,
+          type,
+          state
+        );
 
-  } catch (err) {
+      /* DELETE TEMP FILE */
+      if (
+        req.file &&
+        fs.existsSync(req.file.path)
+      ) {
 
-    console.error("UPLOAD ERROR:", err);
+        fs.unlinkSync(req.file.path);
+      }
 
-    if (req.file && fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
-    }
+      const sheetRows =
+        await getSheetData();
 
-    if (req.body) {
-      const lockKey = `${req.body.code}_${req.body.type}`;
+      const existing =
+        matchRow(sheetRows, code);
+
+      let existingFiles = "";
+
+      if (existing.length) {
+
+        existingFiles =
+          type === "aws"
+            ? existing[2] || ""
+            : existing[3] || "";
+      }
+
+      const updatedFiles =
+        existingFiles
+          ? `${existingFiles},${driveFile.fileId}`
+          : driveFile.fileId;
+
+      await updateRow(
+        code,
+        name,
+        type,
+        updatedFiles,
+        sales
+      );
+
       delete uploadLocks[lockKey];
-    }
 
-    return res.status(400).json({ error: err.message || "UPLOAD FAILED" });
+      return res.json({
+        success: true
+      });
+
+    } catch (err) {
+
+      console.error(
+        "UPLOAD ERROR:",
+        err
+      );
+
+      if (
+        req.file &&
+        fs.existsSync(req.file.path)
+      ) {
+
+        fs.unlinkSync(req.file.path);
+      }
+
+      if (req.body) {
+
+        const lockKey =
+          `${req.body.code}_${req.body.type}`;
+
+        delete uploadLocks[lockKey];
+      }
+
+      return res.status(400).json({
+        error:
+          err.message ||
+          "UPLOAD FAILED"
+      });
+    }
   }
-});
+);
 
 module.exports = router;

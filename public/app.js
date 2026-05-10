@@ -32,6 +32,7 @@ let isValidFile = true;
   }
 }
 
+
 /* =========================
    MESSAGE
 ========================= */
@@ -46,51 +47,41 @@ function showMessage(message, isError = false) {
   const toast = document.createElement("div");
 
   toast.className = "custom-toast";
+
   toast.innerHTML = `
-    <div style="font-size:16px; font-weight:600; margin-bottom:4px;">
+    <div style="font-size:16px;font-weight:600;margin-bottom:5px;">
       ${isError ? "⚠ Error" : "✓ Success"}
     </div>
-    <div style="font-size:14px;">
+
+    <div style="font-size:14px;line-height:1.5;">
       ${message}
     </div>
   `;
 
   toast.style.position = "fixed";
-  toast.style.top = "25px";
-  toast.style.right = "25px";
+  toast.style.top = "20px";
+  toast.style.right = "20px";
+  toast.style.padding = "16px 20px";
   toast.style.minWidth = "280px";
   toast.style.maxWidth = "350px";
-  toast.style.padding = "16px 18px";
-  toast.style.borderRadius = "12px";
+  toast.style.borderRadius = "10px";
   toast.style.color = "#fff";
   toast.style.fontFamily = "Arial, sans-serif";
-  toast.style.boxShadow = "0 8px 24px rgba(0,0,0,0.25)";
-  toast.style.zIndex = "999999";
-  toast.style.opacity = "0";
-  toast.style.transform = "translateY(-10px)";
-  toast.style.transition = "all 0.3s ease";
+  toast.style.fontSize = "14px";
+  toast.style.fontWeight = "500";
+  toast.style.zIndex = "999999999";
+  toast.style.boxShadow = "0 4px 16px rgba(0,0,0,0.3)";
 
   if (isError) {
-    toast.style.background = "linear-gradient(135deg, #dc2626, #991b1b)";
+    toast.style.background = "#dc2626";
   } else {
-    toast.style.background = "linear-gradient(135deg, #16a34a, #166534)";
+    toast.style.background = "#16a34a";
   }
 
   document.body.appendChild(toast);
 
   setTimeout(() => {
-    toast.style.opacity = "1";
-    toast.style.transform = "translateY(0)";
-  }, 50);
-
-  setTimeout(() => {
-    toast.style.opacity = "0";
-    toast.style.transform = "translateY(-10px)";
-
-    setTimeout(() => {
-      toast.remove();
-    }, 300);
-
+    toast.remove();
   }, 4000);
 }
 

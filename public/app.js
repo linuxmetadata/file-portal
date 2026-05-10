@@ -35,7 +35,7 @@ let isValidFile = true;
 /* =========================
    MESSAGE
 ========================= */
-  function showMessage(message, isError = false) {
+function showMessage(message, isError = false) {
 
   const oldToast = document.querySelector(".custom-toast");
 
@@ -245,7 +245,7 @@ function getUploadUI(row, code, type) {
     for (let file of files) {
 
     if (!file.name || !file.name.includes(".")) {
-    showMessage("INVALID FORMAT", true);
+    alert("INVALID FORMAT");
     return;
   }
 
@@ -274,7 +274,7 @@ function getUploadUI(row, code, type) {
 
     if (!validateRes.ok) {
 
-    showMessage(validateData.error || "INVALID FILE", true);
+    alert(validateData.error || "INVALID FILE");
 
     return;
   }

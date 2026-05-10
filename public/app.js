@@ -212,80 +212,166 @@ function getUploadUI(row, code, type) {
 /* =========================
    CHOOSE FILE
 ========================= */
-  function chooseFile(code, type) {
+  /* =========================
+   CHOOSE FILE
+========================= */
+function chooseFile(code, type) {
 
+  /* =========================
+     RESET PREVIEW STATE
+  ========================== */
   currentPreviewFile = null;
   currentPreviewFiles = [];
   currentPreviewCode = null;
   currentPreviewType = null;
 
+  /* =========================
+     FILE INPUT
+  ========================== */
   const input = document.createElement("input");
+
   input.type = "file";
   input.multiple = true;
 
-    input.onchange = async () => {
+  /* =========================
+     FILE CHANGE
+  ========================== */
+  input.onchange = async () => {
+
+    /* =========================
+       CLEAR OLD ERRORS
+    ========================== */
     clearPreviewError();
 
+    /* =========================
+       GET FILES
+    ========================== */
     const files = Array.from(input.files);
+
     if (!files.length) return;
 
-    const allowed = ["pdf", "xlsx", "xls", "doc", "docx", "txt", "html", "htm"];
+    /* =========================
+       ALLOWED FILE TYPES
+    ========================== */
+    const allowed = [
+      "pdf",
+      "xlsx",
+      "xls",
+      "doc",
+      "docx",
+      "txt",
+      "html",
+      "htm"
+    ];
 
+    /* =========================
+       LOCAL FILE VALIDATION
+    ========================== */
     for (let file of files) {
 
-    if (!file.name || !file.name.includes(".")) {
-    showPreviewError("INVALID FORMAT");
-    return;
-  }
+      /* =========================
+         INVALID NAME
+      ========================== */
+      if (!file.name || !file.name.includes(".")) {
 
-    const ext = file.name.split(".").pop().toLowerCase();
+        showPreviewError("INVALID FORMAT");
 
-    if (!allowed.includes(ext)) {
+        return;
+      }
 
-    showMessage("INVALID FORMAT", true);
+      /* =========================
+         FILE EXTENSION
+      ========================== */
+      const ext = file.name
+        .split(".")
+        .pop()
+        .toLowerCase();
 
-    return;
-  }
-}
+      /* =========================
+         INVALID FORMAT
+      ========================== */
+      if (!allowed.includes(ext)) {
 
-    // ✅ VALIDATE BEFORE PREVIEW
+        showPreviewError("INVALID FORMAT");
+
+        return;
+      }
+    }
+
+    /* =========================
+       SERVER VALIDATION
+    ========================== */
     const form = new FormData();
+
     form.append("file", files[0]);
 
     try {
 
-    const validateRes = await fetch("/validate", {
-    method: "POST",
-    body: form
-  });
+      /* =========================
+         VALIDATE API
+      ========================== */
+      const validateRes = await fetch("/validate", {
+        method: "POST",
+        body: form
+      });
 
-    const validateData = await validateRes.json();
+      /* =========================
+         SAFE JSON PARSE
+      ========================== */
+      let validateData = {};
 
-    if (!validateRes.ok) {
+      try {
 
-    showPreviewError(validateData.error || "INVALID FILE");
+        validateData = await validateRes.json();
 
-    return;
-  }
+      } catch {
 
-}   catch (err) {
+        validateData = {
+          error: "Invalid or scanned PDF"
+        };
+      }
 
-    console.error("VALIDATE ERROR:", err);
+      /* =========================
+         VALIDATION FAILED
+      ========================== */
+      if (!validateRes.ok) {
 
-    showPreviewError("Validation failed");
+        showPreviewError(
+          validateData.error || "INVALID FILE"
+        );
 
-    return;
-}
+        return;
+      }
 
-    // ✅ PREVIEW AFTER VALIDATION
+    } catch (err) {
+
+      /* =========================
+         FETCH ERROR
+      ========================== */
+      console.error("VALIDATE ERROR:", err);
+
+      showPreviewError("Validation failed");
+
+      return;
+    }
+
+    /* =========================
+       STORE PREVIEW DATA
+    ========================== */
     currentPreviewFiles = files;
     currentPreviewFile = files[0];
     currentPreviewCode = code;
     currentPreviewType = type;
 
+    /* =========================
+       OPEN PREVIEW
+    ========================== */
     openPreview();
   };
 
+  /* =========================
+     OPEN FILE PICKER
+  ========================== */
   input.click();
 }
 

@@ -245,7 +245,7 @@ function getUploadUI(row, code, type) {
     for (let file of files) {
 
     if (!file.name || !file.name.includes(".")) {
-    alert("INVALID FORMAT");
+    showMessage("INVALID FORMAT", true);
     return;
   }
 
@@ -274,7 +274,7 @@ function getUploadUI(row, code, type) {
 
     if (!validateRes.ok) {
 
-    alert(validateData.error || "INVALID FILE");
+    showMessage(validateData.error || "INVALID FILE", true);
 
     return;
   }

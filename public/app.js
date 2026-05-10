@@ -35,16 +35,10 @@ let isValidFile = true;
 /* =========================
    MESSAGE
 ========================= */
-const validateRes = await fetch("/validate", {
-  method: "POST",
-  body: form
-});
+function showMessage(message, isError = false) {
 
-const validateData = await validateRes.json();
+  alert(message);
 
-if (!validateRes.ok) {
-  showMessage(validateData.error || "INVALID FILE", true);
-  return;
 }
 
 /* =========================
@@ -208,6 +202,8 @@ function getUploadUI(row, code, type) {
     const form = new FormData();
     form.append("file", files[0]);
 
+    try {
+
     const validateRes = await fetch("/validate", {
     method: "POST",
     body: form
@@ -216,9 +212,20 @@ function getUploadUI(row, code, type) {
     const validateData = await validateRes.json();
 
     if (!validateRes.ok) {
-    showMessage(validateData.error || "INVALID FILE", true);
+
+    alert(validateData.error || "INVALID FILE");
+
     return;
   }
+
+}   catch (err) {
+
+    console.error("VALIDATE ERROR:", err);
+
+    alert("Validation failed");
+
+    return;
+}
 
     // ✅ PREVIEW AFTER VALIDATION
     currentPreviewFiles = files;

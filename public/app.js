@@ -62,6 +62,25 @@ let isValidFile = true;
     toast.style.display = "none";
   }, 4000);
 }
+  function showPreviewError(message) {
+
+  const errorDiv = document.getElementById("previewError");
+
+  if (!errorDiv) return;
+
+  errorDiv.innerText = message;
+  errorDiv.style.display = "block";
+}
+
+  function clearPreviewError() {
+
+  const errorDiv = document.getElementById("previewError");
+
+  if (!errorDiv) return;
+
+  errorDiv.style.display = "none";
+  errorDiv.innerText = "";
+}
 
 /* =========================
    FILTER
@@ -204,7 +223,8 @@ function getUploadUI(row, code, type) {
   input.type = "file";
   input.multiple = true;
 
-  input.onchange = async () => {
+    input.onchange = async () => {
+    clearPreviewError();
 
     const files = Array.from(input.files);
     if (!files.length) return;
@@ -214,7 +234,7 @@ function getUploadUI(row, code, type) {
     for (let file of files) {
 
     if (!file.name || !file.name.includes(".")) {
-    showMessage("INVALID FORMAT", true);
+    showPreviewError("INVALID FORMAT");
     return;
   }
 
@@ -243,7 +263,7 @@ function getUploadUI(row, code, type) {
 
     if (!validateRes.ok) {
 
-    showMessage(validateData.error || "INVALID FILE", true);
+    showPreviewError(validateData.error || "INVALID FILE");
 
     return;
   }
@@ -252,7 +272,7 @@ function getUploadUI(row, code, type) {
 
     console.error("VALIDATE ERROR:", err);
 
-    showMessage("Validation failed", true);
+    showPreviewError("Validation failed");
 
     return;
 }

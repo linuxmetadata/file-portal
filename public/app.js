@@ -36,53 +36,30 @@ let isValidFile = true;
 /* =========================
    MESSAGE
 ========================= */
-function showMessage(message, isError = false) {
+  function showMessage(message, isError = false) {
 
-  const oldToast = document.querySelector(".custom-toast");
+  const toast = document.getElementById("toastMessage");
 
-  if (oldToast) {
-    oldToast.remove();
+  if (!toast) {
+    console.error("toastMessage div missing");
+    return;
   }
-
-  const toast = document.createElement("div");
-
-  toast.className = "custom-toast";
 
   toast.innerHTML = `
     <div style="font-size:16px;font-weight:600;margin-bottom:5px;">
       ${isError ? "⚠ Error" : "✓ Success"}
     </div>
-
-    <div style="font-size:14px;line-height:1.5;">
-      ${message}
-    </div>
+    <div>${message}</div>
   `;
 
-  toast.style.position = "fixed";
-  toast.style.top = "20px";
-  toast.style.right = "20px";
-  toast.style.padding = "16px 20px";
-  toast.style.minWidth = "280px";
-  toast.style.maxWidth = "350px";
-  toast.style.borderRadius = "10px";
-  toast.style.color = "#fff";
-  toast.style.fontFamily = "Arial, sans-serif";
-  toast.style.fontSize = "14px";
-  toast.style.fontWeight = "500";
-  toast.style.zIndex = "2147483647";
-  toast.style.pointerEvents = "none";
-  toast.style.boxShadow = "0 4px 16px rgba(0,0,0,0.3)";
+  toast.style.background = isError ? "#dc2626" : "#16a34a";
 
-  if (isError) {
-    toast.style.background = "#dc2626";
-  } else {
-    toast.style.background = "#16a34a";
-  }
+  toast.style.display = "block";
 
-  document.documentElement.appendChild(toast);
+  clearTimeout(window.toastTimer);
 
-  setTimeout(() => {
-    toast.remove();
+  window.toastTimer = setTimeout(() => {
+    toast.style.display = "none";
   }, 4000);
 }
 

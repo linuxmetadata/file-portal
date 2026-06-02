@@ -397,9 +397,13 @@ function openPreview() {
       file.name.split(".").pop().toLowerCase();
 
     const container =
-      document.createElement("div");
+    document.createElement("div");
 
     container.style.marginBottom = "20px";
+    container.style.fontSize = "16px";
+    container.style.lineHeight = "1.6";
+    container.style.color = "#111";
+    container.style.background = "#fff";
 
     /* PDF */
     if (ext === "pdf") {
@@ -542,6 +546,9 @@ function openPreview() {
     frame.appendChild(container);
   });
 
+  frame.style.fontSize = "16px";
+  frame.style.lineHeight = "1.6";
+  frame.style.zoom = "110%";
   modal.classList.remove("hidden");
 }
 

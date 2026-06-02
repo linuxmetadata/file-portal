@@ -323,52 +323,54 @@ function chooseFile(code, type) {
     /* =========================
        SERVER VALIDATION
     ========================== */
+    try {
+
+    for (const file of files) {
+
     const form = new FormData();
 
-    form.append("file", files[0]);
+    form.append("file", file);
+
+    const validateRes = await fetch("/validate", {
+      method: "POST",
+      body: form
+    });
+
+    let validateData = {};
 
     try {
 
-      const validateRes = await fetch("/validate", {
-        method: "POST",
-        body: form
-      });
+      validateData = await validateRes.json();
 
-      let validateData = {};
+    } catch {
 
-      try {
+      validateData = {
+        error: "VALIDATION FAILED"
+      };
+    }
 
-        validateData = await validateRes.json();
-
-      } catch {
-
-        validateData = {
-          error: "Invalid or scanned PDF"
-        };
-      }
-
-      if (!validateRes.ok) {
-
-      console.log("VALIDATION FAILED", validateData);
+    if (!validateRes.ok) {
 
       showMessage(
-      validateData.error || "INVALID FILE",
-      true
-    );
-
-    console.log("SHOW MESSAGE CALLED");
-
-    return;
-  }
-
-    } catch (err) {
-
-      console.error("VALIDATE ERROR:", err);
-
-      showPreviewError("Validation failed");
+        validateData.error || "INVALID FILE",
+        true
+      );
 
       return;
     }
+  }
+
+} catch (err) {
+
+  console.error("VALIDATE ERROR:", err);
+
+  showMessage(
+    "Validation failed",
+    true
+  );
+
+  return;
+}
 
     currentPreviewFiles = files;
     currentPreviewFile = files[0];

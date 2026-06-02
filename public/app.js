@@ -349,13 +349,17 @@ function chooseFile(code, type) {
 
       if (!validateRes.ok) {
 
+      console.log("VALIDATION FAILED", validateData);
+
       showMessage(
       validateData.error || "INVALID FILE",
       true
-      );
+    );
 
-      return;
-    }
+    console.log("SHOW MESSAGE CALLED");
+
+    return;
+  }
 
     } catch (err) {
 

@@ -441,36 +441,19 @@ function openPreview() {
           XLSX.utils.sheet_to_html(sheet);
 
         container.innerHTML = `
-        <div style="
-        max-width:100%;
-        max-height:800px;
-        overflow:auto;
-        border:1px solid #ddd;
-        background:#fff;
-        font-size:18px;
-      ">
-      <div style="min-width:1500px">
-      ${tableHTML}
-      </div>
-    </div>
-  `;
-
-const table = container.querySelector("table");
-
-if (table) {
-
-  table.style.borderCollapse = "collapse";
-  table.style.width = "100%";
-
-  table.querySelectorAll("th, td").forEach(cell => {
-
-    cell.style.padding = "12px";
-    cell.style.fontSize = "18px";
-    cell.style.border = "1px solid #ccc";
-    cell.style.whiteSpace = "nowrap";
-    cell.style.verticalAlign = "middle";
-  });
-}
+          <div style="
+            max-width:100%;
+            max-height:400px;
+            overflow:auto;
+            border:1px solid #ddd;
+            background:#fff;
+          ">
+            <div style="min-width:800px">
+              ${tableHTML}
+            </div>
+          </div>
+        `;
+      };
 
       reader.readAsArrayBuffer(file);
     }

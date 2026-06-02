@@ -301,7 +301,7 @@ function chooseFile(code, type) {
 
       if (!file.name || !file.name.includes(".")) {
 
-        showPreviewError("INVALID FORMAT");
+        showMessage("INVALID FORMAT", true);
 
         return;
       }
@@ -314,7 +314,7 @@ function chooseFile(code, type) {
 
       if (!allowed.includes(ext)) {
 
-        showPreviewError("INVALID FORMAT");
+        showMessage("INVALID FORMAT", true);
 
         return;
       }

@@ -348,13 +348,14 @@ function chooseFile(code, type) {
       }
 
       if (!validateRes.ok) {
-        openPreview();
-        showPreviewError(
-          validateData.error || "INVALID FILE"
-        );
 
-        return;
-      }
+      showMessage(
+      validateData.error || "INVALID FILE",
+      true
+      );
+
+      return;
+    }
 
     } catch (err) {
 

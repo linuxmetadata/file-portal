@@ -146,7 +146,7 @@ async function extractText(filePath, ext) {
       .join(" ");
 
   const periodRegex =
-    /from\s*(\d{2}[\/-]\d{2}[\/-]\d{2,4})\s*(upto|to)\s*(\d{2}[\/-]\d{2}[\/-]\d{2,4})/i;
+  /from[:\s]*(\d{2}[\/-]\d{2}[\/-]\d{2,4}).*?(upto|to|till|\|?\s*to[:\s]*)\s*(\d{2}[\/-]\d{2}[\/-]\d{2,4})/i;
 
   const match =
     first20Lines.match(periodRegex);

@@ -175,43 +175,6 @@ async function extractText(filePath, ext) {
   );
 }
 
-  const mm =
-    String(month).padStart(2, "0");
-
-  const yyyy =
-    String(year);
-
-  const patterns = [
-
-    monthName,
-
-    `${monthName} ${yyyy}`,
-
-    `for ${monthName} month`,
-
-    `period ${monthName}`,
-
-    `period : ${monthName}`,
-
-    `01/${mm}/${yyyy}`,
-
-    `01-${mm}-${yyyy}`,
-
-    `01/${mm}/${String(yyyy).slice(-2)}`,
-
-    `01-${mm}-${String(yyyy).slice(-2)}`,
-
-    `/${mm}/${yyyy}`,
-
-    `-${mm}-${yyyy}`
-  ];
-
-  return patterns.some(
-    p => first20Lines.includes(
-      p.toLowerCase()
-    )
-  );
-}
 
 /* =========================
    VALIDATE FILE

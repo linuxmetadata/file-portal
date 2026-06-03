@@ -134,20 +134,46 @@ async function extractText(filePath, ext) {
 /* =========================
    PERIOD VALIDATION
 ========================= */
-function isValidPreviousMonth(text) {
+  function isValidPreviousMonth(text) {
 
-  const {
-    month,
-    year,
-    monthName
-  } = getPreviousMonthInfo();
+  const { month, year } =
+    getPreviousMonthInfo();
 
   const first20Lines =
     text
       .split(/\r?\n/)
       .slice(0, 20)
-      .join(" ")
-      .toLowerCase();
+      .join(" ");
+
+  const periodRegex =
+    /from\s*(\d{2}[\/-]\d{2}[\/-]\d{2,4})\s*(upto|to)\s*(\d{2}[\/-]\d{2}[\/-]\d{2,4})/i;
+
+  const match =
+    first20Lines.match(periodRegex);
+
+  if (!match) {
+
+    return false;
+  }
+
+  const startDate = match[1];
+
+  const parts =
+    startDate.split(/[\/-]/);
+
+  const fileMonth =
+    parseInt(parts[1]);
+
+  const fileYear =
+    parseInt(parts[2].length === 2
+      ? `20${parts[2]}`
+      : parts[2]);
+
+  return (
+    fileMonth === month &&
+    fileYear === year
+  );
+}
 
   const mm =
     String(month).padStart(2, "0");

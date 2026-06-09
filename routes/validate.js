@@ -131,9 +131,6 @@ async function extractText(filePath, ext) {
   }
 }
 
-/* =========================
-   PERIOD VALIDATION
-========================= */
  /* =========================
    PERIOD VALIDATION
 ========================= */
@@ -178,6 +175,13 @@ async function extractText(filePath, ext) {
     return false;
   }
 
+
+  const parts =
+  startDate.split(/[\/-]/);
+
+  if (parts.length < 3) {
+  return false;
+  }
   const monthMap = {
   jan: 1,
   feb: 2,
@@ -224,13 +228,6 @@ async function extractText(filePath, ext) {
     return false;
   }
 
-  const fileMonth =
-    parseInt(parts[1]);
-
-  const fileYear =
-    parseInt(parts[2].length === 2
-      ? `20${parts[2]}`
-      : parts[2]);
 
   return (
     fileMonth === month &&

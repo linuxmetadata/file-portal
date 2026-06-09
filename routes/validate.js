@@ -257,9 +257,20 @@ function isValidPreviousMonth(text) {
     );
   }
 
+  if (foundDates.length === 1) {
+
+  const onlyDate =
+    foundDates[0];
+
+  return (
+    onlyDate.getMonth() === (month - 1) &&
+    onlyDate.getFullYear() === year
+  );
+}
+
   if (foundDates.length < 2) {
-    return false;
-  }
+  return false;
+}
 
   foundDates.sort(
     (a, b) => a - b

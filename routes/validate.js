@@ -224,21 +224,17 @@ async function extractText(filePath, ext) {
     );
   }
 
-  if (foundDates.length === 0) {
-    return false;
-  }
-
   foundDates.sort(
-    (a, b) => a - b
-  );
+  (a, b) => a - b
+);
 
   const startDate =
-    foundDates[0];
+  foundDates[0];
 
   const endDate =
-    foundDates[
-      foundDates.length - 1
-    ];
+  foundDates[
+    foundDates.length - 1
+  ];
 
   const expectedMonth =
     month - 1;

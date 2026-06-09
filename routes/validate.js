@@ -145,94 +145,132 @@ async function extractText(filePath, ext) {
       .slice(0, 20)
       .join(" ");
 
-  const regexList = [
+  const monthMap = {
+    jan: 0,
+    feb: 1,
+    mar: 2,
+    apr: 3,
+    may: 4,
+    jun: 5,
+    jul: 6,
+    aug: 7,
+    sep: 8,
+    oct: 9,
+    nov: 10,
+    dec: 11
+  };
 
-    /from\s*(\d{2}[\/-]\d{2}[\/-]\d{2,4})\s*(upto|to|till)\s*(\d{2}[\/-]\d{2}[\/-]\d{2,4})/i,
+  const foundDates = [];
 
-    /from[:\s]*(\d{2}[\/-]\d{2}[\/-]\d{2,4})\s*\|\s*to[:\s]*(\d{2}[\/-]\d{2}[\/-]\d{2,4})/i,
+  /* DD/MM/YYYY or DD-MM-YYYY */
+  const dmyRegex =
+    /\b(\d{2})[\/-](\d{2})[\/-](\d{2,4})\b/g;
 
-    /(\d{2}[\/-]\d{2}[\/-]\d{4})\s*(to|upto|-)\s*(\d{2}[\/-]\d{2}[\/-]\d{4})/i,
+  let match;
 
-    /from\s*date\s*(\d{2}-[A-Za-z]{3}-\d{2,4})\s*to\s*(\d{2}-[A-Za-z]{3}-\d{2,4})/i
-  ];
+  while ((match = dmyRegex.exec(first20Lines)) !== null) {
 
-  let startDate = null;
+    let dd = parseInt(match[1]);
+    let mm = parseInt(match[2]);
+    let yyyy = parseInt(match[3]);
 
-  for (const regex of regexList) {
-
-    const match =
-      first20Lines.match(regex);
-
-    if (match) {
-
-      startDate = match[1];
-      break;
+    if (yyyy < 100) {
+      yyyy += 2000;
     }
+
+    foundDates.push(
+      new Date(yyyy, mm - 1, dd)
+    );
   }
 
-  if (!startDate) {
+  /* DD-Mon-YY */
+  const monRegex =
+    /\b(\d{2})[-\/](Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*[-\/](\d{2,4})\b/gi;
 
+  while ((match = monRegex.exec(first20Lines)) !== null) {
+
+    let dd = parseInt(match[1]);
+
+    let mm =
+      monthMap[
+        match[2]
+          .substring(0, 3)
+          .toLowerCase()
+      ];
+
+    let yyyy = parseInt(match[3]);
+
+    if (yyyy < 100) {
+      yyyy += 2000;
+    }
+
+    foundDates.push(
+      new Date(yyyy, mm, dd)
+    );
+  }
+
+  /* YYYY-MM-DD */
+  const ymdRegex =
+    /\b(\d{4})-(\d{2})-(\d{2})\b/g;
+
+  while ((match = ymdRegex.exec(first20Lines)) !== null) {
+
+    foundDates.push(
+      new Date(
+        parseInt(match[1]),
+        parseInt(match[2]) - 1,
+        parseInt(match[3])
+      )
+    );
+  }
+
+  if (foundDates.length === 0) {
     return false;
   }
 
+  foundDates.sort(
+    (a, b) => a - b
+  );
 
-  const parts =
-  startDate.split(/[\/-]/);
+  const startDate =
+    foundDates[0];
 
-  if (parts.length < 3) {
-  return false;
-  }
-  const monthMap = {
-  jan: 1,
-  feb: 2,
-  mar: 3,
-  apr: 4,
-  may: 5,
-  jun: 6,
-  jul: 7,
-  aug: 8,
-  sep: 9,
-  oct: 10,
-  nov: 11,
-  dec: 12
-};
-
-  let fileMonth;
-
-  if (isNaN(parts[1])) {
-
-  fileMonth =
-    monthMap[
-      parts[1]
-        .substring(0, 3)
-        .toLowerCase()
+  const endDate =
+    foundDates[
+      foundDates.length - 1
     ];
 
-  } else {
+  const expectedMonth =
+    month - 1;
 
-  fileMonth =
-    parseInt(parts[1]);
-}
+  const expectedYear =
+    year;
 
-  let fileYear =
-  parseInt(parts[2]);
-
-  if (fileYear < 100) {
-
-  fileYear =
-    2000 + fileYear;
-}
-
-  if (parts.length < 3) {
-
+  if (
+    startDate.getMonth() !== expectedMonth ||
+    endDate.getMonth() !== expectedMonth
+  ) {
     return false;
   }
 
+  if (
+    startDate.getFullYear() !== expectedYear ||
+    endDate.getFullYear() !== expectedYear
+  ) {
+    return false;
+  }
 
-  return (
-    fileMonth === month &&
-    fileYear === year
-  );
+  const days =
+    Math.abs(
+      (endDate - startDate) /
+      (1000 * 60 * 60 * 24)
+    );
+
+  if (days > 31) {
+    return false;
+  }
+
+  return true;
 }
 
 

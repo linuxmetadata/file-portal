@@ -154,7 +154,9 @@ async function extractText(filePath, ext) {
 
     /from[:\s]*(\d{2}[\/-]\d{2}[\/-]\d{2,4})\s*\|\s*to[:\s]*(\d{2}[\/-]\d{2}[\/-]\d{2,4})/i,
 
-    /(\d{2}[\/-]\d{2}[\/-]\d{4})\s*(to|upto|-)\s*(\d{2}[\/-]\d{2}[\/-]\d{4})/i
+    /(\d{2}[\/-]\d{2}[\/-]\d{4})\s*(to|upto|-)\s*(\d{2}[\/-]\d{2}[\/-]\d{4})/i,
+
+    /from\s*date\s*(\d{2}-[A-Za-z]{3}-\d{2,4})\s*to\s*(\d{2}-[A-Za-z]{3}-\d{2,4})/i
   ];
 
   let startDate = null;

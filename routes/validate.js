@@ -145,6 +145,10 @@ function isValidPreviousMonth(text) {
       .slice(0, 20)
       .join(" ");
 
+  console.log("FIRST20LINES");
+  console.log(first20Lines);
+  console.log("END FIRST20LINES");
+
   const directPeriodMatch =
   first20Lines.match(
     /from\s*date\s*[:\-]?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}).*?to\s*date\s*[:\-]?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i

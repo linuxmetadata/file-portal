@@ -224,18 +224,39 @@ async function extractText(filePath, ext) {
     );
   }
 
-  foundDates.sort(
-  (a, b) => a - b
-);
+  if (foundDates.length < 2) {
+  return false;
+}
 
-  const startDate =
-  foundDates[0];
+  let startDate = null;
+  let endDate = null;
 
-  const endDate =
-  foundDates[
-    foundDates.length - 1
-  ];
+  for (let i = 0; i < foundDates.length - 1; i++) {
 
+  const first = foundDates[i];
+  const second = foundDates[i + 1];
+
+  const diffDays =
+    Math.abs(
+      (second - first) /
+      (1000 * 60 * 60 * 24)
+    );
+
+  if (diffDays <= 31) {
+
+    startDate = first;
+    endDate = second;
+    break;
+  }
+}
+
+  if (!startDate || !endDate) {
+  return false;
+}
+
+  if (foundDates.length === 0) {
+  return false;
+}
   const expectedMonth =
     month - 1;
 

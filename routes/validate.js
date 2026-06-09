@@ -134,6 +134,9 @@ async function extractText(filePath, ext) {
 /* =========================
    PERIOD VALIDATION
 ========================= */
+ /* =========================
+   PERIOD VALIDATION
+========================= */
   function isValidPreviousMonth(text) {
 
   const { month, year } =
@@ -145,21 +148,41 @@ async function extractText(filePath, ext) {
       .slice(0, 20)
       .join(" ");
 
-  const periodRegex =
-  /from[:\s]*(\d{2}[\/-]\d{2}[\/-]\d{2,4}).*?(upto|to|till|\|?\s*to[:\s]*)\s*(\d{2}[\/-]\d{2}[\/-]\d{2,4})/i;
+  const regexList = [
 
-  const match =
-    first20Lines.match(periodRegex);
+    /from\s*(\d{2}[\/-]\d{2}[\/-]\d{2,4})\s*(upto|to|till)\s*(\d{2}[\/-]\d{2}[\/-]\d{2,4})/i,
 
-  if (!match) {
+    /from[:\s]*(\d{2}[\/-]\d{2}[\/-]\d{2,4})\s*\|\s*to[:\s]*(\d{2}[\/-]\d{2}[\/-]\d{2,4})/i,
+
+    /(\d{2}[\/-]\d{2}[\/-]\d{4})\s*(to|upto|-)\s*(\d{2}[\/-]\d{2}[\/-]\d{4})/i
+  ];
+
+  let startDate = null;
+
+  for (const regex of regexList) {
+
+    const match =
+      first20Lines.match(regex);
+
+    if (match) {
+
+      startDate = match[1];
+      break;
+    }
+  }
+
+  if (!startDate) {
 
     return false;
   }
 
-  const startDate = match[1];
-
   const parts =
     startDate.split(/[\/-]/);
+
+  if (parts.length < 3) {
+
+    return false;
+  }
 
   const fileMonth =
     parseInt(parts[1]);

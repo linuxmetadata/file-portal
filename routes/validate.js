@@ -254,6 +254,10 @@ if (directPeriodMatch) {
     );
   }
 
+  console.log("FOUND DATES:");
+  foundDates.forEach(d => {
+  console.log(d.toISOString());
+});
   /* Month-only formats like May'26, May 2026 */
   if (foundDates.length === 0) {
 

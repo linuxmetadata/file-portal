@@ -164,7 +164,7 @@ function isValidPreviousMonth(text) {
 
   /* DD/MM/YYYY or DD-MM-YYYY */
   const dmyRegex =
-    /\b(\d{2})[\/-](\d{2})[\/-](\d{2,4})\b/g;
+    /\b(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})\b/g;
 
   let match;
 

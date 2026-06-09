@@ -176,8 +176,46 @@ async function extractText(filePath, ext) {
     return false;
   }
 
-  const parts =
-    startDate.split(/[\/-]/);
+  const monthMap = {
+  jan: 1,
+  feb: 2,
+  mar: 3,
+  apr: 4,
+  may: 5,
+  jun: 6,
+  jul: 7,
+  aug: 8,
+  sep: 9,
+  oct: 10,
+  nov: 11,
+  dec: 12
+};
+
+  let fileMonth;
+
+  if (isNaN(parts[1])) {
+
+  fileMonth =
+    monthMap[
+      parts[1]
+        .substring(0, 3)
+        .toLowerCase()
+    ];
+
+  } else {
+
+  fileMonth =
+    parseInt(parts[1]);
+}
+
+  let fileYear =
+  parseInt(parts[2]);
+
+  if (fileYear < 100) {
+
+  fileYear =
+    2000 + fileYear;
+}
 
   if (parts.length < 3) {
 

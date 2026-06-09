@@ -185,7 +185,7 @@ async function extractText(filePath, ext) {
 
   /* DD-Mon-YY */
   const monRegex =
-    /\b(\d{2})[-\/](Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*[-\/](\d{2,4})\b/gi;
+    /\b(\d{1,2})[-\s\/](Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*[-\s\/](\d{2,4})\b/gi;
 
   while ((match = monRegex.exec(first20Lines)) !== null) {
 
@@ -255,39 +255,35 @@ async function extractText(filePath, ext) {
 }
 
   if (foundDates.length === 0) {
-  return false;
-}
-  const expectedMonth =
-    month - 1;
 
-  const expectedYear =
-    year;
+  const monthOnlyRegex =
+    /(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[' ]?(\d{2,4})/i;
 
-  if (
-    startDate.getMonth() !== expectedMonth ||
-    endDate.getMonth() !== expectedMonth
-  ) {
+  const monthMatch =
+    first20Lines.match(monthOnlyRegex);
+
+  if (!monthMatch) {
     return false;
   }
 
-  if (
-    startDate.getFullYear() !== expectedYear ||
-    endDate.getFullYear() !== expectedYear
-  ) {
-    return false;
+  const fileMonth =
+    monthMap[
+      monthMatch[1]
+        .substring(0, 3)
+        .toLowerCase()
+    ];
+
+  let fileYear =
+    parseInt(monthMatch[2]);
+
+  if (fileYear < 100) {
+    fileYear += 2000;
   }
 
-  const days =
-    Math.abs(
-      (endDate - startDate) /
-      (1000 * 60 * 60 * 24)
-    );
-
-  if (days > 31) {
-    return false;
-  }
-
-  return true;
+  return (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  );
 }
 
 

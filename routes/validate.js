@@ -139,11 +139,49 @@ function isValidPreviousMonth(text) {
   const { month, year } =
     getPreviousMonthInfo();
 
+  const lines =
+  text
+    .split(/\r?\n/)
+    .slice(0, 20);
+
   const first20Lines =
-    text
-      .split(/\r?\n/)
-      .slice(0, 20)
-      .join(" ");
+  lines.join(" ");
+
+  /* =========================
+   PRIORITY PERIOD CHECK
+========================= */
+
+for (const line of lines) {
+
+  const periodMatch =
+    line.match(
+      /(from\s*date|from|period|duration).*?(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}).*?(to\s*date|to|upto).*?(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i
+    );
+
+  if (periodMatch) {
+
+    const startDate =
+      periodMatch[2];
+
+    const parts =
+      startDate.split(/[\/-]/);
+
+    const fileMonth =
+      parseInt(parts[1]);
+
+    let fileYear =
+      parseInt(parts[2]);
+
+    if (fileYear < 100) {
+      fileYear += 2000;
+    }
+
+    return (
+      fileMonth === month &&
+      fileYear === year
+    );
+  }
+}
 
   console.log("FIRST20LINES");
   console.log(first20Lines);

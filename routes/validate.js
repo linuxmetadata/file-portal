@@ -131,211 +131,198 @@ async function extractText(filePath, ext) {
   }
 }
 
- /* =========================
+/* =========================
    PERIOD VALIDATION
 ========================= */
-  function isValidPreviousMonth(text) {
+function isValidPreviousMonth(text) {
 
   const { month, year } =
-  getPreviousMonthInfo();
+    getPreviousMonthInfo();
 
   const first20Lines =
-  text
-  .split(/\r?\n/)
-  .slice(0, 20)
-  .join(" ");
+    text
+      .split(/\r?\n/)
+      .slice(0, 20)
+      .join(" ");
 
   const monthMap = {
-  jan: 0,
-  feb: 1,
-  mar: 2,
-  apr: 3,
-  may: 4,
-  jun: 5,
-  jul: 6,
-  aug: 7,
-  sep: 8,
-  oct: 9,
-  nov: 10,
-  dec: 11
-};
+    jan: 0,
+    feb: 1,
+    mar: 2,
+    apr: 3,
+    may: 4,
+    jun: 5,
+    jul: 6,
+    aug: 7,
+    sep: 8,
+    oct: 9,
+    nov: 10,
+    dec: 11
+  };
 
   const foundDates = [];
 
-/* DD/MM/YYYY or DD-MM-YYYY */
+  /* DD/MM/YYYY or DD-MM-YYYY */
   const dmyRegex =
-    /\b(\d{2})[/-](\d{2})[/-](\d{2,4})\b/g;
+    /\b(\d{2})[\/-](\d{2})[\/-](\d{2,4})\b/g;
 
   let match;
 
   while ((match = dmyRegex.exec(first20Lines)) !== null) {
 
-  ```
-  let dd = parseInt(match[1]);
-  let mm = parseInt(match[2]);
-  let yyyy = parseInt(match[3]);
+    let dd = parseInt(match[1]);
+    let mm = parseInt(match[2]);
+    let yyyy = parseInt(match[3]);
 
-  if (yyyy < 100) {
-  yyyy += 2000;
-}
+    if (yyyy < 100) {
+      yyyy += 2000;
+    }
 
-  foundDates.push(
-  new Date(yyyy, mm - 1, dd)
-);
-```
+    foundDates.push(
+      new Date(yyyy, mm - 1, dd)
+    );
+  }
 
-}
-
-/* DD-Mon-YY */
+  /* DD-Mon-YY or DD Mon YYYY */
   const monRegex =
-    /\b(\d{1,2})[-\s/](Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*[-\s/](\d{2,4})\b/gi; 
+    /\b(\d{1,2})[-\s\/](Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*[-\s\/](\d{2,4})\b/gi;
 
   while ((match = monRegex.exec(first20Lines)) !== null) {
 
-  ```
-  let dd = parseInt(match[1]);
+    let dd = parseInt(match[1]);
 
-  let mm =
-  monthMap[
-    match[2]
-      .substring(0, 3)
-      .toLowerCase()
-  ];
+    let mm =
+      monthMap[
+        match[2]
+          .substring(0, 3)
+          .toLowerCase()
+      ];
 
-  let yyyy = parseInt(match[3]);
+    let yyyy = parseInt(match[3]);
 
-  if (yyyy < 100) {
-  yyyy += 2000;
-}
+    if (yyyy < 100) {
+      yyyy += 2000;
+    }
 
-  foundDates.push(
-  new Date(yyyy, mm, dd)
-);
-```
+    foundDates.push(
+      new Date(yyyy, mm, dd)
+    );
+  }
 
-}
+  /* YYYY-MM-DD */
+  const ymdRegex =
+    /\b(\d{4})-(\d{2})-(\d{2})\b/g;
 
-/* YYYY-MM-DD */
-const ymdRegex =
-/\b(\d{4})-(\d{2})-(\d{2})\b/g;
+  while ((match = ymdRegex.exec(first20Lines)) !== null) {
 
-while ((match = ymdRegex.exec(first20Lines)) !== null) {
+    foundDates.push(
+      new Date(
+        parseInt(match[1]),
+        parseInt(match[2]) - 1,
+        parseInt(match[3])
+      )
+    );
+  }
 
-```
-foundDates.push(
-  new Date(
-    parseInt(match[1]),
-    parseInt(match[2]) - 1,
-    parseInt(match[3])
-  )
-);
-```
+  /* Month-only formats like May'26, May 2026 */
+  if (foundDates.length === 0) {
 
-}
+    const monthOnlyRegex =
+      /(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[' ]?(\d{2,4})/i;
 
-/* Month only format */
-if (foundDates.length === 0) {
+    const monthMatch =
+      first20Lines.match(monthOnlyRegex);
 
-```
-const monthOnlyRegex =
-  /(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[' ]?(\d{2,4})/i;
+    if (!monthMatch) {
+      return false;
+    }
 
-const monthMatch =
-  first20Lines.match(monthOnlyRegex);
+    const fileMonth =
+      monthMap[
+        monthMatch[1]
+          .substring(0, 3)
+          .toLowerCase()
+      ];
 
-if (!monthMatch) {
-  return false;
-}
+    let fileYear =
+      parseInt(monthMatch[2]);
 
-const fileMonth =
-  monthMap[
-    monthMatch[1]
-      .substring(0, 3)
-      .toLowerCase()
-  ];
+    if (fileYear < 100) {
+      fileYear += 2000;
+    }
 
-let fileYear =
-  parseInt(monthMatch[2]);
+    return (
+      fileMonth === (month - 1) &&
+      fileYear === year
+    );
+  }
 
-if (fileYear < 100) {
-  fileYear += 2000;
-}
+  if (foundDates.length < 2) {
+    return false;
+  }
 
-return (
-  fileMonth === (month - 1) &&
-  fileYear === year
-);
-```
-
-}
-
-if (foundDates.length < 2) {
-return false;
-}
-
-let startDate = null;
-let endDate = null;
-
-for (let i = 0; i < foundDates.length - 1; i++) {
-
-```
-const first = foundDates[i];
-const second = foundDates[i + 1];
-
-const diffDays =
-  Math.abs(
-    (second - first) /
-    (1000 * 60 * 60 * 24)
+  foundDates.sort(
+    (a, b) => a - b
   );
 
-if (diffDays <= 31) {
+  let startDate = null;
+  let endDate = null;
 
-  startDate = first;
-  endDate = second;
-  break;
+  for (let i = 0; i < foundDates.length - 1; i++) {
+
+    const first = foundDates[i];
+    const second = foundDates[i + 1];
+
+    const diffDays =
+      Math.abs(
+        (second - first) /
+        (1000 * 60 * 60 * 24)
+      );
+
+    if (diffDays <= 31) {
+
+      startDate = first;
+      endDate = second;
+      break;
+    }
+  }
+
+  if (!startDate || !endDate) {
+    return false;
+  }
+
+  const expectedMonth =
+    month - 1;
+
+  const expectedYear =
+    year;
+
+  if (
+    startDate.getMonth() !== expectedMonth ||
+    endDate.getMonth() !== expectedMonth
+  ) {
+    return false;
+  }
+
+  if (
+    startDate.getFullYear() !== expectedYear ||
+    endDate.getFullYear() !== expectedYear
+  ) {
+    return false;
+  }
+
+  const days =
+    Math.abs(
+      (endDate - startDate) /
+      (1000 * 60 * 60 * 24)
+    );
+
+  if (days > 31) {
+    return false;
+  }
+
+  return true;
 }
-```
-
-}
-
-if (!startDate || !endDate) {
-return false;
-}
-
-const expectedMonth =
-month - 1;
-
-const expectedYear =
-year;
-
-if (
-startDate.getMonth() !== expectedMonth ||
-endDate.getMonth() !== expectedMonth
-) {
-return false;
-}
-
-if (
-startDate.getFullYear() !== expectedYear ||
-endDate.getFullYear() !== expectedYear
-) {
-return false;
-}
-
-const days =
-Math.abs(
-(endDate - startDate) /
-(1000 * 60 * 60 * 24)
-);
-
-if (days > 31) {
-return false;
-}
-
-return true;
-}
-
-
 
 /* =========================
    VALIDATE FILE

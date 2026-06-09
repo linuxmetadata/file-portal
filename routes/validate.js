@@ -145,6 +145,32 @@ function isValidPreviousMonth(text) {
       .slice(0, 20)
       .join(" ");
 
+  const directPeriodMatch =
+  first20Lines.match(
+    /from\s*date\s*[:\-]?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}).*?to\s*date\s*[:\-]?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i
+  );
+
+if (directPeriodMatch) {
+
+  const startParts =
+    directPeriodMatch[1].split(/[\/-]/);
+
+  const fileMonth =
+    parseInt(startParts[1]);
+
+  let fileYear =
+    parseInt(startParts[2]);
+
+  if (fileYear < 100) {
+    fileYear += 2000;
+  }
+
+  return (
+    fileMonth === month &&
+    fileYear === year
+  );
+}
+
   const monthMap = {
     jan: 0,
     feb: 1,

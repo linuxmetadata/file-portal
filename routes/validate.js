@@ -153,6 +153,33 @@ function isValidPreviousMonth(text) {
 
 for (const line of lines) {
 
+  const monthPeriodMatch =
+  first20Lines.match(
+    /from\s*[:\-]?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[- ]?(\d{2,4}).*?to\s*[:\-]?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[- ]?(\d{2,4})/i
+  );
+
+  if (monthPeriodMatch) {
+
+  const fileMonth =
+    monthMap[
+      monthPeriodMatch[1]
+        .substring(0,3)
+        .toLowerCase()
+    ];
+
+  let fileYear =
+    parseInt(monthPeriodMatch[2]);
+
+  if (fileYear < 100) {
+    fileYear += 2000;
+  }
+
+  return (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  );
+}
+
   const periodMatch =
     line.match(
       /(from\s*date|from|period|duration).*?(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}).*?(to\s*date|to|upto).*?(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i

@@ -139,6 +139,29 @@ function isValidPreviousMonth(text) {
   const { month, year } =
     getPreviousMonthInfo();
 
+const monthMap = {
+  jan: 0,
+  feb: 1,
+  mar: 2,
+  apr: 3,
+  may: 4,
+  jun: 5,
+  jul: 6,
+  aug: 7,
+  sep: 8,
+  oct: 9,
+  nov: 10,
+  dec: 11
+};
+
+const lines =
+  text
+    .split(/\r?\n/)
+    .slice(0, 20);
+
+const first20Lines =
+  lines.join(" ");
+  
   const lines =
   text
     .split(/\r?\n/)
@@ -151,8 +174,32 @@ function isValidPreviousMonth(text) {
    PRIORITY PERIOD CHECK
 ========================= */
 
-for (const line of lines) {
+  const fromToMonthMatch =
+  first20Lines.match(
+    /from\s*:?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[- ]?(\d{2,4})/i
+  );
 
+  if (fromToMonthMatch) {
+
+  const fileMonth =
+    monthMap[
+      fromToMonthMatch[1]
+        .substring(0, 3)
+        .toLowerCase()
+    ];
+
+  let fileYear =
+    parseInt(fromToMonthMatch[2]);
+
+  if (fileYear < 100) {
+    fileYear += 2000;
+  }
+
+  return (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  );
+} 
   const monthPeriodMatch =
   first20Lines.match(
     /from\s*[:\-]?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[- ]?(\d{2,4}).*?to\s*[:\-]?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[- ]?(\d{2,4})/i
@@ -179,6 +226,8 @@ for (const line of lines) {
     fileYear === year
   );
 }
+
+  for (const line of lines) {
 
   const periodMatch =
     line.match(
@@ -239,21 +288,6 @@ if (directPeriodMatch) {
     fileYear === year
   );
 }
-
-  const monthMap = {
-    jan: 0,
-    feb: 1,
-    mar: 2,
-    apr: 3,
-    may: 4,
-    jun: 5,
-    jul: 6,
-    aug: 7,
-    sep: 8,
-    oct: 9,
-    nov: 10,
-    dec: 11
-  };
 
   const foundDates = [];
 
@@ -327,7 +361,7 @@ if (directPeriodMatch) {
   if (foundDates.length === 0) {
 
     const monthOnlyRegex =
-      /(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[' ]?(\d{2,4})/i;
+      /(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*['\-\s]?(\d{2,4})/i;
 
     const monthMatch =
       first20Lines.match(monthOnlyRegex);

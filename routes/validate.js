@@ -154,14 +154,6 @@ const monthMap = {
   dec: 11
 };
 
-const lines =
-  text
-    .split(/\r?\n/)
-    .slice(0, 20);
-
-const first20Lines =
-  lines.join(" ");
-  
   const lines =
   text
     .split(/\r?\n/)
@@ -169,6 +161,7 @@ const first20Lines =
 
   const first20Lines =
   lines.join(" ");
+  
 
   /* =========================
    PRIORITY PERIOD CHECK

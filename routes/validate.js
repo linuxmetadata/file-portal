@@ -282,6 +282,21 @@ if (directPeriodMatch) {
   );
 }
 
+  const explicitPeriodMatch =
+  first20Lines.match(
+    /from\s*(\d{1,2}[-\/][A-Za-z]{3}[-\/]\d{2,4}|\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4}).*?to\s*(\d{1,2}[-\/][A-Za-z]{3}[-\/]\d{2,4}|\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4})/i
+  );
+
+if (explicitPeriodMatch) {
+
+  const startText =
+    explicitPeriodMatch[1];
+
+  // validate month/year from startText
+
+  return true/false;
+}
+
   const foundDates = [];
 
   /* DD/MM/YYYY or DD-MM-YYYY */

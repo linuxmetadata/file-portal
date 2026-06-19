@@ -282,6 +282,22 @@ if (directPeriodMatch) {
   );
 }
 
+  const ymdPeriodMatch =
+  first20Lines.match(
+    /(\d{4}-\d{2}-\d{2}).*?(?:to|upto|-).*?(\d{4}-\d{2}-\d{2})/i
+  );
+
+  if (ymdPeriodMatch) {
+
+  const startDate =
+    new Date(ymdPeriodMatch[1]);
+
+  return (
+    startDate.getMonth() === (month - 1) &&
+    startDate.getFullYear() === year
+  );
+}
+
   const foundDates = [];
 
   /* DD/MM/YYYY or DD-MM-YYYY */

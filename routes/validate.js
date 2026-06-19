@@ -161,7 +161,25 @@ const monthMap = {
 
   const first20Lines =
   lines.join(" ");
+
+  console.log("FIRST20LINES:");
+  console.log(first20Lines);
   
+  const rrpdMatch =
+  first20Lines.match(
+    /period\s+of\s+(\d{4}-\d{2}-\d{2})\s+to\s+(\d{4}-\d{2}-\d{2})/i
+  );
+
+  if (rrpdMatch) {
+
+  const startDate =
+    new Date(rrpdMatch[1]);
+
+  return (
+    startDate.getMonth() === (month - 1) &&
+    startDate.getFullYear() === year
+  );
+}
 
   /* =========================
    PRIORITY PERIOD CHECK

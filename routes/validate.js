@@ -162,6 +162,46 @@ const monthMap = {
   const first20Lines =
   lines.join(" ");
 
+  const monthDatePeriodMatch =
+  first20Lines.match(
+    /from\s+(\d{1,2}-[A-Za-z]{3}-\d{4})\s+to\s+(\d{1,2}-[A-Za-z]{3}-\d{4})/i
+  );
+
+  if (monthDatePeriodMatch) {
+
+  const monthMapText = {
+    jan: 0,
+    feb: 1,
+    mar: 2,
+    apr: 3,
+    may: 4,
+    jun: 5,
+    jul: 6,
+    aug: 7,
+    sep: 8,
+    oct: 9,
+    nov: 10,
+    dec: 11
+  };
+
+  const startParts =
+    monthDatePeriodMatch[1].split("-");
+
+  const fileMonth =
+    monthMapText[
+      startParts[1]
+        .toLowerCase()
+    ];
+
+  const fileYear =
+    parseInt(startParts[2]);
+
+  return (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  );
+}
+
   console.log("FIRST20LINES:");
   console.log(first20Lines);
   

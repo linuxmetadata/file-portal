@@ -223,9 +223,9 @@ const monthMap = {
   for (const line of lines) {
 
   const periodMatch =
-    line.match(
-      /(from\s*date|from|period|duration).*?(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}).*?(to\s*date|to|upto).*?(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i
-    );
+  line.match(
+    /(from\s*date|from|period|duration).*?(\d{1,2}(?:[\/-]\d{1,2}[\/-]\d{2,4}|[\/-][A-Za-z]{3}[\/-]\d{2,4})).*?(to\s*date|to|upto).*?(\d{1,2}(?:[\/-]\d{1,2}[\/-]\d{2,4}|[\/-][A-Za-z]{3}[\/-]\d{2,4}))/i
+  );
 
   if (periodMatch) {
 
@@ -280,21 +280,6 @@ if (directPeriodMatch) {
     fileMonth === month &&
     fileYear === year
   );
-}
-
-  const explicitPeriodMatch =
-  first20Lines.match(
-    /from\s*(\d{1,2}[-\/][A-Za-z]{3}[-\/]\d{2,4}|\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4}).*?to\s*(\d{1,2}[-\/][A-Za-z]{3}[-\/]\d{2,4}|\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4})/i
-  );
-
-if (explicitPeriodMatch) {
-
-  const startText =
-    explicitPeriodMatch[1];
-
-  // validate month/year from startText
-
-  return true/false;
 }
 
   const foundDates = [];

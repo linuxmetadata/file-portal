@@ -159,9 +159,14 @@ const monthMap = {
     .split(/\r?\n/)
     .slice(0, 20);
 
-  const first20Lines =
+  let first20Lines =
   lines.join(" ");
 
+  first20Lines =
+  first20Lines.replace(
+    /\(?.*?sale report updated till\s*:?\s*[^\)]*\)?/gi,
+    ""
+  );
   const monthDatePeriodMatch =
   first20Lines.match(
     /from\s+(\d{1,2}-[A-Za-z]{3}-\d{4})\s+to\s+(\d{1,2}-[A-Za-z]{3}-\d{4})/i

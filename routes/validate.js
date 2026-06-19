@@ -600,11 +600,17 @@ router.post(
             ext
           );
 
-        if (
-          !isValidPreviousMonth(
-            text
-          )
-        ) {
+        const validationResult =
+        isValidPreviousMonth(text);
+
+        console.log("================================");
+        console.log("FILE:", file.originalname);
+        console.log("VALIDATION RESULT:", validationResult);
+        console.log("TEXT PREVIEW:");
+        console.log(text.substring(0, 3000));
+        console.log("================================");
+
+      if (!validationResult) {
 
           if (
             fs.existsSync(

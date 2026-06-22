@@ -93,6 +93,14 @@ async function extractText(filePath, ext) {
       return result.value || "";
     }
 
+    if (ext === "csv") {
+
+      return fs.readFileSync(
+        filePath,
+        "utf8"
+      );
+    }
+
     if (ext === "txt") {
 
       return fs.readFileSync(
@@ -630,6 +638,7 @@ router.post(
         "pdf",
         "xlsx",
         "xls",
+        "csv",
         "doc",
         "docx",
         "txt",

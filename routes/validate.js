@@ -217,6 +217,33 @@ if (monthDatePeriodMatch) {
   );
 }
 
+  const reportMonthMatch =
+  text.match(
+    /report.*?of\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s*(\d{2,4})/i
+  );
+
+  if (reportMonthMatch) {
+
+  const fileMonth =
+    monthMap[
+      reportMonthMatch[1]
+        .substring(0,3)
+        .toLowerCase()
+    ];
+
+  let fileYear =
+    parseInt(reportMonthMatch[2]);
+
+  if (fileYear < 100) {
+    fileYear += 2000;
+  }
+
+  return (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  );
+}
+
   /* =========================
    PRIORITY PERIOD CHECK
 ========================= */

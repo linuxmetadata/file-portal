@@ -390,7 +390,7 @@ if (fromMonthMatch) {
 
   const directPeriodMatch =
   text.match(
-    /from\s*date\s*[:\-]?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}).*?to\s*date\s*[:\-]?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i
+    /from(?:\s*date)?\s*[:\-]?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}).*?to(?:\s*date)?\s*[:\-]?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i
   );
 
 if (directPeriodMatch) {

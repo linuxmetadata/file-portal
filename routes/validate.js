@@ -199,6 +199,26 @@ const monthMap = {
     /\(?.*?sale report updated till\s*:?\s*[^\)]*\)?/gi,
     ""
   );
+
+  const monthColumnMatch =
+  normalizedText.match(
+    /month\s+(\d{4}-\d{2}-\d{2}).*?stock end date\s+(\d{4}-\d{2}-\d{2})/is
+  );
+
+if (monthColumnMatch) {
+
+  const startDate =
+    new Date(monthColumnMatch[1]);
+
+  const endDate =
+    new Date(monthColumnMatch[2]);
+
+  return validateDateRange(
+    startDate,
+    endDate
+  );
+}
+
   const monthDatePeriodMatch =
   normalizedText.match(
     /from\s+(\d{1,2}-[A-Za-z]{3}-\d{4})\s+to\s+(\d{1,2}-[A-Za-z]{3}-\d{4})/i

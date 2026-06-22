@@ -219,10 +219,10 @@ if (monthDatePeriodMatch) {
   const fileYear =
     parseInt(parts[2]);
 
-  return validateDateRange(
-  startDate,
-  endDate
-);
+  return (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  );
 }
 
   const rrpdMatch =
@@ -235,10 +235,10 @@ if (monthDatePeriodMatch) {
   const startDate =
     new Date(rrpdMatch[1]);
 
-  return validateDateRange(
-  startDate,
-  endDate
-);
+  return (
+    startDate.getMonth() === (month - 1) &&
+    startDate.getFullYear() === year
+  );
 }
 
   const reportMonthMatch =
@@ -262,10 +262,10 @@ if (monthDatePeriodMatch) {
     fileYear += 2000;
   }
 
-  return validateDateRange(
-  startDate,
-  endDate
-);
+  return (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  );
 }
 
   /* =========================
@@ -292,10 +292,10 @@ if (fromMonthMatch) {
     fileYear += 2000;
   }
 
-  return validateDateRange(
-  startDate,
-  endDate
-);
+  return (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  );
 }
 
   const fromToMonthMatch =
@@ -319,10 +319,10 @@ if (fromMonthMatch) {
     fileYear += 2000;
   }
 
-  return validateDateRange(
-  startDate,
-  endDate
-);
+  return (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  );
 } 
   const monthPeriodMatch =
   normalizedText.match(
@@ -345,17 +345,15 @@ if (fromMonthMatch) {
     fileYear += 2000;
   }
 
-  return validateDateRange(
-  startDate,
-  endDate
-);
+  return (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  );
 }
 
-  const startDateText =
-  periodMatch[2];
+  for (const line of lines) {
 
-  const endDateText =
-  periodMatch[4];
+  const periodMatch =
   line.match(
     /(from\s*date|from|period|duration).*?(\d{1,2}(?:[\/-]\d{1,2}[\/-]\d{2,4}|[\/-][A-Za-z]{3}[\/-]\d{2,4})).*?(to\s*date|to|upto).*?(\d{1,2}(?:[\/-]\d{1,2}[\/-]\d{2,4}|[\/-][A-Za-z]{3}[\/-]\d{2,4}))/i
   );
@@ -384,10 +382,10 @@ if (fromMonthMatch) {
       fileYear += 2000;
     }
 
-    return validateDateRange(
-  startDate,
-  endDate
-);
+    return (
+      fileMonth === (month - 1) &&
+      fileYear === year
+    );
   }
 
     const parts =
@@ -403,10 +401,10 @@ if (fromMonthMatch) {
     fileYear += 2000;
   }
 
-    return validateDateRange(
-  startDate,
-  endDate
-);
+    return (
+    fileMonth === month &&
+    fileYear === year
+  );
 }
 }
 
@@ -421,29 +419,27 @@ if (fromMonthMatch) {
 
   if (directPeriodMatch) {
 
-  const startParts =
-    directPeriodMatch[1].split(/[\/-]/);
-
-  const endParts =
-    directPeriodMatch[2].split(/[\/-]/);
-
   const startDate =
     new Date(
-      startParts[2],
-      startParts[1] - 1,
-      startParts[0]
+      directPeriodMatch[1]
+        .split(/[\/-]/)
+        .reverse()
+        .join("-")
     );
 
   const endDate =
     new Date(
-      endParts[2],
-      endParts[1] - 1,
-      endParts[0]
+      directPeriodMatch[2]
+        .split(/[\/-]/)
+        .reverse()
+        .join("-")
     );
 
-  return validateDateRange(
-    startDate,
-    endDate
+  return (
+    startDate.getMonth() === (month - 1) &&
+    endDate.getMonth() === (month - 1) &&
+    startDate.getFullYear() === year &&
+    endDate.getFullYear() === year
   );
 }
 
@@ -515,10 +511,10 @@ if (dashRangeMatch) {
     fileYear += 2000;
   }
 
-  return validateDateRange(
-  startDate,
-  endDate
-);
+  return (
+    fileMonth === month &&
+    fileYear === year
+  );
 }
 
   const compressedFromToMatch =
@@ -541,10 +537,10 @@ if (compressedFromToMatch) {
     fileYear += 2000;
   }
 
-  return validateDateRange(
-  startDate,
-  endDate
-);
+  return (
+    fileMonth === month &&
+    fileYear === year
+  );
 }
 
   const foundDates = [];
@@ -642,10 +638,10 @@ if (compressedFromToMatch) {
       fileYear += 2000;
     }
 
-    return validateDateRange(
-  startDate,
-  endDate
-);
+    return (
+      fileMonth === (month - 1) &&
+      fileYear === year
+    );
   }
 
   if (foundDates.length === 1) {
@@ -653,10 +649,10 @@ if (compressedFromToMatch) {
   const onlyDate =
     foundDates[0];
 
-  return validateDateRange(
-  startDate,
-  endDate
-);
+  return (
+    onlyDate.getMonth() === (month - 1) &&
+    onlyDate.getFullYear() === year
+  );
 }
 
   if (foundDates.length < 2) {

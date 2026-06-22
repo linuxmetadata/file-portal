@@ -634,6 +634,9 @@ router.post(
           .toLowerCase()
           .replace(".", "");
 
+      console.log("FILE NAME:", file.originalname);
+      console.log("EXTENSION:", ext);
+
       const allowed = [
         "pdf",
         "xlsx",
@@ -646,6 +649,8 @@ router.post(
         "htm"
       ];
 
+      console.log("ALLOWED:", allowed);
+      
       if (!allowed.includes(ext)) {
 
         if (fs.existsSync(file.path)) {

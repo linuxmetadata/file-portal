@@ -192,7 +192,7 @@ if (monthDatePeriodMatch) {
     fileYear === year
   );
 }
-
+}
   console.log("FIRST20LINES:");
   console.log(first20Lines);
   
@@ -211,7 +211,7 @@ if (monthDatePeriodMatch) {
     startDate.getFullYear() === year
   );
 }
-}
+
   /* =========================
    PRIORITY PERIOD CHECK
 ========================= */

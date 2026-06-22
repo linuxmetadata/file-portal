@@ -170,13 +170,21 @@ const monthMap = {
   let first20Lines =
   lines.join(" ");
 
+  const normalizedText =
+  text
+    .replace(/FromTo/gi, "From To ")
+    .replace(
+      /(\d{2}\/\d{2}\/\d{4})(\d{2}\/\d{2}\/\d{4})/g,
+      "$1 To $2"
+    );
+
   first20Lines =
   first20Lines.replace(
     /\(?.*?sale report updated till\s*:?\s*[^\)]*\)?/gi,
     ""
   );
   const monthDatePeriodMatch =
-  text.match(
+  normalizedText.match(
     /from\s+(\d{1,2}-[A-Za-z]{3}-\d{4})\s+to\s+(\d{1,2}-[A-Za-z]{3}-\d{4})/i
   );
 
@@ -202,7 +210,7 @@ if (monthDatePeriodMatch) {
 }
 
   const rrpdMatch =
-  text.match(
+  normalizedText.match(
     /period\s+of\s+(\d{4}-\d{2}-\d{2})\s+to\s+(\d{4}-\d{2}-\d{2})/i
   );
 
@@ -218,7 +226,7 @@ if (monthDatePeriodMatch) {
 }
 
   const reportMonthMatch =
-  text.match(
+  normalizedText.match(
     /report.*?of\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s*(\d{2,4})/i
   );
 
@@ -248,7 +256,7 @@ if (monthDatePeriodMatch) {
    PRIORITY PERIOD CHECK
 ========================= */
   const fromMonthMatch =
-  text.match(
+  normalizedText.match(
     /from\s+month\s*:?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+(\d{2,4})/i
   );
 
@@ -275,7 +283,7 @@ if (fromMonthMatch) {
 }
 
   const fromToMonthMatch =
-  text.match(
+  normalizedText.match(
     /from\s*:?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[- ]?(\d{2,4})/i
   );
 
@@ -301,7 +309,7 @@ if (fromMonthMatch) {
   );
 } 
   const monthPeriodMatch =
-  text.match(
+  normalizedText.match(
     /from\s*[:\-]?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[- ]?(\d{2,4}).*?to\s*[:\-]?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[- ]?(\d{2,4})/i
   );
 
@@ -389,7 +397,7 @@ if (fromMonthMatch) {
   console.log("END FIRST20LINES");
 
   const directPeriodMatch =
-  text.match(
+  normalizedText.match(
     /from(?:\s*date)?\s*[:\-]?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}).*?to(?:\s*date)?\s*[:\-]?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i
   );
 
@@ -415,7 +423,7 @@ if (directPeriodMatch) {
 }
 
   const ymdPeriodMatch =
-  text.match(
+  normalizedText.match(
     /(\d{4}-\d{2}-\d{2}).*?(?:to|upto|-).*?(\d{4}-\d{2}-\d{2})/i
   );
 
@@ -431,7 +439,7 @@ if (directPeriodMatch) {
 }
 
   const simpleRangeMatch =
-  text.match(
+  normalizedText.match(
     /(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})\s*(?:to|-)\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i
   );
 
@@ -457,7 +465,7 @@ if (simpleRangeMatch) {
 }
 
   const dashRangeMatch =
-  text.match(
+  normalizedText.match(
     /(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})\s*-\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/
   );
 
@@ -465,6 +473,32 @@ if (dashRangeMatch) {
 
   const startParts =
     dashRangeMatch[1].split(/[\/-]/);
+
+  const fileMonth =
+    parseInt(startParts[1]);
+
+  let fileYear =
+    parseInt(startParts[2]);
+
+  if (fileYear < 100) {
+    fileYear += 2000;
+  }
+
+  return (
+    fileMonth === month &&
+    fileYear === year
+  );
+}
+
+  const compressedFromToMatch =
+  normalizedText.match(
+    /fromto\s*(\d{2}\/\d{2}\/\d{4})(\d{2}\/\d{2}\/\d{4})/i
+  );
+
+if (compressedFromToMatch) {
+
+  const startParts =
+    compressedFromToMatch[1].split("/");
 
   const fileMonth =
     parseInt(startParts[1]);

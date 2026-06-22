@@ -398,27 +398,32 @@ if (fromMonthMatch) {
 
   const directPeriodMatch =
   normalizedText.match(
-    /from(?:\s*date)?\s*[:\-]?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}).*?to(?:\s*date)?\s*[:\-]?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i
+    /from(?:\s*date)?\s*[:\-]?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}).*?(?:to|upto)(?:\s*date)?\s*[:\-]?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i
   );
 
-if (directPeriodMatch) {
+  if (directPeriodMatch) {
 
-  const startParts =
-    directPeriodMatch[1].split(/[\/-]/);
+  const startDate =
+    new Date(
+      directPeriodMatch[1]
+        .split(/[\/-]/)
+        .reverse()
+        .join("-")
+    );
 
-  const fileMonth =
-    parseInt(startParts[1]);
-
-  let fileYear =
-    parseInt(startParts[2]);
-
-  if (fileYear < 100) {
-    fileYear += 2000;
-  }
+  const endDate =
+    new Date(
+      directPeriodMatch[2]
+        .split(/[\/-]/)
+        .reverse()
+        .join("-")
+    );
 
   return (
-    fileMonth === month &&
-    fileYear === year
+    startDate.getMonth() === (month - 1) &&
+    endDate.getMonth() === (month - 1) &&
+    startDate.getFullYear() === year &&
+    endDate.getFullYear() === year
   );
 }
 
@@ -432,10 +437,15 @@ if (directPeriodMatch) {
   const startDate =
     new Date(ymdPeriodMatch[1]);
 
-  return (
-    startDate.getMonth() === (month - 1) &&
-    startDate.getFullYear() === year
-  );
+  const endDate =
+  new Date(ymdPeriodMatch[2]);
+
+return (
+  startDate.getMonth() === (month - 1) &&
+  endDate.getMonth() === (month - 1) &&
+  startDate.getFullYear() === year &&
+  endDate.getFullYear() === year
+);
 }
 
   const simpleRangeMatch =
@@ -443,24 +453,25 @@ if (directPeriodMatch) {
     /(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})\s*(?:to|-)\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i
   );
 
-if (simpleRangeMatch) {
+  if (simpleRangeMatch) {
 
-  const startParts =
+  const start =
     simpleRangeMatch[1].split(/[\/-]/);
 
-  const fileMonth =
-    parseInt(startParts[1]);
+  const end =
+    simpleRangeMatch[2].split(/[\/-]/);
 
-  let fileYear =
-    parseInt(startParts[2]);
+  const startDate =
+    new Date(start[2], start[1]-1, start[0]);
 
-  if (fileYear < 100) {
-    fileYear += 2000;
-  }
+  const endDate =
+    new Date(end[2], end[1]-1, end[0]);
 
   return (
-    fileMonth === month &&
-    fileYear === year
+    startDate.getMonth() === (month - 1) &&
+    endDate.getMonth() === (month - 1) &&
+    startDate.getFullYear() === year &&
+    endDate.getFullYear() === year
   );
 }
 

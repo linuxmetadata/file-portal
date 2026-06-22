@@ -53,6 +53,22 @@ function getPreviousMonthInfo() {
 /* =========================
    EXTRACT TEXT
 ========================= */
+function validateDateRange(startDate, endDate) {
+
+  const { month, year } =
+    getPreviousMonthInfo();
+
+  const expectedMonth =
+    month - 1;
+
+  return (
+    startDate.getMonth() === expectedMonth &&
+    endDate.getMonth() === expectedMonth &&
+    startDate.getFullYear() === year &&
+    endDate.getFullYear() === year
+  );
+}
+
 async function extractText(filePath, ext) {
 
   try {
@@ -203,10 +219,10 @@ if (monthDatePeriodMatch) {
   const fileYear =
     parseInt(parts[2]);
 
-  return (
-    fileMonth === (month - 1) &&
-    fileYear === year
-  );
+  return validateDateRange(
+  startDate,
+  endDate
+);
 }
 
   const rrpdMatch =
@@ -219,10 +235,10 @@ if (monthDatePeriodMatch) {
   const startDate =
     new Date(rrpdMatch[1]);
 
-  return (
-    startDate.getMonth() === (month - 1) &&
-    startDate.getFullYear() === year
-  );
+  return validateDateRange(
+  startDate,
+  endDate
+);
 }
 
   const reportMonthMatch =
@@ -246,10 +262,10 @@ if (monthDatePeriodMatch) {
     fileYear += 2000;
   }
 
-  return (
-    fileMonth === (month - 1) &&
-    fileYear === year
-  );
+  return validateDateRange(
+  startDate,
+  endDate
+);
 }
 
   /* =========================
@@ -276,10 +292,10 @@ if (fromMonthMatch) {
     fileYear += 2000;
   }
 
-  return (
-    fileMonth === (month - 1) &&
-    fileYear === year
-  );
+  return validateDateRange(
+  startDate,
+  endDate
+);
 }
 
   const fromToMonthMatch =
@@ -303,10 +319,10 @@ if (fromMonthMatch) {
     fileYear += 2000;
   }
 
-  return (
-    fileMonth === (month - 1) &&
-    fileYear === year
-  );
+  return validateDateRange(
+  startDate,
+  endDate
+);
 } 
   const monthPeriodMatch =
   normalizedText.match(
@@ -329,15 +345,17 @@ if (fromMonthMatch) {
     fileYear += 2000;
   }
 
-  return (
-    fileMonth === (month - 1) &&
-    fileYear === year
-  );
+  return validateDateRange(
+  startDate,
+  endDate
+);
 }
 
-  for (const line of lines) {
+  const startDateText =
+  periodMatch[2];
 
-  const periodMatch =
+  const endDateText =
+  periodMatch[4];
   line.match(
     /(from\s*date|from|period|duration).*?(\d{1,2}(?:[\/-]\d{1,2}[\/-]\d{2,4}|[\/-][A-Za-z]{3}[\/-]\d{2,4})).*?(to\s*date|to|upto).*?(\d{1,2}(?:[\/-]\d{1,2}[\/-]\d{2,4}|[\/-][A-Za-z]{3}[\/-]\d{2,4}))/i
   );
@@ -366,10 +384,10 @@ if (fromMonthMatch) {
       fileYear += 2000;
     }
 
-    return (
-      fileMonth === (month - 1) &&
-      fileYear === year
-    );
+    return validateDateRange(
+  startDate,
+  endDate
+);
   }
 
     const parts =
@@ -385,10 +403,10 @@ if (fromMonthMatch) {
     fileYear += 2000;
   }
 
-    return (
-    fileMonth === month &&
-    fileYear === year
-  );
+    return validateDateRange(
+  startDate,
+  endDate
+);
 }
 }
 
@@ -403,27 +421,29 @@ if (fromMonthMatch) {
 
   if (directPeriodMatch) {
 
+  const startParts =
+    directPeriodMatch[1].split(/[\/-]/);
+
+  const endParts =
+    directPeriodMatch[2].split(/[\/-]/);
+
   const startDate =
     new Date(
-      directPeriodMatch[1]
-        .split(/[\/-]/)
-        .reverse()
-        .join("-")
+      startParts[2],
+      startParts[1] - 1,
+      startParts[0]
     );
 
   const endDate =
     new Date(
-      directPeriodMatch[2]
-        .split(/[\/-]/)
-        .reverse()
-        .join("-")
+      endParts[2],
+      endParts[1] - 1,
+      endParts[0]
     );
 
-  return (
-    startDate.getMonth() === (month - 1) &&
-    endDate.getMonth() === (month - 1) &&
-    startDate.getFullYear() === year &&
-    endDate.getFullYear() === year
+  return validateDateRange(
+    startDate,
+    endDate
   );
 }
 
@@ -495,10 +515,10 @@ if (dashRangeMatch) {
     fileYear += 2000;
   }
 
-  return (
-    fileMonth === month &&
-    fileYear === year
-  );
+  return validateDateRange(
+  startDate,
+  endDate
+);
 }
 
   const compressedFromToMatch =
@@ -521,10 +541,10 @@ if (compressedFromToMatch) {
     fileYear += 2000;
   }
 
-  return (
-    fileMonth === month &&
-    fileYear === year
-  );
+  return validateDateRange(
+  startDate,
+  endDate
+);
 }
 
   const foundDates = [];
@@ -622,10 +642,10 @@ if (compressedFromToMatch) {
       fileYear += 2000;
     }
 
-    return (
-      fileMonth === (month - 1) &&
-      fileYear === year
-    );
+    return validateDateRange(
+  startDate,
+  endDate
+);
   }
 
   if (foundDates.length === 1) {
@@ -633,10 +653,10 @@ if (compressedFromToMatch) {
   const onlyDate =
     foundDates[0];
 
-  return (
-    onlyDate.getMonth() === (month - 1) &&
-    onlyDate.getFullYear() === year
-  );
+  return validateDateRange(
+  startDate,
+  endDate
+);
 }
 
   if (foundDates.length < 2) {

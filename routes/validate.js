@@ -193,8 +193,6 @@ if (monthDatePeriodMatch) {
   );
 }
 }
-  console.log("FIRST20LINES:");
-  console.log(first20Lines);
   
   const rrpdMatch =
   text.match(

@@ -650,7 +650,7 @@ router.post(
       ];
 
       console.log("ALLOWED:", allowed);
-      
+
       if (!allowed.includes(ext)) {
 
         if (fs.existsSync(file.path)) {
@@ -763,7 +763,7 @@ router.post(
             .status(400)
             .json({
               error:
-                "INVALID PERIOD. Please upload previous month report only."
+                "INVALID MONTH"
             });
         }
       }

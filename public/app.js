@@ -287,6 +287,7 @@ function chooseFile(code, type) {
       "pdf",
       "xlsx",
       "xls",
+      "csv",
       "doc",
       "docx",
       "txt",
@@ -528,8 +529,8 @@ function openPreview() {
       reader.readAsText(file);
     }
 
-    /* TEXT */
-    else if (ext === "txt") {
+    /* TEXT / CSV */
+      else if (ext === "txt" || ext === "csv") {
 
       const reader = new FileReader();
 

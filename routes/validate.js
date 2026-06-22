@@ -157,7 +157,7 @@ const monthMap = {
   const lines =
   text
     .split(/\r?\n/)
-    .slice(0, 20);
+    .slice(0, 100);
 
   let first20Lines =
   lines.join(" ");
@@ -168,15 +168,36 @@ const monthMap = {
     ""
   );
   const monthDatePeriodMatch =
-  first20Lines.match(
+  text.match(
     /from\s+(\d{1,2}-[A-Za-z]{3}-\d{4})\s+to\s+(\d{1,2}-[A-Za-z]{3}-\d{4})/i
   );
+
+if (monthDatePeriodMatch) {
+
+  const parts =
+    monthDatePeriodMatch[1].split("-");
+
+  const fileMonth =
+    monthMap[
+      parts[1]
+        .substring(0,3)
+        .toLowerCase()
+    ];
+
+  const fileYear =
+    parseInt(parts[2]);
+
+  return (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  );
+}
 
   console.log("FIRST20LINES:");
   console.log(first20Lines);
   
   const rrpdMatch =
-  first20Lines.match(
+  text.match(
     /period\s+of\s+(\d{4}-\d{2}-\d{2})\s+to\s+(\d{4}-\d{2}-\d{2})/i
   );
 
@@ -190,13 +211,13 @@ const monthMap = {
     startDate.getFullYear() === year
   );
 }
-
+}
   /* =========================
    PRIORITY PERIOD CHECK
 ========================= */
 
   const fromToMonthMatch =
-  first20Lines.match(
+  text.match(
     /from\s*:?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[- ]?(\d{2,4})/i
   );
 
@@ -222,7 +243,7 @@ const monthMap = {
   );
 } 
   const monthPeriodMatch =
-  first20Lines.match(
+  text.match(
     /from\s*[:\-]?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[- ]?(\d{2,4}).*?to\s*[:\-]?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[- ]?(\d{2,4})/i
   );
 
@@ -257,14 +278,20 @@ const monthMap = {
 
   if (periodMatch) {
 
-    const startDate =
-      periodMatch[2];
+  const startDate =
+    periodMatch[2];
+
+  if (/[A-Za-z]/.test(startDate)) {
 
     const parts =
       startDate.split(/[\/-]/);
 
     const fileMonth =
-      parseInt(parts[1]);
+      monthMap[
+        parts[1]
+          .substring(0,3)
+          .toLowerCase()
+      ];
 
     let fileYear =
       parseInt(parts[2]);
@@ -274,10 +301,28 @@ const monthMap = {
     }
 
     return (
-      fileMonth === month &&
+      fileMonth === (month - 1) &&
       fileYear === year
     );
   }
+
+    const parts =
+    startDate.split(/[\/-]/);
+
+    const fileMonth =
+    parseInt(parts[1]);
+
+    let fileYear =
+    parseInt(parts[2]);
+
+    if (fileYear < 100) {
+    fileYear += 2000;
+  }
+
+    return (
+    fileMonth === month &&
+    fileYear === year
+  );
 }
 
   console.log("FIRST20LINES");
@@ -285,7 +330,7 @@ const monthMap = {
   console.log("END FIRST20LINES");
 
   const directPeriodMatch =
-  first20Lines.match(
+  text.match(
     /from\s*date\s*[:\-]?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}).*?to\s*date\s*[:\-]?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i
   );
 
@@ -311,7 +356,7 @@ if (directPeriodMatch) {
 }
 
   const ymdPeriodMatch =
-  first20Lines.match(
+  text.match(
     /(\d{4}-\d{2}-\d{2}).*?(?:to|upto|-).*?(\d{4}-\d{2}-\d{2})/i
   );
 

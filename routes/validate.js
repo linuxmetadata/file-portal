@@ -192,8 +192,7 @@ if (monthDatePeriodMatch) {
     fileYear === year
   );
 }
-}
-  
+
   const rrpdMatch =
   text.match(
     /period\s+of\s+(\d{4}-\d{2}-\d{2})\s+to\s+(\d{4}-\d{2}-\d{2})/i
@@ -321,6 +320,7 @@ if (monthDatePeriodMatch) {
     fileMonth === month &&
     fileYear === year
   );
+}
 }
 
   console.log("FIRST20LINES");

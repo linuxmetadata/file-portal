@@ -212,6 +212,32 @@ if (monthDatePeriodMatch) {
   /* =========================
    PRIORITY PERIOD CHECK
 ========================= */
+  const fromMonthMatch =
+  text.match(
+    /from\s+month\s*:?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+(\d{2,4})/i
+  );
+
+if (fromMonthMatch) {
+
+  const fileMonth =
+    monthMap[
+      fromMonthMatch[1]
+        .substring(0, 3)
+        .toLowerCase()
+    ];
+
+  let fileYear =
+    parseInt(fromMonthMatch[2]);
+
+  if (fileYear < 100) {
+    fileYear += 2000;
+  }
+
+  return (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  );
+}
 
   const fromToMonthMatch =
   text.match(

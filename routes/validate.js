@@ -563,6 +563,31 @@ if (compressedFromToMatch) {
   );
 }
 
+  const monthStockMatch =
+  first20Lines.match(
+    /month.*?stock end date.*?(\d{4}\/\d{1,2}\/\d{1,2}).*?(\d{4}\/\d{1,2}\/\d{1,2})/i
+  );
+
+if (monthStockMatch) {
+
+  const startDate =
+    new Date(monthStockMatch[1]);
+
+  const endDate =
+    new Date(monthStockMatch[2]);
+
+  console.log(
+    "MATCHED: Month/Stock End Date",
+    startDate,
+    endDate
+  );
+
+  return validateDateRange(
+    startDate,
+    endDate
+  );
+}
+
   const foundDates = [];
 
   /* DD/MM/YYYY or DD-MM-YYYY */

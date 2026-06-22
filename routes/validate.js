@@ -395,6 +395,32 @@ if (directPeriodMatch) {
   );
 }
 
+  const simpleRangeMatch =
+  text.match(
+    /(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})\s*to\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i
+  );
+
+if (simpleRangeMatch) {
+
+  const startParts =
+    simpleRangeMatch[1].split(/[\/-]/);
+
+  const fileMonth =
+    parseInt(startParts[1]);
+
+  let fileYear =
+    parseInt(startParts[2]);
+
+  if (fileYear < 100) {
+    fileYear += 2000;
+  }
+
+  return (
+    fileMonth === month &&
+    fileYear === year
+  );
+}
+
   const foundDates = [];
 
   /* DD/MM/YYYY or DD-MM-YYYY */

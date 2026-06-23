@@ -619,6 +619,55 @@ if (monthNameRangeMatch) {
   );
 }
 
+  const simplePeriodMatch = text.match(
+  /(\d{1,2}\/\d{1,2}\/\d{2,4})\s+to\s+(\d{1,2}\/\d{1,2}\/\d{2,4})/i
+);
+
+if (simplePeriodMatch) {
+
+  console.log(
+    "SIMPLE PERIOD FOUND:",
+    simplePeriodMatch[1],
+    simplePeriodMatch[2]
+  );
+
+  const startParts =
+    simplePeriodMatch[1].split("/");
+
+  const endParts =
+    simplePeriodMatch[2].split("/");
+
+  let startYear =
+    parseInt(startParts[2]);
+
+  let endYear =
+    parseInt(endParts[2]);
+
+  if (startYear < 100) startYear += 2000;
+  if (endYear < 100) endYear += 2000;
+
+  const startDate =
+    new Date(
+      startYear,
+      parseInt(startParts[1]) - 1,
+      parseInt(startParts[0])
+    );
+
+  const endDate =
+    new Date(
+      endYear,
+      parseInt(endParts[1]) - 1,
+      parseInt(endParts[0])
+    );
+
+  return (
+    startDate.getMonth() === (month - 1) &&
+    startDate.getFullYear() === year &&
+    endDate.getMonth() === (month - 1) &&
+    endDate.getFullYear() === year
+  );
+}
+
   const foundDates = [];
 
   /* DD/MM/YYYY or DD-MM-YYYY */

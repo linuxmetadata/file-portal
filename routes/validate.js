@@ -247,10 +247,16 @@ if (monthDatePeriodMatch) {
 
   const rrpdMatch =
   normalizedText.match(
-    /period\s+of\s+(\d{4}-\d{2}-\d{2})\s+to\s+(\d{4}-\d{2}-\d{2})/i
+    /period\s+of\s*\(?(\d{4}-\d{2}-\d{2})\)?\s*to\s*\(?(\d{4}-\d{2}-\d{2})\)?/i
   );
 
   if (rrpdMatch) {
+
+  console.log(
+    "RRPD PERIOD FOUND:",
+    rrpdMatch[1],
+    rrpdMatch[2]
+  );
 
   const startDate =
     new Date(rrpdMatch[1]);

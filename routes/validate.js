@@ -588,6 +588,31 @@ if (monthStockMatch) {
   );
 }
 
+  const monthNameRangeMatch =
+  text.match(
+    /from[:\-\s]*([A-Za-z]{3,9}\s+\d{1,2},\s+\d{4}).*?to[:\-\s]*([A-Za-z]{3,9}\s+\d{1,2},\s+\d{4})/i
+  );
+
+if (monthNameRangeMatch) {
+
+  const startDate =
+    new Date(monthNameRangeMatch[1]);
+
+  const endDate =
+    new Date(monthNameRangeMatch[2]);
+
+  console.log(
+    "MATCHED: Month Name Range",
+    startDate,
+    endDate
+  );
+
+  return validateDateRange(
+    startDate,
+    endDate
+  );
+}
+
   const foundDates = [];
 
   /* DD/MM/YYYY or DD-MM-YYYY */

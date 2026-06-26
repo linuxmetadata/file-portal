@@ -374,7 +374,247 @@ function isValidPreviousMonth(text) {
 
   }
 
+    /* =========================
+     OCR COMPRESSED FROM TO
+  ========================= */
+
+  const compressedFromToMatch =
+    headerText.match(
+      /from\s*to\s*(\d{2}\/\d{2}\/\d{4})\s*(\d{2}\/\d{2}\/\d{4})/i
+    );
+
+  if (compressedFromToMatch) {
+
+    console.log("Matched : Compressed From-To");
+
+    const parseDate = (value) => {
+
+      const p = value.split("/");
+
+      return new Date(
+        parseInt(p[2]),
+        parseInt(p[1]) - 1,
+        parseInt(p[0])
+      );
+
+    };
+
+    const startDate =
+      parseDate(compressedFromToMatch[1]);
+
+    const endDate =
+      parseDate(compressedFromToMatch[2]);
+
+    if (ok(startDate, endDate)) {
+
+      console.log("Compressed From-To Passed");
+
+      return true;
+
+    }
+
+    console.log("Compressed From-To Failed");
+
+  }
+
+    /* =========================
+     GENERIC DATE EXTRACTION
+  ========================= */
+
+  const foundDates = [];
+
+  // DD/MM/YYYY or DD-MM-YYYY
+  const dmyRegex =
+    /\b(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})\b/g;
+
+  let match;
+
+  while ((match = dmyRegex.exec(headerText)) !== null) {
+
+    let year = parseInt(match[3]);
+
+    if (year < 100)
+      year += 2000;
+
+    foundDates.push(
+      new Date(
+        year,
+        parseInt(match[2]) - 1,
+        parseInt(match[1])
+      )
+    );
+
+  }
+
+  // DD-MMM-YYYY
+  const monRegex =
+    /\b(\d{1,2})[- ](Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*[- ](\d{2,4})\b/gi;
+
+  while ((match = monRegex.exec(headerText)) !== null) {
+
+    let year = parseInt(match[3]);
+
+    if (year < 100)
+      year += 2000;
+
+    foundDates.push(
+      new Date(
+        year,
+        monthMap[
+          match[2]
+            .substring(0,3)
+            .toLowerCase()
+        ],
+        parseInt(match[1])
+      )
+    );
+
+  }
+
+  // YYYY-MM-DD
+  const ymdRegex =
+    /\b(\d{4})-(\d{2})-(\d{2})\b/g;
+
+  while ((match = ymdRegex.exec(headerText)) !== null) {
+
+    foundDates.push(
+      new Date(
+        parseInt(match[1]),
+        parseInt(match[2]) - 1,
+        parseInt(match[3])
+      )
+    );
+
+  }
+
+  if (foundDates.length >= 2) {
+
+    foundDates.sort((a,b)=>a-b);
+
+    for(let i=0;i<foundDates.length-1;i++){
+
+      const startDate =
+        foundDates[i];
+
+      const endDate =
+        foundDates[i+1];
+
+      const days =
+        Math.abs(
+          (endDate-startDate)/
+          (1000*60*60*24)
+        );
+
+      if(days<=31){
+
+        if(ok(startDate,endDate)){
+
+          console.log(
+            "Matched : Generic Dates"
+          );
+
+          return true;
+
+        }
+
+      }
+
+    }
+
+  }
+
+  console.log(
+    "No matching period found."
+  );
+
+  return false;
+
+    /* =========================
+     HEADER DATE RANGE
+  ========================= */
+
+  const headerRangeMatch =
+    headerText.match(
+      /(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}|\d{1,2}-[A-Za-z]{3}-\d{2,4}).{0,20}(?:TO|-).{0,20}(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}|\d{1,2}-[A-Za-z]{3}-\d{2,4})/i
+    );
+
+  if (headerRangeMatch) {
+
+    console.log("Matched : Header Range");
+
+    function parseAnyDate(value){
+
+      if(/[A-Za-z]/.test(value)){
+
+        const p=value.split("-");
+
+        let y=parseInt(p[2]);
+
+        if(y<100)
+          y+=2000;
+
+        return new Date(
+          y,
+          monthMap[
+            p[1]
+              .substring(0,3)
+              .toLowerCase()
+          ],
+          parseInt(p[0])
+        );
+
+      }
+
+      const p=value.split(/[\/-]/);
+
+      let y=parseInt(p[2]);
+
+      if(y<100)
+        y+=2000;
+
+      return new Date(
+        y,
+        parseInt(p[1])-1,
+        parseInt(p[0])
+      );
+
+    }
+
+    const startDate =
+      parseAnyDate(
+        headerRangeMatch[1]
+      );
+
+    const endDate =
+      parseAnyDate(
+        headerRangeMatch[2]
+      );
+
+    if(ok(startDate,endDate)){
+
+      console.log(
+        "Header Range Passed"
+      );
+
+      return true;
+
+    }
+
+    console.log(
+      "Header Range Failed"
+    );
+
+  }
+
   // Next validation will come here.
+
+
+  console.log("================================");
+  console.log("FILE:", file.originalname);
+  console.log("VALIDATION RESULT: false");
+  console.log("TEXT PREVIEW:");
+  console.log(headerText.substring(0, 2000));
+  console.log("================================");
 
   return false;
 }

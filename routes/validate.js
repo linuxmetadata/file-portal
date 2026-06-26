@@ -205,6 +205,175 @@ function isValidPreviousMonth(text) {
   console.log("HEADER:");
   console.log(headerText);
 
+      /* =========================
+     EXCEL MONTH + STOCK END DATE
+  ========================= */
+
+  const monthColumnMatch =
+    headerText.match(
+      /month.*?(\d{4}[\/-]\d{1,2}[\/-]\d{1,2}).*?stock\s*end\s*date.*?(\d{4}[\/-]\d{1,2}[\/-]\d{1,2})/is
+    );
+
+  if (monthColumnMatch) {
+
+    console.log("Matched : Excel Month");
+
+    const startDate =
+      new Date(
+        monthColumnMatch[1].replace(/\//g, "-")
+      );
+
+    const endDate =
+      new Date(
+        monthColumnMatch[2].replace(/\//g, "-")
+      );
+
+    if (ok(startDate, endDate)) {
+
+      console.log("Excel validation passed");
+
+      return true;
+
+    }
+
+    console.log("Excel validation failed");
+
+  }
+
+    /* =========================
+     RRPD PERIOD
+  ========================= */
+
+  const rrpdMatch =
+    headerText.match(
+      /period\s+of\s+(\d{4}-\d{2}-\d{2})\s+to\s+(\d{4}-\d{2}-\d{2})/i
+    );
+
+  if (rrpdMatch) {
+
+    console.log("Matched : RRPD");
+
+    const startDate =
+      new Date(rrpdMatch[1]);
+
+    const endDate =
+      new Date(rrpdMatch[2]);
+
+    if (ok(startDate, endDate)) {
+
+      console.log("RRPD validation passed");
+
+      return true;
+
+    }
+
+    console.log("RRPD validation failed");
+
+  }
+
+    /* =========================
+     FROM DD-MON-YY TO DD-MON-YY
+  ========================= */
+
+  const monthNameRangeMatch =
+    headerText.match(
+      /from\s*:?\s*(\d{1,2})[-\/ ](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[-\/ ](\d{2,4}).*?to\s*:?\s*(\d{1,2})[-\/ ](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[-\/ ](\d{2,4})/i
+    );
+
+  if (monthNameRangeMatch) {
+
+    console.log("Matched : Month Name Range");
+
+    let startYear = parseInt(monthNameRangeMatch[3]);
+    let endYear = parseInt(monthNameRangeMatch[6]);
+
+    if (startYear < 100) startYear += 2000;
+    if (endYear < 100) endYear += 2000;
+
+    const startDate =
+      new Date(
+        startYear,
+        monthMap[
+          monthNameRangeMatch[2]
+            .substring(0,3)
+            .toLowerCase()
+        ],
+        parseInt(monthNameRangeMatch[1])
+      );
+
+    const endDate =
+      new Date(
+        endYear,
+        monthMap[
+          monthNameRangeMatch[5]
+            .substring(0,3)
+            .toLowerCase()
+        ],
+        parseInt(monthNameRangeMatch[4])
+      );
+
+    if (ok(startDate,endDate)) {
+
+      console.log("Month Name validation passed");
+
+      return true;
+
+    }
+
+    console.log("Month Name validation failed");
+
+  }
+
+    /* =========================
+     DD/MM/YYYY DATE RANGE
+  ========================= */
+
+  const dateRangeMatch =
+    headerText.match(
+      /(from|period|duration|statement)?\s*:?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}).*?(to|upto)?\s*:?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i
+    );
+
+  if (dateRangeMatch) {
+
+    console.log("Matched : Numeric Date Range");
+
+    const parseDate = (value) => {
+
+      const p = value.split(/[\/-]/);
+
+      let day = parseInt(p[0]);
+      let monthValue = parseInt(p[1]);
+      let yearValue = parseInt(p[2]);
+
+      if (yearValue < 100)
+        yearValue += 2000;
+
+      return new Date(
+        yearValue,
+        monthValue - 1,
+        day
+      );
+
+    };
+
+    const startDate =
+      parseDate(dateRangeMatch[2]);
+
+    const endDate =
+      parseDate(dateRangeMatch[4]);
+
+    if (ok(startDate, endDate)) {
+
+      console.log("Numeric Date validation passed");
+
+      return true;
+
+    }
+
+    console.log("Numeric Date validation failed");
+
+  }
+
   // Next validation will come here.
 
   return false;

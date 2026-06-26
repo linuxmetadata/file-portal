@@ -160,138 +160,54 @@ async function extractText(filePath, ext) {
 ========================= */
 function isValidPreviousMonth(text) {
 
-  const { month, year } =
-    getPreviousMonthInfo();
+  const { month, year } = getPreviousMonthInfo();
 
-const monthMap = {
-  jan: 0,
-  feb: 1,
-  mar: 2,
-  apr: 3,
-  may: 4,
-  jun: 5,
-  jul: 6,
-  aug: 7,
-  sep: 8,
-  oct: 9,
-  nov: 10,
-  dec: 11
-};
+  const monthMap = {
+    jan:0,
+    feb:1,
+    mar:2,
+    apr:3,
+    may:4,
+    jun:5,
+    jul:6,
+    aug:7,
+    sep:8,
+    oct:9,
+    nov:10,
+    dec:11
+  };
 
-  const lines =
-  text
-    .split(/\r?\n/)
-    .slice(0, 100);
+  function ok(startDate, endDate) {
 
-  let first20Lines =
-  lines.join(" ");
-
-  const normalizedText =
-  text
-    .replace(/FromTo/gi, "From To ")
-    .replace(
-      /(\d{2}\/\d{2}\/\d{4})(\d{2}\/\d{2}\/\d{4})/g,
-      "$1 To $2"
+    return (
+      startDate.getMonth() === (month - 1) &&
+      endDate.getMonth() === (month - 1) &&
+      startDate.getFullYear() === year &&
+      endDate.getFullYear() === year
     );
 
-  first20Lines =
-  first20Lines.replace(
-    /\(?.*?sale report updated till\s*:?\s*[^\)]*\)?/gi,
-    ""
-  );
-
-  const monthColumnMatch =
-  normalizedText.match(
-    /month\s+(\d{4}-\d{2}-\d{2}).*?stock end date\s+(\d{4}-\d{2}-\d{2})/is
-  );
-
-if (monthColumnMatch) {
-
-  const startDate =
-    new Date(monthColumnMatch[1]);
-
-  const endDate =
-    new Date(monthColumnMatch[2]);
-
-  return validateDateRange(
-    startDate,
-    endDate
-  );
-}
-
-  const monthDatePeriodMatch =
-  normalizedText.match(
-    /from\s+(\d{1,2}-[A-Za-z]{3}-\d{4})\s+to\s+(\d{1,2}-[A-Za-z]{3}-\d{4})/i
-  );
-
-if (monthDatePeriodMatch) {
-
-  const parts =
-    monthDatePeriodMatch[1].split("-");
-
-  const fileMonth =
-    monthMap[
-      parts[1]
-        .substring(0,3)
-        .toLowerCase()
-    ];
-
-  const fileYear =
-    parseInt(parts[2]);
-
-  return (
-    fileMonth === (month - 1) &&
-    fileYear === year
-  );
-}
-
-  const rrpdMatch =
-  normalizedText.match(
-    /period\s+of\s*\(?(\d{4}-\d{2}-\d{2})\)?\s*to\s*\(?(\d{4}-\d{2}-\d{2})\)?/i
-  );
-
-  if (rrpdMatch) {
-
-  console.log(
-    "RRPD PERIOD FOUND:",
-    rrpdMatch[1],
-    rrpdMatch[2]
-  );
-
-  const startDate =
-    new Date(rrpdMatch[1]);
-
-  return (
-    startDate.getMonth() === (month - 1) &&
-    startDate.getFullYear() === year
-  );
-}
-
-  const reportMonthMatch =
-  normalizedText.match(
-    /report.*?of\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s*(\d{2,4})/i
-  );
-
-  if (reportMonthMatch) {
-
-  const fileMonth =
-    monthMap[
-      reportMonthMatch[1]
-        .substring(0,3)
-        .toLowerCase()
-    ];
-
-  let fileYear =
-    parseInt(reportMonthMatch[2]);
-
-  if (fileYear < 100) {
-    fileYear += 2000;
   }
 
-  return (
-    fileMonth === (month - 1) &&
-    fileYear === year
-  );
+  const normalizedText =
+    text
+      .replace(/\r/g, " ")
+      .replace(/\n/g, " ")
+      .replace(/\s+/g, " ")
+      .replace(/FromTo/gi, "From To")
+      .replace(
+        /\(?.*?Sale Report Updated Till\s*:?\s*[^\)]*\)?/gi,
+        ""
+      );
+
+  const headerText =
+    normalizedText.substring(0, 6000);
+
+  console.log("HEADER:");
+  console.log(headerText);
+
+  // Next validation will come here.
+
+  return false;
 }
 
   /* =========================
@@ -388,10 +304,10 @@ if (simplePeriodMatch) {
   console.log(simplePeriodMatch[2]);
 
   const startParts =
-    simplePeriodMatch[1].split("/");
+  simplePeriodMatch[1].split(/[\/-]/);
 
   const endParts =
-    simplePeriodMatch[2].split("/");
+  simplePeriodMatch[2].split(/[\/-]/);
 
   let startYear =
     parseInt(startParts[2]);
@@ -424,22 +340,20 @@ if (simplePeriodMatch) {
   );
 }
 
-    for (const line of lines) {
+for (const line of lines) {
 
   const periodMatch =
-  line.match(
-    /(from\s*date|from|period|duration).*?(\d{1,2}(?:[\/-]\d{1,2}[\/-]\d{2,4}|[\/-][A-Za-z]{3}[\/-]\d{2,4})).*?(to\s*date|to|upto).*?(\d{1,2}(?:[\/-]\d{1,2}[\/-]\d{2,4}|[\/-][A-Za-z]{3}[\/-]\d{2,4}))/i
-  );
+    line.match(
+      /(from\s*date|from|period|duration).*?(\d{1,2}(?:[\/-]\d{1,2}[\/-]\d{2,4}|[\/-][A-Za-z]{3}[\/-]\d{2,4})).*?(to\s*date|to|upto).*?(\d{1,2}(?:[\/-]\d{1,2}[\/-]\d{2,4}|[\/-][A-Za-z]{3}[\/-]\d{2,4}))/i
+    );
 
-  if (periodMatch) {
+  if (!periodMatch) continue;
 
-  const startDate =
-    periodMatch[2];
+  const startDate = periodMatch[2];
 
   if (/[A-Za-z]/.test(startDate)) {
 
-    const parts =
-      startDate.split(/[\/-]/);
+    const parts = startDate.split(/[\/-]/);
 
     const fileMonth =
       monthMap[
@@ -448,37 +362,39 @@ if (simplePeriodMatch) {
           .toLowerCase()
       ];
 
-    let fileYear =
-      parseInt(parts[2]);
+    let fileYear = parseInt(parts[2]);
 
     if (fileYear < 100) {
       fileYear += 2000;
     }
 
-    return (
+    if (
       fileMonth === (month - 1) &&
       fileYear === year
-    );
+    ) {
+      return true;
+    }
+
+    continue;
   }
 
-    const parts =
-    startDate.split(/[\/-]/);
+  const parts = startDate.split(/[\/-]/);
 
-    const fileMonth =
-    parseInt(parts[1]);
+  const fileMonth = parseInt(parts[1]);
 
-    let fileYear =
-    parseInt(parts[2]);
+  let fileYear = parseInt(parts[2]);
 
-    if (fileYear < 100) {
+  if (fileYear < 100) {
     fileYear += 2000;
   }
 
-    return (
+  if (
     fileMonth === month &&
     fileYear === year
-  );
-}
+  ) {
+    return true;
+  }
+
 }
 
   console.log("FIRST20LINES");
@@ -743,9 +659,30 @@ if (monthNameRangeMatch) {
     const monthMatch =
       first20Lines.match(monthOnlyRegex);
 
-    if (!monthMatch) {
-      return false;
+    if (monthMatch) {
+
+        const fileMonth =
+          monthMap[
+            monthMatch[1]
+              .substring(0,3)
+              .toLowerCase()
+          ];
+
+        let fileYear =
+          parseInt(monthMatch[2]);
+
+        if(fileYear < 100)
+            fileYear += 2000;
+
+        if(
+            fileMonth === (month-1) &&
+            fileYear === year
+        ){
+            return true;
+        }
+
     }
+}
 
     const fileMonth =
       monthMap[
@@ -843,7 +780,7 @@ if (monthNameRangeMatch) {
   }
 
   return true;
-}
+
 
 /* =========================
    VALIDATE FILE

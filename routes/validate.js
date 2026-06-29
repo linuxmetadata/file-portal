@@ -217,38 +217,40 @@ function isValidPreviousMonth(text) {
 
   const stockSalesMatch =
   text.match(
-    /from\s*(\d{1,2}-[A-Za-z]{3}-\d{4})\s*to\s*(\d{1,2}-[A-Za-z]{3}-\d{4})/i
+    /from\s*date\s*:?\s*(\d{1,2})[\/-](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[\/-](\d{2,4}).*?to\s*date\s*:?\s*(\d{1,2})[\/-](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[\/-](\d{2,4})/i
   );
 
   console.log("STOCK SALES MATCH:", stockSalesMatch);
-  
+
 if (stockSalesMatch) {
 
   console.log("MATCHED STOCK SALES");
 
-  const startParts =
-    stockSalesMatch[1].split("-");
-
   const fileMonth =
-    monthMap[
-      startParts[1]
-        .toLowerCase()
-    ];
+  monthMap[
+    stockSalesMatch[2]
+      .substring(0,3)
+      .toLowerCase()
+  ];
 
-  const fileYear =
-    parseInt(startParts[2]);
+let fileYear =
+  parseInt(stockSalesMatch[3]);
 
-  console.log(
-    "Month:",
-    fileMonth,
-    "Year:",
-    fileYear
-  );
+if (fileYear < 100) {
+  fileYear += 2000;
+}
 
-  return (
-    fileMonth === (month - 1) &&
-    fileYear === year
-  );
+console.log(
+  "STOCK SALES MONTH:",
+  fileMonth,
+  "YEAR:",
+  fileYear
+);
+
+return (
+  fileMonth === (month - 1) &&
+  fileYear === year
+);
 }
 
       /* =========================

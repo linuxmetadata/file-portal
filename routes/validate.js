@@ -160,6 +160,13 @@ async function extractText(filePath, ext) {
 ========================= */
 function isValidPreviousMonth(text) {
 
+  console.log("VALIDATOR INPUT LENGTH:", text.length);
+
+  console.log(
+    "VALIDATOR INPUT PREVIEW:",
+    text.substring(0,500)
+  );
+  
   const { month, year } = getPreviousMonthInfo();
 
   const monthMap = {

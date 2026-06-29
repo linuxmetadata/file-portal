@@ -417,6 +417,45 @@ function isValidPreviousMonth(text) {
 
   }
 
+  /* =========================
+   MONTH ONLY
+========================= */
+
+const monthOnlyMatch =
+  headerText.match(
+    /(?:month\s+of\s+)?(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*['\-\s]?(\d{2,4})/i
+  );
+
+if (monthOnlyMatch) {
+
+  console.log("Matched : Month Only");
+
+  const fileMonth =
+    monthMap[
+      monthOnlyMatch[1]
+        .substring(0,3)
+        .toLowerCase()
+    ];
+
+  let fileYear =
+    parseInt(monthOnlyMatch[2]);
+
+  if (fileYear < 100)
+    fileYear += 2000;
+
+  if (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  ) {
+
+    console.log("Month Only Passed");
+
+    return true;
+
+  }
+
+}
+
     /* =========================
      GENERIC DATE EXTRACTION
   ========================= */
@@ -604,7 +643,6 @@ function isValidPreviousMonth(text) {
 
 
   console.log("================================");
-  console.log("FILE:", file.originalname);
   console.log("VALIDATION RESULT: false");
   console.log("TEXT PREVIEW:");
   console.log(headerText.substring(0, 2000));
@@ -617,7 +655,7 @@ function isValidPreviousMonth(text) {
   );
 
   return false;
-   
+
 }
 
   

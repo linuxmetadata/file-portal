@@ -612,6 +612,8 @@ if (monthNamePeriodMatch) {
   );
 }
 
+  let periodFound = false;
+
     /* =========================
      GENERIC DATE EXTRACTION
   ========================= */
@@ -682,9 +684,11 @@ if (monthNamePeriodMatch) {
 
   }
 
-  if (foundDates.length >= 2) {
+  if (!periodFound) {
 
-    foundDates.sort((a,b)=>a-b);
+    console.log(
+      "Rejected - No period header found"
+    );
 
     for(let i=0;i<foundDates.length-1;i++){
 

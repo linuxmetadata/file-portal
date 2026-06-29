@@ -799,6 +799,41 @@ if (monthNamePeriodMatch) {
 
   }
 
+  /* =========================
+   REPORT DATE COLUMNS
+========================= */
+
+if (
+  text.match(/report[_ ]?date/i) ||
+  text.match(/stock[_ ]?end[_ ]?date/i) ||
+  text.match(/\bmonth\b/i)
+) {
+
+  console.log(
+    "Matched : Report Date Column"
+  );
+
+  const dateMatch =
+    text.match(
+      /(20\d{2})[-\/](\d{1,2})[-\/](\d{1,2})/
+    );
+
+  if (dateMatch) {
+
+    const fileYear =
+      parseInt(dateMatch[1]);
+
+    const fileMonth =
+      parseInt(dateMatch[2]);
+
+    return (
+      fileMonth === month &&
+      fileYear === year
+    );
+
+  }
+}
+
   // Next validation will come here.
 
 

@@ -684,11 +684,9 @@ if (monthNamePeriodMatch) {
 
   }
 
-  if (!periodFound) {
+  if (fromDateMatch) {
 
-    console.log(
-      "Rejected - No period header found"
-    );
+  periodFound = true;
 
     for(let i=0;i<foundDates.length-1;i++){
 
@@ -706,11 +704,11 @@ if (monthNamePeriodMatch) {
 
       if(days<=31){
 
-        if(ok(startDate,endDate)){
+        if (!periodFound) {
 
-          console.log(
-            "Matched : Generic Dates"
-          );
+        console.log(
+        "Rejected - No period header found"
+        );
 
           return true;
 

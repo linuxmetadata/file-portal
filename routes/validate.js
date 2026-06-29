@@ -220,6 +220,8 @@ function isValidPreviousMonth(text) {
     /from\s*(\d{1,2}-[A-Za-z]{3}-\d{4})\s*to\s*(\d{1,2}-[A-Za-z]{3}-\d{4})/i
   );
 
+  console.log("STOCK SALES MATCH:", stockSalesMatch);
+  
 if (stockSalesMatch) {
 
   console.log("MATCHED STOCK SALES");

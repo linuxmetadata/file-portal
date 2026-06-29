@@ -500,6 +500,42 @@ if (monthOnlyMatch) {
 
 }
 
+  /* =========================
+   FROM DD-M-YY TO DD.M.YY
+========================= */
+
+const mixedDateMatch =
+  text.match(
+    /from\s+(\d{1,2})[-\/\.](\d{1,2})[-\/\.](\d{2,4})\s+to\s+(\d{1,2})[-\/\.](\d{1,2})[-\/\.](\d{2,4})/i
+  );
+
+if (mixedDateMatch) {
+
+  console.log("Matched : Mixed Date Format");
+
+  let fileMonth =
+    parseInt(mixedDateMatch[2]);
+
+  let fileYear =
+    parseInt(mixedDateMatch[3]);
+
+  if (fileYear < 100) {
+    fileYear += 2000;
+  }
+
+  console.log(
+    "Month:",
+    fileMonth,
+    "Year:",
+    fileYear
+  );
+
+  return (
+    fileMonth === month &&
+    fileYear === year
+  );
+}
+
     /* =========================
      GENERIC DATE EXTRACTION
   ========================= */

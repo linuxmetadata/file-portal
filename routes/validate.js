@@ -536,6 +536,42 @@ if (mixedDateMatch) {
   );
 }
 
+/* =========================
+   FROM DATE / TO DATE
+========================= */
+
+const fromDateMatch =
+  text.match(
+    /from\s*date\s*,?\s*(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s*,?\s*to\s*date\s*,?\s*(\d{1,2})\/(\d{1,2})\/(\d{2,4})/i
+  );
+
+if (fromDateMatch) {
+
+  console.log("Matched : From Date To Date");
+
+  let fileMonth =
+    parseInt(fromDateMatch[1]);
+
+  let fileYear =
+    parseInt(fromDateMatch[3]);
+
+  if (fileYear < 100) {
+    fileYear += 2000;
+  }
+
+  console.log(
+    "Month:",
+    fileMonth,
+    "Year:",
+    fileYear
+  );
+
+  return (
+    fileMonth === month &&
+    fileYear === year
+  );
+}
+
     /* =========================
      GENERIC DATE EXTRACTION
   ========================= */

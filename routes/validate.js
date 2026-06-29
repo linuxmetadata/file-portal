@@ -200,11 +200,13 @@ function isValidPreviousMonth(text) {
       );
 
 
-  const headerText =
-    normalizedText.substring(0, 6000);
+  const headerText = normalizedText;
 
-  console.log("HEADER:");
-  console.log(headerText);
+  console.log("TEXT LENGTH:", normalizedText.length);
+  console.log(
+    "FROM FOUND:",
+    normalizedText.includes("From")
+  );
 
   const stockSalesMatch =
   headerText.match(

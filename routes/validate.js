@@ -707,12 +707,12 @@ if (monthNamePeriodMatch) {
         if (!periodFound) {
 
         console.log(
-        "Rejected - No period header found"
-        );
+          "Rejected - No period header found"
+          );
 
-          return true;
+        return false;
 
-        }
+      }
 
       }
 

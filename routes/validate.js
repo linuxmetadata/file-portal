@@ -523,13 +523,7 @@ function isValidPreviousMonth(text) {
 
   }
 
-  console.log(
-    "No matching period found."
-  );
-
-  return false;
-
-    /* =========================
+   /* =========================
      HEADER DATE RANGE
   ========================= */
 
@@ -617,6 +611,13 @@ function isValidPreviousMonth(text) {
   console.log("================================");
 
   return false;
+
+  console.log(
+    "No matching period found."
+  );
+
+  return false;
+   
 }
 
   

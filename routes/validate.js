@@ -200,6 +200,12 @@ function isValidPreviousMonth(text) {
       );
 
 
+  const headerText =
+    normalizedText.substring(0, 6000);
+
+  console.log("HEADER:");
+  console.log(headerText);
+
   const stockSalesMatch =
   headerText.match(
     /from\s+(\d{1,2}-[A-Za-z]{3}-\d{4})\s+to\s+(\d{1,2}-[A-Za-z]{3}-\d{4})/i
@@ -234,12 +240,6 @@ if (stockSalesMatch) {
     fileYear === year
   );
 }
-
-  const headerText =
-    normalizedText.substring(0, 6000);
-
-  console.log("HEADER:");
-  console.log(headerText);
 
       /* =========================
      EXCEL MONTH + STOCK END DATE
@@ -683,12 +683,6 @@ if (monthOnlyMatch) {
   console.log("TEXT PREVIEW:");
   console.log(headerText.substring(0, 2000));
   console.log("================================");
-
-  return false;
-
-  console.log(
-    "No matching period found."
-  );
 
   return false;
 

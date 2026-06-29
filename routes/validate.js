@@ -811,6 +811,9 @@ if (
     "Matched : Report Date Column"
   );
 
+  console.log("MATCHED REPORT DATE COLUMN");
+  console.log("DATE MATCH:", dateMatch);
+
   const dateMatch =
     text.match(
       /(20\d{2})[-\/](\d{1,2})[-\/](\d{1,2})/

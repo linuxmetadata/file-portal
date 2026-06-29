@@ -804,9 +804,9 @@ if (monthNamePeriodMatch) {
 ========================= */
 
 if (
-  text.match(/report[_ ]?date/i) ||
-  text.match(/stock[_ ]?end[_ ]?date/i) ||
-  text.match(/\bmonth\b/i)
+  /report[_ ]?date/i.test(text) ||
+  /sns[_ ]?month/i.test(text) ||
+  /\bmonth\b/i.test(text)
 ) {
 
   console.log(

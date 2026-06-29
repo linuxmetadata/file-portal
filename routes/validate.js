@@ -199,6 +199,42 @@ function isValidPreviousMonth(text) {
         ""
       );
 
+
+  const stockSalesMatch =
+  headerText.match(
+    /from\s+(\d{1,2}-[A-Za-z]{3}-\d{4})\s+to\s+(\d{1,2}-[A-Za-z]{3}-\d{4})/i
+  );
+
+if (stockSalesMatch) {
+
+  console.log("Matched : Stock Sales Format");
+
+  const parts =
+    stockSalesMatch[1].split("-");
+
+  const fileMonth =
+    monthMap[
+      parts[1]
+        .substring(0,3)
+        .toLowerCase()
+    ];
+
+  const fileYear =
+    parseInt(parts[2]);
+
+  console.log(
+    "Month:",
+    fileMonth,
+    "Year:",
+    fileYear
+  );
+
+  return (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  );
+}
+
   const headerText =
     normalizedText.substring(0, 6000);
 

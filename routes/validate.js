@@ -471,11 +471,12 @@ return (
 
 const monthOnlyMatch =
   headerText.match(
-    /(?:month\s+of\s+)?(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*['\-\s]?(\d{2,4})/i
+    /(?:month\s+of\s+|for\s+the\s+month\s+)?(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s*[-']?\s*(\d{2,4})/i
   );
 
 if (monthOnlyMatch) {
 
+  console.log("MONTH ONLY MATCH:", monthOnlyMatch);
   console.log("Matched : Month Only");
 
   const fileMonth =

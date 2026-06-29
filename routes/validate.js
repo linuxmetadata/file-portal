@@ -204,8 +204,8 @@ function isValidPreviousMonth(text) {
 
   console.log("TEXT LENGTH:", normalizedText.length);
   console.log(
-    "FROM FOUND:",
-    normalizedText.includes("From")
+    "VALIDATOR INPUT PREVIEW:",
+    text.substring(0,500)
   );
 
   const stockSalesMatch =
@@ -819,6 +819,10 @@ router.post(
             file.path,
             ext
           );
+
+          console.log("TEXT PASSED TO VALIDATOR");
+          console.log(text.substring(0,2000));
+          console.log("TEXT LENGTH:", text.length);
 
         const validationResult =
         isValidPreviousMonth(text);

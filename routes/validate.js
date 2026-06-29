@@ -801,23 +801,32 @@ if (monthNamePeriodMatch) {
    REPORT DATE COLUMNS
 ========================= */
 
-if (
-  /report[_ ]?date/i.test(text) ||
-  /sns[_ ]?month/i.test(text) ||
-  /\bmonth\b/i.test(text)
-) {
+  if (
+    /report[_ ]?date/i.test(text) ||
+    /sns[_ ]?month/i.test(text) ||
+    /\bmonth\b/i.test(text)
+  ) {
 
-  console.log(
+    console.log(
     "Matched : Report Date Column"
-  );
-
-  console.log("MATCHED REPORT DATE COLUMN");
-  console.log("DATE MATCH:", dateMatch);
-
-  const dateMatch =
-    text.match(
-      /(20\d{2})[-\/](\d{1,2})[-\/](\d{1,2})/
     );
+
+    const dateMatch =
+    text.match(
+      /(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})/
+    );
+
+    let fileYear =
+    parseInt(dateMatch[3]);
+
+  if (fileYear < 100) {
+    fileYear += 2000;
+  }
+
+  const fileMonth =
+    parseInt(dateMatch[1]);
+
+  console.log("DATE MATCH:", dateMatch);
 
   if (dateMatch) {
 
@@ -827,11 +836,17 @@ if (
     const fileMonth =
       parseInt(dateMatch[2]);
 
+    console.log(
+      "Month:",
+      fileMonth,
+      "Year:",
+      fileYear
+    );
+
     return (
       fileMonth === month &&
       fileYear === year
     );
-
   }
 }
 

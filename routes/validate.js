@@ -572,6 +572,46 @@ if (fromDateMatch) {
   );
 }
 
+/* =========================
+   1 May,26 TO 31 May,26
+========================= */
+
+const monthNamePeriodMatch =
+  text.match(
+    /(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*,?(\d{2,4})\s+to\s+(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*,?(\d{2,4})/i
+  );
+
+if (monthNamePeriodMatch) {
+
+  console.log("Matched : Month Name Period");
+
+  const fileMonth =
+    monthMap[
+      monthNamePeriodMatch[2]
+        .substring(0,3)
+        .toLowerCase()
+    ];
+
+  let fileYear =
+    parseInt(monthNamePeriodMatch[3]);
+
+  if (fileYear < 100) {
+    fileYear += 2000;
+  }
+
+  console.log(
+    "Month:",
+    fileMonth,
+    "Year:",
+    fileYear
+  );
+
+  return (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  );
+}
+
     /* =========================
      GENERIC DATE EXTRACTION
   ========================= */

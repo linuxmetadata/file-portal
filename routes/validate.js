@@ -166,7 +166,7 @@ function isValidPreviousMonth(text) {
     "VALIDATOR INPUT PREVIEW:",
     text.substring(0,500)
   );
-  
+
   const { month, year } = getPreviousMonthInfo();
 
   const monthMap = {
@@ -216,26 +216,25 @@ function isValidPreviousMonth(text) {
   );
 
   const stockSalesMatch =
-  headerText.match(
-    /from\s+(\d{1,2}-[A-Za-z]{3}-\d{4})\s+to\s+(\d{1,2}-[A-Za-z]{3}-\d{4})/i
+  text.match(
+    /from\s*(\d{1,2}-[A-Za-z]{3}-\d{4})\s*to\s*(\d{1,2}-[A-Za-z]{3}-\d{4})/i
   );
 
 if (stockSalesMatch) {
 
-  console.log("Matched : Stock Sales Format");
+  console.log("MATCHED STOCK SALES");
 
-  const parts =
+  const startParts =
     stockSalesMatch[1].split("-");
 
   const fileMonth =
     monthMap[
-      parts[1]
-        .substring(0,3)
+      startParts[1]
         .toLowerCase()
     ];
 
   const fileYear =
-    parseInt(parts[2]);
+    parseInt(startParts[2]);
 
   console.log(
     "Month:",

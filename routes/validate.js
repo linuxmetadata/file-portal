@@ -812,42 +812,35 @@ if (monthNamePeriodMatch) {
     );
 
     const dateMatch =
-    text.match(
-      /(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})/
-    );
+  text.match(
+    /(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})/
+  );
 
-    let fileYear =
+  console.log("DATE MATCH:", dateMatch);
+
+if (dateMatch) {
+
+  const fileMonth =
+    parseInt(dateMatch[1]);
+
+  let fileYear =
     parseInt(dateMatch[3]);
 
   if (fileYear < 100) {
     fileYear += 2000;
   }
 
-  const fileMonth =
-    parseInt(dateMatch[1]);
+  console.log(
+    "Month:",
+    fileMonth,
+    "Year:",
+    fileYear
+  );
 
-  console.log("DATE MATCH:", dateMatch);
-
-  if (dateMatch) {
-
-    const fileYear =
-      parseInt(dateMatch[1]);
-
-    const fileMonth =
-      parseInt(dateMatch[2]);
-
-    console.log(
-      "Month:",
-      fileMonth,
-      "Year:",
-      fileYear
-    );
-
-    return (
-      fileMonth === month &&
-      fileYear === year
-    );
-  }
+  return (
+    fileMonth === month &&
+    fileYear === year
+  );
 }
 
   // Next validation will come here.
@@ -862,7 +855,7 @@ if (monthNamePeriodMatch) {
   return false;
 
 }
-
+}
   
 /* =========================
    VALIDATE FILE
@@ -917,6 +910,7 @@ router.post(
           error: "INVALID FORMAT"
         });
       }
+    
 
       /* =========================
          PDF SCANNED CHECK

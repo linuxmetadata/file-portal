@@ -542,7 +542,7 @@ if (desaiMatch) {
 
 const monthOnlyMatch =
   headerText.match(
-    /for\s+the\s+month\s*[-:]?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s*,?\s*(\d{2,4})/i
+    /for\s+the\s+month\s*[-:]?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[\s,\-\/]*(\d{2,4})/i
   );
 
 if (monthOnlyMatch) {

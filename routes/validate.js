@@ -326,10 +326,20 @@ return (
      FROM DD-MON-YY TO DD-MON-YY
   ========================= */
 
+  console.log(
+  "CHECKING MONTH NAME RANGE",
+  headerText.substring(0,1000)
+);
+
   const monthNameRangeMatch =
     headerText.match(
       /from\s*:?\s*(\d{1,2})[-\/ ](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[-\/ ](\d{2,4}).*?to\s*:?\s*(\d{1,2})[-\/ ](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[-\/ ](\d{2,4})/i
     );
+
+    console.log(
+    "MONTH NAME RANGE MATCH:",
+    monthNameRangeMatch
+  );
 
   if (monthNameRangeMatch) {
 

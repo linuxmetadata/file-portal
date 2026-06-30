@@ -507,6 +507,7 @@ return (
   fileMonth === (month - 1) &&
   fileYear === year
 );
+}
 
   /* =========================
    FROM DD-M-YY TO DD.M.YY

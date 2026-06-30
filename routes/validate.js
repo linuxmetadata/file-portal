@@ -212,9 +212,15 @@ function isValidPreviousMonth(text) {
 
   console.log("TEXT LENGTH:", normalizedText.length);
   console.log(
-    "VALIDATOR INPUT PREVIEW:",
-    text.substring(0,500)
-  );
+  "VALIDATOR INPUT PREVIEW:",
+  text.substring(0,500)
+);
+
+  console.log("HEADER LENGTH:", headerText.length);
+  console.log(
+  "HEADER PREVIEW:",
+  headerText.substring(0,1000)
+);
 
   console.log("STEP 2");
 
@@ -332,7 +338,7 @@ return (
 );
 
   const monthNameRangeMatch =
-    headerText.match(
+    text.match(
       /from\s*:?\s*(\d{1,2})[-\/ ](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[-\/ ](\d{2,4}).*?to\s*:?\s*(\d{1,2})[-\/ ](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[-\/ ](\d{2,4})/i
     );
 

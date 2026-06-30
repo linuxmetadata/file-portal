@@ -167,8 +167,7 @@ function isValidPreviousMonth(text) {
     text.substring(0,500)
   );
   console.log("STEP 1");
-  console.log("STEP 2");
-
+  
   const { month, year } = getPreviousMonthInfo();
 
   const monthMap = {
@@ -217,11 +216,12 @@ function isValidPreviousMonth(text) {
     text.substring(0,500)
   );
 
+  console.log("STEP 2");
+
   const stockSalesMatch =
   text.match(
     /from\s*date\s*:?\s*(\d{1,2})[\/-](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[\/-](\d{2,4}).*?to\s*date\s*:?\s*(\d{1,2})[\/-](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[\/-](\d{2,4})/i
   );
-  console.log("STEP 3");
 
   console.log("STOCK SALES MATCH:", stockSalesMatch);
 
@@ -467,7 +467,7 @@ return (
     console.log("Compressed From-To Failed");
 
   }
-
+  console.log("STEP 3");
   /* =========================
    MONTH ONLY
 ========================= */

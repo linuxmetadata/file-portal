@@ -521,6 +521,55 @@ if (fromMonthMatch) {
 
   console.log("STEP 3");
 
+  /* =========================
+   STOCK & SALES REPORT FOR MONTH
+========================= */
+
+const stockSalesMonthMatch =
+  headerText.match(
+    /stock\s*&?\s*sales\s*report\s*for\s*the\s*month\s*[-:]?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s*[, -]*\s*(\d{2,4})/i
+  );
+
+console.log(
+  "STOCK SALES MONTH MATCH:",
+  stockSalesMonthMatch
+);
+
+if (stockSalesMonthMatch) {
+
+  console.log(
+    "MATCHED STOCK SALES REPORT MONTH"
+  );
+
+  const fileMonth =
+    monthMap[
+      stockSalesMonthMatch[1]
+        .substring(0,3)
+        .toLowerCase()
+    ];
+
+  let fileYear =
+    parseInt(
+      stockSalesMonthMatch[2]
+    );
+
+  if (fileYear < 100) {
+    fileYear += 2000;
+  }
+
+  console.log(
+    "FILE MONTH:",
+    fileMonth,
+    "FILE YEAR:",
+    fileYear
+  );
+
+  return (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  );
+}
+
   const desaiMatch =
   headerText.match(
     /01\s+May\s+2026.*?31\s+May\s+2026/i

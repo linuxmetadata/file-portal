@@ -898,7 +898,12 @@ if (dateMatch) {
 }
   console.log("END OF VALIDATOR - NO MATCH FOUND");
   return false;
+
+  console.log("FOUND DATES:", foundDates);
+  console.log("MONTH:", month);
+  console.log("YEAR:", year);
 }
+
   
 /* =========================
    VALIDATE FILE

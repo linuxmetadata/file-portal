@@ -86,6 +86,7 @@ async function extractText(filePath, ext) {
 
   try {
 
+    console.log("FILE SIZE:", fs.statSync(filePath).size);
     const workbook =
       XLSX.readFile(filePath);
 
@@ -110,6 +111,14 @@ async function extractText(filePath, ext) {
     );
 
     try {
+
+      const raw =
+      fs.readFileSync(filePath);
+
+    console.log(
+      "FIRST 200 BYTES:",
+      raw.toString("utf8",0,200)
+    );
 
       const buffer =
         fs.readFileSync(filePath);

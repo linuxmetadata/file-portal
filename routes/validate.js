@@ -474,7 +474,7 @@ return (
 
 const monthOnlyMatch =
   headerText.match(
-    /(?:month\s+of\s+|for\s+the\s+month\s+)?(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s*[-']?\s*(\d{2,4})/i
+    /for\s+the\s+month\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s*[-']?\s*(\d{2,4})/i
   );
 
 if (monthOnlyMatch) {
@@ -483,30 +483,30 @@ if (monthOnlyMatch) {
   console.log("Matched : Month Only");
 
   const fileMonth =
-    monthMap[
-      monthOnlyMatch[1]
-        .substring(0,3)
-        .toLowerCase()
-    ];
+  monthMap[
+    monthOnlyMatch[1]
+      .substring(0,3)
+      .toLowerCase()
+  ];
 
-  let fileYear =
-    parseInt(monthOnlyMatch[2]);
+let fileYear =
+  parseInt(monthOnlyMatch[2]);
 
-  if (fileYear < 100)
-    fileYear += 2000;
-
-  if (
-    fileMonth === (month - 1) &&
-    fileYear === year
-  ) {
-
-    console.log("Month Only Passed");
-
-    return true;
-
-  }
-
+if (fileYear < 100) {
+  fileYear += 2000;
 }
+
+console.log(
+  "FILE MONTH:",
+  fileMonth,
+  "FILE YEAR:",
+  fileYear
+);
+
+return (
+  fileMonth === (month - 1) &&
+  fileYear === year
+);
 
   /* =========================
    FROM DD-M-YY TO DD.M.YY

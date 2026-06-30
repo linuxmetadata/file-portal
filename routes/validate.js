@@ -166,6 +166,8 @@ function isValidPreviousMonth(text) {
     "VALIDATOR INPUT PREVIEW:",
     text.substring(0,500)
   );
+  console.log("STEP 1");
+  console.log("STEP 2");
 
   const { month, year } = getPreviousMonthInfo();
 
@@ -219,6 +221,7 @@ function isValidPreviousMonth(text) {
   text.match(
     /from\s*date\s*:?\s*(\d{1,2})[\/-](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[\/-](\d{2,4}).*?to\s*date\s*:?\s*(\d{1,2})[\/-](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[\/-](\d{2,4})/i
   );
+  console.log("STEP 3");
 
   console.log("STOCK SALES MATCH:", stockSalesMatch);
 

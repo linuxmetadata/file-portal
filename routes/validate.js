@@ -84,20 +84,66 @@ async function extractText(filePath, ext) {
 
     if (ext === "xlsx" || ext === "xls") {
 
-      const workbook = XLSX.readFile(filePath);
+  try {
+
+    const workbook =
+      XLSX.readFile(filePath);
+
+    let text = "";
+
+    workbook.SheetNames.forEach(sheetName => {
+
+      const sheet =
+        workbook.Sheets[sheetName];
+
+      text +=
+        XLSX.utils.sheet_to_csv(sheet) + "\n";
+    });
+
+    return text;
+
+  } catch (err) {
+
+    console.log(
+      "PRIMARY XLSX READ FAILED:",
+      err.message
+    );
+
+    try {
+
+      const buffer =
+        fs.readFileSync(filePath);
+
+      const workbook =
+        XLSX.read(buffer, {
+          type: "buffer"
+        });
 
       let text = "";
 
       workbook.SheetNames.forEach(sheetName => {
 
-        const sheet = workbook.Sheets[sheetName];
+        const sheet =
+          workbook.Sheets[sheetName];
 
         text +=
           XLSX.utils.sheet_to_csv(sheet) + "\n";
       });
 
       return text;
+
+    } catch (err2) {
+
+      console.log(
+        "FALLBACK XLSX READ FAILED:",
+        err2.message
+      );
+
+      return "";
     }
+  }
+}
+    
 
     if (ext === "docx") {
 
@@ -520,6 +566,7 @@ if (fromMonthMatch) {
 }
 
   console.log("STEP 3");
+
 
   /* =========================
    STOCK & SALES REPORT FOR MONTH

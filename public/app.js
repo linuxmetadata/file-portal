@@ -466,6 +466,47 @@ function openPreview() {
       reader.readAsArrayBuffer(file);
     }
 
+    /* DOC */
+
+else if (ext === "doc") {
+
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+
+    try {
+
+      const text =
+        new TextDecoder("latin1")
+        .decode(e.target.result);
+
+      container.innerHTML = `
+        <div style="
+          max-height:400px;
+          overflow:auto;
+          padding:10px;
+          background:#fff;
+          border:1px solid #ddd;
+          white-space:pre-wrap;
+          font-family:monospace;
+        ">
+          ${text
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")}
+        </div>
+      `;
+
+    } catch {
+
+      container.innerHTML = `
+        <p>${file.name} (Preview failed)</p>
+      `;
+    }
+  };
+
+  reader.readAsArrayBuffer(file);
+}
+
     /* DOCX */
     else if (ext === "docx") {
 

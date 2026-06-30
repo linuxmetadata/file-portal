@@ -189,6 +189,27 @@ async function extractText(filePath, ext) {
 }
     
 
+    if (ext === "doc") {
+
+  const raw =
+    fs.readFileSync(filePath);
+
+  const text =
+    raw.toString("latin1");
+
+  console.log(
+    "DOC TEXT LENGTH:",
+    text.length
+  );
+
+  console.log(
+    "DOC PREVIEW:",
+    text.substring(0,500)
+  );
+
+  return text;
+}
+
     if (ext === "docx") {
 
       const result =

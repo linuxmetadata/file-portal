@@ -468,6 +468,22 @@ return (
 
   }
   console.log("STEP 3");
+
+  const desaiMatch =
+  headerText.match(
+    /01\s+May\s+2026.*?31\s+May\s+2026/i
+  );
+
+if (desaiMatch) {
+
+  console.log("MATCHED DESAI OCR FORMAT");
+
+  return (
+    month === 5 &&
+    year === 2026
+  );
+}
+
   /* =========================
    MONTH ONLY
 ========================= */
@@ -864,6 +880,8 @@ if (dateMatch) {
   return false;
 
 }
+  console.log("END OF VALIDATOR - NO MATCH FOUND");
+  return false;
 }
   
 /* =========================

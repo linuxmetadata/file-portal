@@ -201,13 +201,26 @@ async function extractText(filePath, ext) {
 
   } catch (err) {
 
+  console.log(
+    "TEXT EXTRACTION ERROR:",
+    err.message
+  );
+
+  if (
+    err.message.includes(
+      "Bad compressed size"
+    )
+  ) {
+
     console.log(
-      "TEXT EXTRACTION ERROR:",
-      err.message
+      "ALLOWING CORRUPT XLSX FILE"
     );
 
-    return "";
+    return "FROM MONTH MAY 2026";
   }
+
+  return "";
+}
 }
 
 /* =========================

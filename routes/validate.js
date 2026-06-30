@@ -483,6 +483,42 @@ return (
     console.log("Compressed From-To Failed");
 
   }
+  /* =========================
+   FROM MONTH : MAY 2026
+========================= */
+
+const fromMonthMatch =
+  headerText.match(
+    /from\s+month\s*:?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s*(\d{4})/i
+  );
+
+if (fromMonthMatch) {
+
+  console.log("MATCHED FROM MONTH");
+
+  const fileMonth =
+    monthMap[
+      fromMonthMatch[1]
+        .substring(0,3)
+        .toLowerCase()
+    ];
+
+  const fileYear =
+    parseInt(fromMonthMatch[2]);
+
+  console.log(
+    "FILE MONTH:",
+    fileMonth,
+    "FILE YEAR:",
+    fileYear
+  );
+
+  return (
+    fileMonth === (month - 1) &&
+    fileYear === year
+  );
+}
+
   console.log("STEP 3");
 
   const desaiMatch =
@@ -856,6 +892,21 @@ if (monthNamePeriodMatch) {
   text.match(
     /(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})/
   );
+
+  const parsedMonth =
+  parseInt(dateMatch[2]);
+
+  const parsedYear =
+  parseInt(dateMatch[3]);
+
+if (
+  parsedMonth < 1 ||
+  parsedMonth > 12 ||
+  parsedYear < 2020
+) {
+  console.log("INVALID DATE FOUND");
+  return false;
+}
 
   console.log("DATE MATCH:", dateMatch);
 

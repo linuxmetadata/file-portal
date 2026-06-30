@@ -147,6 +147,41 @@ async function extractText(filePath, ext) {
         "FALLBACK XLSX READ FAILED:",
         err2.message
       );
+      try {
+
+  const workbook =
+    XLSX.read(
+      fs.readFileSync(filePath),
+      {
+        type: "binary",
+        WTF: true
+      }
+    );
+
+  let text = "";
+
+  workbook.SheetNames.forEach(sheetName => {
+
+    const sheet =
+      workbook.Sheets[sheetName];
+
+    text +=
+      XLSX.utils.sheet_to_csv(sheet) + "\n";
+  });
+
+  console.log(
+    "THIRD XLSX FALLBACK SUCCESS"
+  );
+
+  return text;
+
+} catch (err3) {
+
+  console.log(
+    "THIRD XLSX FALLBACK FAILED:",
+    err3.message
+  );
+}
 
       return "";
     }

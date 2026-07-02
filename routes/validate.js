@@ -570,6 +570,64 @@ return (
 
   }
 
+  /* =========================
+   STOCK & SALES STATEMENT
+========================= */
+
+const statementRangeMatch =
+  headerText.match(
+    /stock\s*&?\s*sales\s*statement.*?(\d{2}-\d{2}-\d{4})\s*-\s*(\d{2}-\d{2}-\d{4})/i
+  );
+
+if (statementRangeMatch) {
+
+  console.log(
+    "MATCHED STOCK SALES STATEMENT RANGE"
+  );
+
+  const parseDMY = (value) => {
+
+    const p = value.split("-");
+
+    return new Date(
+      parseInt(p[2]),
+      parseInt(p[1]) - 1,
+      parseInt(p[0])
+    );
+
+  };
+
+  const startDate =
+    parseDMY(statementRangeMatch[1]);
+
+  const endDate =
+    parseDMY(statementRangeMatch[2]);
+
+  console.log(
+    "STATEMENT START:",
+    startDate
+  );
+
+  console.log(
+    "STATEMENT END:",
+    endDate
+  );
+
+  if (ok(startDate, endDate)) {
+
+    console.log(
+      "STOCK SALES STATEMENT PASSED"
+    );
+
+    return true;
+
+  }
+
+  console.log(
+    "STOCK SALES STATEMENT FAILED"
+  );
+}
+
     /* =========================
      OCR COMPRESSED FROM TO
   ========================= */

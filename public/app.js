@@ -296,6 +296,12 @@ function chooseFile(code, type) {
 
     const files = Array.from(input.files);
 
+    console.log("FILES SELECTED:", files.length);
+
+    files.forEach(f => {
+    console.log("SELECTED:", f.name);
+  });
+
     if (!files.length) return;
 
     const allowed = [
@@ -367,12 +373,18 @@ function chooseFile(code, type) {
 
     if (!validateRes.ok) {
 
-      showMessage(
-        validateData.error || "INVALID FILE",
-        true
+      console.log(
+        "FAILED FILE:",
+        file.name,
+        validateData
       );
 
-      return;
+    showMessage(
+      validateData.error || "INVALID FILE",
+      true
+    );
+
+    return;
     }
   }
 
@@ -393,6 +405,10 @@ function chooseFile(code, type) {
     currentPreviewCode = code;
     currentPreviewType = type;
 
+    console.log(
+    "OPENING PREVIEW:",
+    currentPreviewFiles.map(f => f.name)
+    );
     openPreview();
   };
 

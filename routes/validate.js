@@ -515,14 +515,60 @@ return (
 
   }
 
+  /* =========================
+   LINUX STOCK & SALES STATEMENT
+========================= */
+
+const linuxStatementMatch =
+  headerText.match(
+    /linux\s+stock\s*&?\s*sales\s*statement\s*(\d{2}-\d{2}-\d{4})\s*-\s*(\d{2}-\d{2}-\d{4})/i
+  );
+
+if (linuxStatementMatch) {
+
+  console.log(
+    "MATCHED LINUX STOCK SALES STATEMENT"
+  );
+
+  const parseDMY = (value) => {
+
+    const p = value.split("-");
+
+    return new Date(
+      parseInt(p[2]),
+      parseInt(p[1]) - 1,
+      parseInt(p[0])
+    );
+  };
+
+  const startDate =
+    parseDMY(linuxStatementMatch[1]);
+
+  const endDate =
+    parseDMY(linuxStatementMatch[2]);
+
+  if (ok(startDate, endDate)) {
+
+    console.log(
+      "LINUX STOCK SALES STATEMENT PASSED"
+    );
+
+    return true;
+  }
+
+  console.log(
+    "LINUX STOCK SALES STATEMENT FAILED"
+  );
+}
+
     /* =========================
      DD/MM/YYYY DATE RANGE
   ========================= */
 
   const dateRangeMatch =
-    headerText.match(
-      /(from|period|duration|statement)?\s*:?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}).*?(to|upto)?\s*:?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i
-    );
+  headerText.match(
+    /(from|period|duration)?\s*:?\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})\s*(to|-)\s*(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/i
+  );
 
   if (dateRangeMatch) {
 

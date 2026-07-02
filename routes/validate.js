@@ -409,11 +409,6 @@ return (
         monthColumnMatch[2].replace(/\//g, "-")
       );
 
-      console.log("START DATE:", startDate);
-      console.log("END DATE:", endDate);
-      console.log("EXPECTED MONTH:", month);
-      console.log("EXPECTED YEAR:", year);
-
     if (ok(startDate, endDate)) {
 
       console.log("Excel validation passed");
@@ -557,6 +552,11 @@ return (
 
     const endDate =
       parseDate(dateRangeMatch[4]);
+
+    console.log("START DATE:", startDate);
+    console.log("END DATE:", endDate);
+    console.log("EXPECTED MONTH:", month);
+    console.log("EXPECTED YEAR:", year);
 
     if (ok(startDate, endDate)) {
 

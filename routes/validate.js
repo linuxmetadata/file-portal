@@ -1176,11 +1176,18 @@ if (monthNamePeriodMatch) {
     /(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})/
   );
 
+  console.log("DATE MATCH:", dateMatch);
+
+if (dateMatch) {
+
+  const fileMonth =
+    parseInt(dateMatch[1]);
+
   const parsedMonth =
-  parseInt(dateMatch[2]);
+    parseInt(dateMatch[2]);
 
   const parsedYear =
-  parseInt(dateMatch[3]);
+    parseInt(dateMatch[3]);
 
 if (
   parsedMonth < 1 ||
@@ -1190,16 +1197,6 @@ if (
   console.log("INVALID DATE FOUND");
   return false;
 }
-
-  console.log("DATE MATCH:", dateMatch);
-
-if (dateMatch) {
-
-  const fileMonth =
-    parseInt(dateMatch[1]);
-
-  let fileYear =
-    parseInt(dateMatch[3]);
 
   if (fileYear < 100) {
     fileYear += 2000;

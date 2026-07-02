@@ -7,6 +7,20 @@ let currentPreviewCode = null;
 let currentPreviewType = null;
 let isValidFile = true;
 
+function resetValidationState() {
+
+  currentPreviewFile = null;
+  currentPreviewFiles = [];
+  currentPreviewCode = null;
+  currentPreviewType = null;
+
+  isValidFile = true;
+
+  clearPreviewError();
+
+  console.log("VALIDATION STATE RESET");
+}
+
 /* =========================
    LOAD DATA
 ========================= */
@@ -277,6 +291,7 @@ function chooseFile(code, type) {
 
   input.onchange = async () => {
 
+    resetValidationState();
     clearPreviewError();
 
     const files = Array.from(input.files);

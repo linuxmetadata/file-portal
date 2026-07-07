@@ -1242,6 +1242,14 @@ if (allDates && allDates.length >= 2) {
   return false;
 
 }
+  console.log("FINAL DATE FALLBACK");
+
+  const allDates = headerText.match(
+    /\d{1,2}[\/-]\d{1,2}[\/-]\d{4}/g
+  );
+
+  console.log("ALL DATES:", allDates);
+
   console.log("END OF VALIDATOR - NO MATCH FOUND");
   return false;
 

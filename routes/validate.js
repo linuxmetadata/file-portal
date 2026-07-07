@@ -1215,6 +1215,37 @@ if (
   );
 }
 
+console.log("CHECKING REVERSED FROM TO FORMAT");
+
+const allDates =
+  header.match(/\d{1,2}[\/-]\d{1,2}[\/-]\d{4}/g);
+
+console.log("ALL DATES FOUND:", allDates);
+
+if (allDates && allDates.length >= 2) {
+
+    const startDate =
+      parseFlexibleDate(allDates[0]);
+
+    const endDate =
+      parseFlexibleDate(allDates[1]);
+
+    console.log("START DATE:", startDate);
+    console.log("END DATE:", endDate);
+
+    if (
+        startDate &&
+        endDate &&
+        startDate.getMonth() + 1 === expectedMonth &&
+        startDate.getFullYear() === expectedYear &&
+        endDate.getMonth() + 1 === expectedMonth &&
+        endDate.getFullYear() === expectedYear
+    ) {
+
+        console.log("DATE LIST MATCH PASSED");
+        return true;
+    }
+}
   // Next validation will come here.
 
 

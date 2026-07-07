@@ -1217,18 +1217,36 @@ if (
 
 console.log("FINAL DATE FALLBACK");
 
-const allDates =
-  headerText.match(
-    /\d{1,2}[\/-]\d{1,2}[\/-]\d{4}/g
-  );
+const allDates = headerText.match(
+  /\d{1,2}[\/-]\d{1,2}[\/-]\d{4}/g
+);
 
 console.log("ALL DATES:", allDates);
 
 if (allDates && allDates.length >= 2) {
 
-  console.log("DATE FALLBACK PASSED");
+    const periodDates = allDates.filter(d => {
 
-  return true;
+        const parts = d.split(/[\/-]/);
+
+        const day = parseInt(parts[0]);
+        const month = parseInt(parts[1]);
+        const year = parseInt(parts[2]);
+
+        return (
+            month === expectedMonth &&
+            year === expectedYear
+        );
+    });
+
+    console.log("PERIOD DATES:", periodDates);
+
+    if (periodDates.length >= 2) {
+
+        console.log("FINAL DATE FALLBACK PASSED");
+
+        return true;
+    }
 }
   // Next validation will come here.
 

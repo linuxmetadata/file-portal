@@ -1156,55 +1156,7 @@ if (monthNamePeriodMatch) {
     );
 
   }
-
-  /* =========================
-   REPORT DATE COLUMNS
-========================= */
-
-  if (
-    /report[_ ]?date/i.test(text) ||
-    /sns[_ ]?month/i.test(text) ||
-    /\bmonth\b/i.test(text)
-  ) {
-
-    console.log(
-    "Matched : Report Date Column"
-    );
-
-    const dateMatch =
-  text.match(
-    /(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})/
-  );
-
-  console.log("DATE MATCH:", dateMatch);
-
-if (dateMatch) {
-
-  const day =
-    parseInt(dateMatch[1]);
-
-  const fileMonth =
-    parseInt(dateMatch[2]);
-
-  let fileYear =
-    parseInt(dateMatch[3]);
-
-  if (fileYear < 100)
-    fileYear += 2000;
-
-  console.log(
-    "DAY:", day,
-    "MONTH:", fileMonth,
-    "YEAR:", fileYear
-);
-
-  return (
-    fileMonth === month &&
-    fileYear === year
-  );
-}
-}
-
+  
 /* =========================
   SAHA / C-Square Validation
 ========================= */
@@ -1253,6 +1205,64 @@ if (dateMatch) {
     }
 
     console.log("C-SQUARE MONTH FAILED");
+}
+
+  /* =========================
+   REPORT DATE COLUMNS
+========================= */
+
+  if (
+    /report[_ ]?date/i.test(text) ||
+    /sns[_ ]?month/i.test(text) ||
+    /\bmonth\b/i.test(text)
+  ) {
+
+    console.log(
+    "Matched : Report Date Column"
+    );
+
+    const dateMatch =
+    text.match(
+    /Report\s*Date\s*:?\s*(\d{1,2})[-\/](\d{1,2}|[A-Za-z]{3})[-\/](\d{2,4})/i
+    );
+
+  console.log("DATE MATCH:", dateMatch);
+
+if (dateMatch) {
+
+  const day =
+    parseInt(dateMatch[1]);
+
+  const fileMonth =
+    parseInt(dateMatch[2]);
+
+  let fileYear =
+    parseInt(dateMatch[3]);
+
+  if (fileYear < 100)
+    fileYear += 2000;
+
+  console.log(
+    "DAY:", day,
+    "MONTH:", fileMonth,
+    "YEAR:", fileYear
+);
+
+  if (
+    fileMonth === month &&
+    fileYear === year
+) {
+
+    console.log("REPORT DATE PASSED");
+
+    return true;
+}
+
+    console.log("REPORT DATE FAILED");
+
+// Don't return false here.
+// Allow the next validation.
+}
 }
 
 /* =========================

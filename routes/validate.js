@@ -369,8 +369,8 @@ if (stockSalesMatch) {
 let fileYear =
   parseInt(stockSalesMatch[3]);
 
-if (parsedYear < 100) {
-  parsedYear += 2000;
+if (fileYear < 100) {
+  fileYear += 2000;
 }
 
 console.log(
@@ -1180,100 +1180,89 @@ if (monthNamePeriodMatch) {
 
 if (dateMatch) {
 
-  const fileMonth =
+  const day =
     parseInt(dateMatch[1]);
 
-  const parsedMonth =
+  const fileMonth =
     parseInt(dateMatch[2]);
 
-  const parsedYear =
+  let fileYear =
     parseInt(dateMatch[3]);
 
-if (
-  parsedMonth < 1 ||
-  parsedMonth > 12 ||
-  parsedYear < 2020
-) {
-  console.log("INVALID DATE FOUND");
-  return false;
-}
-
-  if (fileYear < 100) {
+  if (fileYear < 100)
     fileYear += 2000;
-  }
 
   console.log(
-    "Month:",
-    fileMonth,
-    "Year:",
-    fileYear
-  );
+    "DAY:", day,
+    "MONTH:", fileMonth,
+    "YEAR:", fileYear
+);
 
   return (
     fileMonth === month &&
     fileYear === year
   );
 }
+}
+/* =========================
+   FINAL DATE FALLBACK
+========================= */
 
 console.log("FINAL DATE FALLBACK");
 
-const allDates = headerText.match(
-  /\d{1,2}[\/-]\d{1,2}[\/-]\d{4}/g
-);
+const allDates =
+  headerText.match(
+    /\d{1,2}[\/-]\d{1,2}[\/-]\d{4}/g
+  );
 
 console.log("ALL DATES:", allDates);
 
 if (allDates && allDates.length >= 2) {
 
-    const periodDates = allDates.filter(d => {
+    const periodDates =
+        allDates.filter(d => {
 
-        const parts = d.split(/[\/-]/);
+            const parts =
+                d.split(/[\/-]/);
 
-        const day = parseInt(parts[0]);
-        const month = parseInt(parts[1]);
-        const year = parseInt(parts[2]);
+            const fileMonth =
+                parseInt(parts[1]);
 
-        return (
-            month === expectedMonth &&
-            year === expectedYear
-        );
-    });
+            const fileYear =
+                parseInt(parts[2]);
 
-    console.log("PERIOD DATES:", periodDates);
+            return (
+                fileMonth === month &&
+                fileYear === year
+            );
+
+        });
+
+    console.log(
+        "PERIOD DATES:",
+        periodDates
+    );
 
     if (periodDates.length >= 2) {
 
-        console.log("FINAL DATE FALLBACK PASSED");
+        console.log(
+            "FINAL DATE FALLBACK PASSED"
+        );
 
         return true;
+
     }
-}
-  // Next validation will come here.
-
-
-  console.log("================================");
-  console.log("VALIDATION RESULT: false");
-  console.log("TEXT PREVIEW:");
-  console.log(headerText.substring(0, 2000));
-  console.log("================================");
-
-  return false;
 
 }
-  console.log("FINAL DATE FALLBACK");
 
-  const allDates = headerText.match(
-    /\d{1,2}[\/-]\d{1,2}[\/-]\d{4}/g
-  );
+console.log("================================");
+console.log("VALIDATION RESULT: false");
+console.log("TEXT PREVIEW:");
+console.log(headerText.substring(0,2000));
+console.log("================================");
 
-  console.log("ALL DATES:", allDates);
+return false;
 
-  console.log("END OF VALIDATOR - NO MATCH FOUND");
-  return false;
-
-  console.log("FOUND DATES:", foundDates);
-  console.log("MONTH:", month);
-  console.log("YEAR:", year);
 }
 
   

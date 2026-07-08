@@ -1204,6 +1204,57 @@ if (dateMatch) {
   );
 }
 }
+
+/* =========================
+  SAHA / C-Square Validation
+========================= */
+
+  console.log("CHECKING C-SQUARE STOCK REPORT");
+
+  const cSquareMatch =
+    /Printed\s+Using\s+PharmAssist\s+From\s+C-Square/i.test(headerText);
+
+  const reportMatch =
+    /Stock\s+and\s+Sale\s+Report/i.test(headerText);
+
+  const periodMatch =
+    headerText.match(
+        /From\s+date\s+(\d{1,2})-([A-Za-z]{3})-(\d{2,4})\s+to\s+(\d{1,2})-([A-Za-z]{3})-(\d{2,4})/i
+    );
+
+  console.log("C-SQUARE:", cSquareMatch);
+  console.log("REPORT:", reportMatch);
+  console.log("PERIOD:", periodMatch);
+
+  if (cSquareMatch && reportMatch && periodMatch) {
+
+    const fromMonth =
+        periodMatch[2].toLowerCase();
+
+    let fromYear =
+        parseInt(periodMatch[3]);
+
+    if (fromYear < 100)
+        fromYear += 2000;
+
+    const monthMap = {
+        jan:1,feb:2,mar:3,apr:4,may:5,jun:6,
+        jul:7,aug:8,sep:9,oct:10,nov:11,dec:12
+    };
+
+    if (
+        monthMap[fromMonth] === month &&
+        fromYear === year
+    ) {
+
+        console.log("C-SQUARE VALIDATION PASSED");
+
+        return true;
+    }
+
+    console.log("C-SQUARE MONTH FAILED");
+}
+
 /* =========================
    FINAL DATE FALLBACK
 ========================= */

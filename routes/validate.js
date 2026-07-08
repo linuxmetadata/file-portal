@@ -1080,6 +1080,53 @@ if (monthNamePeriodMatch) {
 
   }
 
+  /* =========================
+   STOCK REPORT SIMPLE
+========================= */
+
+console.log("CHECKING SIMPLE STOCK REPORT");
+
+const stockReportSimple =
+headerText.match(
+/STOCK\s+REPORT.*?(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s*To\s*:?\s*(\d{1,2})\/(\d{1,2})\/(\d{2,4})/i
+);
+
+console.log("SIMPLE STOCK REPORT:", stockReportSimple);
+
+if(stockReportSimple){
+
+    console.log("MATCHED SIMPLE STOCK REPORT");
+
+    let startYear=parseInt(stockReportSimple[3]);
+    let endYear=parseInt(stockReportSimple[6]);
+
+    if(startYear<100) startYear+=2000;
+    if(endYear<100) endYear+=2000;
+
+    const startDate=new Date(
+        startYear,
+        parseInt(stockReportSimple[2])-1,
+        parseInt(stockReportSimple[1])
+    );
+
+    const endDate=new Date(
+        endYear,
+        parseInt(stockReportSimple[5])-1,
+        parseInt(stockReportSimple[4])
+    );
+
+    if(ok(startDate,endDate)){
+
+        console.log("SIMPLE STOCK REPORT PASSED");
+
+        return true;
+
+    }
+
+    console.log("SIMPLE STOCK REPORT FAILED");
+
+}
+
    /* =========================
      HEADER DATE RANGE
   ========================= */

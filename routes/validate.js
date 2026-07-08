@@ -1207,6 +1207,49 @@ if (monthNamePeriodMatch) {
     console.log("C-SQUARE MONTH FAILED");
 }
 
+function validateStockReport(headerText, month, year) {
+
+    console.log("CHECKING STOCK REPORT");
+
+    const reportMatch =
+        /STOCK\s+REPORT/i.test(headerText);
+
+    const dateMatch =
+        headerText.match(
+            /(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s*To\s*:?\s*(\d{1,2})\/(\d{1,2})\/(\d{2,4})/i
+        );
+
+    console.log("REPORT:", reportMatch);
+    console.log("DATE:", dateMatch);
+
+    if (!reportMatch || !dateMatch)
+        return false;
+
+    const fileMonth = parseInt(dateMatch[2]);
+
+    let fileYear = parseInt(dateMatch[3]);
+
+    if (fileYear < 100)
+        fileYear += 2000;
+
+    console.log("FILE MONTH:", fileMonth);
+    console.log("FILE YEAR:", fileYear);
+
+    if (
+        fileMonth === month &&
+        fileYear === year
+    ) {
+
+        console.log("STOCK REPORT VALIDATION PASSED");
+
+        return true;
+    }
+
+    console.log("STOCK REPORT VALIDATION FAILED");
+
+    return false;
+}
+
   /* =========================
    REPORT DATE COLUMNS
 ========================= */

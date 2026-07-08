@@ -1204,6 +1204,80 @@ if(stockReportSimple){
 
   }
   
+  /* =========================
+   MARG ERP STOCK REPORT
+========================= */
+
+console.log("CHECKING MARG ERP STOCK REPORT");
+
+const margMatch = headerText.match(
+/Stock\s+and\s+Sale\s+Report\s*-*\s*From\s*date\s*(\d{1,2})-([A-Za-z]+)-(\d{2,4})\s*to\s*(\d{1,2})-([A-Za-z]+)-(\d{2,4})/i
+);
+
+console.log("MARG MATCH:", margMatch);
+
+if (margMatch) {
+
+    let startDay = parseInt(margMatch[1]);
+    let startMonthName = margMatch[2];
+    let startYear = parseInt(margMatch[3]);
+
+    let endDay = parseInt(margMatch[4]);
+    let endMonthName = margMatch[5];
+    let endYear = parseInt(margMatch[6]);
+
+    if (startYear < 100) startYear += 2000;
+    if (endYear < 100) endYear += 2000;
+
+    const months = {
+        january:0,
+        february:1,
+        march:2,
+        april:3,
+        may:4,
+        june:5,
+        july:6,
+        august:7,
+        september:8,
+        october:9,
+        november:10,
+        december:11,
+
+        jan:0,
+        feb:1,
+        mar:2,
+        apr:3,
+        jun:5,
+        jul:6,
+        aug:7,
+        sep:8,
+        oct:9,
+        nov:10,
+        dec:11
+    };
+
+    const startMonth = months[startMonthName.toLowerCase()];
+    const endMonth = months[endMonthName.toLowerCase()];
+
+    console.log("START:", startDay, startMonth + 1, startYear);
+    console.log("END:", endDay, endMonth + 1, endYear);
+
+    if (
+        startMonth === expectedMonth - 1 &&
+        endMonth === expectedMonth - 1 &&
+        startYear === expectedYear &&
+        endYear === expectedYear
+    ) {
+
+        console.log("MARG ERP STOCK REPORT PASSED");
+
+        return true;
+
+    }
+
+    console.log("MARG ERP STOCK REPORT FAILED");
+}
+
 /* =========================
   SAHA / C-Square Validation
 ========================= */

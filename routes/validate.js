@@ -1263,10 +1263,10 @@ if (margMatch) {
     console.log("END:", endDay, endMonth + 1, endYear);
 
     if (
-        startMonth === expectedMonth - 1 &&
-        endMonth === expectedMonth - 1 &&
-        startYear === expectedYear &&
-        endYear === expectedYear
+        startMonth === month - 1 &&
+        endMonth === month - 1 &&
+        startYear === year &&
+        endYear === year
     ) {
 
         console.log("MARG ERP STOCK REPORT PASSED");

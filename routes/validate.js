@@ -1354,6 +1354,48 @@ if (
 }
 
 /* =========================
+  CHECKING DATABASE DATE COLUMNS
+========================= */
+console.log("CHECKING DATABASE DATE COLUMNS");
+
+const dbMatch = headerText.match(
+    /FromDt\s*,\s*ToDt[\s\S]*?(\d{4})-(\d{2})-(\d{2})\s*,\s*(\d{4})-(\d{2})-(\d{2})/i
+);
+
+console.log("DATABASE MATCH:", dbMatch);
+
+if (dbMatch) {
+
+    const { month, year } = getPreviousMonthInfo();
+
+    const startYear = Number(dbMatch[1]);
+    const startMonth = Number(dbMatch[2]);
+
+    const endYear = Number(dbMatch[4]);
+    const endMonth = Number(dbMatch[5]);
+
+    console.log(
+        "DATABASE RANGE:",
+        startMonth,
+        startYear,
+        endMonth,
+        endYear
+    );
+
+    if (
+        startMonth === month &&
+        endMonth === month &&
+        startYear === year &&
+        endYear === year
+    ) {
+
+        console.log("DATABASE EXPORT PASSED");
+
+        return true;
+    }
+}
+
+/* =========================
   SAHA / C-Square Validation
 ========================= */
 

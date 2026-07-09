@@ -1695,6 +1695,23 @@ if (allDates && allDates.length >= 2) {
 
 }
 
+console.log("NO REPORT PERIOD FOUND");
+
+const hasAnyReportPeriod =
+    /from|to|period|month|stock report|sale report|report date|stock end date/i
+        .test(headerText);
+
+if (!hasAnyReportPeriod) {
+
+    console.log("NO PERIOD AVAILABLE IN FILE");
+
+    return {
+        valid: false,
+        reason: "NO REPORT PERIOD FOUND"
+    };
+
+}
+
 console.log("================================");
 console.log("VALIDATION RESULT: false");
 console.log("TEXT PREVIEW:");

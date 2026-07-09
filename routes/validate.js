@@ -1293,46 +1293,62 @@ if (simpleRange) {
 
     const startDay = parseInt(simpleRange[1]);
 
-    const startMonth = getMonthNumber(simpleRange[2]);
+    const { month, year } = getPreviousMonthInfo();
 
-    const startYear = parseInt(simpleRange[3]);
+const monthMap = {
+    jan:1,
+    january:1,
+    feb:2,
+    february:2,
+    mar:3,
+    march:3,
+    apr:4,
+    april:4,
+    may:5,
+    jun:6,
+    june:6,
+    jul:7,
+    july:7,
+    aug:8,
+    august:8,
+    sep:9,
+    sept:9,
+    september:9,
+    oct:10,
+    october:10,
+    nov:11,
+    november:11,
+    dec:12,
+    december:12
+};
 
-    const endDay = parseInt(simpleRange[4]);
+const startMonth =
+    monthMap[
+        simpleRange[2].toLowerCase()
+    ];
 
-    const endMonth = getMonthNumber(simpleRange[5]);
+const endMonth =
+    monthMap[
+        simpleRange[5].toLowerCase()
+    ];
 
-    const endYear = parseInt(simpleRange[6]);
+const startYear =
+    parseInt(simpleRange[3]);
 
-    console.log(
-        "START:",
-        startDay,
-        startMonth,
-        startYear
-    );
+const endYear =
+    parseInt(simpleRange[6]);
 
-    console.log(
-        "END:",
-        endDay,
-        endMonth,
-        endYear
-    );
+if (
+    startMonth === month &&
+    endMonth === month &&
+    startYear === year &&
+    endYear === year
+) {
 
-    if (
-        isValidPreviousMonth(
-            startDay,
-            startMonth,
-            startYear,
-            endDay,
-            endMonth,
-            endYear
-        )
-    ) {
+    console.log("SIMPLE DATE RANGE PASSED");
 
-        console.log("SIMPLE DATE RANGE PASSED");
-
-        return true;
-
-    }
+    return true;
+}
 
     console.log("SIMPLE DATE RANGE FAILED");
 }

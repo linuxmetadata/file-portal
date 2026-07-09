@@ -1354,6 +1354,63 @@ if (
 }
 
 /* =========================
+  CHECKING DATE HEADER REPORT
+========================= */
+
+console.log("CHECKING DATE HEADER REPORT");
+
+const dateHeaderMatch = headerText.match(
+    /Date\s*:?\s*(\d{1,2})[-\/](Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*[-\/](\d{2,4})\s*To\s*:?\s*(\d{1,2})[-\/](Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*[-\/](\d{2,4})/i
+);
+
+console.log("DATE HEADER MATCH:", dateHeaderMatch);
+
+if (dateHeaderMatch) {
+
+    const startMonth =
+        monthMap[
+            dateHeaderMatch[2]
+                .substring(0,3)
+                .toLowerCase()
+        ];
+
+    let startYear = Number(dateHeaderMatch[3]);
+
+    if (startYear < 100)
+        startYear += 2000;
+
+    const endMonth =
+        monthMap[
+            dateHeaderMatch[5]
+                .substring(0,3)
+                .toLowerCase()
+        ];
+
+    let endYear = Number(dateHeaderMatch[6]);
+
+    if (endYear < 100)
+        endYear += 2000;
+
+    console.log(
+        "DATE HEADER:",
+        startMonth,
+        startYear,
+        endMonth,
+        endYear
+    );
+
+    if (
+        startMonth === (month - 1) &&
+        endMonth === (month - 1) &&
+        startYear === year &&
+        endYear === year
+    ) {
+        console.log("DATE HEADER PASSED");
+        return true;
+    }
+}
+
+/* =========================
   CHECKING DATABASE DATE COLUMNS
 ========================= */
 console.log("CHECKING DATABASE DATE COLUMNS");

@@ -1279,6 +1279,65 @@ if (margMatch) {
 }
 
 /* =========================
+  CHECKING SIMPLE DATE RANGE
+========================= */
+console.log("CHECKING SIMPLE DATE RANGE");
+
+const simpleRange = headerText.match(
+    /(\d{1,2})[- ]([A-Za-z]+)[- ](\d{4})\s*TO\s*(\d{1,2})[- ]([A-Za-z]+)[- ](\d{4})/i
+);
+
+console.log("SIMPLE RANGE:", simpleRange);
+
+if (simpleRange) {
+
+    const startDay = parseInt(simpleRange[1]);
+
+    const startMonth = getMonthNumber(simpleRange[2]);
+
+    const startYear = parseInt(simpleRange[3]);
+
+    const endDay = parseInt(simpleRange[4]);
+
+    const endMonth = getMonthNumber(simpleRange[5]);
+
+    const endYear = parseInt(simpleRange[6]);
+
+    console.log(
+        "START:",
+        startDay,
+        startMonth,
+        startYear
+    );
+
+    console.log(
+        "END:",
+        endDay,
+        endMonth,
+        endYear
+    );
+
+    if (
+        isValidPreviousMonth(
+            startDay,
+            startMonth,
+            startYear,
+            endDay,
+            endMonth,
+            endYear
+        )
+    ) {
+
+        console.log("SIMPLE DATE RANGE PASSED");
+
+        return true;
+
+    }
+
+    console.log("SIMPLE DATE RANGE FAILED");
+}
+
+/* =========================
   SAHA / C-Square Validation
 ========================= */
 

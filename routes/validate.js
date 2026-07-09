@@ -1453,6 +1453,47 @@ if (dbMatch) {
 }
 
 /* =========================
+  CHECKING MONTH / STOCK END DATE
+========================= */
+console.log("CHECKING MONTH / STOCK END DATE");
+
+const dbDateMatch = headerText.match(
+    /(\d{4})\/(\d{1,2})\/(\d{1,2})\s*,\s*(\d{4})\/(\d{1,2})\/(\d{1,2})/
+);
+
+console.log("DATABASE MATCH:", dbDateMatch);
+
+if (dbDateMatch) {
+
+    const startYear = Number(dbDateMatch[1]);
+    const startMonth = Number(dbDateMatch[2]);
+
+    const endYear = Number(dbDateMatch[4]);
+    const endMonth = Number(dbDateMatch[5]);
+
+    console.log(
+        "DATABASE:",
+        startMonth,
+        startYear,
+        endMonth,
+        endYear
+    );
+
+    if (
+        startMonth === month &&
+        endMonth === month &&
+        startYear === year &&
+        endYear === year
+    ) {
+
+        console.log("DATABASE DATE PASSED");
+        return true;
+
+    }
+
+}
+
+/* =========================
   SAHA / C-Square Validation
 ========================= */
 

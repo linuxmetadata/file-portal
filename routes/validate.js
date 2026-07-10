@@ -5,6 +5,7 @@ const path = require("path");
 const pdfParse = require("pdf-parse");
 const XLSX = require("xlsx");
 const mammoth = require("mammoth");
+const { validateStockist } = require("./stockistValidator");
 
 const router = express.Router();
 
@@ -1845,9 +1846,11 @@ router.post(
          PERIOD VALIDATION
       ========================= */
 
+      let text = "";
+
       if (ext !== "doc") {
 
-        const text =
+        text =
           await extractText(
             file.path,
             ext
@@ -1888,6 +1891,35 @@ router.post(
         }
       }
 
+/* =========================
+  STOCKIST VALIDATION
+========================= */
+  console.log("================================");
+  console.log("STOCKIST FROM REQUEST:", req.body.stockistName);
+  console.log("================================");
+  
+  const stockistResult =
+    await validateStockist(
+        text,
+        req.body.stockistName
+    );
+
+  console.log(
+    "STOCKIST RESULT:",
+    stockistResult
+);
+
+  if (!stockistResult.valid) {
+
+    if (fs.existsSync(file.path)) {
+        fs.unlinkSync(file.path);
+    }
+
+    return res.status(400).json({
+        error: stockistResult.reason
+    });
+
+}
       /* CLEAN TEMP FILE */
 
       if (

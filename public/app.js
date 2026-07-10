@@ -672,6 +672,15 @@ async function submitFile(btn) {
       form.append("code", currentPreviewCode);
       form.append("type", currentPreviewType);
 
+      const row = fullData.find(
+      r => String(r.code) === String(currentPreviewCode)
+    );
+
+    form.append(
+      "stockistName",
+      row ? row.name : ""
+    );
+
       const res = await fetch("/data/upload", {
         method: "POST",
         body: form

@@ -362,10 +362,15 @@ router.post(
     try {
 
       const {
-        code,
-        type,
-        sales
-      } = req.body;
+      code,
+      type,
+      sales,
+      stockistName
+    } = req.body;
+
+    console.log("================================");
+    console.log("STOCKIST FROM REQUEST:", stockistName);
+    console.log("================================");
 
       /* INVALID */
       if (

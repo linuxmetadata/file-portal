@@ -45,6 +45,8 @@ function cleanBusinessName(name = "") {
         .replace(/\bPRIVATE\b/g, "PVT")
         .replace(/\bLIMITED\b/g, "LTD")
         .replace(/\bPVT\s+LTD\b/g, "PVT LTD")
+        .replace(/\bPVT\.?\b/g,"PVT")
+        .replace(/\bLTD\.?\b/g,"LTD")
 
         .replace(/\s+/g," ")
         .replace(/\s*-\s*[A-Z ]+$/,"")

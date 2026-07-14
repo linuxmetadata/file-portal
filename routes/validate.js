@@ -516,6 +516,64 @@ return (
 
   }
 
+
+  /* =========================
+   FROM MON DD, YYYY TO MON DD, YYYY
+========================= */
+
+console.log("CHECKING MONTH FIRST DATE RANGE");
+
+const monthFirstRange =
+headerText.match(
+/from\s*:?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+(\d{1,2}),?\s*(\d{2,4}).*?to\s*:?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+(\d{1,2}),?\s*(\d{2,4})/i
+);
+
+console.log("MONTH FIRST RANGE:", monthFirstRange);
+
+if (monthFirstRange) {
+
+    console.log("MATCHED MONTH FIRST RANGE");
+
+    let startYear = parseInt(monthFirstRange[3]);
+    let endYear = parseInt(monthFirstRange[6]);
+
+    if (startYear < 100) startYear += 2000;
+    if (endYear < 100) endYear += 2000;
+
+    const startDate = new Date(
+        startYear,
+        monthMap[
+            monthFirstRange[1]
+                .substring(0,3)
+                .toLowerCase()
+        ],
+        parseInt(monthFirstRange[2])
+    );
+
+    const endDate = new Date(
+        endYear,
+        monthMap[
+            monthFirstRange[4]
+                .substring(0,3)
+                .toLowerCase()
+        ],
+        parseInt(monthFirstRange[5])
+    );
+
+    console.log("START:", startDate);
+    console.log("END:", endDate);
+
+    if (ok(startDate, endDate)) {
+
+        console.log("MONTH FIRST RANGE PASSED");
+
+        return true;
+
+    }
+
+    console.log("MONTH FIRST RANGE FAILED");
+}
+
   /* =========================
    LINUX STOCK & SALES STATEMENT
 ========================= */

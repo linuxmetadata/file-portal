@@ -127,39 +127,34 @@ function extractStockistName(text = "") {
 
     }
 
-    // ======================================================
-// Company Name above Address (CIPLA format)
-// ======================================================
+//======================================================
+// CIPLA / Linux PDF
+//======================================================
 
-if (!extractedName) {
+const lines = text
+    .split(/\r?\n/)
+    .map(x => x.trim())
+    .filter(Boolean);
 
-    const lines = text
-        .split(/\r?\n/)
-        .map(x => x.trim())
-        .filter(Boolean);
+const idx = lines.findIndex(x =>
+    /STOCK\s*&\s*SALES\s*STATEMENT/i.test(x)
+);
 
-    const idx = lines.findIndex(x =>
-        /STOCK\s*&\s*SALES\s*STATEMENT/i.test(x)
-    );
+if (idx > 0) {
 
-    if (idx > 0) {
+    for (let i = idx - 1; i >= 0; i--) {
 
-        for (let i = idx - 1; i >= 0; i--) {
+        const line = lines[i];
 
-            const line = lines[i];
+        if (
+            /Company|Division|Date\/Time|Contact|Phone|Email|EMail/i.test(line)
+        )
+            continue;
 
-            if (
-                /Phone|EMail|Email|Contact|Division|Company|Date\/Time/i.test(line)
-            ) {
-                continue;
-            }
+        if (line.length < 5)
+            continue;
 
-            if (line.length < 5)
-                continue;
-
-            extractedName = line;
-            break;
-        }
+        return line;
     }
 }
 

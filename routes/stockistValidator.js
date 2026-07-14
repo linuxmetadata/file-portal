@@ -24,33 +24,46 @@ async function validateStockist(text, dashboardName) {
 
     let extractedName = "";
 
-    // Pattern 1
-    let match = header.match(/Statements?\s+of\s+([A-Za-z0-9&.,()\- ]+)/i);
+// Statements of XXXXX
+let m = header.match(/Statements?\s+of\s+([^\r\n]+)/i);
 
-    if (match) {
-    extractedName = match[1].trim();
-}
-    if (!extractedName) {
+if (m)
+    extractedName = m[1].trim();
 
-    match = header.match(
-        /Product\s+Stock\s+Report\s+([A-Za-z0-9&.,()\- ]+)/i
+
+// Product Stock Report XXXXX
+if (!extractedName) {
+
+    m = header.match(
+        /Product\s+Stock\s+Report\s+([^\r\n]+)/i
     );
 
-    if (match) {
-        extractedName = match[1].trim();
-    }
-
+    if (m)
+        extractedName = m[1].trim();
 }
 
-    if (!extractedName) {
 
-    const firstLine = text
-        .split(/\r?\n/)
-        .find(x => x.trim().length > 3);
+// STOCK AND SALES
+if (!extractedName) {
 
-    if (firstLine)
-        extractedName = firstLine.trim();
+    m = header.match(
+        /STOCK\s+AND\s+SALES\s+([A-Z0-9 .,&()'-]+)/i
+    );
 
+    if (m)
+        extractedName = m[1].trim();
+}
+
+
+// Company Name before Stock & Sales Statement
+if (!extractedName) {
+
+    m = header.match(
+        /^(.+?)\s+Stock\s*&\s*Sales\s+Statement/i
+    );
+
+    if (m)
+        extractedName = m[1].trim();
 }
 
     const normalizedDocument =

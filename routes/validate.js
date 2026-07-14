@@ -469,7 +469,7 @@ return (
 
   const monthDates = [
     ...headerText.matchAll(
-        /From\s*[:\-]*\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s*(\d{1,2})\s*,?\s*(\d{2,4})[\s\S]{0,150}?To\s*[:\-]*\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s*(\d{1,2})\s*,?\s*(\d{2,4})/i
+        /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},\s+\d{4}\b/gi
     )
 ];
 

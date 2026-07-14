@@ -78,6 +78,33 @@ if (!extractedName) {
         extractedName = m[1].trim();
 }
 
+    // Company Name before Saleable Stock Report
+if (!extractedName) {
+
+    m = header.match(
+        /^(.+?)\s+\(From\s+\d{2}[\/-]\d{2}[\/-]\d{4}\s+To\s+\d{2}[\/-]\d{2}[\/-]\d{4}\)\s+Saleable\s+Stock\s+Report/i
+    );
+
+    if (m)
+        extractedName = m[1].trim();
+}
+
+    // Saleable Stock Report
+if (!extractedName) {
+
+    const lines = text
+        .split(/\r?\n/)
+        .map(x => x.trim())
+        .filter(Boolean);
+
+    if (
+        lines.length &&
+        /Saleable Stock Report/i.test(text)
+    ) {
+        extractedName = lines[0];
+    }
+}
+
     const normalizedDocument =
     normalizeName(extractedName);
 

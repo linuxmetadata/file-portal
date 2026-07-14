@@ -261,6 +261,44 @@ function extractStockistName(text = "") {
 
 
 
+    /*----------------------------------------------------
+  CIPLA / Linux Stock & Sales Statement
+-----------------------------------------------------*/
+
+if (/STOCK\s*&\s*SALES\s*STATEMENT/i.test(header)) {
+
+    const lines = header
+        .split(/\r?\n/)
+        .map(removeGarbage)
+        .filter(Boolean);
+
+    const companyIndex = lines.findIndex(x =>
+        /^Company\s*:/i.test(x)
+    );
+
+    if (companyIndex >= 0) {
+
+        for (let i = companyIndex + 1; i < lines.length; i++) {
+
+            const line = lines[i];
+
+            if (/^Division/i.test(line)) continue;
+            if (/^Date/i.test(line)) continue;
+            if (/^Contact/i.test(line)) continue;
+            if (/^EMail/i.test(line)) continue;
+            if (/^Phone/i.test(line)) continue;
+            if (/STOCK\s*&\s*SALES/i.test(line)) break;
+
+            if (
+                line.length > 5 &&
+                /[A-Za-z]/.test(line)
+            ) {
+                return line;
+            }
+        }
+    }
+}
+
     /*--------------------------------------------------
       XXXXX Stock & Sales Statement
     --------------------------------------------------*/

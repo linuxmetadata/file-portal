@@ -154,6 +154,24 @@ function scoreBusinessLine(line = "") {
     if (isCompanyLine(line))
 
         return 0;
+    // Reject table headers / OCR garbage
+    if (
+        /A3MNE/i.test(line) ||
+        /AGEEXP/i.test(line) ||
+        /^SR\s*NO/i.test(line) ||
+        /^PRODUCT\s*NAME/i.test(line) ||
+        /^PACK/i.test(line) ||
+        /^CLSTK/i.test(line) ||
+        /^QTY/i.test(line) ||
+        /^AMOUNT/i.test(line)||
+        /AGEEXP/i.test(line) ||
+        /PACKOPSTK/i.test(line) ||
+        /QTYQTY/i.test(line) ||
+        /CLSTK/i.test(line)
+    ) {
+    return 0;
+}
+
     // Reject column headers
     if (
         /^(FREE|TOTAL|QTY|ORDER|PRODUCT|OPENING|PURCHASE|SALES|CLOSING|STOCK|AMOUNT)$/i.test(line)
@@ -443,6 +461,29 @@ if (/STOCK\s*&\s*SALES\s*STATEMENT/i.test(header)) {
     return removeGarbage(companyMatch[1]);
 }
 
+// Stock Statement (Datewise) layout
+    if (/Stock\s+Statement\s*\(Datewise\)/i.test(header)) {
+
+    const lines = header
+        .split(/\r?\n/)
+        .map(removeGarbage)
+        .filter(Boolean);
+
+    for (let i = 0; i < lines.length; i++) {
+
+        if (/Stock\s+Statement/i.test(lines[i])) {
+
+            for (let j = i - 1; j >= 0 && j >= i - 8; j--) {
+
+                const line = lines[j];
+
+                if (scoreBusinessLine(line) > 50) {
+                    return line;
+                }
+            }
+        }
+    }
+}
     /*--------------------------------------------------
       Generic PDF / Excel fallback
     --------------------------------------------------*/

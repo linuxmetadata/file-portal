@@ -115,7 +115,7 @@ function isCompanyLine(line = "") {
     /LABORATORIES/i.test(line) ||
     /DIVISION/i.test(line) ||
     /SUPPLIER/i.test(line) ||
-    /COMPANY/i.test(line) ||
+    /^Company\s*:/i.test(line) ||
     /MFG/i.test(line) ||
     /ABOUT:BLANK/i.test(line) ||
     /AUTHORIZED/i.test(line) ||
@@ -136,8 +136,23 @@ function scoreBusinessLine(line = "") {
 
         return 0;
 
+    // Reject product names immediately
+    if (
+        /\b(VYSOV|TRIEXER|EBERNET|TABLET|TABLETS|TAB|CAPSULE|CAPSULES|CREAM|LOTION|SYRUP|INJECTION|MG|ML|GM)\b/i.test(line)
+    ) {
+    return 0;
+    }
+
     if (isCompanyLine(line))
 
+        return 0;
+    if (/^FOR\b/i.test(line))
+        return 0;
+
+    if (/AUTHORISED SIGNATORY/i.test(line))
+        return 0;
+
+    if (/AUTHORIZED SIGNATORY/i.test(line))
         return 0;
 
     let score = 0;
@@ -204,25 +219,25 @@ function scoreBusinessLine(line = "") {
 
 
     if (/PVT/i.test(line))
-    score += 15;
+        score += 15;
 
     if (/LTD/i.test(line))
-    score += 15;
+        score += 15;
 
     if (/LIMITED/i.test(line))
-    score += 15;
+        score += 15;
 
     if (/PRIVATE/i.test(line))
-    score += 15;
+        score += 15;
 
     if (/AGENCY/i.test(line))
-    score += 25;
+        score += 25;
 
     if (/MEDICAL/i.test(line))
-    score += 25;
+        score += 25;
 
     if (/PHARMA/i.test(line))
-    score += 25;
+        score += 25;
     
     return score;
 
@@ -323,7 +338,7 @@ if (/STOCK\s*&\s*SALES\s*STATEMENT/i.test(header)) {
         let best = "";
         let bestScore = 0;
 
-        for (const line of lines) {
+        for (const line of lines.slice(0, 20)) {
 
             const score = scoreBusinessLine(line);
 
@@ -389,7 +404,7 @@ if (/STOCK\s*&\s*SALES\s*STATEMENT/i.test(header)) {
     let best = "";
     let bestScore = 0;
 
-    for (const line of lines) {
+    for (const line of lines.slice(0, 25)) {
 
         const score = scoreBusinessLine(line);
 

@@ -335,6 +335,14 @@ function isValidPreviousMonth(text) {
 
   const headerText = normalizedText;
 
+  const searchText = headerText
+
+  .replace(/([A-Za-z])From:/g,"$1 From:")
+  .replace(/([A-Za-z])From/g,"$1 From")
+  .replace(/([A-Za-z])To:/g,"$1 To:")
+  .replace(/([A-Za-z])To/g,"$1 To")
+  .replace(/\s+/g," ");
+
   console.log("TEXT LENGTH:", normalizedText.length);
   console.log(
   "VALIDATOR INPUT PREVIEW:",
@@ -523,12 +531,11 @@ return (
 
 console.log("CHECKING MONTH FIRST DATE RANGE");
 
-const monthFirstRange =
-headerText.match(
-/from\s*:?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+(\d{1,2}),?\s*(\d{2,4}).*?to\s*:?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+(\d{1,2}),?\s*(\d{2,4})/i
+const monthFirstRange = headerText.match(
+/From\s*[:-]?\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s*(\d{1,2})\s*,?\s*(\d{2,4})[\s\S]{0,100}?To\s*[:-]?\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s*(\d{1,2})\s*,?\s*(\d{2,4})/i
 );
 
-console.log("MONTH FIRST RANGE:", monthFirstRange);
+console.log(monthFirstRange);
 
 if (monthFirstRange) {
 

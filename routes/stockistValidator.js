@@ -42,9 +42,12 @@ function cleanBusinessName(name = "") {
         .replace(/\bSTORES\b/g,"")
         .replace(/\bCHEMIST\b/g,"")
         .replace(/\bDRUGS\b/g,"")
+        .replace(/\bPRIVATE\b/g, "PVT")
+        .replace(/\bLIMITED\b/g, "LTD")
+        .replace(/\bPVT\s+LTD\b/g, "PVT LTD")
 
         .replace(/\s+/g," ")
-
+        .replace(/\s*-\s*[A-Z ]+$/,"")
         .trim();
 
 }
@@ -122,6 +125,41 @@ function extractStockistName(text = "") {
 
     }
 
+    // ======================================================
+// Company Name above Address (CIPLA format)
+// ======================================================
+
+if (!extractedName) {
+
+    const lines = text
+        .split(/\r?\n/)
+        .map(x => x.trim())
+        .filter(Boolean);
+
+    const idx = lines.findIndex(x =>
+        /STOCK\s*&\s*SALES\s*STATEMENT/i.test(x)
+    );
+
+    if (idx > 0) {
+
+        for (let i = idx - 1; i >= 0; i--) {
+
+            const line = lines[i];
+
+            if (
+                /Phone|EMail|Email|Contact|Division|Company|Date\/Time/i.test(line)
+            ) {
+                continue;
+            }
+
+            if (line.length < 5)
+                continue;
+
+            extractedName = line;
+            break;
+        }
+    }
+}
 
 
     /*----------------------------------------------------

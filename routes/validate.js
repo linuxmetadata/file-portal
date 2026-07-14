@@ -1899,6 +1899,9 @@ console.log("================================");
 console.log("STOCKIST FROM REQUEST:", req.body.stockistName);
 console.log("================================");
 
+// Get the stockist name from the request
+const dashboardName = req.body.stockistName || "";
+
 const stockistResult =
     await validateStockist(text, dashboardName);
 

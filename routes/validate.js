@@ -1892,33 +1892,27 @@ router.post(
       }
 
 /* =========================
-  STOCKIST VALIDATION
+   STOCKIST VALIDATION
 ========================= */
-  console.log("================================");
-  console.log("STOCKIST FROM REQUEST:", req.body.stockistName);
-  console.log("================================");
-  
-  const stockistResult =
-    await validateStockist(
-        text,
-        req.body.stockistName
-    );
 
-  console.log(
-    "STOCKIST RESULT:",
-    stockistResult
-);
+console.log("================================");
+console.log("STOCKIST FROM REQUEST:", req.body.stockistName);
+console.log("================================");
 
-  if (!stockistResult.valid) {
+const stockistResult =
+    await validateStockist(text, dashboardName);
+
+console.log("STOCKIST RESULT:", stockistResult);
+
+if (!stockistResult || !stockistResult.valid) {
 
     if (fs.existsSync(file.path)) {
         fs.unlinkSync(file.path);
     }
 
     return res.status(400).json({
-        error: stockistResult.reason
+        error: stockistResult?.reason || "INVALID STOCKIST NAME"
     });
-
 }
       /* CLEAN TEMP FILE */
 

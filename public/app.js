@@ -353,6 +353,15 @@ function chooseFile(code, type) {
 
     form.append("file", file);
 
+    const row = fullData.find(
+    r => String(r.code) === String(code)
+  );
+
+  form.append(
+    "stockistName",
+    row ? row.name : ""
+);
+
     const validateRes = await fetch("/validate", {
       method: "POST",
       body: form
@@ -673,8 +682,8 @@ async function submitFile(btn) {
       form.append("type", currentPreviewType);
 
       const row = fullData.find(
-      r => String(r.code) === String(currentPreviewCode)
-    );
+        r => String(r.code) === String(currentPreviewCode)
+      );
 
     form.append(
       "stockistName",

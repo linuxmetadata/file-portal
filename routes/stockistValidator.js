@@ -1,10 +1,151 @@
 function normalizeName(name = "") {
+
     return name
         .toUpperCase()
-        .replace(/AGENCIES/g, "AGENCY")
-        .replace(/&/g, "AND")
-        .replace(/\b(M\/S|MS|MESSRS)\b/g, "")
-        .replace(/[^A-Z0-9]/g, "");
+
+        .replace(/&/g, " AND ")
+
+        .replace(/\bM\/S\b/g, "")
+        .replace(/\bMS\b/g, "")
+        .replace(/\bMESSRS\b/g, "")
+
+        .replace(/\bSHREE\b/g, "SHRI")
+        .replace(/\bSRI\b/g, "SHRI")
+
+        .replace(/\bAGENCIES\b/g, "AGENCY")
+        .replace(/\bDISTRIBUTORS\b/g, "DISTRIBUTOR")
+        .replace(/\bMEDICALS\b/g, "MEDICAL")
+        .replace(/\bPHARMACEUTICALS\b/g, "PHARMA")
+        .replace(/\bPHARMACY\b/g, "PHARMA")
+
+        .replace(/[^A-Z0-9 ]/g, " ")
+
+        .replace(/\s+/g, " ")
+
+        .trim();
+
+}
+function cleanBusinessName(name = "") {
+
+    return normalizeName(name)
+
+        .replace(/^SHRI\s+/,"")
+
+        .replace(/\bAGENCY\b/g,"")
+        .replace(/\bDISTRIBUTOR\b/g,"")
+        .replace(/\bMEDICAL\b/g,"")
+        .replace(/\bPHARMA\b/g,"")
+        .replace(/\bENTERPRISE\b/g,"")
+        .replace(/\bENTERPRISES\b/g,"")
+        .replace(/\bTRADERS\b/g,"")
+        .replace(/\bSTORE\b/g,"")
+        .replace(/\bSTORES\b/g,"")
+        .replace(/\bCHEMIST\b/g,"")
+        .replace(/\bDRUGS\b/g,"")
+
+        .replace(/\s+/g," ")
+
+        .trim();
+
+}
+function extractStockistName(text = "") {
+
+    const header = text
+        .replace(/\r/g, "\n")
+        .replace(/\t/g, " ")
+        .replace(/[ ]+/g, " ")
+        .substring(0, 2500);
+
+    let m;
+
+    /*----------------------------------------------------
+      Statements of XXXXX
+    -----------------------------------------------------*/
+    m = header.match(/Statements?\s+of\s+([^\n]+)/i);
+
+    if (m)
+        return m[1].trim();
+
+
+
+    /*----------------------------------------------------
+      Product Stock Report XXXXX
+    -----------------------------------------------------*/
+    m = header.match(/Product\s+Stock\s+Report\s+([^\n]+)/i);
+
+    if (m)
+        return m[1].trim();
+
+
+
+    /*----------------------------------------------------
+      XXXXX Stock & Sales Statement
+    -----------------------------------------------------*/
+    m = header.match(/^(.+?)\s+Stock\s*&\s*Sales\s+Statement/im);
+
+    if (m)
+        return m[1].trim();
+
+
+
+    /*----------------------------------------------------
+      Saleable Stock Report
+      (Company name is first line)
+    -----------------------------------------------------*/
+    if (/Saleable\s+Stock\s+Report/i.test(header)) {
+
+        const lines = header
+            .split(/\n/)
+            .map(x => x.trim())
+            .filter(Boolean);
+
+        if (lines.length)
+            return lines[0];
+
+    }
+
+
+
+    /*----------------------------------------------------
+      Stock Statement (Datewise)
+      (First line is stockist)
+    -----------------------------------------------------*/
+    if (/Stock\s+Statement/i.test(header)) {
+
+        const lines = header
+            .split(/\n/)
+            .map(x => x.trim())
+            .filter(Boolean);
+
+        if (lines.length)
+            return lines[0];
+
+    }
+
+
+
+    /*----------------------------------------------------
+      Product Stock Report
+      MFG Company...
+      Company is previous line
+    -----------------------------------------------------*/
+    const lines = header
+        .split(/\n/)
+        .map(x => x.trim())
+        .filter(Boolean);
+
+    for (let i = 1; i < lines.length; i++) {
+
+        if (/MFG\s+Company/i.test(lines[i])) {
+
+            return lines[i - 1];
+
+        }
+
+    }
+
+    return "";
+
 }
 async function validateStockist(text, dashboardName) {
 
@@ -14,128 +155,152 @@ async function validateStockist(text, dashboardName) {
 
     console.log("Dashboard Name :", dashboardName);
 
-    const header = text
-        .replace(/\r/g, " ")
-        .replace(/\n/g, " ")
-        .replace(/\s+/g, " ")
-        .substring(0, 2000);
+    let extractedName = extractStockistName(text);
 
-    console.log("HEADER:");
-    console.log(header);
-
-    let extractedName = "";
-
-// Statements of XXXXX
-let m = header.match(/Statements?\s+of\s+([^\r\n]+)/i);
-
-if (m)
-    extractedName = m[1].trim();
-
-
-// Product Stock Report XXXXX
 if (!extractedName) {
 
-    m = header.match(
-        /Product\s+Stock\s+Report\s+([^\r\n]+)/i
-    );
+    console.log("Trying Fallback...");
 
-    if (m)
-        extractedName = m[1].trim();
+    extractedName = fallbackExtract(text);
+
 }
 
+    console.log("Extracted :", extractedName);
 
-// STOCK AND SALES
-if (!extractedName) {
+    if (!extractedName) {
 
-    m = header.match(
-        /STOCK\s+AND\s+SALES\s+([A-Z0-9 .,&()'-]+)/i
-    );
+        console.log("❌ Unable to extract stockist name.");
 
-    if (m)
-        extractedName = m[1].trim();
+        return {
+
+            valid: false,
+
+            reason: "STOCKIST NAME NOT FOUND",
+
+            extractedName: "",
+
+            dashboardName,
+
+            normalizedDocument: "",
+
+            normalizedDashboard: ""
+
+        };
+
+    }
+
+    const normalizedDocument =
+        normalizeName(extractedName);
+
+    const normalizedDashboard =
+        normalizeName(dashboardName);
+
+    const documentClean =
+        cleanBusinessName(extractedName);
+
+    const dashboardClean =
+        cleanBusinessName(dashboardName);
+
+    const documentCompact =
+        documentClean.replace(/\s/g, "");
+
+    const dashboardCompact =
+        dashboardClean.replace(/\s/g, "");
+
+    let valid = false;
+
+if (documentCompact && dashboardCompact) {
+
+    valid =
+        documentCompact.includes(dashboardCompact) ||
+        dashboardCompact.includes(documentCompact);
+
 }
 
+/* Second chance */
 
-// Company Name before Stock & Sales Statement
-if (!extractedName) {
+if (!valid) {
 
-    m = header.match(
-        /^(.+?)\s+Stock\s*&\s*Sales\s+Statement/i
-    );
+    const docWords = documentClean.split(" ");
+    const dashWords = dashboardClean.split(" ");
 
-    if (m)
-        extractedName = m[1].trim();
+    let matched = 0;
+
+    dashWords.forEach(w => {
+
+        if (docWords.includes(w))
+            matched++;
+
+    });
+
+    if (matched >= Math.min(2, dashWords.length)) {
+
+        valid = true;
+
+    }
+
 }
 
-    // Company Name before Stock Statement
-if (!extractedName) {
+    console.log("Normalized Document :", normalizedDocument);
+    console.log("Normalized Dashboard :", normalizedDashboard);
 
-    m = header.match(
-        /^(.+?)\s+Stock\s+Statement/i
-    );
+    console.log("Document Clean :", documentClean);
+    console.log("Dashboard Clean :", dashboardClean);
 
-    if (m)
-        extractedName = m[1].trim();
+    console.log("Document Compact :", documentCompact);
+    console.log("Dashboard Compact :", dashboardCompact);
+
+    console.log("VALID :", valid);
+
+    return {
+
+        valid,
+
+        reason: valid ? "" : "INVALID STOCKIST NAME",
+
+        extractedName,
+
+        dashboardName,
+
+        normalizedDocument,
+
+        normalizedDashboard
+
+    };
+
 }
-
-    // Company Name before Saleable Stock Report
-if (!extractedName) {
-
-    m = header.match(
-        /^(.+?)\s+\(From\s+\d{2}[\/-]\d{2}[\/-]\d{4}\s+To\s+\d{2}[\/-]\d{2}[\/-]\d{4}\)\s+Saleable\s+Stock\s+Report/i
-    );
-
-    if (m)
-        extractedName = m[1].trim();
-}
-
-    // Saleable Stock Report
-if (!extractedName) {
+function fallbackExtract(text = "") {
 
     const lines = text
         .split(/\r?\n/)
         .map(x => x.trim())
         .filter(Boolean);
 
-    if (
-        lines.length &&
-        /Saleable Stock Report/i.test(text)
-    ) {
-        extractedName = lines[0];
+    for (let line of lines.slice(0, 15)) {
+
+        if (
+            /Company/i.test(line) ||
+            /Run Date/i.test(line) ||
+            /From\s*:/i.test(line) ||
+            /To\s*:/i.test(line) ||
+            /Statement/i.test(line) ||
+            /Product/i.test(line)
+        ) {
+            continue;
+        }
+
+        if (
+            line.length > 4 &&
+            line.length < 80 &&
+            /[A-Za-z]/.test(line)
+        ) {
+            return line;
+        }
     }
-}
 
-    const normalizedDocument =
-    normalizeName(extractedName);
-
-    const normalizedDashboard =
-    normalizeName(dashboardName);
-
-    let valid = false;
-
-    if (normalizedDocument && normalizedDashboard) {
-
-    valid =
-        normalizedDocument.includes(normalizedDashboard) ||
-        normalizedDashboard.includes(normalizedDocument);
+    return "";
 
 }
-
-    console.log("Extracted :", extractedName);
-    console.log("Normalized Document :", normalizedDocument);
-    console.log("Normalized Dashboard :", normalizedDashboard);
-    console.log("VALID :", valid);
-
-    return {
-        valid,
-        reason: valid ? "" : "INVALID STOCKIST NAME",
-        extractedName,
-        dashboardName,
-        normalizedDocument,
-        normalizedDashboard
-    };
-}
-
 module.exports = {
     validateStockist
 };

@@ -469,7 +469,7 @@ return (
 
   const monthDates = [
     ...headerText.matchAll(
-        /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},\s+\d{4}\b/gi
+        /From\s*[:\-]*\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s*(\d{1,2})\s*,?\s*(\d{2,4})[\s\S]{0,150}?To\s*[:\-]*\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s*(\d{1,2})\s*,?\s*(\d{2,4})/i
     )
 ];
 
@@ -483,12 +483,7 @@ return (
     console.log("START:", startDate);
     console.log("END:", endDate);
 
-    if (
-        startDate.getMonth() + 1 === expectedMonth &&
-        startDate.getFullYear() === expectedYear &&
-        endDate.getMonth() + 1 === expectedMonth &&
-        endDate.getFullYear() === expectedYear
-    ) {
+    if (ok(startDate, endDate)) {
 
         console.log("Matched : Month First Dates");
 

@@ -136,6 +136,14 @@ function scoreBusinessLine(line = "") {
 
         return 0;
 
+    // Reject page numbers like 1/1, 2/3 etc.
+    if (/^\d+\s*\/\s*\d+$/.test(line))
+        return 0;
+
+    // Reject lines containing only numbers/slashes
+    if (/^[0-9\s\/().-]+$/.test(line))
+        return 0;
+
     // Reject product names immediately
     if (
         /\b(VYSOV|TRIEXER|EBERNET|TABLET|TABLETS|TAB|CAPSULE|CAPSULES|CREAM|LOTION|SYRUP|INJECTION|MG|ML|GM)\b/i.test(line)
@@ -263,6 +271,17 @@ function scoreBusinessLine(line = "") {
 
     if (/\bCHEMIST/i.test(line))
         score += 40;
+
+    if (
+    /ROAD/i.test(line) ||
+    /STREET/i.test(line) ||
+    /NAGAR/i.test(line) ||
+    /HOSPITAL/i.test(line) ||
+    /SHAHPORE/i.test(line) ||
+    /AWAS/i.test(line) ||
+    /RAJKOT/i.test(line)
+)
+    return 0;
     
     return score;
 
@@ -416,6 +435,13 @@ if (/STOCK\s*&\s*SALES\s*STATEMENT/i.test(header)) {
     }
 
 
+    const companyMatch = header.match(
+    /(?:^|\n)([A-Z][A-Z0-9 .,&()'-]{8,}(?:MEDICAL|CHEMIST|PHARMA|AGENCY|AGENCIES|DISTRIBUTOR|DISTRIBUTORS)[A-Z0-9 .,&()'-]*)(?=\n|$)/im
+    );
+
+    if (companyMatch) {
+    return removeGarbage(companyMatch[1]);
+}
 
     /*--------------------------------------------------
       Generic PDF / Excel fallback

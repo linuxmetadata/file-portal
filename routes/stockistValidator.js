@@ -146,6 +146,22 @@ function scoreBusinessLine(line = "") {
     if (isCompanyLine(line))
 
         return 0;
+    // Reject column headers
+    if (
+        /^(FREE|TOTAL|QTY|ORDER|PRODUCT|OPENING|PURCHASE|SALES|CLOSING|STOCK|AMOUNT)$/i.test(line)
+    ) {
+        return 0;
+    }
+
+    if (
+        /PRODUCTOPENINGPURCHASE/i.test(line) ||
+        /TOTALSALESSALES/i.test(line) ||
+        /SALESRET/i.test(line) ||
+        /SHORTAGE/i.test(line)
+        ) {
+        return 0;
+    }
+
     if (/^FOR\b/i.test(line))
         return 0;
 
@@ -238,6 +254,15 @@ function scoreBusinessLine(line = "") {
 
     if (/PHARMA/i.test(line))
         score += 25;
+
+    if (/\bAND\b/i.test(line))
+    score += 10;
+
+    if (/\bDISTRIBUTOR/i.test(line))
+        score += 40;
+
+    if (/\bCHEMIST/i.test(line))
+        score += 40;
     
     return score;
 

@@ -136,7 +136,7 @@ const lines = text
     .map(x => x.trim())
     .filter(Boolean);
 
-const idx = lines.findIndex(x =>
+const idx = pdfLines.findIndex(x =>
     /STOCK\s*&\s*SALES\s*STATEMENT/i.test(x)
 );
 
@@ -144,7 +144,7 @@ if (idx > 0) {
 
     for (let i = idx - 1; i >= 0; i--) {
 
-        const line = lines[i];
+        const line = pdfLines[i];
 
         if (
             /Company|Division|Date\/Time|Contact|Phone|Email|EMail/i.test(line)
@@ -165,7 +165,7 @@ if (idx > 0) {
       Company is previous line
     -----------------------------------------------------*/
     const lines = header
-        .split(/\n/)
+        .split(/\r?\n/)
         .map(x => x.trim())
         .filter(Boolean);
 

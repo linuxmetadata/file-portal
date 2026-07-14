@@ -1,6 +1,7 @@
 function normalizeName(name = "") {
     return name
         .toUpperCase()
+        .replace(/AGENCIES/g, "AGENCY")
         .replace(/&/g, "AND")
         .replace(/\b(M\/S|MS|MESSRS)\b/g, "")
         .replace(/[^A-Z0-9]/g, "");
@@ -77,23 +78,18 @@ if (!extractedName) {
     normalizedDashboard.includes(normalizedDocument);
 
     console.log("Extracted :", extractedName);
-
     console.log("Normalized Document :", normalizedDocument);
-
     console.log("Normalized Dashboard :", normalizedDashboard);
-
     console.log("VALID :", valid);
 
-    function normalizeName(name = "") {
-
-    return name
-        .toUpperCase()
-        .replace(/AGENCIES/g, "AGENCY")
-        .replace(/&/g, "AND")
-        .replace(/\b(M\/S|MS|MESSRS)\b/g, "")
-        .replace(/[^A-Z0-9]/g, "");
-
-    }
+    return {
+        valid,
+        reason: valid ? "" : "INVALID STOCKIST NAME",
+        extractedName,
+        dashboardName,
+        normalizedDocument,
+        normalizedDashboard
+    };
 }
 
 module.exports = {

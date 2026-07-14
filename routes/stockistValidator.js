@@ -67,15 +67,32 @@ if (!extractedName) {
         extractedName = m[1].trim();
 }
 
+    // Company Name before Stock Statement
+if (!extractedName) {
+
+    m = header.match(
+        /^(.+?)\s+Stock\s+Statement/i
+    );
+
+    if (m)
+        extractedName = m[1].trim();
+}
+
     const normalizedDocument =
     normalizeName(extractedName);
 
     const normalizedDashboard =
     normalizeName(dashboardName);
 
-    const valid =
-    normalizedDocument.includes(normalizedDashboard) ||
-    normalizedDashboard.includes(normalizedDocument);
+    let valid = false;
+
+    if (normalizedDocument && normalizedDashboard) {
+
+    valid =
+        normalizedDocument.includes(normalizedDashboard) ||
+        normalizedDashboard.includes(normalizedDocument);
+
+}
 
     console.log("Extracted :", extractedName);
     console.log("Normalized Document :", normalizedDocument);

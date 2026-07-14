@@ -465,64 +465,36 @@ return (
      FROM DD-MON-YY TO DD-MON-YY
   ========================= */
 
-  console.log(
-  "CHECKING MONTH NAME RANGE",
-  headerText.substring(0,1000)
-);
+  console.log("CHECKING MONTH FIRST DATE RANGE");
 
-  const monthNameRangeMatch =
-    text.match(
-      /from\s*:?\s*(\d{1,2})[-\/ ](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[-\/ ](\d{2,4}).*?to\s*:?\s*(\d{1,2})[-\/ ](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[-\/ ](\d{2,4})/i
-    );
+  const monthDates = [
+    ...headerText.matchAll(
+        /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},\s+\d{4}\b/gi
+    )
+];
 
-    console.log(
-    "MONTH NAME RANGE MATCH:",
-    monthNameRangeMatch
-  );
+  console.log("MONTH FIRST DATES:", monthDates.map(x => x[0]));
 
-  if (monthNameRangeMatch) {
+  if (monthDates.length >= 2) {
 
-    console.log("Matched : Month Name Range");
+    const startDate = new Date(monthDates[0][0]);
+    const endDate = new Date(monthDates[1][0]);
 
-    let startYear = parseInt(monthNameRangeMatch[3]);
-    let endYear = parseInt(monthNameRangeMatch[6]);
+    console.log("START:", startDate);
+    console.log("END:", endDate);
 
-    if (startYear < 100) startYear += 2000;
-    if (endYear < 100) endYear += 2000;
+    if (
+        startDate.getMonth() + 1 === expectedMonth &&
+        startDate.getFullYear() === expectedYear &&
+        endDate.getMonth() + 1 === expectedMonth &&
+        endDate.getFullYear() === expectedYear
+    ) {
 
-    const startDate =
-      new Date(
-        startYear,
-        monthMap[
-          monthNameRangeMatch[2]
-            .substring(0,3)
-            .toLowerCase()
-        ],
-        parseInt(monthNameRangeMatch[1])
-      );
+        console.log("Matched : Month First Dates");
 
-    const endDate =
-      new Date(
-        endYear,
-        monthMap[
-          monthNameRangeMatch[5]
-            .substring(0,3)
-            .toLowerCase()
-        ],
-        parseInt(monthNameRangeMatch[4])
-      );
-
-    if (ok(startDate,endDate)) {
-
-      console.log("Month Name validation passed");
-
-      return true;
-
+        return true;
     }
-
-    console.log("Month Name validation failed");
-
-  }
+}
 
 
   /* =========================

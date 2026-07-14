@@ -136,6 +136,38 @@ function scoreBusinessLine(line = "") {
 
         return 0;
 
+    // Reject report labels / totals / table headers
+if (
+    /^TOTAL:?$/i.test(line) ||
+    /^APPEXP:?$/i.test(line) ||
+    /^BILLS:?$/i.test(line) ||
+    /^O\/S:?$/i.test(line) ||
+    /^PENDING\s+CLAIM:?$/i.test(line) ||
+    /^AUTHORIZED\s+SIGNATORY$/i.test(line) ||
+    /^AUTHORISED\s+SIGNATORY$/i.test(line) ||
+    /^FREE$/i.test(line) ||
+    /^QTY$/i.test(line) ||
+    /^AMOUNT$/i.test(line)
+) {
+    return 0;
+}
+    // Reject lines ending with :
+    if (/:$/.test(line))
+        return 0;
+    
+    // Reject numeric lines
+    if (/^[0-9.,/-]+$/.test(line))
+        return 0;
+
+    // Reject product names
+if (
+    /^VYSOV/i.test(line) ||
+    /^TRIEXER/i.test(line) ||
+    /^REXITE/i.test(line) ||
+    /^EBERNET/i.test(line)
+)
+    return 0;
+
     // Reject page numbers like 1/1, 2/3 etc.
     if (/^\d+\s*\/\s*\d+$/.test(line))
         return 0;
@@ -301,6 +333,12 @@ function scoreBusinessLine(line = "") {
 )
     return 0;
     
+    if (/DISTRIBUTOR|AGENCY|MEDICAL|CHEMIST|PHARMA|ENTERPRISE/i.test(line))
+        score += 100;
+
+    if (/PRIVATE|LIMITED|PVT|LTD/i.test(line))
+        score += 40;
+
     return score;
 
 }

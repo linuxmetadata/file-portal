@@ -84,13 +84,16 @@ if (!extractedName) {
 
     console.log("VALID :", valid);
 
-    return {
-        valid,
-        dashboardName,
-        extractedName,
-        normalizedDashboard,
-        normalizedDocument
-    };
+    function normalizeName(name = "") {
+
+    return name
+        .toUpperCase()
+        .replace(/AGENCIES/g, "AGENCY")
+        .replace(/&/g, "AND")
+        .replace(/\b(M\/S|MS|MESSRS)\b/g, "")
+        .replace(/[^A-Z0-9]/g, "");
+
+    }
 }
 
 module.exports = {

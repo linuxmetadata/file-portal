@@ -1958,6 +1958,10 @@ router.post(
             );
           }
 
+          console.log("PDF PARSE ERROR:");
+          console.log(err);
+          console.log(err.message);
+
           return res
             .status(400)
             .json({

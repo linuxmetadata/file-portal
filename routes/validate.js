@@ -76,12 +76,21 @@ async function extractText(filePath, ext) {
 
     if (ext === "pdf") {
 
-      const buffer = fs.readFileSync(filePath);
+    try {
 
-      const data = await pdfParse(buffer);
+        const buffer = fs.readFileSync(filePath);
 
-      return data.text || "";
+        const data = await pdfParse(buffer);
+
+        return data.text || "";
+
+    } catch (err) {
+
+        console.log("PDF parser failed in extractText:", err.message);
+
+        return "";
     }
+}
 
     if (ext === "xlsx" || ext === "xls") {
 
@@ -1948,28 +1957,14 @@ router.post(
 
         } catch (err) {
 
-          if (
-            fs.existsSync(
-              file.path
-            )
-          ) {
-            fs.unlinkSync(
-              file.path
-            );
-          }
+    console.log("Primary PDF parser failed.");
+    console.log(err.message);
 
-          console.log("PDF PARSE ERROR:");
-          console.log(err);
-          console.log(err.message);
+    // Don't reject here.
+    // Let extractText() try to read the PDF.
 
-          return res
-            .status(400)
-            .json({
-              error:
-                "INVALID PDF"
-            });
-        }
-      }
+    }
+  }
 
       /* =========================
          PERIOD VALIDATION

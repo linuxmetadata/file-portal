@@ -522,6 +522,42 @@ if (/STOCK\s*&\s*SALES\s*STATEMENT/i.test(header)) {
         }
     }
 }
+/*--------------------------------------------------
+  STOCK & SALES ANALYSIS
+--------------------------------------------------*/
+
+if (/STOCK\s*&\s*SALES\s+ANALYSIS/i.test(header)) {
+
+    const lines = header
+        .split(/\r?\n/)
+        .map(removeGarbage)
+        .filter(Boolean);
+
+    const reportIndex = lines.findIndex(line =>
+        /STOCK\s*&\s*SALES\s+ANALYSIS/i.test(line)
+    );
+
+    if (reportIndex > 0) {
+
+        let best = "";
+        let bestScore = 0;
+
+        for (let i = reportIndex - 1; i >= 0 && i >= reportIndex - 6; i--) {
+
+        const line = lines[i];
+        const score = scoreBusinessLine(line);
+
+        if (score > bestScore) {
+        bestScore = score;
+        best = line;
+    }
+}
+
+    if (best) {
+    return best;
+    }
+    }
+}
     /*--------------------------------------------------
       Generic PDF / Excel fallback
     --------------------------------------------------*/

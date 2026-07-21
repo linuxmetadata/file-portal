@@ -1678,6 +1678,61 @@ if (dateMatch) {
 }
 
 /* =========================
+   UNIVERSAL FROM TO VALIDATION
+========================= */
+
+console.log("CHECKING UNIVERSAL FROM-TO");
+
+const universalMatch = headerText.match(
+/From\s*:?\s*(\d{1,2})[-\/ ](Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|\d{1,2})[-\/ ](\d{2,4})[\s\S]{0,80}?To\s*:?\s*(\d{1,2})[-\/ ](Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|\d{1,2})[-\/ ](\d{2,4})/i
+);
+
+console.log("UNIVERSAL MATCH:", universalMatch);
+
+if (universalMatch) {
+
+    const monthLookup = {
+        jan:1,feb:2,mar:3,apr:4,may:5,jun:6,
+        jul:7,aug:8,sep:9,oct:10,nov:11,dec:12
+    };
+
+    let startMonth = universalMatch[2];
+
+    if (isNaN(startMonth)) {
+        startMonth =
+            monthLookup[
+                startMonth.substring(0,3).toLowerCase()
+            ];
+    } else {
+        startMonth = parseInt(startMonth);
+    }
+
+    let startYear = parseInt(universalMatch[3]);
+
+    if (startYear < 100)
+        startYear += 2000;
+
+    console.log(
+        "UNIVERSAL MONTH:",
+        startMonth,
+        "YEAR:",
+        startYear
+    );
+
+    if (
+        startMonth === month &&
+        startYear === year
+    ) {
+
+        console.log("UNIVERSAL FROM-TO PASSED");
+
+        return true;
+    }
+
+    console.log("UNIVERSAL FROM-TO FAILED");
+}
+
+/* =========================
    FINAL DATE FALLBACK
 ========================= */
 

@@ -1733,6 +1733,44 @@ if (universalMatch) {
 }
 
 /* =========================
+   STOCK N SALES STATUS
+========================= */
+
+console.log("CHECKING STOCK N SALES STATUS");
+
+const statusMatch = headerText.match(
+/Stock\s*N\s*Sales\s*Status\s*[-:]?\s*['"]?(\d{1,2})-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d{2,4})['"]?\s*to\s*['"]?(\d{1,2})-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d{2,4})/i
+);
+
+console.log("STATUS MATCH:", statusMatch);
+
+if (statusMatch) {
+
+    let fileYear = parseInt(statusMatch[3]);
+    if (fileYear < 100) fileYear += 2000;
+
+    const fileMonth =
+        monthMap[
+            statusMatch[2].substring(0,3).toLowerCase()
+        ];
+
+    console.log("MONTH:", fileMonth);
+    console.log("YEAR:", fileYear);
+
+    if (
+        fileMonth === (month - 1) &&
+        fileYear === year
+    ) {
+
+        console.log("STOCK N SALES STATUS PASSED");
+
+        return true;
+    }
+
+    console.log("STOCK N SALES STATUS FAILED");
+}
+
+/* =========================
    FINAL DATE FALLBACK
 ========================= */
 

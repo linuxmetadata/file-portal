@@ -604,6 +604,17 @@ if (linuxHeaderMatch) {
     }
 }
 /*--------------------------------------------------
+  LINUX PDF - STOCK & SALES ANALYSIS
+--------------------------------------------------*/
+
+m = header.match(
+    /^(.+?)\s+SHOP\s+NO.*?STOCK\s*&\s*SALES\s+ANALYSIS/i
+);
+
+if (m) {
+    return removeGarbage(m[1]);
+}
+/*--------------------------------------------------
   STOCK & SALES ANALYSIS
 --------------------------------------------------*/
 

@@ -376,6 +376,23 @@ function extractStockistName(text = "") {
 
 
 
+    /* =========================
+   LINUX XLS HEADER FORMAT
+========================= */
+
+const linuxXlsHeader = text.match(
+/^\s*([A-Z0-9&.,()'\/ -]{5,})[\s,"]*\n(?:.*\n){0,6}?LINUX\s+LABORATOR(?:IES|ITRIES)\s+STOCK\s*&?\s*SALES\s*STATEMENT/i
+);
+
+if (linuxXlsHeader) {
+
+    console.log("MATCHED LINUX XLS HEADER");
+
+    return linuxXlsHeader[1]
+        .replace(/[,"]+/g,"")
+        .trim();
+}
+
     /*----------------------------------------------------
   CIPLA / Linux Stock & Sales Statement
 -----------------------------------------------------*/

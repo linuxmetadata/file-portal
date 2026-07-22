@@ -812,23 +812,22 @@ async function validateStockist(text, dashboardName) {
 
     }
 
-    const normalizedDocument =
-        normalizeName(extractedName);
+    // ===== FIRST TRY (Original Names) =====
 
-    const normalizedDashboard =
-        normalizeName(dashboardName);
-
-    const documentClean =
+    let documentClean =
         cleanBusinessName(extractedName);
 
-    const dashboardClean =
+    let dashboardClean =
         cleanBusinessName(dashboardName);
 
-    const documentCompact =
+    let documentCompact =
         documentClean.replace(/\s/g, "");
 
-    const dashboardCompact =
+    let dashboardCompact =
         dashboardClean.replace(/\s/g, "");
+
+    let normalizedDocument = extractedName;
+    let normalizedDashboard = dashboardName;
 
     let valid = false;
 
@@ -873,7 +872,47 @@ async function validateStockist(text, dashboardName) {
             valid = true;
 
     }
+// ===== SECOND TRY (Normalized Names) =====
 
+if (!valid) {
+
+    normalizedDocument = normalizeName(extractedName);
+    normalizedDashboard = normalizeName(dashboardName);
+
+    documentClean = cleanBusinessName(normalizedDocument);
+    dashboardClean = cleanBusinessName(normalizedDashboard);
+
+    documentCompact = documentClean.replace(/\s/g, "");
+    dashboardCompact = dashboardClean.replace(/\s/g, "");
+
+    // Exact / Contains
+    if (documentCompact && dashboardCompact) {
+
+        valid =
+            documentCompact.includes(dashboardCompact) ||
+            dashboardCompact.includes(documentCompact);
+
+    }
+
+    // Word Match
+    if (!valid) {
+
+        const docWords = documentClean.split(" ");
+        const dashWords = dashboardClean.split(" ");
+
+        let matched = 0;
+
+        dashWords.forEach(word => {
+
+            if (docWords.includes(word))
+                matched++;
+
+        });
+
+        if (matched >= Math.min(2, dashWords.length))
+            valid = true;
+    }
+}
     /*==================================
       LOGS
     ==================================*/

@@ -135,6 +135,18 @@ function scoreBusinessLine(line = "") {
     if (!line)
 
         return 0;
+// Reject address lines
+if (
+    /\bSHOP\s*NO\b/i.test(line) ||
+    /\bROAD\b/i.test(line) ||
+    /\bRAIPUR\b/i.test(line) ||
+    /\bNAGAR\b/i.test(line) ||
+    /\bCOMPLEX\b/i.test(line) ||
+    /\bBUILDING\b/i.test(line) ||
+    /\bFLOOR\b/i.test(line)
+) {
+    return 0;
+}
 
     // Reject report labels / totals / table headers
 if (

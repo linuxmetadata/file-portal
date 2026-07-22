@@ -376,6 +376,23 @@ function extractStockistName(text = "") {
 
 
 
+/* =========================
+   LINUX XLS STOCKIST
+========================= */
+
+const linuxHeaderBlock = text.match(
+/^\s*([A-Z][A-Z0-9&.,()'\/ -]{5,})[\s,"]*\n(?:.*\n){0,8}?LINUX\s+LABORAT(?:E|ORIES|ORITRIES)\s+STOCK\s*&?\s*SALES\s*STATEMENT/im
+);
+
+if (linuxHeaderBlock) {
+
+    console.log("MATCHED LINUX XLS STOCKIST");
+
+    return linuxHeaderBlock[1]
+        .replace(/[,"]+/g,"")
+        .trim();
+}
+
     /* =========================
    LINUX XLS HEADER FORMAT
 ========================= */

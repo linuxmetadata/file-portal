@@ -1355,6 +1355,24 @@ if (margMatch) {
     console.log("MARG ERP STOCK REPORT FAILED");
 }
 
+console.log("CHECKING DD-MMM-YYYY DATE RANGE");
+
+const monthRange = text.match(
+    /From\s+(\d{1,2}-[A-Za-z]{3}-\d{4})\s+To\s+(\d{1,2}-[A-Za-z]{3}-\d{4})/i
+);
+
+console.log("DD-MMM MATCH:", monthRange);
+
+if (monthRange) {
+
+    console.log("FOUND DD-MMM REPORT PERIOD");
+
+    return {
+        startDate: monthRange[1],
+        endDate: monthRange[2]
+    };
+}
+
 /* =========================
   CHECKING SIMPLE DATE RANGE
 ========================= */

@@ -414,6 +414,24 @@ if (/STOCK\s*&\s*SALES\s*STATEMENT/i.test(header)) {
     }
 }
 
+    /* =========================
+   LINUX STOCK & SALES HEADER
+========================= */
+
+const linuxHeaderMatch =
+    text.match(
+        /([A-Z][A-Z&.,()' -]{5,})\s*\n[\s\S]{0,400}?LINUX\s+LABORITRIES\s+STOCK\s*&?\s*SALES\s*STATEMENT/i
+    );
+
+if (linuxHeaderMatch) {
+
+    console.log("MATCHED LINUX HEADER STOCKIST");
+
+    return linuxHeaderMatch[1]
+        .replace(/[,"]+/g, "")
+        .trim();
+}
+
     /*--------------------------------------------------
       XXXXX Stock & Sales Statement
     --------------------------------------------------*/

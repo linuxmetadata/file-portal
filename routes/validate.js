@@ -1050,6 +1050,45 @@ if (/RioSaathi/i.test(text)) {
     };
 }
 
+/*=========================================================
+  JALARAM STOCK REPORT
+=========================================================*/
+
+console.log("CHECKING JALARAM STOCK REPORT");
+
+if (
+    /Stock\s+Statment/i.test(text) &&
+    /LINUX\s+LAB/i.test(text)
+) {
+
+    const match = text.match(
+        /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec),\s*(20\d{2})/i
+    );
+
+    if (match) {
+
+        console.log("Matched : JALARAM MONTH");
+
+        const monthMap = {
+            JAN:1,FEB:2,MAR:3,APR:4,MAY:5,JUN:6,
+            JUL:7,AUG:8,SEP:9,OCT:10,NOV:11,DEC:12
+        };
+
+        const pdfMonth = monthMap[match[1].toUpperCase()];
+        const pdfYear = Number(match[2]);
+
+        if (
+            pdfMonth === expectedMonth &&
+            pdfYear === expectedYear
+        ) {
+
+            console.log("JALARAM MONTH VALID");
+
+            return true;
+        }
+    }
+}
+
     /* =========================
      GENERIC DATE EXTRACTION
   ========================= */

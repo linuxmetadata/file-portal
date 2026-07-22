@@ -405,7 +405,80 @@ return (
 );
 }
 
-      /* =========================
+/*=========================================================
+    LINUX STOCK STATEMENT REPORT
+=========================================================*/
+
+console.log("CHECKING LINUX STOCK STATEMENT");
+
+if (/Stock\s*Statment/i.test(text)) {
+
+    //-----------------------------------------------------
+    // FORMAT 1 : Jun, 2026
+    //-----------------------------------------------------
+
+    let match = text.match(
+        /Stock\s*Statment\s*:\s*.*?(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*,\s*(20\d{2})/i
+    );
+
+    console.log("MONTH FORMAT :", match);
+
+    if (match) {
+
+        const monthMap = {
+            JAN:1,FEB:2,MAR:3,APR:4,MAY:5,JUN:6,
+            JUL:7,AUG:8,SEP:9,OCT:10,NOV:11,DEC:12
+        };
+
+        const pdfMonth = monthMap[match[1].toUpperCase()];
+        const pdfYear = Number(match[2]);
+
+        console.log("PDF MONTH :", pdfMonth);
+        console.log("PDF YEAR :", pdfYear);
+
+        if (
+            pdfMonth === expectedMonth &&
+            pdfYear === expectedYear
+        ) {
+
+            console.log("MATCHED LINUX MONTH");
+
+            return true;
+        }
+    }
+
+    //-----------------------------------------------------
+    // FORMAT 2 : 30/06/26
+    //-----------------------------------------------------
+
+    match = text.match(
+        /Stock\s*Statment\s*:\s*.*?(\d{2})\/(\d{2})\/(\d{2})/i
+    );
+
+    console.log("DATE FORMAT :", match);
+
+    if (match) {
+
+        const pdfMonth = Number(match[2]);
+        const pdfYear = 2000 + Number(match[3]);
+
+        console.log("PDF MONTH :", pdfMonth);
+        console.log("PDF YEAR :", pdfYear);
+
+        if (
+            pdfMonth === expectedMonth &&
+            pdfYear === expectedYear
+        ) {
+
+            console.log("MATCHED LINUX DATE");
+
+            return true;
+        }
+    }
+}
+
+
+  /* =========================
      EXCEL MONTH + STOCK END DATE
   ========================= */
 

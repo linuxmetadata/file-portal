@@ -1017,6 +1017,39 @@ if (monthNamePeriodMatch) {
 
   let periodFound = false;
 
+/*=========================================================
+  RIOSAATHI REPORT
+=========================================================*/
+
+if (/RioSaathi/i.test(text)) {
+
+    console.log("CHECKING RIOSAATHI REPORT");
+
+    const period = text.match(
+        /Report\s*From\s*:.*?(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})\s*(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})/is
+    );
+
+    if (period) {
+
+        console.log("Matched : RioSaathi Date Range");
+
+        const startDate = new Date(period[1]);
+        const endDate   = new Date(period[2]);
+
+        return {
+            matched: true,
+            startDate,
+            endDate
+        };
+    }
+
+    console.log("RioSaathi Date Not Found");
+
+    return {
+        matched: false
+    };
+}
+
     /* =========================
      GENERIC DATE EXTRACTION
   ========================= */

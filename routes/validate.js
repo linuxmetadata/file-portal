@@ -1922,11 +1922,7 @@ router.post(
 
           const buffer = fs.readFileSync(file.path);
 
-          const parser = new pdfParse({ data: buffer });
-
-          const data = await parser.getText();
-
-          await parser.destroy();
+          const data = await pdfParse(buffer);
 
           const text = (data.text || "").trim();
 

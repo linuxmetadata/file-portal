@@ -1057,17 +1057,17 @@ if (/RioSaathi/i.test(text)) {
 console.log("CHECKING JALARAM STOCK REPORT");
 
 if (
-    /Stock\s+Statment/i.test(text) &&
-    /LINUX\s+LAB/i.test(text)
+    /Stock\s*Statment/i.test(text) &&
+    /LINUX\s*LAB/i.test(text)
 ) {
 
     const match = text.match(
-        /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec),\s*(20\d{2})/i
+        /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*,?\s*(20\d{2})/i
     );
 
-    if (match) {
+    console.log("JALARAM MATCH :", match);
 
-        console.log("Matched : JALARAM MONTH");
+    if (match) {
 
         const monthMap = {
             JAN:1,FEB:2,MAR:3,APR:4,MAY:5,JUN:6,
@@ -1075,7 +1075,10 @@ if (
         };
 
         const pdfMonth = monthMap[match[1].toUpperCase()];
-        const pdfYear = Number(match[2]);
+        const pdfYear = parseInt(match[2], 10);
+
+        console.log("PDF MONTH :", pdfMonth);
+        console.log("PDF YEAR  :", pdfYear);
 
         if (
             pdfMonth === expectedMonth &&
@@ -1086,6 +1089,8 @@ if (
 
             return true;
         }
+
+        console.log("JALARAM MONTH INVALID");
     }
 }
 

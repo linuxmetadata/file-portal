@@ -80,11 +80,7 @@ const { pdfParse } = require("pdf-parse");
 
         const buffer = fs.readFileSync(filePath);
 
-        const parser = new pdfParse({ data: buffer });
-
-        const data = await parser.getText();
-
-        await parser.destroy();
+        const data = await pdfParse(buffer);
 
         return data.text || "";
 

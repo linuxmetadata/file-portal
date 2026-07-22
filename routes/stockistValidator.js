@@ -367,6 +367,27 @@ function extractStockistName(text = "") {
         .substring(0, 3000);
 
     let m;
+/*=========================================================
+  RIOSAATHI STOCKIST
+=========================================================*/
+
+if (/RioSaathi/i.test(header)) {
+
+    const stockist = header.match(
+        /Stockiest\s*:\s*([^\n]+)/i
+    );
+
+    if (stockist) {
+
+        console.log("MATCHED RIOSAATHI STOCKIST");
+
+        return removeGarbage(
+            stockist[1]
+                .replace(/\(.*?\)/g, "")
+                .trim()
+        );
+    }
+}
 
     /*--------------------------------------------------
       Statements of XXXXX

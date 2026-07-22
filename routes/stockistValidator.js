@@ -712,6 +712,13 @@ if (/STOCK\s*&\s*SALES\s*STATMENT\s*FROM/i.test(header)) {
     }
     }
 }
+const match = header.match(
+    /^([A-Z0-9&().,' -]+?)\s+SHOP\s+NO/i
+);
+
+if (match) {
+    return removeGarbage(match[1]);
+}
     /*--------------------------------------------------
       Generic PDF / Excel fallback
     --------------------------------------------------*/

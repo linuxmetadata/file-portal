@@ -377,12 +377,12 @@ function extractStockistName(text = "") {
 
 /* ===== Reversed Linux XLS Header ===== */
 
-const lines = header
+const linuxHeaderLines = header
     .split(/\r?\n/)
     .map(x => x.replace(/[",]/g, "").trim())
     .filter(Boolean);
 
-const linuxIndex = lines.findIndex(x =>
+const linuxIndex = linuxHeaderLines.findIndex(x =>
     /LINUX.*STOCK\s*&?\s*SALES/i.test(x)
 );
 
@@ -390,7 +390,7 @@ if (linuxIndex > 0) {
 
     console.log("MATCHED REVERSED LINUX XLS");
 
-    return lines[0];
+    return linuxHeaderLines[0];
 }
 
 /* =========================

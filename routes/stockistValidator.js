@@ -664,27 +664,48 @@ if (/STOCK\s*&\s*SALES\s*STATMENT\s*FROM/i.test(header)) {
     --------------------------------------------------*/
 
     const lines = header
-        .split(/\n/)
-        .map(x => removeGarbage(x))
-        .filter(Boolean);
+    .split(/\r?\n/)
+    .map(removeGarbage)
+    .filter(Boolean);
 
-    let best = "";
-    let bestScore = 0;
+// First search for a STOCK & SALES report title
+const reportIndex = lines.findIndex(line =>
+    /STOCK\s*&\s*SALES\s*STAT(?:E)?MENT\s*FROM/i.test(line)
+);
 
-    for (const line of lines.slice(0, 25)) {
+if (reportIndex >= 0) {
 
-        const score = scoreBusinessLine(line);
+    // Look after the report title
+    for (let i = reportIndex + 1; i < Math.min(reportIndex + 8, lines.length); i++) {
 
-        if (score > bestScore) {
+        const line = lines[i]
+            .replace(/`/g, "")
+            .trim();
 
-            bestScore = score;
-            best = line;
+        if (scoreBusinessLine(line) > 40) {
 
+            console.log("FOUND STOCKIST AFTER REPORT TITLE:", line);
+
+            return line;
         }
-
     }
+}
 
-    return best;
+// Generic fallback
+let best = "";
+let bestScore = 0;
+
+for (const line of lines) {
+
+    const score = scoreBusinessLine(line);
+
+    if (score > bestScore) {
+        bestScore = score;
+        best = line;
+    }
+}
+
+return best;
 
 }
 /*=========================================================

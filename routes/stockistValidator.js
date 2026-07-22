@@ -627,6 +627,35 @@ if (/STOCK\s*&\s*SALES\s+ANALYSIS/i.test(header)) {
     }
     }
 }
+/*--------------------------------------------------
+  STOCK & SALES STATMENT FROM
+--------------------------------------------------*/
+
+if (/STOCK\s*&\s*SALES\s*STATMENT\s*FROM/i.test(header)) {
+
+    const lines = header
+        .split(/\r?\n/)
+        .map(removeGarbage)
+        .filter(Boolean);
+
+    const reportIndex = lines.findIndex(line =>
+        /STOCK\s*&\s*SALES\s*STATMENT\s*FROM/i.test(line)
+    );
+
+    if (reportIndex >= 0 && reportIndex + 1 < lines.length) {
+
+        let stockist = lines[reportIndex + 1]
+            .replace(/`/g, "")
+            .trim();
+
+        if (scoreBusinessLine(stockist) > 40) {
+
+            console.log("MATCHED STOCK SALES STATMENT FROM");
+
+            return stockist;
+        }
+    }
+}
     /*--------------------------------------------------
       Generic PDF / Excel fallback
     --------------------------------------------------*/

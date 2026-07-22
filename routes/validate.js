@@ -73,13 +73,14 @@ function validateDateRange(startDate, endDate) {
 async function extractText(filePath, ext) {
 
   try {
-const { pdfParse } = require("pdf-parse");
+const pdfParse = require("pdf-parse");
     if (ext === "pdf") {
 
     try {
 
         const buffer = fs.readFileSync(filePath);
-
+        console.log("typeof pdfParse =", typeof pdfParse);
+        console.log(pdfParse);
         const data = await pdfParse(buffer);
 
         return data.text || "";
@@ -1921,7 +1922,8 @@ router.post(
         try {
 
           const buffer = fs.readFileSync(file.path);
-
+          console.log("typeof pdfParse =", typeof pdfParse);
+          console.log(pdfParse);
           const data = await pdfParse(buffer);
 
           const text = (data.text || "").trim();

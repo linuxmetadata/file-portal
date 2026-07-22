@@ -768,6 +768,85 @@ for (const line of lines) {
 return best;
 
 }
+function headerSearch(header, dashboardName) {
+
+    const originalHeader = normalizeName(header);
+    const originalDashboard = normalizeName(dashboardName);
+
+    // ----------------------------
+    // FULL MATCH
+    // ----------------------------
+
+    if (originalHeader.includes(originalDashboard)) {
+
+        return {
+            matched: true,
+            method: "FULL_MATCH"
+        };
+
+    }
+
+    const ignoreWords = new Set([
+        "MEDICAL",
+        "PHARMA",
+        "PHARMACEUTICAL",
+        "PHARMACEUTICALS",
+        "AGENCY",
+        "AGENCIES",
+        "DISTRIBUTOR",
+        "DISTRIBUTORS",
+        "STORE",
+        "STORES",
+        "CHEMIST",
+        "DRUGS",
+        "ENTERPRISE",
+        "ENTERPRISES",
+        "COMPANY",
+        "CO",
+        "PVT",
+        "PRIVATE",
+        "LIMITED",
+        "LTD"
+    ]);
+
+    const words = originalDashboard
+        .split(" ")
+        .filter(w => w.length > 2)
+        .filter(w => !ignoreWords.has(w));
+
+    let matched = 0;
+
+    for (const word of words) {
+
+        if (originalHeader.includes(word)) {
+
+            matched++;
+
+        }
+
+    }
+
+    if (matched >= Math.min(2, words.length)) {
+
+        return {
+
+            matched: true,
+
+            method: "WORD_MATCH"
+
+        };
+
+    }
+
+    return {
+
+        matched: false,
+
+        method: "NONE"
+
+    };
+
+}
 /*=========================================================
  VALIDATE STOCKIST
 =========================================================*/
@@ -779,6 +858,49 @@ async function validateStockist(text, dashboardName) {
     console.log("================================");
 
     console.log("Dashboard :", dashboardName);
+    const header = text
+    .replace(/\r/g, "\n")
+    .replace(/\t/g, " ")
+    .replace(/[ ]+/g, " ")
+    .substring(0, 3000);
+    console.log("================================");
+    console.log("HEADER SEARCH");
+    console.log("================================");
+
+    console.log("Dashboard Name :", dashboardName);
+    console.log("Header Preview :");
+    console.log(header.substring(0, 500));
+
+    const headerResult = headerSearch(header, dashboardName);
+
+    console.log("Header Match :", headerResult.matched);
+    console.log("Match Method :", headerResult.method);
+
+if (headerResult.matched) {
+
+    console.log("VALIDATION METHOD : HEADER SEARCH");
+    console.log("================================");
+
+    return {
+
+        valid: true,
+
+        reason: "HEADER MATCH",
+
+        extractedName: "HEADER MATCH",
+
+        dashboardName,
+
+        normalizedDocument: normalizeName(dashboardName),
+
+        normalizedDashboard: normalizeName(dashboardName)
+
+    };
+
+}
+
+    console.log("HEADER SEARCH FAILED");
+    console.log("================================");
 
     let extractedName = extractStockistName(text);
 

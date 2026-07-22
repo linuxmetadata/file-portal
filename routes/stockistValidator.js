@@ -644,16 +644,19 @@ if (/STOCK\s*&\s*SALES\s*STATMENT\s*FROM/i.test(header)) {
 
     if (reportIndex >= 0 && reportIndex + 1 < lines.length) {
 
-        let stockist = lines[reportIndex + 1]
-            .replace(/`/g, "")
-            .trim();
+        for (let i = reportIndex + 1; i <= Math.min(reportIndex + 8, lines.length - 1); i++) {
+
+        const stockist = lines[i]
+        .replace(/`/g, "")
+        .trim();
 
         if (scoreBusinessLine(stockist) > 40) {
 
-            console.log("MATCHED STOCK SALES STATMENT FROM");
+        console.log("MATCHED STOCK SALES STATMENT FROM");
 
-            return stockist;
+        return stockist;
         }
+    }
     }
 }
     /*--------------------------------------------------

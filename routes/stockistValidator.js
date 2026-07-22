@@ -615,6 +615,25 @@ if (m) {
     return removeGarbage(m[1]);
 }
 /*--------------------------------------------------
+  LINUX PDF - GITIKA FORMAT
+--------------------------------------------------*/
+
+m = header.match(
+    /^(.+?)\s+SHOP\s+NO\.?/i
+);
+
+if (m) {
+
+    const stockist = removeGarbage(m[1]);
+
+    if (scoreBusinessLine(stockist) > 40) {
+
+        console.log("MATCHED SHOP NO FORMAT");
+
+        return stockist;
+    }
+}
+/*--------------------------------------------------
   STOCK & SALES ANALYSIS
 --------------------------------------------------*/
 

@@ -623,20 +623,31 @@ if (/STOCK\s*&\s*SALES\s+ANALYSIS/i.test(header)) {
         let best = "";
         let bestScore = 0;
 
-        for (let i = reportIndex - 1; i >= 0 && i >= reportIndex - 6; i--) {
+    for (let i = reportIndex - 1; i >= 0 && i >= reportIndex - 6; i--) {
 
-        const line = lines[i];
-        const score = scoreBusinessLine(line);
+    const line = lines[i];
 
-        if (score > bestScore) {
+    // Skip addresses
+    if (
+        /\bSHOP\b/i.test(line) ||
+        /\bROAD\b/i.test(line) ||
+        /\bCOMPLEX\b/i.test(line) ||
+        /\bRAIPUR\b/i.test(line)
+    ) {
+        continue;
+    }
+
+    const score = scoreBusinessLine(line);
+
+    if (score > bestScore) {
         bestScore = score;
         best = line;
     }
 }
 
-    if (best) {
+if (best) {
     return best;
-    }
+}
     }
 }
 /*--------------------------------------------------

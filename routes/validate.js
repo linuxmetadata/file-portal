@@ -1939,6 +1939,61 @@ if (stockSalesReportMatch) {
         endDate: `${endDay}-${endMonth}-${endYear}`
     };
 }
+/*=========================================================
+  STOCK STATEMENT FOR THE MONTH OF MON'YY
+=========================================================*/
+
+console.log("CHECKING MONTH REPORT (MON'YY)");
+
+const monthReportMatch = text.match(
+    /Stock\s+Statement\s+for\s+the\s+month\s+of\s+([A-Za-z]{3})['’](\d{2})/i
+);
+
+console.log("MONTH REPORT MATCH :", monthReportMatch);
+
+if (monthReportMatch) {
+
+    const monthName = monthReportMatch[1];
+    let year = parseInt(monthReportMatch[2], 10) + 2000;
+
+    const monthMap = {
+        JAN: 0,
+        FEB: 1,
+        MAR: 2,
+        APR: 3,
+        MAY: 4,
+        JUN: 5,
+        JUL: 6,
+        AUG: 7,
+        SEP: 8,
+        OCT: 9,
+        NOV: 10,
+        DEC: 11
+    };
+
+    const monthIndex = monthMap[monthName.toUpperCase()];
+
+    if (monthIndex === undefined) {
+
+        console.log("INVALID MONTH :", monthName);
+
+        return false;
+    }
+
+    const startDate = new Date(year, monthIndex, 1);
+    const endDate = new Date(year, monthIndex + 1, 0);
+
+    const months = [
+        "Jan","Feb","Mar","Apr","May","Jun",
+        "Jul","Aug","Sep","Oct","Nov","Dec"
+    ];
+
+    return {
+        startDate: `${String(startDate.getDate()).padStart(2,"0")}-${months[monthIndex]}-${year}`,
+        endDate: `${String(endDate.getDate()).padStart(2,"0")}-${months[monthIndex]}-${year}`
+    };
+}
+
 /* =========================
    FINAL DATE FALLBACK
 ========================= */

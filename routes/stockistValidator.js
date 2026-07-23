@@ -763,27 +763,25 @@ if (/This PDF Report is created from Medica Ultimate/i.test(header)) {
     console.log("MEDICA STOCKIST NOT FOUND");
 }
 /*=========================================================
-  LINUX STOCK AND SALES REPORT
+  LINUX META - COMPANY + STOCK AND SALES
 =========================================================*/
 
-if (/STOCK\s+AND\s+SALES/i.test(header)) {
+if (
+    /Company\s*:\s*LINUX\s+LABORATORIES/i.test(header) &&
+    /STOCK\s+AND\s+SALES/i.test(header)
+) {
 
-    console.log("MATCHED LINUX STOCK AND SALES");
+    console.log("MATCHED LINUX META STOCK REPORT");
 
-    const lines = header
-        .split(/\r?\n/)
-        .map(removeGarbage)
-        .filter(Boolean);
-
-    const reportIndex = lines.findIndex(line =>
-        /STOCK\s+AND\s+SALES/i.test(line)
+    const match = header.match(
+        /STOCK\s+AND\s+SALES\s*[\r\n]+\s*([^\r\n]+)/i
     );
 
-    if (reportIndex >= 0 && reportIndex + 1 < lines.length) {
+    if (match) {
 
-        const stockist = lines[reportIndex + 1];
+        const stockist = removeGarbage(match[1]);
 
-        console.log("LINUX STOCKIST :", stockist);
+        console.log("LINUX META STOCKIST :", stockist);
 
         return stockist;
     }

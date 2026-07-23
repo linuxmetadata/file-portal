@@ -1998,33 +1998,38 @@ if (monthReportMatch) {
   STOCK & SALES STATEMENT FOR THE MONTH OF MON'YY
 =========================================================*/
 
-console.log("CHECKING STOCK & SALES MONTH REPORT");
+console.log("CHECKING STOCK & SALES STATEMENT MONTH REPORT");
 
-const stockSalesMonthMatch = text.match(
-    /Stock\s*(?:&|and)\s*Sales\s*Statement\s*for\s*the\s*month\s*of\s*([A-Za-z]{3})['’](\d{2})/i
+const linuxStockStatementMatch = text.match(
+    /Stock\s*(?:&|and)\s*Sales\s*Statement\s*for\s*the\s*month\s*of\s*([A-Za-z]{3})['’]?(\d{2})/i
 );
 
-console.log("STOCK SALES MONTH MATCH :", stockSalesMonthMatch);
+console.log("LINUX STOCK STATEMENT MATCH :", linuxStockStatementMatch);
 
-if (stockSalesMonthMatch) {
+if (linuxStockStatementMatch) {
 
     const monthMap = {
-        JAN:0,
-        FEB:1,
-        MAR:2,
-        APR:3,
-        MAY:4,
-        JUN:5,
-        JUL:6,
-        AUG:7,
-        SEP:8,
-        OCT:9,
-        NOV:10,
-        DEC:11
+        JAN: 0,
+        FEB: 1,
+        MAR: 2,
+        APR: 3,
+        MAY: 4,
+        JUN: 5,
+        JUL: 6,
+        AUG: 7,
+        SEP: 8,
+        OCT: 9,
+        NOV: 10,
+        DEC: 11
     };
 
-    const monthName = stockSalesMonthMatch[1].toUpperCase();
-    const year = 2000 + parseInt(stockSalesMonthMatch[2],10);
+    const months = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+
+    const monthName = linuxStockStatementMatch[1].toUpperCase();
+    const year = 2000 + parseInt(linuxStockStatementMatch[2], 10);
 
     if (!(monthName in monthMap)) {
         console.log("INVALID MONTH :", monthName);
@@ -2033,21 +2038,18 @@ if (stockSalesMonthMatch) {
 
     const month = monthMap[monthName];
 
-    const startDate = new Date(year, month, 1);
-    const endDate = new Date(year, month + 1, 0);
+    const lastDay = new Date(year, month + 1, 0).getDate();
 
-    const months = [
-        "Jan","Feb","Mar","Apr","May","Jun",
-        "Jul","Aug","Sep","Oct","Nov","Dec"
-    ];
+    const startDate = `01-${months[month]}-${year}`;
+    const endDate = `${String(lastDay).padStart(2, "0")}-${months[month]}-${year}`;
 
-    console.log("FOUND STOCK & SALES MONTH");
+    console.log("FOUND LINUX STOCK STATEMENT");
+    console.log("START DATE :", startDate);
+    console.log("END DATE   :", endDate);
 
     return {
-        startDate:
-            `${String(startDate.getDate()).padStart(2,"0")}-${months[month]}-${year}`,
-        endDate:
-            `${String(endDate.getDate()).padStart(2,"0")}-${months[month]}-${year}`
+        startDate,
+        endDate
     };
 }
 

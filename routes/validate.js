@@ -2303,12 +2303,16 @@ if (stockStatementAsOnMatch) {
 
     const monthIndex = new Date(`${month} 1, ${year}`).getMonth();
 
-    const startDate = new Date(year, monthIndex, 1);
-    const endDate = new Date(year, monthIndex + 1, 0);
+    const months = [
+    "Jan","Feb","Mar","Apr","May","Jun",
+    "Jul","Aug","Sep","Oct","Nov","Dec"
+    ];
+
+    const lastDay = new Date(year, monthIndex + 1, 0).getDate();
 
     return {
-        startDate: formatDate(startDate),
-        endDate: formatDate(endDate)
+      startDate: `01-${months[monthIndex]}-${year}`,
+      endDate: `${String(lastDay).padStart(2,"0")}-${months[monthIndex]}-${year}`
     };
 }
 

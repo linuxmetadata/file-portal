@@ -1286,7 +1286,7 @@ if(stockReportSimple){
 
     console.log("Matched : Header Range");
 
-    function parseAnyDate(value){
+    function parseAnyDate(value) {
 
     // YYYY-MM-DD
     if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
@@ -1294,9 +1294,9 @@ if(stockReportSimple){
         const p = value.split("-");
 
         return new Date(
-            parseInt(p[0]),
-            parseInt(p[1]) - 1,
-            parseInt(p[2])
+            Number(p[0]),      // Year
+            Number(p[1]) - 1,  // Month
+            Number(p[2])       // Day
         );
     }
 
@@ -1305,34 +1305,30 @@ if(stockReportSimple){
 
         const p = value.split("-");
 
-        let y = parseInt(p[2]);
+        let y = Number(p[2]);
 
         if (y < 100)
             y += 2000;
 
         return new Date(
             y,
-            monthMap[
-                p[1]
-                    .substring(0,3)
-                    .toLowerCase()
-            ],
-            parseInt(p[0])
+            monthMap[p[1].substring(0,3).toLowerCase()],
+            Number(p[0])
         );
     }
 
     // DD/MM/YYYY or DD-MM-YYYY
     const p = value.split(/[\/-]/);
 
-    let y = parseInt(p[2]);
+    let y = Number(p[2]);
 
     if (y < 100)
         y += 2000;
 
     return new Date(
         y,
-        parseInt(p[1]) - 1,
-        parseInt(p[0])
+        Number(p[1]) - 1,
+        Number(p[0])
     );
 }
 

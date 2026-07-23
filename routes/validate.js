@@ -1994,6 +1994,63 @@ if (monthReportMatch) {
     };
 }
 
+/*=========================================================
+  STOCK & SALES STATEMENT FOR THE MONTH OF MON'YY
+=========================================================*/
+
+console.log("CHECKING STOCK & SALES MONTH REPORT");
+
+const stockSalesMonthMatch = text.match(
+    /Stock\s*(?:&|and)\s*Sales\s*Statement\s*for\s*the\s*month\s*of\s*([A-Za-z]{3})['’](\d{2})/i
+);
+
+console.log("STOCK SALES MONTH MATCH :", stockSalesMonthMatch);
+
+if (stockSalesMonthMatch) {
+
+    const monthMap = {
+        JAN:0,
+        FEB:1,
+        MAR:2,
+        APR:3,
+        MAY:4,
+        JUN:5,
+        JUL:6,
+        AUG:7,
+        SEP:8,
+        OCT:9,
+        NOV:10,
+        DEC:11
+    };
+
+    const monthName = stockSalesMonthMatch[1].toUpperCase();
+    const year = 2000 + parseInt(stockSalesMonthMatch[2],10);
+
+    if (!(monthName in monthMap)) {
+        console.log("INVALID MONTH :", monthName);
+        return false;
+    }
+
+    const month = monthMap[monthName];
+
+    const startDate = new Date(year, month, 1);
+    const endDate = new Date(year, month + 1, 0);
+
+    const months = [
+        "Jan","Feb","Mar","Apr","May","Jun",
+        "Jul","Aug","Sep","Oct","Nov","Dec"
+    ];
+
+    console.log("FOUND STOCK & SALES MONTH");
+
+    return {
+        startDate:
+            `${String(startDate.getDate()).padStart(2,"0")}-${months[month]}-${year}`,
+        endDate:
+            `${String(endDate.getDate()).padStart(2,"0")}-${months[month]}-${year}`
+    };
+}
+
 /* =========================
    FINAL DATE FALLBACK
 ========================= */

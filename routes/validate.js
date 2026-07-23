@@ -2244,6 +2244,44 @@ if (simpleLinuxMonthMatch) {
     };
 }
 
+/*=========================================================
+  PERIOD--01.6.26 TO 30.06.26
+=========================================================*/
+
+console.log("CHECKING PERIOD DASH FORMAT");
+
+const periodDashMatch = text.match(
+    /PERIOD\s*-+\s*(\d{1,2})[.\-/](\d{1,2})[.\-/](\d{2,4})\s*TO\s*(\d{1,2})[.\-/](\d{1,2})[.\-/](\d{2,4})/i
+);
+
+console.log("PERIOD DASH MATCH :", periodDashMatch);
+
+if (periodDashMatch) {
+
+    const startDay = periodDashMatch[1].padStart(2, "0");
+    const startMonth = parseInt(periodDashMatch[2], 10);
+    let startYear = parseInt(periodDashMatch[3], 10);
+
+    const endDay = periodDashMatch[4].padStart(2, "0");
+    const endMonth = parseInt(periodDashMatch[5], 10);
+    let endYear = parseInt(periodDashMatch[6], 10);
+
+    if (startYear < 100) startYear += 2000;
+    if (endYear < 100) endYear += 2000;
+
+    const months = [
+        "Jan","Feb","Mar","Apr","May","Jun",
+        "Jul","Aug","Sep","Oct","Nov","Dec"
+    ];
+
+    console.log("FOUND PERIOD DASH REPORT");
+
+    return {
+        startDate: `${startDay}-${months[startMonth-1]}-${startYear}`,
+        endDate: `${endDay}-${months[endMonth-1]}-${endYear}`
+    };
+}
+
 /* =========================
    FINAL DATE FALLBACK
 ========================= */

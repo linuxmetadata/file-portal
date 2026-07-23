@@ -788,8 +788,7 @@ if (
 }
 
 /*=========================================================
-  LINUX SALES REPORT
-  Seller : XXXXX
+  LINUX SALES REPORT (MULTI-LINE SELLER)
 =========================================================*/
 
 if (/Sales\s+Report/i.test(header)) {
@@ -797,14 +796,21 @@ if (/Sales\s+Report/i.test(header)) {
     console.log("CHECKING LINUX SALES REPORT");
 
     const sellerMatch = header.match(
-        /Seller\s*:\s*([A-Z0-9&.,()'\/ -]+?)\s*(?:Stock\s+And\s+Sales|Report\s*Date|From\s+\d{2}[-\/]\d{2}[-\/]\d{4}|$)/i
+        /Seller\s*:\s*([\s\S]*?)\s*Stock\s+And\s+Sales/i
     );
 
     console.log("SELLER MATCH :", sellerMatch);
 
     if (sellerMatch) {
 
-        return removeGarbage(sellerMatch[1].trim());
+        let seller = sellerMatch[1]
+            .replace(/\r?\n/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+
+        console.log("SELLER :", seller);
+
+        return removeGarbage(seller);
     }
 }
 

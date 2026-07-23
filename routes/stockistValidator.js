@@ -813,6 +813,39 @@ if (/Sales\s+Report/i.test(header)) {
         return removeGarbage(seller);
     }
 }
+/*=========================================================
+  C-SQUARE STOCKIST
+=========================================================*/
+
+console.log("CHECKING C-SQUARE STOCKIST");
+
+if (/Printed\s+Using\s+PharmAssist\s+From\s+C-?Square/i.test(text)) {
+
+    const lines = text
+        .split(/\r?\n/)
+        .map(x => x.replace(/,+/g, "").trim())
+        .filter(Boolean);
+
+    console.log("LINES :", lines);
+
+    for (const line of lines) {
+
+        if (
+            /PERIOD/i.test(line) ||
+            /Manufacturer/i.test(line) ||
+            /Report Date/i.test(line) ||
+            /Printed Using/i.test(line) ||
+            /LINUX LABORATORIES/i.test(line)
+        ) {
+            continue;
+        }
+
+        console.log("FOUND STOCKIST :", line);
+
+        return removeGarbage(line);
+    }
+}
+
 
     /*--------------------------------------------------
       Generic PDF / Excel fallback

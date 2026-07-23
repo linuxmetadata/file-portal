@@ -897,13 +897,38 @@ for (const line of lines) {
 return best;
 
 }
-function headerSearch(header, dashboardName) {
+    function headerSearch(header, dashboardName) {
 
     const originalHeader = normalizeName(header);
     const originalDashboard = normalizeName(dashboardName);
 
-    console.log("HEADER NORMALIZED :", originalHeader);
-    console.log("DASHBOARD NORMALIZED :", originalDashboard);
+    /*====================================
+      STOCKIST ALIAS MAPPING
+    ====================================*/
+
+    const stockistAliases = {
+
+        "KAMALAM MEDICAL CORPORATION":
+            "TRANSWORLD MEDICAL CORPORATION PVT LTD"
+
+    };
+
+    let dashboardSearch = originalDashboard;
+
+    if (
+        stockistAliases[originalDashboard] &&
+        originalHeader.includes(
+            stockistAliases[originalDashboard]
+        )
+    ) {
+
+        console.log("ALIAS MATCH FOUND");
+
+        dashboardSearch =
+            stockistAliases[originalDashboard];
+    }
+
+    // Existing code continues...
 
     // ----------------------------
     // FULL MATCH

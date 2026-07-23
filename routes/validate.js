@@ -1288,41 +1288,53 @@ if(stockReportSimple){
 
     function parseAnyDate(value){
 
-      if(/[A-Za-z]/.test(value)){
+    // YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
 
-        const p=value.split("-");
-
-        let y=parseInt(p[2]);
-
-        if(y<100)
-          y+=2000;
+        const p = value.split("-");
 
         return new Date(
-          y,
-          monthMap[
-            p[1]
-              .substring(0,3)
-              .toLowerCase()
-          ],
-          parseInt(p[0])
+            parseInt(p[0]),
+            parseInt(p[1]) - 1,
+            parseInt(p[2])
         );
-
-      }
-
-      const p=value.split(/[\/-]/);
-
-      let y=parseInt(p[2]);
-
-      if(y<100)
-        y+=2000;
-
-      return new Date(
-        y,
-        parseInt(p[1])-1,
-        parseInt(p[0])
-      );
-
     }
+
+    // DD-MMM-YYYY
+    if (/[A-Za-z]/.test(value)) {
+
+        const p = value.split("-");
+
+        let y = parseInt(p[2]);
+
+        if (y < 100)
+            y += 2000;
+
+        return new Date(
+            y,
+            monthMap[
+                p[1]
+                    .substring(0,3)
+                    .toLowerCase()
+            ],
+            parseInt(p[0])
+        );
+    }
+
+    // DD/MM/YYYY or DD-MM-YYYY
+    const p = value.split(/[\/-]/);
+
+    let y = parseInt(p[2]);
+
+    if (y < 100)
+        y += 2000;
+
+    return new Date(
+        y,
+        parseInt(p[1]) - 1,
+        parseInt(p[0])
+    );
+}
 
     const startDate =
       parseAnyDate(

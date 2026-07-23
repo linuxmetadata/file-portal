@@ -1901,6 +1901,44 @@ if (statusMatch) {
     console.log("STOCK N SALES STATUS FAILED");
 }
 
+/*=========================================================
+  STOCK AND SALES REPORT (DD-MMM-YY)
+=========================================================*/
+
+console.log("CHECKING STOCK AND SALES REPORT DD-MMM-YY");
+
+const stockSalesMatch = text.match(
+    /Stock\s+and\s+Sales\s+report\s+From\s*-*>\s*(\d{1,2})-([A-Za-z]{3})-(\d{2})\s*to\s*(\d{1,2})-([A-Za-z]{3})-(\d{2})/i
+);
+
+console.log("STOCK SALES MATCH :", stockSalesMatch);
+
+if (stockSalesMatch) {
+
+    let startDay = stockSalesMatch[1].padStart(2, "0");
+    let startMonth = stockSalesMatch[2];
+    let startYear = parseInt(stockSalesMatch[3], 10);
+
+    let endDay = stockSalesMatch[4].padStart(2, "0");
+    let endMonth = stockSalesMatch[5];
+    let endYear = parseInt(stockSalesMatch[6], 10);
+
+    // Convert YY -> YYYY
+    if (startYear < 100) startYear += 2000;
+    if (endYear < 100) endYear += 2000;
+
+    const startDate = `${startDay}-${startMonth}-${startYear}`;
+    const endDate = `${endDay}-${endMonth}-${endYear}`;
+
+    console.log("FOUND STOCK SALES DD-MMM-YY");
+    console.log("START DATE :", startDate);
+    console.log("END DATE   :", endDate);
+
+    return {
+        startDate,
+        endDate
+    };
+}
 /* =========================
    FINAL DATE FALLBACK
 ========================= */

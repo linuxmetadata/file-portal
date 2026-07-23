@@ -740,29 +740,24 @@ const match = header.match(
 if (match) {
     return removeGarbage(match[1]);
 }
+
 console.log("CHECKING MEDICA STOCK REPORT");
 
-if (/This PDF Report is created from Medica Ultimate/i.test(text)) {
+if (/This PDF Report is created from Medica Ultimate/i.test(header)) {
 
     console.log("MEDICA REPORT DETECTED");
 
-    // Extract stockist name before "TO : LINUX LABORATORIES"
-    const stockist = text.match(
-        /([A-Z0-9&.,()\-/\s]+?)\s*\[[^\]]*\]\s*TO\s*:\s*LINUX\s+LABORATORIES/i
+    const match = header.match(
+        /([A-Z][A-Z0-9&.,()'\/ -]{5,})\s*\[[^\]]*\]\s*TO\s*:\s*LINUX\s+LABORATORIES/i
     );
 
-    console.log("MEDICA STOCKIST :", stockist);
+    if (match) {
 
-    if (stockist) {
+        const stockist = removeGarbage(match[1]);
 
-        const extractedName = stockist[1].trim();
+        console.log("MEDICA STOCKIST :", stockist);
 
-        console.log("EXTRACTED :", extractedName);
-
-        return validateStockist(
-            dashboardStockistName,
-            extractedName
-        );
+        return stockist;
     }
 
     console.log("MEDICA STOCKIST NOT FOUND");

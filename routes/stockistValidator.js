@@ -20,6 +20,7 @@ function normalizeName(name = "") {
         .replace(/\bAGENCIES\b/g, "AGENCY")
         .replace(/\bDISTRIBUTORS\b/g, "DISTRIBUTOR")
         .replace(/\bMEDICALS\b/g, "MEDICAL")
+        .replace(/\bPHARMACUETICALS\b/g, "PHARMA")
         .replace(/\bPHARMACEUTICALS\b/g, "PHARMA")
         .replace(/\bPHARMACY\b/g, "PHARMA")
 
@@ -900,6 +901,9 @@ function headerSearch(header, dashboardName) {
 
     const originalHeader = normalizeName(header);
     const originalDashboard = normalizeName(dashboardName);
+
+    console.log("HEADER NORMALIZED :", originalHeader);
+    console.log("DASHBOARD NORMALIZED :", originalDashboard);
 
     // ----------------------------
     // FULL MATCH

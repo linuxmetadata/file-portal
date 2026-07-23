@@ -2140,6 +2140,54 @@ if (linuxMonthMatch) {
 
 console.log("LINUX META REPORT NOT MATCHED");
 
+/*=========================================================
+  LINUX STOCK STATEMENT REPORT AS ON MONTH YY
+=========================================================*/
+
+console.log("CHECKING STOCK STATEMENT REPORT AS ON");
+
+const stockAsOnMatch = text.match(
+    /Stock\s+Statement\s+Report\s+As\s+on\s+([A-Za-z]+)\s+(\d{2})/i
+);
+
+console.log("STOCK AS ON MATCH :", stockAsOnMatch);
+
+if (stockAsOnMatch) {
+
+    const monthMap = {
+        JANUARY:0, FEBRUARY:1, MARCH:2, APRIL:3,
+        MAY:4, JUNE:5, JULY:6, AUGUST:7,
+        SEPTEMBER:8, OCTOBER:9, NOVEMBER:10, DECEMBER:11,
+
+        JAN:0, FEB:1, MAR:2, APR:3,
+        MAY:4, JUN:5, JUL:6, AUG:7,
+        SEP:8, OCT:9, NOV:10, DEC:11
+    };
+
+    const months = [
+        "Jan","Feb","Mar","Apr","May","Jun",
+        "Jul","Aug","Sep","Oct","Nov","Dec"
+    ];
+
+    const monthName = stockAsOnMatch[1].toUpperCase();
+    const year = 2000 + parseInt(stockAsOnMatch[2], 10);
+
+    if (!(monthName in monthMap)) {
+        console.log("INVALID MONTH :", monthName);
+        return false;
+    }
+
+    const month = monthMap[monthName];
+    const lastDay = new Date(year, month + 1, 0).getDate();
+
+    console.log("FOUND STOCK AS ON REPORT");
+
+    return {
+        startDate: `01-${months[month]}-${year}`,
+        endDate: `${String(lastDay).padStart(2,"0")}-${months[month]}-${year}`
+    };
+}
+
 /* =========================
    FINAL DATE FALLBACK
 ========================= */

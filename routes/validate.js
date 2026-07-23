@@ -2053,6 +2053,93 @@ if (linuxStockStatementMatch) {
     };
 }
 
+/*=========================================================
+  LINUX META REPORT DATE VALIDATOR
+=========================================================*/
+
+console.log("CHECKING LINUX META REPORT");
+
+/*---------------------------------------------
+  FORMAT 1
+  Monthly Sales And Stock
+----------------------------------------------*/
+
+if (/Monthly\s+Sales\s+And\s+Stock/i.test(text)) {
+
+    console.log("MONTHLY SALES FORMAT DETECTED");
+
+    const dateList = text.match(/\d{2}-[A-Za-z]{3}-\d{4}/g);
+
+    console.log("DATE LIST :", dateList);
+
+    if (dateList && dateList.length >= 3) {
+
+        console.log("FOUND MONTHLY SALES REPORT");
+
+        return {
+            startDate: dateList[0],
+            endDate: dateList[2]
+        };
+    }
+}
+
+
+/*---------------------------------------------
+  FORMAT 2
+  Stock Statement / Stock & Sales Statement
+----------------------------------------------*/
+
+const linuxMonthMatch = text.match(
+    /Stock\s*(?:&|and)?\s*Sales?\s*Statement\s*for\s*the\s*month\s*of\s*([A-Za-z]{3})['’]?(\d{2})/i
+);
+
+console.log("LINUX MONTH MATCH :", linuxMonthMatch);
+
+if (linuxMonthMatch) {
+
+    const monthMap = {
+        JAN:0,
+        FEB:1,
+        MAR:2,
+        APR:3,
+        MAY:4,
+        JUN:5,
+        JUL:6,
+        AUG:7,
+        SEP:8,
+        OCT:9,
+        NOV:10,
+        DEC:11
+    };
+
+    const months = [
+        "Jan","Feb","Mar","Apr","May","Jun",
+        "Jul","Aug","Sep","Oct","Nov","Dec"
+    ];
+
+    const monthName = linuxMonthMatch[1].toUpperCase();
+
+    if (!(monthName in monthMap)) {
+        console.log("INVALID MONTH :", monthName);
+        return false;
+    }
+
+    const year = 2000 + parseInt(linuxMonthMatch[2], 10);
+
+    const month = monthMap[monthName];
+
+    const lastDay = new Date(year, month + 1, 0).getDate();
+
+    console.log("FOUND LINUX MONTH REPORT");
+
+    return {
+        startDate: `01-${months[month]}-${year}`,
+        endDate: `${String(lastDay).padStart(2, "0")}-${months[month]}-${year}`
+    };
+}
+
+console.log("LINUX META REPORT NOT MATCHED");
+
 /* =========================
    FINAL DATE FALLBACK
 ========================= */

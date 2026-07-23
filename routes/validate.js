@@ -2187,6 +2187,62 @@ if (stockAsOnMatch) {
         endDate: `${String(lastDay).padStart(2,"0")}-${months[month]}-${year}`
     };
 }
+/*=========================================================
+  STOCKIST - STOCK STATEMENT FOR MON'YY
+  Example:
+  Sabari Syndicate - Stock Statement for Jun'26
+=========================================================*/
+
+console.log("CHECKING SIMPLE STOCK STATEMENT MONTH");
+
+const simpleLinuxMonthMatch = text.match(
+    /(.+?)\s*-\s*Stock\s+Statement\s+for\s+([A-Za-z]{3})['’]?(\d{2})/i
+);
+
+console.log("SIMPLE LINUX MONTH MATCH :", simpleLinuxMonthMatch);
+
+if (simpleLinuxMonthMatch) {
+
+    const monthMap = {
+        JAN:0,
+        FEB:1,
+        MAR:2,
+        APR:3,
+        MAY:4,
+        JUN:5,
+        JUL:6,
+        AUG:7,
+        SEP:8,
+        OCT:9,
+        NOV:10,
+        DEC:11
+    };
+
+    const months = [
+        "Jan","Feb","Mar","Apr","May","Jun",
+        "Jul","Aug","Sep","Oct","Nov","Dec"
+    ];
+
+    const stockist = simpleLinuxMonthMatch[1].trim();
+
+    const monthName = simpleLinuxMonthMatch[2].toUpperCase();
+    const year = 2000 + parseInt(simpleLinuxMonthMatch[3],10);
+
+    if (!(monthName in monthMap))
+        return false;
+
+    const month = monthMap[monthName];
+    const lastDay = new Date(year, month + 1, 0).getDate();
+
+    console.log("FOUND SIMPLE LINUX STOCK REPORT");
+    console.log("STOCKIST :", stockist);
+
+    return {
+        stockist,
+        startDate: `01-${months[month]}-${year}`,
+        endDate: `${String(lastDay).padStart(2,"0")}-${months[month]}-${year}`
+    };
+}
 
 /* =========================
    FINAL DATE FALLBACK

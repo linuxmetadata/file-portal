@@ -1907,21 +1907,21 @@ if (statusMatch) {
 
 console.log("CHECKING STOCK AND SALES REPORT DD-MMM-YY");
 
-const stockSalesMatch = text.match(
+const stockSalesReportMatch = text.match(
     /Stock\s+and\s+Sales\s+report\s+From\s*-*>\s*(\d{1,2})-([A-Za-z]{3})-(\d{2})\s*to\s*(\d{1,2})-([A-Za-z]{3})-(\d{2})/i
 );
 
-console.log("STOCK SALES MATCH :", stockSalesMatch);
+console.log("STOCK SALES MATCH :", stockSalesReportMatch);
 
-if (stockSalesMatch) {
+if (stockSalesReportMatch) {
 
-    let startDay = stockSalesMatch[1].padStart(2, "0");
-    let startMonth = stockSalesMatch[2];
-    let startYear = parseInt(stockSalesMatch[3], 10);
+    let startDay = stockSalesReportMatch[1].padStart(2, "0");
+    let startMonth = stockSalesReportMatch[2];
+    let startYear = parseInt(stockSalesReportMatch[3], 10);
 
-    let endDay = stockSalesMatch[4].padStart(2, "0");
-    let endMonth = stockSalesMatch[5];
-    let endYear = parseInt(stockSalesMatch[6], 10);
+    let endDay = stockSalesReportMatch[4].padStart(2, "0");
+    let endMonth = stockSalesReportMatch[5];
+    let endYear = parseInt(stockSalesReportMatch[6], 10);
 
     // Convert YY -> YYYY
     if (startYear < 100) startYear += 2000;
@@ -1935,8 +1935,8 @@ if (stockSalesMatch) {
     console.log("END DATE   :", endDate);
 
     return {
-        startDate,
-        endDate
+        startDate: `${startDay}-${startMonth}-${startYear}`,
+        endDate: `${endDay}-${endMonth}-${endYear}`
     };
 }
 /* =========================

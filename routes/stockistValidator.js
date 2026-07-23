@@ -787,6 +787,27 @@ if (
     }
 }
 
+/*=========================================================
+  LINUX SALES REPORT
+  Seller : XXXXX
+=========================================================*/
+
+if (/Sales\s+Report/i.test(header)) {
+
+    console.log("CHECKING LINUX SALES REPORT");
+
+    const sellerMatch = header.match(
+        /Seller\s*:\s*([A-Z0-9&.,()'\/ -]+?)\s*(?:Stock\s+And\s+Sales|Report\s*Date|From\s+\d{2}[-\/]\d{2}[-\/]\d{4}|$)/i
+    );
+
+    console.log("SELLER MATCH :", sellerMatch);
+
+    if (sellerMatch) {
+
+        return removeGarbage(sellerMatch[1].trim());
+    }
+}
+
     /*--------------------------------------------------
       Generic PDF / Excel fallback
     --------------------------------------------------*/

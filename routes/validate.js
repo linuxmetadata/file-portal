@@ -1277,11 +1277,16 @@ if(stockReportSimple){
      HEADER DATE RANGE
   ========================= */
 
-  const headerRangeMatch =
-    headerText.match(
-      /(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}|\d{1,2}-[A-Za-z]{3}-\d{2,4}).{0,20}(?:TO|-).{0,20}(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}|\d{1,2}-[A-Za-z]{3}-\d{2,4})/i
-    );
+  const headerRangeMatch = headerText.match(
+/(\d{4}-\d{2}-\d{2}|\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}|\d{1,2}-[A-Za-z]{3}-\d{2,4}).{0,20}(?:TO|-).{0,20}(\d{4}-\d{2}-\d{2}|\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}|\d{1,2}-[A-Za-z]{3}-\d{2,4})/i
+);
 
+    console.log("HEADER RANGE MATCH:", headerRangeMatch);
+
+if (headerRangeMatch) {
+    console.log("CAPTURE 1:", headerRangeMatch[1]);
+    console.log("CAPTURE 2:", headerRangeMatch[2]);
+}
   if (headerRangeMatch) {
 
     console.log("Matched : Header Range");

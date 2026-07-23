@@ -1346,6 +1346,20 @@ if(stockReportSimple){
         headerRangeMatch[2]
       );
 
+    console.log("START DATE :", startDate);
+    console.log("END DATE   :", endDate);
+
+    console.log(
+    startDate.getDate(),
+    startDate.getMonth() + 1,
+    startDate.getFullYear()
+);
+
+    console.log(
+    endDate.getDate(),
+    endDate.getMonth() + 1,
+    endDate.getFullYear()
+);
     if(ok(startDate,endDate)){
 
       console.log(

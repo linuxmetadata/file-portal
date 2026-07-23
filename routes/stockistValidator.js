@@ -762,6 +762,32 @@ if (/This PDF Report is created from Medica Ultimate/i.test(header)) {
 
     console.log("MEDICA STOCKIST NOT FOUND");
 }
+/*=========================================================
+  LINUX STOCK AND SALES REPORT
+=========================================================*/
+
+if (/STOCK\s+AND\s+SALES/i.test(header)) {
+
+    console.log("MATCHED LINUX STOCK AND SALES");
+
+    const lines = header
+        .split(/\r?\n/)
+        .map(removeGarbage)
+        .filter(Boolean);
+
+    const reportIndex = lines.findIndex(line =>
+        /STOCK\s+AND\s+SALES/i.test(line)
+    );
+
+    if (reportIndex >= 0 && reportIndex + 1 < lines.length) {
+
+        const stockist = lines[reportIndex + 1];
+
+        console.log("LINUX STOCKIST :", stockist);
+
+        return stockist;
+    }
+}
 
     /*--------------------------------------------------
       Generic PDF / Excel fallback

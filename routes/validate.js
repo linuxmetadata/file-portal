@@ -2054,6 +2054,56 @@ if (linuxStockStatementMatch) {
 }
 
 /*=========================================================
+  STOCK AND SALES REPORT (MONTH)
+  of Jun2026 for LINUX META
+=========================================================*/
+
+console.log("CHECKING STOCK AND SALES REPORT(MONTH)");
+
+const stockMonthOnlyMatch = text.match(
+    /Stock\s+And\s+Sales\s+Report\s*\(Month\)[\s\S]{0,100}?of\s+([A-Za-z]{3})\s*(\d{4})\s+for\s+LINUX\s+META/i
+);
+
+console.log("STOCK MONTH REPORT MATCH :", stockMonthOnlyMatch);
+
+if (stockMonthOnlyMatch) {
+
+    const monthMap = {
+        JAN:0,
+        FEB:1,
+        MAR:2,
+        APR:3,
+        MAY:4,
+        JUN:5,
+        JUL:6,
+        AUG:7,
+        SEP:8,
+        OCT:9,
+        NOV:10,
+        DEC:11
+    };
+
+    const months = [
+        "Jan","Feb","Mar","Apr","May","Jun",
+        "Jul","Aug","Sep","Oct","Nov","Dec"
+    ];
+
+    const monthName = stockMonthOnlyMatch[1].toUpperCase();
+    const year = Number(stockMonthOnlyMatch[2]);
+
+    const month = monthMap[monthName];
+
+    const lastDay = new Date(year, month + 1, 0).getDate();
+
+    console.log("FOUND STOCK MONTH REPORT");
+
+    return {
+        startDate: `01-${months[month]}-${year}`,
+        endDate: `${String(lastDay).padStart(2,"0")}-${months[month]}-${year}`
+    };
+}
+
+/*=========================================================
   LINUX META REPORT DATE VALIDATOR
 =========================================================*/
 

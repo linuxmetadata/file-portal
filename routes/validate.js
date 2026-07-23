@@ -2282,6 +2282,36 @@ if (periodDashMatch) {
     };
 }
 
+/*=========================================================
+  STOCK STATEMENT AS ON MONTH YY
+=========================================================*/
+
+console.log("CHECKING STOCK STATEMENT AS ON");
+
+const stockStatementAsOnMatch = text.match(
+    /Stock\s+Statement\s+As\s+on\s+([A-Za-z]+)\s+(\d{2})/i
+);
+
+console.log("STOCK STATEMENT AS ON MATCH :", stockStatementAsOnMatch);
+
+if (stockStatementAsOnMatch) {
+
+    console.log("FOUND STOCK STATEMENT AS ON REPORT");
+
+    const month = stockStatementAsOnMatch[1];
+    const year = Number("20" + stockStatementAsOnMatch[2]);
+
+    const monthIndex = new Date(`${month} 1, ${year}`).getMonth();
+
+    const startDate = new Date(year, monthIndex, 1);
+    const endDate = new Date(year, monthIndex + 1, 0);
+
+    return {
+        startDate: formatDate(startDate),
+        endDate: formatDate(endDate)
+    };
+}
+
 /* =========================
    FINAL DATE FALLBACK
 ========================= */

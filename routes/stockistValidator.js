@@ -934,7 +934,7 @@ return best;
     // FULL MATCH
     // ----------------------------
 
-    if (originalHeader.includes(originalDashboard)) {
+    if (originalHeader.includes(dashboardSearch)) {
 
         return {
             matched: true,

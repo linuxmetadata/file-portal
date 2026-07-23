@@ -406,77 +406,73 @@ return (
 }
 
 /*=========================================================
-    LINUX STOCK STATEMENT REPORT
+    LINUX STOCK STATEMENT (MMM, YYYY)
 =========================================================*/
 
 console.log("CHECKING LINUX STOCK STATEMENT");
 
-if (/Stock\s*Statment/i.test(text)) {
+// Check only Linux Stock Statement reports
+if (/Stock\s*Statment/i.test(text) &&
+    /LINUX\s+LAB/i.test(text)) {
 
-    //-----------------------------------------------------
-    // FORMAT 1 : Jun, 2026
-    //-----------------------------------------------------
-
-    let match = text.match(
-        /Stock\s*Statment\s*:\s*.*?(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*,\s*(20\d{2})/i
+    // Extract only MMM, YYYY
+    const match = text.match(
+        /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*,\s*(20\d{2})/i
     );
 
-    console.log("MONTH FORMAT :", match);
+    console.log("MONTH MATCH :", match);
 
-    if (match) {
-
-        const monthMap = {
-            JAN:1,FEB:2,MAR:3,APR:4,MAY:5,JUN:6,
-            JUL:7,AUG:8,SEP:9,OCT:10,NOV:11,DEC:12
-        };
-
-        const pdfMonth = monthMap[match[1].toUpperCase()];
-        const pdfYear = Number(match[2]);
-
-        console.log("PDF MONTH :", pdfMonth);
-        console.log("PDF YEAR :", pdfYear);
-
-        if (
-            pdfMonth === expectedMonth &&
-            pdfYear === expectedYear
-        ) {
-
-            console.log("MATCHED LINUX MONTH");
-
-            return true;
-        }
+    if (!match) {
+        console.log("MONTH NOT FOUND");
+        return false;
     }
 
-    //-----------------------------------------------------
-    // FORMAT 2 : 30/06/26
-    //-----------------------------------------------------
+    const monthMap = {
+        Jan: 0, Feb: 1, Mar: 2, Apr: 3,
+        May: 4, Jun: 5, Jul: 6, Aug: 7,
+        Sep: 8, Oct: 9, Nov: 10, Dec: 11
+    };
 
-    match = text.match(
-        /Stock\s*Statment\s*:\s*.*?(\d{2})\/(\d{2})\/(\d{2})/i
+    const pdfMonth = monthMap[
+        match[1].charAt(0).toUpperCase() +
+        match[1].slice(1).toLowerCase()
+    ];
+
+    const pdfYear = Number(match[2]);
+
+    // Previous month
+    const today = new Date();
+    const previousMonth = new Date(
+        today.getFullYear(),
+        today.getMonth() - 1,
+        1
     );
 
-    console.log("DATE FORMAT :", match);
+    console.log(
+        "PDF MONTH:",
+        pdfMonth + 1,
+        "PDF YEAR:",
+        pdfYear
+    );
 
-    if (match) {
+    console.log(
+        "EXPECTED MONTH:",
+        previousMonth.getMonth() + 1,
+        "EXPECTED YEAR:",
+        previousMonth.getFullYear()
+    );
 
-        const pdfMonth = Number(match[2]);
-        const pdfYear = 2000 + Number(match[3]);
-
-        console.log("PDF MONTH :", pdfMonth);
-        console.log("PDF YEAR :", pdfYear);
-
-        if (
-            pdfMonth === expectedMonth &&
-            pdfYear === expectedYear
-        ) {
-
-            console.log("MATCHED LINUX DATE");
-
-            return true;
-        }
+    if (
+        pdfMonth === previousMonth.getMonth() &&
+        pdfYear === previousMonth.getFullYear()
+    ) {
+        console.log("VALID LINUX STOCK REPORT");
+        return true;
     }
+
+    console.log("INVALID LINUX STOCK REPORT");
+    return false;
 }
-
 
   /* =========================
      EXCEL MONTH + STOCK END DATE

@@ -2104,6 +2104,56 @@ if (stockMonthOnlyMatch) {
 }
 
 /*=========================================================
+  STOCK AND SALE REPORT (TRANSACTION)
+  of Jun2026 for LINUX -META
+=========================================================*/
+
+console.log("CHECKING STOCK AND SALE REPORT (TRANSACTION)");
+
+const transactionReportMatch = text.match(
+    /Stock\s+and\s+Sale\s+Report\s*\(Transaction\)[\s\S]{0,100}?of\s+([A-Za-z]{3})\s*(\d{4})\s+for\s+LINUX\s*-?\s*META/i
+);
+
+console.log("TRANSACTION REPORT MATCH :", transactionReportMatch);
+
+if (transactionReportMatch) {
+
+    const monthMap = {
+        JAN:0,
+        FEB:1,
+        MAR:2,
+        APR:3,
+        MAY:4,
+        JUN:5,
+        JUL:6,
+        AUG:7,
+        SEP:8,
+        OCT:9,
+        NOV:10,
+        DEC:11
+    };
+
+    const months = [
+        "Jan","Feb","Mar","Apr","May","Jun",
+        "Jul","Aug","Sep","Oct","Nov","Dec"
+    ];
+
+    const monthName = transactionReportMatch[1].toUpperCase();
+    const year = Number(transactionReportMatch[2]);
+
+    const month = monthMap[monthName];
+
+    const lastDay = new Date(year, month + 1, 0).getDate();
+
+    console.log("FOUND TRANSACTION REPORT");
+
+    return {
+        startDate: `01-${months[month]}-${year}`,
+        endDate: `${String(lastDay).padStart(2,"0")}-${months[month]}-${year}`
+    };
+}
+
+/*=========================================================
   LINUX META REPORT DATE VALIDATOR
 =========================================================*/
 

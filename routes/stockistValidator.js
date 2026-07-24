@@ -368,10 +368,42 @@ function extractStockistName(text = "") {
         .replace(/\t/g, " ")
         .replace(/[ ]+/g, " ")
         .substring(0, 3000);
-
+    let m;
+    
     console.log("===== STOCKIST EXTRACTION START =====");
 
-    let m;
+    /*=========================================================
+ DASHBOARD NAME SEARCH
+=========================================================*/
+
+if (global.dashboardStockistName) {
+
+    const dashboard = cleanBusinessName(global.dashboardStockistName);
+
+    const lines = header
+        .split(/\r?\n/)
+        .map(removeGarbage)
+        .filter(Boolean);
+
+    for (const line of lines) {
+
+        const cleanLine = cleanBusinessName(line);
+
+        if (
+            cleanLine &&
+            dashboard &&
+            cleanLine.includes(dashboard)
+        ) {
+
+            console.log("MATCHED DASHBOARD STOCKIST");
+            console.log("FOUND :", line);
+
+            return line;
+        }
+    }
+}
+
+
 /*=========================================================
   RIOSAATHI STOCKIST
 =========================================================*/

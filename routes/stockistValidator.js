@@ -939,14 +939,17 @@ return best;
     // FULL MATCH
     // ----------------------------
 
-    if (originalHeader.includes(dashboardSearch)) {
+    if (
+    cleanBusinessName(originalHeader) ===
+    cleanBusinessName(dashboardSearch)
+) {
 
-        return {
-            matched: true,
-            method: "FULL_MATCH"
-        };
+    return {
+        matched: true,
+        method: "FULL_MATCH"
+    };
 
-    }
+}
 
     const ignoreWords = new Set([
         "MEDICAL",
@@ -988,17 +991,7 @@ return best;
 
     }
 
-    if (matched >= Math.min(2, words.length)) {
-
-        return {
-
-            matched: true,
-
-            method: "WORD_MATCH"
-
-        };
-
-    }
+    // WORD MATCH DISABLED
 
     return {
 
@@ -1122,10 +1115,7 @@ if (headerResult.matched) {
     if (documentCompact && dashboardCompact) {
 
         valid =
-
-            documentCompact.includes(dashboardCompact) ||
-
-            dashboardCompact.includes(documentCompact);
+        documentCompact === dashboardCompact;
 
     }
 
@@ -1151,9 +1141,7 @@ if (headerResult.matched) {
 
         });
 
-        if (matched >= Math.min(2, dashWords.length))
-
-            valid = true;
+        // Disabled Word Match
 
     }
 // ===== SECOND TRY (Normalized Names) =====
@@ -1162,6 +1150,19 @@ if (!valid) {
 
     normalizedDocument = normalizeName(extractedName);
     normalizedDashboard = normalizeName(dashboardName);
+
+    // Apply Stockist Alias
+const aliasMap = {
+    "KAMALAM MEDICAL CORPORATION":
+        "TRANSWORLD MEDICAL CORPORATION PVT LTD",
+
+    "MUTHU PHARMA A UNIT OF ASCENT WELLNESS AND":
+        "MUTHU PHARMA PVT LTD"
+};
+
+if (aliasMap[normalizedDashboard]) {
+    normalizedDashboard = normalizeName(aliasMap[normalizedDashboard]);
+}
 
     documentClean = cleanBusinessName(normalizedDocument);
     dashboardClean = cleanBusinessName(normalizedDashboard);
@@ -1173,8 +1174,7 @@ if (!valid) {
     if (documentCompact && dashboardCompact) {
 
         valid =
-            documentCompact.includes(dashboardCompact) ||
-            dashboardCompact.includes(documentCompact);
+            documentCompact === dashboardCompact;
 
     }
 
@@ -1193,8 +1193,7 @@ if (!valid) {
 
         });
 
-        if (matched >= Math.min(2, dashWords.length))
-            valid = true;
+        // Disabled Word Match
     }
 }
     /*==================================

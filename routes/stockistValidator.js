@@ -1195,6 +1195,46 @@ for (const line of headerLines) {
     console.log("HEADER SEARCH FAILED");
     console.log("================================");
 
+    /*==================================
+  FULL DOCUMENT DASHBOARD SEARCH
+==================================*/
+
+    const dashboardSearch = cleanBusinessName(dashboardName);
+
+    const fullText = text
+    .replace(/\r/g, "\n")
+    .replace(/\t/g, " ")
+    .replace(/[ ]+/g, " ");
+
+    const fullLines = fullText
+    .split(/\r?\n/)
+    .map(removeGarbage)
+    .filter(Boolean);
+
+    for (const line of fullLines) {
+
+    const cleanLine = cleanBusinessName(line);
+
+    if (
+        cleanLine &&
+        dashboardSearch &&
+        cleanLine.includes(dashboardSearch)
+    ) {
+
+        console.log("VALIDATION METHOD : FULL DOCUMENT SEARCH");
+        console.log("FOUND :", line);
+
+        return {
+            valid: true,
+            reason: "FULL DOCUMENT SEARCH",
+            extractedName: line,
+            dashboardName,
+            normalizedDocument: normalizeName(line),
+            normalizedDashboard: normalizeName(dashboardName)
+        };
+    }
+}
+
     global.dashboardStockistName = dashboardName;
 
     let extractedName = extractStockistName(text);

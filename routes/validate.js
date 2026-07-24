@@ -931,6 +931,41 @@ if (desaiMatch) {
   );
 }
 
+/* =========================
+   FOR THE MONTH OF 06/2026
+========================= */
+
+const numericMonthMatch = headerText.match(
+    /for\s+the\s+month\s+of\s*:?\s*(\d{1,2})\s*\/\s*(\d{4})/i
+);
+
+console.log("NUMERIC MONTH MATCH:", numericMonthMatch);
+
+if (numericMonthMatch) {
+
+    const fileMonth = parseInt(numericMonthMatch[1]);
+    const fileYear = parseInt(numericMonthMatch[2]);
+
+    console.log(
+        "FILE MONTH:",
+        fileMonth,
+        "FILE YEAR:",
+        fileYear
+    );
+
+    if (
+        fileMonth === month &&
+        fileYear === year
+    ) {
+
+        console.log("NUMERIC MONTH PASSED");
+
+        return true;
+    }
+
+    console.log("NUMERIC MONTH FAILED");
+}
+
   /* =========================
    MONTH ONLY
 ========================= */

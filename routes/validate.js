@@ -2495,8 +2495,11 @@ console.log("CHECKING GENERIC STOCK REPORT");
 // Step 1 - Identify whether this is a stock report
 const isStockReport =
     /Stock\s*Statement/i.test(text) ||
-    /Stock\s*(?:and|&)\s*Sale[s]?\s*Report/i.test(text) ||
-    /Stock\s*&\s*Sales\s*Statement/i.test(text);
+    /Stock\s*and\s*Sale\s*Report/i.test(text) ||
+    /Stock\s*and\s*Sales\s*Report/i.test(text) ||
+    /Stock\s*and\s*Sales\s*Statement/i.test(text) ||
+    /Stock\s*&\s*Sales\s*Statement/i.test(text) ||
+    /Stock\s*&\s*Sale\s*Statement/i.test(text);
 
 console.log("IS STOCK REPORT :", isStockReport);
 
@@ -2520,15 +2523,34 @@ if (isStockReport) {
 
     } else {
 
-        // --------------------------------------------------
-        // Month formats
-        // Jun2026
-        // Jun 2026
-        // Jun'26
-        // Jun26
-        // June 2026
-        // --------------------------------------------------
+    // ==========================
+    // For the Month Of June-2026
+    // ==========================
 
+    m = text.match(
+        /For\s+the\s+Month\s+Of\s+([A-Za-z]+)-(\d{4})/i
+    );
+
+    if (m) {
+
+        const monthMap = {
+            jan:0,feb:1,mar:2,apr:3,may:4,jun:5,
+            jul:6,aug:7,sep:8,oct:9,nov:10,dec:11
+        };
+
+        const month =
+            monthMap[
+                m[1].substring(0,3).toLowerCase()
+            ];
+
+        const year = Number(m[2]);
+
+        startDate = new Date(year, month, 1);
+        endDate = new Date(year, month + 1, 0);
+
+    } else {
+
+        // Existing Month Regex
         m = text.match(
             /\b(Jan|January|Feb|February|Mar|March|Apr|April|May|Jun|June|Jul|July|Aug|August|Sep|Sept|September|Oct|October|Nov|November|Dec|December)\s*'?(\d{2,4})\b/i
         );
@@ -2540,11 +2562,9 @@ if (isStockReport) {
                 jul:6,aug:7,sep:8,oct:9,nov:10,dec:11
             };
 
-            let month =
+            const month =
                 monthMap[
-                    m[1]
-                    .substring(0,3)
-                    .toLowerCase()
+                    m[1].substring(0,3).toLowerCase()
                 ];
 
             let year = Number(m[2]);
@@ -2556,23 +2576,7 @@ if (isStockReport) {
             endDate = new Date(year, month + 1, 0);
         }
     }
-
-    console.log("GENERIC START :", startDate);
-    console.log("GENERIC END   :", endDate);
-
-    if (
-        startDate &&
-        endDate &&
-        ok(startDate, endDate)
-    ) {
-
-        console.log("Matched : Generic Stock Report");
-
-        return {
-            startDate,
-            endDate
-        };
-    }
+}
 }
 
 /* =========================

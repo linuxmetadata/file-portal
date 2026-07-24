@@ -20,6 +20,8 @@ function normalizeName(name = "") {
         .replace(/\bAGENCIES\b/g, "AGENCY")
         .replace(/\bDISTRIBUTORS\b/g, "DISTRIBUTOR")
         .replace(/\bMEDICALS\b/g, "MEDICAL")
+        .replace(/\bPHARMACUETICALS\b/g, "PHARMACUETICAL")
+        .replace(/\bPHARMACEUTICALS\b/g, "PHARMACEUTICAL")
         .replace(/\bPHARMACUETICALS\b/g, "PHARMA")
         .replace(/\bPHARMACEUTICALS\b/g, "PHARMA")
         .replace(/\bPHARMACY\b/g, "PHARMA")

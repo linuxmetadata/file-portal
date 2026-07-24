@@ -2492,14 +2492,21 @@ if (stockStatementAsOnMatch) {
 
 console.log("CHECKING GENERIC STOCK REPORT");
 
+const cleanText = text
+    .replace(/[\r\n\t]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+console.log("CLEAN HEADER:", cleanText.substring(0,300));
+
 // Step 1 - Identify whether this is a stock report
 const isStockReport =
-    /Stock\s*Statement/i.test(text) ||
-    /Stock\s*and\s*Sale\s*Report/i.test(text) ||
-    /Stock\s*and\s*Sales\s*Report/i.test(text) ||
-    /Stock\s*and\s*Sales\s*Statement/i.test(text) ||
-    /Stock\s*&\s*Sales\s*Statement/i.test(text) ||
-    /Stock\s*&\s*Sale\s*Statement/i.test(text);
+    /Stock\s*Statement/i.test(cleanText) ||
+    /Stock\s*and\s*Sale\s*Report/i.test(cleanText) ||
+    /Stock\s*and\s*Sales\s*Report/i.test(cleanText) ||
+    /Stock\s*and\s*Sales\s*Statement/i.test(cleanText) ||
+    /Stock\s*&\s*Sales\s*Statement/i.test(cleanText) ||
+    /Stock\s*&\s*Sale\s*Statement/i.test(cleanText);
 
 console.log("IS STOCK REPORT :", isStockReport);
 

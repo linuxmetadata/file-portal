@@ -200,25 +200,29 @@ const pdfParse = require("pdf-parse");
 }
     
 
-    if (ext === "doc") {
+const libre = require("libreoffice-convert");
+const { promisify } = require("util");
 
-  const raw =
-    fs.readFileSync(filePath);
+const convertAsync = promisify(libre.convert);
 
-  const text =
-    raw.toString("latin1");
 
-  console.log(
-    "DOC TEXT LENGTH:",
-    text.length
-  );
+if (ext === "doc") {
 
-  console.log(
-    "DOC PREVIEW:",
-    text.substring(0,500)
-  );
+    const input = fs.readFileSync(filePath);
 
-  return text;
+    const converted = await convertAsync(input, ".docx", undefined);
+
+    const tempDocx = filePath + ".docx";
+
+    fs.writeFileSync(tempDocx, converted);
+
+    const result = await mammoth.extractRawText({
+        path: tempDocx
+    });
+
+    fs.unlinkSync(tempDocx);
+
+    return result.value || "";
 }
 
     if (ext === "docx") {

@@ -1543,6 +1543,47 @@ if (
 
     console.log("SIMPLE DATE RANGE FAILED");
 }
+/*=========================================================
+  STOCK AND SALE REPORT (PERIOD)
+  30/06/26 To:01/06/26
+=========================================================*/
+
+console.log("CHECKING PERIOD BETWEEN REPORT");
+
+const betweenMatch = text.match(
+/(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s*To:?\s*(\d{1,2})\/(\d{1,2})\/(\d{2,4})/i
+);
+
+console.log("BETWEEN MATCH :", betweenMatch);
+
+if (betweenMatch) {
+
+    let endDay = parseInt(betweenMatch[1]);
+    let endMonth = parseInt(betweenMatch[2]);
+    let endYear = parseInt(betweenMatch[3]);
+
+    let startDay = parseInt(betweenMatch[4]);
+    let startMonth = parseInt(betweenMatch[5]);
+    let startYear = parseInt(betweenMatch[6]);
+
+    if (startYear < 100) startYear += 2000;
+    if (endYear < 100) endYear += 2000;
+
+    const startDate = new Date(startYear, startMonth - 1, startDay);
+    const endDate = new Date(endYear, endMonth - 1, endDay);
+
+    console.log("START :", startDate);
+    console.log("END   :", endDate);
+
+    if (ok(startDate, endDate)) {
+
+        console.log("PERIOD BETWEEN REPORT PASSED");
+
+        return true;
+    }
+
+    console.log("PERIOD BETWEEN REPORT FAILED");
+}
 
 /* =========================
   CHECKING DATE HEADER REPORT

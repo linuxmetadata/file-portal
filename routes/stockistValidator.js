@@ -1199,7 +1199,6 @@ for (const line of headerLines) {
   FULL DOCUMENT DASHBOARD SEARCH
 ==================================*/
 
-    const dashboardSearch = cleanBusinessName(dashboardName);
 
     const fullText = text
     .replace(/\r/g, "\n")

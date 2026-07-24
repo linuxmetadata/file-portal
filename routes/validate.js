@@ -2314,6 +2314,49 @@ if (stockAsOnMatch) {
         endDate: `${String(lastDay).padStart(2,"0")}-${months[month]}-${year}`
     };
 }
+console.log("CHECKING STOCKSTATEMENT REPORT AS ON");
+
+const stockStatementAsOnCompact = text.match(
+    /Stock\s*Statement\s*Report\s*As\s*On\s*([A-Za-z]{3,9})\s*(\d{2,4})/i
+);
+
+console.log("STOCKSTATEMENT AS ON MATCH :", stockStatementAsOnCompact);
+
+if (stockStatementAsOnCompact) {
+
+    const monthMap = {
+        jan:0,feb:1,mar:2,apr:3,may:4,jun:5,
+        jul:6,aug:7,sep:8,oct:9,nov:10,dec:11
+    };
+
+    const monthName = stockStatementAsOnCompact[1]
+        .substring(0,3)
+        .toLowerCase();
+
+    let year = Number(stockStatementAsOnCompact[2]);
+
+    if (year < 100)
+        year += 2000;
+
+    const month = monthMap[monthName];
+
+    if (month !== undefined) {
+
+        const startDate = new Date(year, month, 1);
+        const endDate = new Date(year, month + 1, 0);
+
+        if (ok(startDate, endDate)) {
+
+            console.log("Matched : Compact Stock Statement As On");
+
+            return {
+                startDate,
+                endDate
+            };
+        }
+    }
+}
+
 /*=========================================================
   STOCKIST - STOCK STATEMENT FOR MON'YY
   Example:

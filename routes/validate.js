@@ -2486,6 +2486,95 @@ if (stockStatementAsOnMatch) {
     };
 }
 
+// ======================================================
+// GENERIC STOCK REPORT VALIDATOR
+// ======================================================
+
+console.log("CHECKING GENERIC STOCK REPORT");
+
+// Step 1 - Identify whether this is a stock report
+const isStockReport =
+    /Stock\s*Statement/i.test(text) ||
+    /Stock\s*(?:and|&)\s*Sale[s]?\s*Report/i.test(text) ||
+    /Stock\s*&\s*Sales\s*Statement/i.test(text);
+
+console.log("IS STOCK REPORT :", isStockReport);
+
+if (isStockReport) {
+
+    let startDate = null;
+    let endDate = null;
+
+    // --------------------------------------------------
+    // ISO Date Range
+    // Example:
+    // 2026-06-01 to 2026-06-30
+    // --------------------------------------------------
+
+    let m = text.match(/(\d{4}-\d{2}-\d{2})\s*(?:TO|to|-)\s*(\d{4}-\d{2}-\d{2})/i);
+
+    if (m) {
+
+        startDate = new Date(m[1]);
+        endDate = new Date(m[2]);
+
+    } else {
+
+        // --------------------------------------------------
+        // Month formats
+        // Jun2026
+        // Jun 2026
+        // Jun'26
+        // Jun26
+        // June 2026
+        // --------------------------------------------------
+
+        m = text.match(
+            /\b(Jan|January|Feb|February|Mar|March|Apr|April|May|Jun|June|Jul|July|Aug|August|Sep|Sept|September|Oct|October|Nov|November|Dec|December)\s*'?(\d{2,4})\b/i
+        );
+
+        if (m) {
+
+            const monthMap = {
+                jan:0,feb:1,mar:2,apr:3,may:4,jun:5,
+                jul:6,aug:7,sep:8,oct:9,nov:10,dec:11
+            };
+
+            let month =
+                monthMap[
+                    m[1]
+                    .substring(0,3)
+                    .toLowerCase()
+                ];
+
+            let year = Number(m[2]);
+
+            if (year < 100)
+                year += 2000;
+
+            startDate = new Date(year, month, 1);
+            endDate = new Date(year, month + 1, 0);
+        }
+    }
+
+    console.log("GENERIC START :", startDate);
+    console.log("GENERIC END   :", endDate);
+
+    if (
+        startDate &&
+        endDate &&
+        ok(startDate, endDate)
+    ) {
+
+        console.log("Matched : Generic Stock Report");
+
+        return {
+            startDate,
+            endDate
+        };
+    }
+}
+
 /* =========================
    FINAL DATE FALLBACK
 ========================= */

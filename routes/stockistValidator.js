@@ -1213,10 +1213,11 @@ if (headerResult.matched) {
 
     if (documentCompact && dashboardCompact) {
 
-        valid =
-        documentCompact === dashboardCompact;
+    valid =
+        documentCompact === dashboardCompact ||
+        documentCompact.startsWith(dashboardCompact);
 
-    }
+}
 
     /*==================================
       WORD MATCH
@@ -1269,11 +1270,12 @@ if (aliasMap[normalizedDashboard]) {
     documentCompact = documentClean.replace(/\s/g, "");
     dashboardCompact = dashboardClean.replace(/\s/g, "");
 
-    // Exact / Contains
+// Exact / Contains
     if (documentCompact && dashboardCompact) {
 
         valid =
-            documentCompact === dashboardCompact;
+            documentCompact === dashboardCompact ||
+            documentCompact.startsWith(dashboardCompact);
 
     }
 

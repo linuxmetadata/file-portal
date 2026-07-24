@@ -594,6 +594,38 @@ if (
     }
 }
 
+/*--------------------------------------------------
+  LINUX META - STOCK & SALES PERIOD
+--------------------------------------------------*/
+
+if (/Stock\s*&\s*Sales\s+Statement\s+for\s+the\s+Period/i.test(header)) {
+
+    const lines = header
+        .split(/\r?\n/)
+        .map(removeGarbage)
+        .filter(Boolean);
+
+    const reportIndex = lines.findIndex(line =>
+        /Stock\s*&\s*Sales\s+Statement\s+for\s+the\s+Period/i.test(line)
+    );
+
+    if (reportIndex >= 0) {
+
+        // Look below the report title first
+        for (let i = reportIndex + 1; i <= Math.min(reportIndex + 3, lines.length - 1); i++) {
+
+            const line = lines[i];
+
+            if (scoreBusinessLine(line) > 40) {
+
+                console.log("MATCHED LINUX META PERIOD FORMAT");
+
+                return line;
+            }
+        }
+    }
+}
+
     /*--------------------------------------------------
       Stock Statement (Datewise)
     --------------------------------------------------*/

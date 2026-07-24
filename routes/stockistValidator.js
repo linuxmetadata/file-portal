@@ -1148,6 +1148,49 @@ if (headerResult.matched) {
     };
 
 }
+/*==================================
+  DASHBOARD NAME SEARCH
+==================================*/
+
+const dashboardSearch = cleanBusinessName(dashboardName);
+
+const headerLines = header
+    .split(/\r?\n/)
+    .map(removeGarbage)
+    .filter(Boolean);
+
+for (const line of headerLines) {
+
+    const cleanLine = cleanBusinessName(line);
+
+    if (
+        cleanLine &&
+        dashboardSearch &&
+        cleanLine.includes(dashboardSearch)
+    ) {
+
+        console.log("VALIDATION METHOD : DASHBOARD SEARCH");
+        console.log("FOUND :", line);
+
+        return {
+
+            valid: true,
+
+            reason: "DASHBOARD SEARCH",
+
+            extractedName: line,
+
+            dashboardName,
+
+            normalizedDocument: normalizeName(line),
+
+            normalizedDashboard: normalizeName(dashboardName)
+
+        };
+
+    }
+
+}
 
     console.log("HEADER SEARCH FAILED");
     console.log("================================");

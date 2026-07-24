@@ -561,7 +561,36 @@ if (linuxHeaderMatch) {
 
     }
 
+/*--------------------------------------------------
+  LINUX META - COMPANY NAME ABOVE STOCK & SALES
+--------------------------------------------------*/
 
+if (
+    /Company\s*Name\s*:\s*LINUX\s+META/i.test(header) &&
+    /Stock\s*&\s*Sales\s+Statement/i.test(header)
+) {
+
+    const lines = header
+        .split(/\r?\n/)
+        .map(removeGarbage)
+        .filter(Boolean);
+
+    const companyIndex = lines.findIndex(line =>
+        /Company\s*Name\s*:\s*LINUX\s+META/i.test(line)
+    );
+
+    if (companyIndex >= 0 && companyIndex + 1 < lines.length) {
+
+        const stockist = lines[companyIndex + 1];
+
+        if (scoreBusinessLine(stockist) > 40) {
+
+            console.log("MATCHED LINUX META COMPANY NAME");
+
+            return stockist;
+        }
+    }
+}
 
     /*--------------------------------------------------
       Stock Statement (Datewise)

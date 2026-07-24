@@ -2521,7 +2521,7 @@ if (isStockReport) {
     // 2026-06-01 to 2026-06-30
     // --------------------------------------------------
 
-    let m = text.match(/(\d{4}-\d{2}-\d{2})\s*(?:TO|to|-)\s*(\d{4}-\d{2}-\d{2})/i);
+    let m = cleanText.match(/(\d{4}-\d{2}-\d{2})\s*(?:TO|to|-)\s*(\d{4}-\d{2}-\d{2})/i);
 
     if (m) {
 
@@ -2583,6 +2583,22 @@ if (isStockReport) {
             endDate = new Date(year, month + 1, 0);
         }
     }
+}
+console.log("GENERIC START :", startDate);
+console.log("GENERIC END   :", endDate);
+
+if (startDate && endDate) {
+
+    console.log("GENERIC MONTH FOUND");
+
+    if (ok(startDate, endDate)) {
+
+        console.log("GENERIC VALIDATION PASSED");
+
+        return true;
+    }
+
+    console.log("GENERIC VALIDATION FAILED");
 }
 }
 

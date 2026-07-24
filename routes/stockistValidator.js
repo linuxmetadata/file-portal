@@ -369,6 +369,8 @@ function extractStockistName(text = "") {
         .replace(/[ ]+/g, " ")
         .substring(0, 3000);
 
+    console.log("===== STOCKIST EXTRACTION START =====");
+
     let m;
 /*=========================================================
   RIOSAATHI STOCKIST

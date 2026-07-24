@@ -2534,9 +2534,9 @@ if (isStockReport) {
     // For the Month Of June-2026
     // ==========================
 
-    m = text.match(
-        /For\s+the\s+Month\s+Of\s+([A-Za-z]+)-(\d{4})/i
-    );
+    m = cleanText.match(
+    /For\s+the\s+Month\s+Of\s+([A-Za-z]+)\s*-\s*(\d{4})/i
+  );
 
     if (m) {
 

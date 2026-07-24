@@ -369,7 +369,7 @@ function extractStockistName(text = "") {
         .replace(/[ ]+/g, " ")
         .substring(0, 3000);
     let m;
-    
+
     console.log("===== STOCKIST EXTRACTION START =====");
 
     /*=========================================================
@@ -1152,7 +1152,11 @@ if (headerResult.matched) {
     console.log("HEADER SEARCH FAILED");
     console.log("================================");
 
+    global.dashboardStockistName = dashboardName;
+
     let extractedName = extractStockistName(text);
+
+    global.dashboardStockistName = null;
 
     if (!extractedName) {
 

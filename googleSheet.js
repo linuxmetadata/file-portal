@@ -37,7 +37,7 @@ async function getSheetData() {
   try {
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!A2:E`,
+      range: `${SHEET_NAME}!A2:F`,
     });
 
     return res.data.values || [];
@@ -49,11 +49,17 @@ async function getSheetData() {
 }
 
 /* ========================= */
-async function updateRow(code, name, type, fileId, sales) {
+async function updateRow(division, code, name, type, fileId, sales) {
 
   try {
     const rows = await getSheetData();
-    let rowIndex = rows.findIndex(r => String(r[0]) === String(code));
+    let rowIndex = rows.findIndex(r =>
+  String(r[0] || "").trim().toUpperCase() ===
+    String(division || "").trim().toUpperCase() &&
+
+  String(r[1] || "").trim().toUpperCase() ===
+    String(code || "").trim().toUpperCase()
+);
 
     if (rowIndex === -1) {
 
@@ -63,6 +69,7 @@ async function updateRow(code, name, type, fileId, sales) {
         valueInputOption: "RAW",
         requestBody: {
           values: [[
+            division,
             code,
             name,
             type === "aws" ? fileId : "",
@@ -79,15 +86,15 @@ async function updateRow(code, name, type, fileId, sales) {
       const rowNumber = rowIndex + 2;
       let existing = rows[rowIndex];
 
-      let awsFile = existing[2] || "";
-      let sssFile = existing[3] || "";
+      let awsFile = existing[3] || "";
+      let sssFile = existing[4] || "";
 
       if (type === "aws") awsFile = fileId;
       if (type === "sss") sssFile = fileId;
 
       await sheets.spreadsheets.values.update({
         spreadsheetId: SPREADSHEET_ID,
-        range: `${SHEET_NAME}!A${rowNumber}:E${rowNumber}`,
+        range: `${SHEET_NAME}!A${rowNumber}:F${rowNumber}`,
         valueInputOption: "RAW",
         requestBody: {
           values: [[
@@ -129,7 +136,7 @@ async function deleteFileFromSheet(code, type) {
 
     await sheets.spreadsheets.values.update({
       spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!A${rowNumber}:E${rowNumber}`,
+      range: `${SHEET_NAME}!A${rowNumber}:F${rowNumber}`,
       valueInputOption: "RAW",
       requestBody: {
         values: [[

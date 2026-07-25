@@ -5,6 +5,7 @@ let currentPreviewFile = null;
 let currentPreviewFiles = [];
 let currentPreviewCode = null;
 let currentPreviewType = null;
+let currentPreviewDivision = null;
 let isValidFile = true;
 
 function resetValidationState() {
@@ -256,7 +257,7 @@ function getUploadUI(row, code, type) {
     if (isAdmin()) {
 
       buttons += `
-        <button onclick="deleteFile('${code}','${type}')">
+        <button onclick="chooseFile('${row.division}','${code}','${type}')">
           Delete
         </button>
       `;
@@ -265,7 +266,7 @@ function getUploadUI(row, code, type) {
   } else {
 
     buttons += `
-      <button onclick="chooseFile('${code}','${type}')">
+      <button onclick="chooseFile('${row.division}','${code}','${type}')">
         Upload
       </button>
     `;
@@ -277,7 +278,7 @@ function getUploadUI(row, code, type) {
 /* =========================
    CHOOSE FILE
 ========================= */
-function chooseFile(code, type) {
+function chooseFile(division, code, type) {
 
   currentPreviewFile = null;
   currentPreviewFiles = [];
@@ -411,6 +412,7 @@ function chooseFile(code, type) {
 
     currentPreviewFiles = files;
     currentPreviewFile = files[0];
+    currentPreviewDivision = division;
     currentPreviewCode = code;
     currentPreviewType = type;
 
@@ -682,13 +684,13 @@ async function submitFile(btn) {
       form.append("type", currentPreviewType);
 
       const row = fullData.find(
-        r => String(r.code) === String(currentPreviewCode)
+        r =>
+        String(r.code) === String(currentPreviewCode) &&
+        String(r.division) === String(currentPreviewDivision)
       );
 
-    form.append(
-      "stockistName",
-      row ? row.name : ""
-    );
+        form.append("division", row ? row.division : "");
+        form.append("stockistName", row ? row.name : "");
 
       const res = await fetch("/data/upload", {
         method: "POST",

@@ -162,21 +162,26 @@ router.post(
 /* =========================
    MATCH ROW
 ========================= */
-function matchRow(sheetRows, code) {
+function matchRow(sheetRows, division, code) {
 
   return sheetRows.find(r => {
 
+    const sheetDivision =
+      String(r[0] || "").trim().toUpperCase();
+
     const sheetCode =
-      String(r[0] || "")
-        .trim()
-        .toUpperCase();
+      String(r[1] || "").trim().toUpperCase();
+
+    const rowDivision =
+      String(division || "").trim().toUpperCase();
 
     const rowCode =
-      String(code || "")
-        .trim()
-        .toUpperCase();
+      String(code || "").trim().toUpperCase();
 
-    return sheetCode === rowCode;
+    return (
+      sheetDivision === rowDivision &&
+      sheetCode === rowCode
+    );
 
   }) || [];
 }
@@ -219,7 +224,11 @@ router.get("/list", async (req, res) => {
           "";
 
         const match =
-          matchRow(sheetRows, code);
+          matchRow(
+            sheetRows,
+            row.Division,
+            code
+          );
 
         return {
 
@@ -362,10 +371,11 @@ router.post(
     try {
 
       const {
-      code,
-      type,
-      sales,
-      stockistName
+        division,
+        code,
+        type,
+        sales,
+        stockistName
     } = req.body;
 
     console.log("================================");
@@ -385,7 +395,7 @@ router.post(
       }
 
       const lockKey =
-        `${code}_${type}`;
+        `${division}_${code}_${type}`;
 
       /* DUPLICATE UPLOAD */
       if (uploadLocks[lockKey]) {
@@ -402,9 +412,25 @@ router.post(
         loadExcel();
 
       const rowData =
-        excelData.find(r =>
-          String(r.Code || r.CODE).trim() === String(code).trim()
-        );
+      excelData.find(r =>
+
+        String(r.Division || "")
+            .trim()
+            .toUpperCase() ===
+        String(division || "")
+            .trim()
+            .toUpperCase()
+
+        &&
+
+        String(r.Code || r.CODE)
+            .trim()
+            .toUpperCase() ===
+        String(code)
+            .trim()
+            .toUpperCase()
+
+    );
 
       const division =
         rowData?.Division || "General";
@@ -441,7 +467,11 @@ router.post(
         await getSheetData();
 
       const existing =
-        matchRow(sheetRows, code);
+        matchRow(
+          sheetRows,
+          division,
+          code
+        );
 
       let existingFiles = "";
 
@@ -459,6 +489,7 @@ router.post(
           : driveFile.fileId;
 
       await updateRow(
+        division,
         code,
         name,
         type,
@@ -490,7 +521,7 @@ router.post(
       if (req.body) {
 
         const lockKey =
-          `${req.body.code}_${req.body.type}`;
+          `${division}_${req.body.code}_${req.body.type}`;
 
         delete uploadLocks[lockKey];
       }

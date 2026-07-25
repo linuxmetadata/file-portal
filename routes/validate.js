@@ -2565,6 +2565,39 @@ const cleanText = text
 
 console.log("CLEAN HEADER:", cleanText.substring(0,300));
 
+// TXT STOCK REPORT
+const txtPeriodMatch = headerText.match(
+    /between\s+(\d{1,2}\/\d{1,2}\/\d{4})\s+and\s+(\d{1,2}\/\d{1,2}\/\d{4})/i
+);
+
+if (txtPeriodMatch) {
+
+    console.log("MATCHED TXT BETWEEN DATE FORMAT");
+
+    const parse = (d) => {
+
+        const p = d.split("/");
+
+        return new Date(
+            Number(p[2]),
+            Number(p[0]) - 1,
+            Number(p[1])
+        );
+    };
+
+    const startDate = parse(txtPeriodMatch[1]);
+    const endDate = parse(txtPeriodMatch[2]);
+
+    if (ok(startDate, endDate)) {
+
+        console.log("TXT REPORT PASSED");
+
+        return true;
+    }
+
+    console.log("TXT REPORT FAILED");
+}
+
 // Step 1 - Identify whether this is a stock report
 const isStockReport =
     /Stock\s*Statement/i.test(cleanText) ||

@@ -432,8 +432,8 @@ router.post(
 
     );
 
-      const division =
-        rowData?.Division || "General";
+      const excelDivision =
+      rowData?.Division || "General";
 
       const state =
         rowData?.STATE ||
@@ -521,7 +521,7 @@ router.post(
       if (req.body) {
 
         const lockKey =
-          `${division}_${req.body.code}_${req.body.type}`;
+          `${req.body.division}_${req.body.code}_${req.body.type}`;
 
         delete uploadLocks[lockKey];
       }

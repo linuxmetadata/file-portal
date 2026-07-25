@@ -6,6 +6,7 @@ const drive = google.drive({
   version: "v3",
   auth: oAuth2Client
 });
+const ROOT_FOLDER_ID = "1XYBCv9qzPgcM7knqpnu57Iw18QBEGOfT";
 
 /* =========================
    CREATE / GET FOLDER
@@ -57,7 +58,10 @@ async function uploadToDrive(
   try {
     console.log("Uploading:", fileName);
 
-    const divisionFolderId = await getOrCreateFolder(division);
+    const divisionFolderId = await getOrCreateFolder(
+    division,
+    ROOT_FOLDER_ID
+  );
     const stateFolderId = await getOrCreateFolder(state, divisionFolderId);
     const typeFolderId = await getOrCreateFolder(type.toUpperCase(), stateFolderId);
 

@@ -287,16 +287,13 @@ router.get("/list", async (req, res) => {
               ""
             ).toString(),
 
-          sales:
-            match[4] || "",
+          sales: match[5] || "",
 
-          awsFile:
-            match[2] || "",
+          awsFile: match[3] || "",
 
-          sssFile:
-            match[3] || ""
-        };
-      });
+          sssFile: match[4] || ""
+        }
+        });
 
     let filteredData =
       finalData;
@@ -478,9 +475,9 @@ router.post(
       if (existing.length) {
 
         existingFiles =
-          type === "aws"
-            ? existing[2] || ""
-            : existing[3] || "";
+        type === "aws"
+          ? existing[3] || ""
+          : existing[4] || "";
       }
 
       const updatedFiles =

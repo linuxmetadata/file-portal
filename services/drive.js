@@ -67,7 +67,7 @@ async function uploadToDrive(
     requestBody: {
       name: uniqueName,
       parents: [typeFolderId]
-    },
+      },
       media: {
         mimeType: "application/octet-stream",
         body: fs.createReadStream(filePath, {
@@ -85,6 +85,24 @@ async function uploadToDrive(
     const webViewLink = `https://drive.google.com/file/d/${fileId}/view`;
 
     console.log("Upload success:", fileId);
+
+    /* =========================
+   MAKE FILE PUBLIC
+========================= */
+
+await drive.permissions.create({
+
+    fileId: file.data.id,
+
+    requestBody: {
+
+        role: "reader",
+
+        type: "anyone"
+
+    }
+
+});
 
     return {
       fileId,

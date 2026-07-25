@@ -47,20 +47,27 @@ async function getOrCreateFolder(name, parent = null) {
 /* =========================
    FAST UPLOAD FILE
 ========================= */
-async function uploadToDrive(filePath, fileName, type, state = "General") {
+async function uploadToDrive(
+  filePath,
+  fileName,
+  division,
+  state = "General",
+  type
+) {
   try {
     console.log("Uploading:", fileName);
 
-    const mainFolderId = await getOrCreateFolder(type);
-    const stateFolderId = await getOrCreateFolder(state, mainFolderId);
+    const divisionFolderId = await getOrCreateFolder(division);
+    const stateFolderId = await getOrCreateFolder(state, divisionFolderId);
+    const typeFolderId = await getOrCreateFolder(type.toUpperCase(), stateFolderId);
 
     const uniqueName = Date.now() + "-" + fileName;
 
     const response = await drive.files.create({
-      requestBody: {
-        name: uniqueName,
-        parents: [stateFolderId]
-      },
+    requestBody: {
+      name: uniqueName,
+      parents: [typeFolderId]
+    },
       media: {
         mimeType: "application/octet-stream",
         body: fs.createReadStream(filePath, {

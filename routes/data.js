@@ -403,9 +403,11 @@ router.post(
 
       const rowData =
         excelData.find(r =>
-          String(r.Code || r.CODE)
-            === String(code)
+          String(r.Code || r.CODE).trim() === String(code).trim()
         );
+
+      const division =
+        rowData?.Division || "General";
 
       const state =
         rowData?.STATE ||
@@ -421,8 +423,9 @@ router.post(
         await uploadToDrive(
           req.file.path,
           req.file.originalname,
-          type,
-          state
+          division,
+          state,
+          type
         );
 
       /* DELETE TEMP FILE */

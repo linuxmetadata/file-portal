@@ -117,28 +117,53 @@ async function updateRow(division, code, name, type, fileId, sales) {
 }
 
 /* ========================= */
-async function deleteFileFromSheet(code, type) {
+async function deleteFileFromSheet(
+    division,
+    code,
+    type,
+    updatedFiles
+) {
 
   try {
+
     const rows = await getSheetData();
-    let rowIndex = rows.findIndex(r => String(r[0]) === String(code));
+
+    let rowIndex = rows.findIndex(r =>
+
+      String(r[0] || "").trim().toUpperCase() ===
+      String(division || "").trim().toUpperCase()
+
+      &&
+
+      String(r[1] || "").trim().toUpperCase() ===
+      String(code || "").trim().toUpperCase()
+
+    );
 
     if (rowIndex === -1) return;
 
     const rowNumber = rowIndex + 2;
-    let existing = rows[rowIndex];
+
+    const existing = rows[rowIndex];
 
     let awsFile = existing[3] || "";
     let sssFile = existing[4] || "";
-    let sales = existing[5] || "";
+    const sales = existing[5] || "";
 
-    if (type === "aws") awsFile = "";
-    if (type === "sss") sssFile = "";
+    if (type === "aws")
+    awsFile = updatedFiles;
+
+    if (type === "sss")
+    sssFile = updatedFiles;
 
     await sheets.spreadsheets.values.update({
+
       spreadsheetId: SPREADSHEET_ID,
+
       range: `${SHEET_NAME}!A${rowNumber}:F${rowNumber}`,
+
       valueInputOption: "RAW",
+
       requestBody: {
         values: [[
           existing[0],   // Division
@@ -149,13 +174,17 @@ async function deleteFileFromSheet(code, type) {
           sales
         ]]
       }
+
     });
 
-    console.log("🗑️ Sheet updated after delete:", code);
+    console.log("🗑️ Sheet updated:", division, code);
 
   } catch (err) {
-    console.error("❌ Sheet Delete Error:", err.message);
+
+    console.error("❌ Sheet Delete Error:", err);
+
   }
+
 }
 
 /* ========================= */

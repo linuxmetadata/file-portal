@@ -241,27 +241,38 @@ function getUploadUI(row, code, type) {
 
     buttons += fileIds.map(id => {
 
-      let url = id.trim();
+  const fileId = id.trim();
 
-      if (!url.startsWith("http")) {
-        url = `https://drive.google.com/file/d/${url}/view`;
+  let url = fileId;
+
+  if (!url.startsWith("http")) {
+    url = `https://drive.google.com/file/d/${fileId}/view`;
+  }
+
+  return `
+    <div style="margin-bottom:6px;display:flex;gap:5px;justify-content:center;">
+
+      <button onclick="viewFile('${url}')">
+        View
+      </button>
+
+      ${
+        isAdmin()
+        ? `<button onclick="deleteSingleFile(
+            '${row.division}',
+            '${code}',
+            '${type}',
+            '${fileId}'
+          )">
+            Delete
+          </button>`
+        : ""
       }
 
-      return `
-        <button onclick="viewFile('${url}')">
-          View
-        </button>
-      `;
-    }).join(" ");
+    </div>
+  `;
 
-    if (isAdmin()) {
-
-      buttons += `
-        <button onclick="chooseFile('${row.division}','${code}','${type}')">
-          Delete
-        </button>
-      `;
-    }
+}).join("");
 
   } else {
 
@@ -739,17 +750,42 @@ async function submitFile(btn) {
 /* =========================
    DELETE
 ========================= */
-async function deleteFile(code, type) {
+async function deleteSingleFile(
+    division,
+    code,
+    type,
+    fileId
+) {
 
-  if (!confirm("Delete file?")) return;
+    if (!confirm("Delete this file?"))
+        return;
 
-  await fetch(`/data/delete/${code}/${type}`, {
-    method: "DELETE"
-  });
+    const res = await fetch(
 
-  applyFilters();
+        `/data/delete/${encodeURIComponent(division)}/${encodeURIComponent(code)}/${type}/${fileId}`,
 
-  setTimeout(loadData, 300);
+        {
+            method: "DELETE"
+        }
+
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+
+        showMessage(
+            data.error || "Delete failed",
+            true
+        );
+
+        return;
+    }
+
+    showMessage("File deleted");
+
+    await loadData();
+
 }
 
 /* =========================

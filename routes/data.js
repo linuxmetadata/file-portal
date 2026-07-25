@@ -532,4 +532,75 @@ router.post(
   }
 );
 
+/* =========================
+   DELETE
+========================= */
+router.delete(
+"/delete/:division/:code/:type/:fileId", async (req, res) => {
+
+  try {
+
+    const {
+    division,
+    code,
+    type,
+    fileId
+} = req.params;
+
+    const sheetRows = await getSheetData();
+
+    const row = matchRow(sheetRows, division, code);
+
+    if (!row.length) {
+      return res.status(404).json({
+        error: "Record not found"
+      });
+    }
+
+    const currentFiles = (
+      type === "aws"
+        ? row[3] || ""
+        : row[4] || ""
+)
+    .split(",")
+    .map(x => x.trim())
+    .filter(Boolean);
+
+    const updatedFiles =
+      currentFiles.filter(
+        id => id !== fileId
+      );
+
+    // Delete files from Google Drive
+    await deleteFromDrive(fileId); {
+      try {
+        await deleteFromDrive(fileId);
+      } catch (e) {
+        console.error("Drive delete failed:", e);
+      }
+    }
+
+    // Remove file IDs from Google Sheet
+    await deleteFileFromSheet(
+    division,
+    code,
+    type,
+    updatedFiles.join(",")
+);
+
+    return res.json({
+      success: true
+    });
+
+  } catch (err) {
+
+    console.error("DELETE ERROR:", err);
+
+    return res.status(500).json({
+      error: "Delete failed"
+    });
+
+  }
+});
+
 module.exports = router;

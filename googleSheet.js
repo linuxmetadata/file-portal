@@ -65,7 +65,7 @@ async function updateRow(division, code, name, type, fileId, sales) {
 
       await sheets.spreadsheets.values.append({
         spreadsheetId: SPREADSHEET_ID,
-        range: `${SHEET_NAME}!A:E`,
+        range: `${SHEET_NAME}!A:F`,
         valueInputOption: "RAW",
         requestBody: {
           values: [[
@@ -98,11 +98,12 @@ async function updateRow(division, code, name, type, fileId, sales) {
         valueInputOption: "RAW",
         requestBody: {
           values: [[
+            division,
             code,
             name,
             awsFile,
             sssFile,
-            sales || existing[4] || ""
+            sales || existing[5] || ""
           ]]
         }
       });
@@ -127,9 +128,9 @@ async function deleteFileFromSheet(code, type) {
     const rowNumber = rowIndex + 2;
     let existing = rows[rowIndex];
 
-    let awsFile = existing[2] || "";
-    let sssFile = existing[3] || "";
-    let sales = existing[4] || "";
+    let awsFile = existing[3] || "";
+    let sssFile = existing[4] || "";
+    let sales = existing[5] || "";
 
     if (type === "aws") awsFile = "";
     if (type === "sss") sssFile = "";
@@ -140,8 +141,9 @@ async function deleteFileFromSheet(code, type) {
       valueInputOption: "RAW",
       requestBody: {
         values: [[
-          code,
-          existing[1],
+          existing[0],   // Division
+          existing[1],   // Code
+          existing[2],   // Name
           awsFile,
           sssFile,
           sales
@@ -170,14 +172,21 @@ async function syncExcelToSheet(excelData) {
       const name = row["Stockist Name"] || row.Name || "";
 
       if (!existingCodes.has(code)) {
-        newRows.push([code, name, "", "", ""]);
+        newRows.push([
+          row.Division || "",
+          code,
+          name,
+          "",
+          "",
+          ""
+        ]);
       }
     }
 
     if (newRows.length > 0) {
       await sheets.spreadsheets.values.append({
         spreadsheetId: SPREADSHEET_ID,
-        range: `${SHEET_NAME}!A:E`,
+        range: `${SHEET_NAME}!A:F`,
         valueInputOption: "RAW",
         requestBody: {
           values: newRows

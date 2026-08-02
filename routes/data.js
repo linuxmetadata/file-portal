@@ -4,6 +4,7 @@ const XLSX = require("xlsx");
 const path = require("path");
 const fs = require("fs");
 const pdfParse = require("pdf-parse");
+const processStatement = require("../validation/processStatement");
 
 const {
   uploadToDrive,
@@ -451,14 +452,37 @@ router.post(
           type
         );
 
-      /* DELETE TEMP FILE */
-      if (
-        req.file &&
-        fs.existsSync(req.file.path)
-      ) {
+/* =====================================
+   EXTRACTION
+===================================== */
 
-        fs.unlinkSync(req.file.path);
-      }
+console.log("================================");
+console.log("STARTING EXTRACTION");
+console.log("================================");
+
+const extraction = await processStatement(
+    req.file.path,
+    division
+);
+
+if (!extraction.success) {
+
+    console.log("Extraction Failed");
+    console.log(extraction);
+
+} else {
+
+    console.log("Extraction Successful");
+
+    console.log(
+        "Rows Extracted :",
+        extraction.data.rows.length
+    );
+
+    console.log(extraction.data);
+
+}
+      
 
       const sheetRows =
         await getSheetData();
@@ -587,6 +611,14 @@ router.delete(
     type,
     updatedFiles.join(",")
 );
+
+  /* TEMP FILE CLEANUP */
+if (
+    req.file &&
+    fs.existsSync(req.file.path)
+) {
+    fs.unlinkSync(req.file.path);
+}
 
     return res.json({
       success: true

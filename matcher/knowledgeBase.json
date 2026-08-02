@@ -1,0 +1,53 @@
+{
+  "synonyms": {
+    "TABLET": "TAB",
+    "TABLETS": "TAB",
+    "TABS": "TAB",
+
+    "CAPSULE": "CAP",
+    "CAPSULES": "CAP",
+    "CAPS": "CAP",
+
+    "SYRUP": "SYP",
+
+    "LOTION": "LOT",
+
+    "CREME": "CREAM",
+    "CRM": "CREAM",
+
+    "INJECTION": "INJ",
+    "INJN": "INJ",
+
+    "OINTMENT": "OINT"
+  },
+
+  "modifiers": [
+    "M",
+    "+",
+    "CR",
+    "SR",
+    "ER",
+    "XR",
+    "MR",
+    "IR",
+    "OD",
+    "DS",
+    "PLUS",
+    "FORTE",
+    "MF",
+    "GOLD",
+    "LITE",
+    "KID",
+    "EZ"
+  ],
+
+  "units": [
+    "MG",
+    "GM",
+    "MCG",
+    "ML",
+    "L",
+    "KG",
+    "IU"
+  ]
+}

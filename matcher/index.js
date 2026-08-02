@@ -17,7 +17,7 @@ function matchProduct(statementProduct, priceIndex) {
     // -----------------------------
     // STEP 1 : Raw Match
     // -----------------------------
-    const raw = rawMatch(statementProduct, priceList);
+    const raw = rawMatch(statementProduct, priceIndex);
 
     if (raw) {
         return {
@@ -36,7 +36,7 @@ function matchProduct(statementProduct, priceIndex) {
     // -----------------------------
     // STEP 2 : Original Matching
     // -----------------------------
-    let result = execute(statementProduct, priceList);
+    let result = execute(statementProduct, priceIndex);
 
     if (result) {
         return {
@@ -51,7 +51,7 @@ function matchProduct(statementProduct, priceIndex) {
     // -----------------------------
     const normalized = normalizeProduct(statementProduct);
 
-    result = execute(normalized, priceList);
+    result = execute(normalized, priceIndex);
 
     if (result) {
         return {
@@ -68,7 +68,7 @@ function matchProduct(statementProduct, priceIndex) {
 
     for (const alt of alternatives) {
 
-        result = execute(alt, priceList);
+        result = execute(alt, priceIndex);
 
         if (result) {
 

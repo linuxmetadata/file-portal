@@ -3,34 +3,41 @@
  * RAW EXACT MATCH
  * ==========================================
  *
- * Checks statement product against price list
- * without any modification.
+ * Checks statement product against the
+ * indexed price list without normalization.
  */
 
-function rawMatch(statementProduct, priceList) {
+function rawMatch(statementProduct, priceIndex) {
 
-    if (!statementProduct || !priceList.length) {
+    if (!statementProduct || !priceIndex) {
         return null;
     }
 
-    const statement = statementProduct.trim().toUpperCase();
+    const statement = String(statementProduct)
+        .trim()
+        .toUpperCase();
 
-    for (const product of priceList) {
+    // Split to get the brand
+    const brand = statement.split(" ")[0];
 
-        const priceProduct = product.trim().toUpperCase();
+    const candidates = priceIndex[brand] || [];
+
+    for (const item of candidates) {
+
+        const priceProduct = String(
+            item.product["Product Description"] || ""
+        )
+            .trim()
+            .toUpperCase();
 
         if (statement === priceProduct) {
-            return product;
+            return item.product;
         }
-
     }
 
     return null;
-
 }
 
 module.exports = {
-
     rawMatch
-
 };

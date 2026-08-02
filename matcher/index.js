@@ -101,7 +101,7 @@ function matchProduct(statementProduct, priceIndex) {
  * Executes one matching cycle
  */
 
-function execute(product, priceList) {
+function execute(product, priceIndex) {
 
     const statement = splitProduct(product);
 

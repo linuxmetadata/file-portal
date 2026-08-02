@@ -435,10 +435,7 @@ router.post(
 
     );
 
-      const excelDivision =
-      rowData?.Division || "General";
-
-      const state =
+        const state =
         rowData?.STATE ||
         "General";
 
@@ -458,82 +455,70 @@ router.post(
         );
 
 /* =====================================
-   EXTRACTION
+   EXTRACTION (NON-BLOCKING)
 ===================================== */
-
-console.log("================================");
-console.log("STARTING EXTRACTION");
-console.log("================================");
-
-const extraction = await processStatement(
-    req.file.path,
-    division
-);
-
-if (!extraction.success) {
-
-    console.log("Extraction Failed");
-    console.log(extraction);
-
-} else {
-
-    console.log("Extraction Successful");
-
-    console.log(
-        "Rows Extracted :",
-        extraction.data.rows.length
-    );
-
-    //------------------------------------------------
-    // LOAD PRICE LIST
-    //------------------------------------------------
-
-    const priceList = loadPriceList();
-
-    console.log(
-        "Price List Loaded :",
-        priceList.length
-    );
-
-    //------------------------------------------------
-    // MATCH PRODUCTS
-    //------------------------------------------------
-
-    const matchedRows = bulkMatch(
-    extraction.data.rows,
-    priceList
-);
-
-console.log(
-    "Matched Products :",
-    matchedRows.length
-);
-
-console.log(
-    matchedRows.slice(0,5)
-);
 
 try {
 
-    await updateMasterExtraction(
-        matchedRows,
-        extraction.data,
-        type.toUpperCase()
+    console.log("================================");
+    console.log("STARTING EXTRACTION");
+    console.log("================================");
+
+    const extraction = await processStatement(
+        req.file.path,
+        division
     );
 
-    console.log("Master Extraction Updated");
+    if (!extraction.success) {
+
+        console.log("Extraction Failed");
+        console.log(extraction);
+
+    } else {
+
+        console.log("Extraction Successful");
+
+        console.log(
+            "Rows Extracted :",
+            extraction.data.rows.length
+        );
+
+        const priceList = loadPriceList();
+
+        console.log(
+            "Price List Loaded :",
+            priceList.length
+        );
+
+        const matchedRows = bulkMatch(
+            extraction.data.rows,
+            priceList
+        );
+
+        console.log(
+            "Matched Products :",
+            matchedRows.length
+        );
+
+        await updateMasterExtraction(
+            matchedRows,
+            extraction.data,
+            type.toUpperCase()
+        );
+
+        console.log("Master Extraction Updated");
+    }
 
 } catch (err) {
 
-    console.error(
-        "Master Extraction Failed:",
-        err
-    );
+    console.error("EXTRACTION ERROR:", err);
+
+    // IMPORTANT:
+    // Don't throw the error.
+    // Don't return.
+    // Let the upload continue.
 
 }
-
-}
-      
 
       const sheetRows =
         await getSheetData();

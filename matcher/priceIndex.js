@@ -9,18 +9,29 @@ function buildPriceIndex(priceList) {
 
     for (const product of priceList) {
 
-        const parsed = splitProduct(product);
+    const productName =
+        String(
+            product["Product Description"] || ""
+        ).trim();
 
-        if (!index[parsed.brand]) {
-            index[parsed.brand] = [];
-        }
+    if (!productName)
+        continue;
 
-        index[parsed.brand].push({
-            product,
-            parsed
-        });
+    const parsed = splitProduct(productName);
 
+    if (!index[parsed.brand]) {
+        index[parsed.brand] = [];
     }
+
+    index[parsed.brand].push({
+
+        product,
+
+        parsed
+
+    });
+
+}
 
     return index;
 }

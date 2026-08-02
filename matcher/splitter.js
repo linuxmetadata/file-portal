@@ -48,7 +48,7 @@ function splitProduct(productName) {
 
     }
 
-    const original = productName.trim();
+    const original = String(productName || "").trim();
 
     let text = original
 

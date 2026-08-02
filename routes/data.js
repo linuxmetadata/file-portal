@@ -519,6 +519,13 @@ if (!extraction.success) {
       );
 
       delete uploadLocks[lockKey];
+      /* TEMP FILE CLEANUP */
+    if (
+      req.file &&
+      fs.existsSync(req.file.path)
+    ) {
+      fs.unlinkSync(req.file.path);
+    }
 
       return res.json({
         success: true
@@ -612,13 +619,7 @@ router.delete(
     updatedFiles.join(",")
 );
 
-  /* TEMP FILE CLEANUP */
-if (
-    req.file &&
-    fs.existsSync(req.file.path)
-) {
-    fs.unlinkSync(req.file.path);
-}
+
 
     return res.json({
       success: true

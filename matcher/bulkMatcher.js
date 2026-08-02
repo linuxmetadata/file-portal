@@ -1,29 +1,32 @@
 const { buildPriceIndex } = require("./priceIndex");
 const { matchProduct } = require("./index");
 
-function bulkMatch(statementProducts, priceList) {
+function bulkMatch(extractedRows, priceList) {
 
     const priceIndex = buildPriceIndex(priceList);
 
     const results = [];
 
-    for (const statement of statementProducts) {
+    for (const row of extractedRows) {
 
-        const result = matchProduct(statement, priceIndex);
+        const result = matchProduct(
+            row.product,
+            priceIndex
+        );
 
         results.push({
 
-    statement,
+            ...row,
 
-    matched: result.matched,
+            matched: result.matched,
 
-    stage: result.stage,
+            matchedProduct: result.product || "",
 
-    product: result.product,
+            stage: result.stage,
 
-    reason: result.reason || ""
+            reason: result.reason || ""
 
-});
+        });
 
     }
 

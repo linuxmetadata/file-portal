@@ -5,6 +5,11 @@ const path = require("path");
 const fs = require("fs");
 const pdfParse = require("pdf-parse");
 const processStatement = require("../validation/processStatement");
+const { loadPriceList } = require("../services/priceListLoader");
+const { bulkMatch } = require("../matcher/bulkMatcher");
+const {
+    updateMasterExtraction
+} = require("../services/masterExtractionService");
 
 const {
   uploadToDrive,
@@ -479,7 +484,53 @@ if (!extraction.success) {
         extraction.data.rows.length
     );
 
-    console.log(extraction.data);
+    //------------------------------------------------
+    // LOAD PRICE LIST
+    //------------------------------------------------
+
+    const priceList = loadPriceList();
+
+    console.log(
+        "Price List Loaded :",
+        priceList.length
+    );
+
+    //------------------------------------------------
+    // MATCH PRODUCTS
+    //------------------------------------------------
+
+    const matchedRows = bulkMatch(
+    extraction.data.rows,
+    priceList
+);
+
+console.log(
+    "Matched Products :",
+    matchedRows.length
+);
+
+console.log(
+    matchedRows.slice(0,5)
+);
+
+try {
+
+    await updateMasterExtraction(
+        matchedRows,
+        extraction.data,
+        type.toUpperCase()
+    );
+
+    console.log("Master Extraction Updated");
+
+} catch (err) {
+
+    console.error(
+        "Master Extraction Failed:",
+        err
+    );
+
+}
 
 }
       

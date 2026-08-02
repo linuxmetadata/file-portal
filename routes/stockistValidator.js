@@ -16,6 +16,9 @@ function normalizeName(name = "") {
 
         .replace(/\bSHREE\b/g, "SHRI")
         .replace(/\bSRI\b/g, "SHRI")
+        .replace(/\bLAKSHMI\b/g, "LAKSHMI")
+        .replace(/\bLAKSHMI\b/g, "LEKSHMI")
+
 
         .replace(/\bAGENCIES\b/g, "AGENCY")
         .replace(/\bDISTRIBUTORS\b/g, "DISTRIBUTOR")

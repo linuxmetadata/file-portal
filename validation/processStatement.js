@@ -1,4 +1,4 @@
-const { readWorkbook } = require("./reader");
+const { readDocument } = require("../services/documentReader");
 const { detectTable } = require("./detector");
 const { extractTable } = require("./tableExtractor");
 
@@ -6,7 +6,7 @@ async function processStatement(filePath, division = "") {
     try {
 
         // Step 1 - Read workbook
-        const workbook = readWorkbook(filePath);
+        const workbook = readDocument(filePath);
 
         if (!workbook) {
             return {

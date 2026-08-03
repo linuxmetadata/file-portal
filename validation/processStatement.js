@@ -1,4 +1,4 @@
-const { readDocument } = require("../services/documentReader");
+const { readDocument } = require("./readers/documentReader");
 const { detectTable } = require("./detector");
 const { extractTable } = require("./tableExtractor");
 
@@ -6,15 +6,19 @@ async function processStatement(filePath, division = "") {
     try {
 
         // Step 1 - Read workbook
-        const workbook = readDocument(filePath);
+        const document = readDocument(filePath);
 
-        if (!workbook) {
-            return {
-                success: false,
-                stage: "reader",
-                reason: "Unable to read workbook"
-            };
-        }
+if (!document.success) {
+
+    return {
+        success: false,
+        stage: "reader",
+        reason: document.message
+    };
+
+}
+
+const workbook = document.workbook;
 
         // Step 2 - Detect table
         const detection = detectTable(workbook);

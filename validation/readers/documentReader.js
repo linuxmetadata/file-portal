@@ -1,4 +1,5 @@
 const path = require("path");
+
 const { readWorkbook } = require("./excelReader");
 
 function readDocument(filePath) {
@@ -11,12 +12,19 @@ function readDocument(filePath) {
 
         case ".xlsx":
         case ".xls":
-            return readWorkbook(filePath);
+
+            return {
+                success: true,
+                type: "excel",
+                workbook: readWorkbook(filePath)
+            };
 
         default:
-            throw new Error(
-                `Unsupported file format: ${extension}`
-            );
+
+            return {
+                success: false,
+                message: `Unsupported file format: ${extension}`
+            };
 
     }
 

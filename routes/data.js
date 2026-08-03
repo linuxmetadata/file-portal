@@ -455,68 +455,73 @@ router.post(
         );
 
 /* =====================================
-   EXTRACTION (NON-BLOCKING)
+   EXTRACTION (ONLY FOR SSS)
 ===================================== */
 
-try {
+if (type.toUpperCase() === "SSS") {
 
-    console.log("================================");
-    console.log("STARTING EXTRACTION");
-    console.log("================================");
+    try {
 
-    const extraction = await processStatement(
-        req.file.path,
-        division
-    );
+        console.log("================================");
+        console.log("STARTING SSS EXTRACTION");
+        console.log("================================");
 
-    if (!extraction.success) {
-
-        console.log("Extraction Failed");
-        console.log(extraction);
-
-    } else {
-
-        console.log("Extraction Successful");
-
-        console.log(
-            "Rows Extracted :",
-            extraction.data.rows.length
+        const extraction = await processStatement(
+            req.file.path,
+            division
         );
 
-        const priceList = loadPriceList();
+        if (!extraction.success) {
 
-        console.log(
-            "Price List Loaded :",
-            priceList.length
-        );
+            console.log("Extraction Failed");
+            console.log(extraction);
 
-        const matchedRows = bulkMatch(
-            extraction.data.rows,
-            priceList
-        );
+        } else {
 
-        console.log(
-            "Matched Products :",
-            matchedRows.length
-        );
+            console.log("Extraction Successful");
+            console.log(
+                "Rows Extracted :",
+                extraction.data.rows.length
+            );
 
-        await updateMasterExtraction(
-            matchedRows,
-            extraction.data,
-            type.toUpperCase()
-        );
+            const priceList = loadPriceList();
 
-        console.log("Master Extraction Updated");
+            console.log(
+                "Price List Loaded :",
+                priceList.length
+            );
+
+            const matchedRows = bulkMatch(
+                extraction.data.rows,
+                priceList
+            );
+
+            console.log(
+                "Matched Products :",
+                matchedRows.length
+            );
+
+            await updateMasterExtraction(
+                matchedRows,
+                extraction.data,
+                "SSS"
+            );
+
+            console.log("Master Extraction Updated");
+
+        }
+
+    } catch (err) {
+
+        console.error("EXTRACTION ERROR:", err);
+
     }
 
-} catch (err) {
+} else {
 
-    console.error("EXTRACTION ERROR:", err);
-
-    // IMPORTANT:
-    // Don't throw the error.
-    // Don't return.
-    // Let the upload continue.
+    console.log("================================");
+    console.log("AWS FILE - EXTRACTION SKIPPED");
+    console.log("================================");
 
 }
 

@@ -1,6 +1,12 @@
 const path = require("path");
 
-const { readWorkbook } = require("./excelReader");
+const supportedFormats = [
+    ".xlsx",
+    ".xls",
+    ".csv"
+];
+const { readWorkbook: readExcel } = require("./excelReader");
+const { readWorkbook: readCSV } = require("./csvReader");
 
 function readDocument(filePath) {
 
@@ -11,13 +17,21 @@ function readDocument(filePath) {
     switch (extension) {
 
         case ".xlsx":
-        case ".xls":
+case ".xls":
 
-            return {
-                success: true,
-                type: "excel",
-                workbook: readWorkbook(filePath)
-            };
+    return {
+        success: true,
+        type: "excel",
+        workbook: readExcel(filePath)
+    };
+
+case ".csv":
+
+    return {
+        success: true,
+        type: "csv",
+        workbook: readCSV(filePath)
+    };
 
         default:
 

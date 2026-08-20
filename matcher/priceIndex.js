@@ -1,44 +1,55 @@
 const { splitProduct } = require("./splitter");
+const { normalizeProduct } = require("./normalizer");
 
 /**
- * Build searchable index from price list
+ * =====================================================
+ * PRICE INDEX
+ * =====================================================
+ * Builds searchable index from the price list.
+ * Every product is normalized before indexing.
  */
+
 function buildPriceIndex(priceList) {
 
     const index = {};
 
     for (const product of priceList) {
 
-    const productName =
-        String(
+        const originalName = String(
             product["Product Description"] || ""
         ).trim();
 
-    if (!productName)
-        continue;
+        if (!originalName)
+            continue;
 
-    const parsed = splitProduct(productName);
+        // Normalize exactly the same way as statement products
+        const normalizedName = normalizeProduct(originalName);
 
-    if (!index[parsed.brand]) {
-        index[parsed.brand] = [];
+        const parsed = splitProduct(normalizedName);
+
+        if (!index[parsed.brand]) {
+            index[parsed.brand] = [];
+        }
+
+        index[parsed.brand].push({
+
+            product,              // Original record
+            parsed,
+            normalizedName
+
+        });
+
     }
-
-    index[parsed.brand].push({
-
-        product,
-
-        parsed
-
-    });
-
-}
 
     return index;
 }
 
 /**
+ * =====================================================
  * Get products by brand
+ * =====================================================
  */
+
 function getBrandProducts(index, brand) {
 
     return index[brand] || [];
@@ -46,6 +57,8 @@ function getBrandProducts(index, brand) {
 }
 
 module.exports = {
+
     buildPriceIndex,
     getBrandProducts
+
 };

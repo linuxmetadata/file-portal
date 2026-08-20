@@ -4,56 +4,144 @@
  * ======================================================
  *
  * Converts one token into searchable tokens.
- *
- * Example:
- * 15GM
- * ↓
- * 15GM
- * 15
- * GM
  */
 
-const CONFIG = require("./config");
+const {
+    kb,
+    normalizeWord
+} = require("./knowledgeBase");
 
 function tokenize(token) {
 
-    token = token.toUpperCase().trim();
+    token = String(token || "")
+        .trim()
+        .toUpperCase();
 
-    const tokens = [token];
+    if (!token)
+        return [];
 
-    // -------------------------
-    // Number + Unit
-    // -------------------------
+    const tokens = [];
 
-    const { kb } = require("./knowledgeBase");
+    //--------------------------------------------------
+    // Original
+    //--------------------------------------------------
 
-const unitPattern = kb.units.join("|");
+    tokens.push(token);
 
-const unitRegex = new RegExp(
-    `^(\\d+(?:\\.\\d+)?)(${unitPattern})$`
-);
+    //--------------------------------------------------
+    // Normalized Word
+    //--------------------------------------------------
 
-const unitMatch = token.match(unitRegex);
+    const normalized = normalizeWord(token);
 
-    if (unitMatch) {
+    if (normalized !== token) {
 
-        tokens.push(unitMatch[1]);
-        tokens.push(unitMatch[2]);
+        tokens.push(normalized);
 
     }
 
-    // -------------------------
-    // Ratio
-    // -------------------------
+    //--------------------------------------------------
+    // Number + Unit
+    // Example:
+    // 100MG
+    // 15GR
+    // 60ML
+    //--------------------------------------------------
 
-    const ratioMatch = token.match(/^(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/);
+    const unitPattern = kb.units.join("|");
+
+    const unitRegex = new RegExp(
+
+        `^(\\d+(?:\\.\\d+)?)([A-Z]+)$`
+
+    );
+
+    const unitMatch = token.match(unitRegex);
+
+    if (unitMatch) {
+
+        const number = unitMatch[1];
+
+        let unit = unitMatch[2];
+
+        unit = normalizeWord(unit);
+
+        tokens.push(number);
+
+        tokens.push(unit);
+
+        tokens.push(number + unit);
+
+    }
+
+    //--------------------------------------------------
+    // Ratio
+    // Example:
+    // 100/10
+    //--------------------------------------------------
+
+    const ratioMatch = token.match(
+
+        /^(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/
+
+    );
 
     if (ratioMatch) {
 
         tokens.push(ratioMatch[1]);
+
         tokens.push(ratioMatch[2]);
 
     }
+
+    //--------------------------------------------------
+    // Compound Strength
+    // Example:
+    // 100MG/500MG
+    //--------------------------------------------------
+
+    if (token.includes("/")) {
+
+        token.split("/")
+
+            .forEach(part => {
+
+                part = part.trim();
+
+                if (!part)
+                    return;
+
+                tokens.push(part);
+
+                const match = part.match(
+
+                    /^(\d+(?:\.\d+)?)([A-Z]+)$/
+
+                );
+
+                if (match) {
+
+                    const number = match[1];
+
+                    let unit = match[2];
+
+                    unit = normalizeWord(unit);
+
+                    tokens.push(number);
+
+                    tokens.push(unit);
+
+                    tokens.push(number + unit);
+
+                }
+
+            });
+
+    }
+
+    //--------------------------------------------------
+    // Remove duplicates
+    //--------------------------------------------------
 
     return [...new Set(tokens)];
 

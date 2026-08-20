@@ -3,10 +3,7 @@
  * ADVANCED NORMALIZER
  * =====================================================
  *
- * Handles complex normalization.
- *
- * Example:
- * 100/10 -> 10/100
+ * Generates alternate representations of products.
  */
 
 function generateAlternatives(product) {
@@ -15,23 +12,49 @@ function generateAlternatives(product) {
         return [];
     }
 
-    const alternatives = [product.toUpperCase()];
+    const source = product.toUpperCase();
 
-    // Reverse ratio values
+    const alternatives = [source];
+
+    // -------------------------------------
+    // Rule 1 : Reverse simple ratios
+    // Example:
+    // 100/10 -> 10/100
+    // -------------------------------------
+
     const ratioRegex = /\b(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)\b/g;
 
     let match;
 
-    while ((match = ratioRegex.exec(product)) !== null) {
+    while ((match = ratioRegex.exec(source)) !== null) {
 
         const original = match[0];
 
         const reversed = `${match[2]}/${match[1]}`;
 
         alternatives.push(
-            product
-                .toUpperCase()
-                .replace(original.toUpperCase(), reversed)
+            source.replace(original, reversed)
+        );
+
+    }
+
+    // -------------------------------------
+    // Rule 2 : Expand strength notation
+    // Example:
+    // 100/10/500MG
+    // ->
+    // 100MG/10MG/500MG
+    // -------------------------------------
+
+    const strengthRegex = /(\d+)\/(\d+)\/(\d+)\s*MG\b/g;
+
+    while ((match = strengthRegex.exec(source)) !== null) {
+
+        const expanded =
+            `${match[1]}MG/${match[2]}MG/${match[3]}MG`;
+
+        alternatives.push(
+            source.replace(match[0], expanded)
         );
 
     }
@@ -41,7 +64,5 @@ function generateAlternatives(product) {
 }
 
 module.exports = {
-
     generateAlternatives
-
 };

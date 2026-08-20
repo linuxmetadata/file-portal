@@ -1,53 +1,116 @@
 {
   "synonyms": {
+
     "TABLET": "TAB",
     "TABLETS": "TAB",
     "TABS": "TAB",
+    "TABS.": "TAB",
 
     "CAPSULE": "CAP",
     "CAPSULES": "CAP",
     "CAPS": "CAP",
+    "CAP.": "CAP",
+
+    "SOFTGEL": "CAP",
+    "SOFTGELS": "CAP",
 
     "SYRUP": "SYP",
+    "SYR": "SYP",
+
+    "SUSPENSION": "SUSP",
+    "SUSP": "SUSP",
+
+    "DROPS": "DROP",
+    "DROP": "DROP",
 
     "LOTION": "LOT",
+    "LOTI": "LOT",
+    "LOTN": "LOT",
+    "LOT": "LOT",
 
+    "CREAM": "CREAM",
     "CREME": "CREAM",
+    "CREA": "CREAM",
     "CRM": "CREAM",
+    "CRM.": "CREAM",
+    "CR": "CREAM",
+
+    "GEL": "GEL",
+    "JEL": "GEL",
+
+    "OINTMENT": "OINT",
+    "OINT": "OINT",
+
+    "SOLUTION": "SOL",
+    "SOLN": "SOL",
+    "SOL": "SOL",
+
+    "SPRAY": "SPRAY",
+
+    "POWDER": "PWD",
 
     "INJECTION": "INJ",
     "INJN": "INJ",
+    "INJ.": "INJ",
 
-    "OINTMENT": "OINT"
+    "FACE": "FAC",
+    "FACIAL": "FAC",
+
+    "GRAM": "GM",
+    "GRAMS": "GM",
+    "GR": "GM",
+
+    "LITRE": "L",
+    "LITER": "L"
   },
 
   "modifiers": [
+
     "M",
     "+",
+
     "CR",
     "SR",
     "ER",
     "XR",
     "MR",
     "IR",
+
     "OD",
+    "BD",
+    "TDS",
+    "HS",
+
     "DS",
     "PLUS",
     "FORTE",
+    "MAX",
+    "ADV",
+    "ADVANCED",
+
     "MF",
     "GOLD",
     "LITE",
+
     "KID",
-    "EZ"
+    "KIDS",
+
+    "EZ",
+    "NEW"
   ],
 
   "units": [
+
     "MG",
     "GM",
     "MCG",
     "ML",
     "L",
     "KG",
-    "IU"
+
+    "IU",
+    "GM.",
+    "ML.",
+    "MG."
   ]
 }

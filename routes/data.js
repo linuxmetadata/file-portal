@@ -306,49 +306,23 @@ router.get("/list", async (req, res) => {
 
     if (role !== "admin" && user) {
 
-      const temp =
-        finalData.filter(row =>
+    const userId = String(user)
+        .trim()
+        .toLowerCase();
 
-          (row.bh_id || "")
-            .toLowerCase()
-            .includes(user)
+    filteredData = finalData.filter(row => {
 
-          ||
-
-          (row.sm_id || "")
-            .toLowerCase()
-            .includes(user)
-
-          ||
-
-          (row.zbm_id || "")
-            .toLowerCase()
-            .includes(user)
-
-          ||
-
-          (row.rbm_id || "")
-            .toLowerCase()
-            .includes(user)
-
-          ||
-
-          (row.abm_id || "")
-            .toLowerCase()
-            .includes(user)
-
-          ||
-
-          (row.bmhq || "")
-            .toLowerCase()
-            .includes(user)
+        return (
+            String(row.bh_id || "").trim().toLowerCase() === userId ||
+            String(row.sm_id || "").trim().toLowerCase() === userId ||
+            String(row.zbm_id || "").trim().toLowerCase() === userId ||
+            String(row.rbm_id || "").trim().toLowerCase() === userId ||
+            String(row.abm_id || "").trim().toLowerCase() === userId
         );
 
-      filteredData =
-        temp.length > 0
-          ? temp
-          : finalData;
-    }
+    });
+
+}
 
     res.json(filteredData);
 

@@ -1,0 +1,3471 @@
+/**
+ * ======================================================
+ * HEADER DETECTOR V3
+ * ======================================================
+ *
+ * Generic statement header detection.
+ *
+ * Supports:
+ *  - PRODUCT / ITEM / DESCRIPTION / PARTICULARS
+ *  - OPENING / OP
+ *  - PURCHASE / PUR
+ *  - SALES / SALE
+ *  - PURCHASE RETURN
+ *  - SALES RETURN
+ *  - CLOSING / CL / BALANCE / STOCK
+ *  - VALUE / AMOUNT
+ *  - RATE / PRICE
+ *  - QTY / QUANTITY
+ *
+ * Important:
+ *  - Product column is mandatory.
+ *  - Data start is detected using actual product rows.
+ *  - Metadata rows after the header are ignored.
+ *  - Footer/summary rows are ignored.
+ */
+
+const XLSX = require("xlsx");
+const vocabulary = require("./businessVocabulary");
+
+//======================================================
+// NORMALIZE
+//======================================================
+
+function normalize(value) {
+
+    return String(value ?? "")
+        .toUpperCase()
+        .replace(/\r?\n/g, " ")
+        .replace(/[_\-\/\\.,():]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+}
+
+//======================================================
+// COMPACT
+//======================================================
+
+function compact(value) {
+
+    return normalize(value)
+        .replace(/\s+/g, "");
+
+}
+
+//======================================================
+// ROW TEXT
+//======================================================
+// TXT statements may be represented either as one fixed-width
+// cell OR as multiple tab-separated cells. Inspect the complete
+// row for fixed-format header detection.
+//======================================================
+
+function rowText(row) {
+
+    if (!Array.isArray(row))
+        return normalize(row);
+
+    return normalize(
+        row.map(value => String(value ?? "")).join(" ")
+    );
+
+}
+
+//======================================================
+// NUMERIC
+//======================================================
+
+function isNumeric(value) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        value === ""
+    ) {
+        return false;
+    }
+
+    const text = String(value)
+        .replace(/,/g, "")
+        .replace(/%/g, "")
+        .trim();
+
+    if (!text)
+        return false;
+
+    return Number.isFinite(Number(text));
+
+}
+
+//======================================================
+// PRODUCT HEADER
+//======================================================
+
+function isProductHeader(value) {
+
+    const text = normalize(value);
+    const cmp = compact(value);
+
+    if (!text)
+        return false;
+
+    const exact = [
+
+        "PRODUCT",
+        "PRODUCT NAME",
+        "PRODUCTNAME",
+
+        "PRODUCT DESCRIPTION",
+        "PRODUCTDESCRIPTION",
+
+        "PRODUCT DESC",
+        "PRODUCTDESC",
+
+        "PRODUCT COMPANY",
+        "PRODUCT COMPANY NAME",
+
+        "PRODUCT / COMPANY",
+
+        "ITEM",
+        "ITEM NAME",
+        "ITEMNAME",
+
+        "ITEM DESCRIPTION",
+        "ITEMDESCRIPTION",
+
+        "DESCRIPTION",
+
+        "PARTICULAR",
+        "PARTICULARS",
+
+        "MEDICINE",
+        "DRUG",
+
+        "SKU",
+
+        "GOODS",
+
+        "NAME",
+
+        "NAME TO DISPLAY",
+        "NAMETODISPLAY",
+
+        "DISPLAY NAME"
+
+    ];
+
+    if (exact.includes(text))
+        return true;
+
+    const compactHeaders = [
+
+        "PRODUCT",
+        "PRODUCTNAME",
+        "PRODUCT NAME",
+        "PRODUCTDESCRIPTION",
+        "PRODUCTDESC",
+
+        "PRODUCTCOMPANY",
+        "PRODUCTCOMPANYNAME",
+
+        "ITEM",
+        "ITEMNAME",
+        "ITEMDESCRIPTION",
+
+        "DESCRIPTION",
+
+        "PARTICULAR",
+        "PARTICULARS",
+
+        "MEDICINE",
+        "DRUG",
+
+        "SKU",
+
+        "GOODS",
+
+        "NAME",
+
+        "NAMETODISPLAY",
+
+        "DISPLAYNAME"
+
+    ];
+
+    if (compactHeaders.includes(cmp))
+        return true;
+
+    if (
+        text.includes("PRODUCT") &&
+        (
+            text.includes("NAME") ||
+            text.includes("DESCRIPTION") ||
+            text.includes("DESC") ||
+            text.includes("COMPANY")
+        )
+    ) {
+        return true;
+    }
+
+    if (
+        text.includes("ITEM") &&
+        (
+            text.includes("NAME") ||
+            text.includes("DESCRIPTION") ||
+            text.includes("DESC")
+        )
+    ) {
+        return true;
+    }
+
+    if (
+        (vocabulary.product || []).some(word => {
+
+            const w = normalize(word);
+
+            return (
+                text === w ||
+                text.includes(w)
+            );
+
+        })
+    ) {
+        return true;
+    }
+
+    return false;
+
+}
+
+//======================================================
+// FIXED-WIDTH STOCK & SALES FORMAT
+//======================================================
+//
+// Some old XLS statements store the complete report
+// as fixed-width text inside ONE Excel cell.
+//
+// Example:
+//
+// ITEM DESCRIPTION ... OPENING ... RECEIPT ... ISSUE
+// ... CLOSING ... DUMP
+//
+// Product rows also exist completely inside column A.
+//
+// This detection is intentionally strict so that
+// normal Excel statements are NOT affected.
+//======================================================
+
+function isFixedWidthStockSalesHeader(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return false;
+
+    const hasItemDescription =
+        text.includes("ITEM DESCRIPTION");
+
+    const hasOpening =
+        text.includes("OPENING");
+
+    const hasReceipt =
+        text.includes("RECEIPT");
+
+    const hasIssue =
+        text.includes("ISSUE");
+
+    const hasClosing =
+        text.includes("CLOSING");
+
+    const hasDump =
+        text.includes("DUMP");
+
+    return (
+        hasItemDescription &&
+        hasOpening &&
+        hasReceipt &&
+        hasIssue &&
+        hasClosing &&
+        hasDump
+    );
+}
+
+//======================================================
+// FIXED-WIDTH TXT SALES & STOCK FORMAT
+//======================================================
+//
+// Example:
+//
+// DESCRIPTION/PACKING     Pro.  OPENING    PUR.   SALE
+//                         Age     QTY.     QTY.    QTY.
+//                         CR.NO.  DR.NO.   CLOSING
+//
+// Product rows are stored completely inside column A.
+//
+function isFixedWidthTxtSalesStockHeader(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return false;
+
+    /*
+     * IMPORTANT
+     *
+     * normalize() converts:
+     *
+     * DESCRIPTION/PACKING -> DESCRIPTION PACKING
+     * PUR.                 -> PUR
+     * CR.NO.               -> CR NO
+     * DR.NO.               -> DR NO
+     *
+     * Therefore the checks below MUST use the
+     * normalized form.
+     */
+
+    const hasDescription =
+        text.includes("DESCRIPTION PACKING");
+
+    const hasOpening =
+        text.includes("OPENING");
+
+    const hasPurchase =
+        text.includes("PUR");
+
+    const hasSale =
+        text.includes("SALE");
+
+    const hasClosing =
+        text.includes("CLOSING");
+
+    const hasCredit =
+        text.includes("CR NO");
+
+    const hasDebit =
+        text.includes("DR NO");
+
+    return (
+        hasDescription &&
+        hasOpening &&
+        hasPurchase &&
+        hasSale &&
+        hasClosing &&
+        hasCredit &&
+        hasDebit
+    );
+}
+
+//======================================================
+// FIXED-WIDTH PRODUCT NAME FORMAT
+//======================================================
+//
+// Example:
+//
+// Product Name               Packing       OP
+// <---Receipts---> <----Sales----> <---Closing---->
+//
+// Entire header is stored in column A.
+// Entire product rows are also stored in column A.
+//======================================================
+
+function isFixedWidthProductNameHeader(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return false;
+
+    return (
+        text.includes("PRODUCT NAME") &&
+        text.includes("PACKING") &&
+        text.includes("RECEIPTS") &&
+        text.includes("SALES") &&
+        text.includes("CLOSING")
+    );
+}
+
+
+//======================================================
+// FIXED-WIDTH INTEGRA STOCK & SALES FORMAT
+//======================================================
+//
+// Header:
+// PRODUCT NAME   PACKG SALES CLOSING DAY
+//
+// Product rows are fixed-width and may use "-" for zero.
+// Therefore product detection must NOT require numeric values.
+//
+function isFixedWidthIntegraStockSalesHeader(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return false;
+
+    /*
+     * INTEGRA / UNIQUE CORPORATION fixed-width TXT format.
+     *
+     * Actual example:
+     *
+     * Particulars   Pkg.   Op.Qty. Pr.Qty. Sl Ret Sale
+     * M.Out Cl.Stk  Sal.Val Cl.Val
+     *
+     * IMPORTANT:
+     * The product header is "PARTICULARS", NOT necessarily
+     * "PRODUCT NAME".
+     *
+     * normalize() converts:
+     *   Op.Qty.  -> OP QTY
+     *   Pr.Qty.  -> PR QTY
+     *   Sl Ret   -> SL RET
+     *   M.Out    -> M OUT
+     *   Cl.Stk   -> CL STK
+     *   Sal.Val  -> SAL VAL
+     *   Cl.Val   -> CL VAL
+     */
+
+    const hasParticulars =
+        text.includes("PARTICULARS") ||
+        text.includes("PARTICULAR");
+
+    const hasPackage =
+        text.includes("PKG") ||
+        text.includes("PACK") ||
+        text.includes("PACKING");
+
+    const hasOpeningQty =
+        text.includes("OP QTY") ||
+        text.includes("OPQTY") ||
+        text.includes("OPENING");
+
+    const hasPurchaseQty =
+        text.includes("PR QTY") ||
+        text.includes("PRQTY") ||
+        text.includes("PUR QTY") ||
+        text.includes("PURQTY") ||
+        text.includes("PURCHASE");
+
+    const hasSales =
+        text.includes("SALE") ||
+        text.includes("SALES");
+
+    const hasReturn =
+        text.includes("SL RET") ||
+        text.includes("SLRET") ||
+        text.includes("RETURN");
+
+    const hasMovementOut =
+        text.includes("M OUT") ||
+        text.includes("MOUT");
+
+    const hasClosingStock =
+        text.includes("CL STK") ||
+        text.includes("CLSTK") ||
+        text.includes("CLOSING") ||
+        text.includes("CLOSE");
+
+    const hasSalesValue =
+        text.includes("SAL VAL") ||
+        text.includes("SALVAL") ||
+        text.includes("SALES VALUE");
+
+    const hasClosingValue =
+        text.includes("CL VAL") ||
+        text.includes("CLVAL") ||
+        text.includes("CLOSING VALUE");
+
+    /*
+     * Require the characteristic INTEGRA structure.
+     *
+     * Particulars + package + opening/purchase + sales +
+     * closing stock/value is sufficient.
+     *
+     * Optional columns such as SL RET and M OUT are accepted
+     * but are not mandatory because statement variants differ.
+     */
+
+    const core =
+        hasParticulars &&
+        hasPackage &&
+        hasOpeningQty &&
+        hasPurchaseQty &&
+        hasSales &&
+        hasClosingStock;
+
+    const valueEvidence =
+        hasSalesValue || hasClosingValue;
+
+    return core && valueEvidence;
+}
+
+
+function looksLikeIntegraProduct(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return false;
+
+    if (isFooterOrSummary(text))
+        return false;
+
+    if (isMetadataRow(text))
+        return false;
+
+    if (/^-+$/.test(text))
+        return false;
+
+    if (
+        text === "LINUX INTEGRA" ||
+        text === "LINUX LAB" ||
+        text === "LINUX LAB PVT LTD"
+    )
+        return false;
+
+    if (isFixedWidthIntegraStockSalesHeader(text))
+        return false;
+
+    /*
+     * INTEGRA product rows are fixed-width.
+     *
+     * Examples:
+     *
+     *   ANTICLAV DRY SYP 30ML - -
+     *   CARBANERVE 150MG T 10'S 96 105 15
+     *
+     * The product name can itself contain numbers.
+     * Therefore we validate the numeric / "-" tail rather
+     * than trying to split the product name by digits.
+     */
+
+    const tokens =
+        text.split(/\s+/).filter(Boolean);
+
+    if (tokens.length < 3)
+        return false;
+
+    let tailCount = 0;
+
+    for (
+        let i = tokens.length - 1;
+        i >= 0;
+        i--
+    ) {
+
+        const token = tokens[i];
+
+        if (
+            token === "-" ||
+            /^-?\d+(?:\.\d+)?$/.test(token)
+        ) {
+
+            tailCount++;
+
+            continue;
+        }
+
+        break;
+    }
+
+    /*
+     * Need at least two movement/stock fields at the end.
+     * This is intentionally more tolerant than the old regex.
+     */
+    if (tailCount < 2)
+        return false;
+
+    const productName =
+        tokens
+            .slice(0, tokens.length - tailCount)
+            .join(" ")
+            .trim();
+
+    if (productName.length < 2)
+        return false;
+
+    if (!/[A-Z]/i.test(productName))
+        return false;
+
+    /*
+     * Do not accept obvious non-product text.
+     */
+    if (
+        productName === "TOTAL" ||
+        productName === "SUMMARY" ||
+        productName.startsWith("PREPARED BY") ||
+        productName.startsWith("COMPUTER GENERATED")
+    )
+        return false;
+
+    return true;
+}
+
+
+//======================================================
+// FIXED-WIDTH ITEMCODE / ITEMNAME STOCK & SALES FORMAT
+//======================================================
+//
+// Example:
+//
+// ITEMCODE  ITEMNAME  CLSTOCK  CLVALUE  SALES  SALESVALUE  LM 1  LM 2
+//
+// Product rows:
+//
+// 1200264   .HIKIDZ              75 GM       0   0.00   3   335.58   0   0
+// 1200246   ACNESTAL 5.5 SOAP    75 GM       0   0.00  15  1810.20   0   0
+//
+// The complete header is stored in column A for TXT statements.
+// Product rows are also stored completely in column A.
+//======================================================
+
+function isFixedWidthItemCodeStockSalesHeader(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return false;
+
+    const hasItemCode =
+        text.includes("ITEMCODE");
+
+    const hasItemName =
+        text.includes("ITEMNAME");
+
+    const hasClosingStock =
+        text.includes("CLSTOCK");
+
+    const hasClosingValue =
+        text.includes("CLVALUE");
+
+    const hasSales =
+        text.includes("SALES");
+
+    const hasSalesValue =
+        text.includes("SALESVALUE");
+
+    return (
+        hasItemCode &&
+        hasItemName &&
+        hasClosingStock &&
+        hasClosingValue &&
+        hasSales &&
+        hasSalesValue
+    );
+}
+
+//======================================================
+// FIXED-WIDTH JYOTI STOCK & SALES FORMAT
+//======================================================
+//
+// Example:
+//
+// Product Name              Packing  Opening Stock
+//                           Purchases        Sales
+//                           Closing Stock
+//
+// Qty      Value  Qty      Value  Qty      Value  Qty      Value
+//======================================================
+
+function isFixedWidthJyotiStockSalesHeader(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return false;
+
+    const hasProductName =
+        text.includes("PRODUCT NAME");
+
+    const hasPacking =
+        text.includes("PACKING");
+
+    const hasOpeningStock =
+        text.includes("OPENING STOCK");
+
+    const hasPurchases =
+        text.includes("PURCHASES");
+
+    const hasSales =
+        text.includes("SALES");
+
+    const hasClosingStock =
+        text.includes("CLOSING STOCK");
+
+    return (
+        hasProductName &&
+        hasPacking &&
+        hasOpeningStock &&
+        hasPurchases &&
+        hasSales &&
+        hasClosingStock
+    );
+}
+
+//======================================================
+// FIXED-WIDTH KANAKADURGA STOCK & SALES FORMAT
+//======================================================
+
+function isFixedWidthKanakadurgaStockSalesHeader(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return false;
+
+    return (
+        text.includes("PRODUCT NAME") &&
+        text.includes("PACKING") &&
+        text.includes("O STK") &&
+        text.includes("PURC") &&
+        text.includes("TOT") &&
+        text.includes("SALE") &&
+        text.includes("QOH") &&
+        text.includes("VALUE") &&
+        text.includes("AGE")
+    );
+}
+
+//======================================================
+// FIXED-WIDTH INFINA TWO-LINE STOCK & SALES FORMAT
+//======================================================
+//
+// Example:
+//
+// PRODUCT NAME      PACKG OPENING   RECEIPT  SALES RETAIL  CASH
+// CLO.STK    CLOSING   AGE
+// QTY    QTY  FREE  LAST  SALES SALES  QTY  FREE    VALUE   DAYS
+//
+// The first two physical lines together form the logical header.
+// Product rows are stored completely inside column A.
+//
+function isFixedWidthInfinaTwoLineStockSalesHeader(rows, rowIndex) {
+
+    const firstRow = rows[rowIndex] || [];
+    const secondRow = rows[rowIndex + 1] || [];
+
+    if (!firstRow.length || !secondRow.length)
+        return false;
+
+    const firstText = rowText(firstRow);
+    const secondText = rowText(secondRow);
+
+    if (!firstText || !secondText)
+        return false;
+
+    const combined = normalize(
+        firstText + " " + secondText
+    );
+
+    const hasProductName =
+        combined.includes("PRODUCT NAME");
+
+    const hasPack =
+        combined.includes("PACKG") ||
+        combined.includes("PACK");
+
+    const hasOpening =
+        combined.includes("OPENING");
+
+    const hasReceipt =
+        combined.includes("RECEIPT");
+
+    const hasSales =
+        combined.includes("SALES");
+
+    const hasClosing =
+        combined.includes("CLOSING") ||
+        combined.includes("CLO STK");
+
+    const hasAge =
+        combined.includes("AGE") ||
+        combined.includes("DAYS");
+
+    const hasQty =
+        combined.includes("QTY");
+
+    return (
+        hasProductName &&
+        hasPack &&
+        hasOpening &&
+        hasReceipt &&
+        hasSales &&
+        hasClosing &&
+        hasQty &&
+        hasAge
+    );
+}
+
+//======================================================
+// HEADERLESS PANIKULAM STOCK & SALES FORMAT
+//======================================================
+//
+// Some TXT statements have NO column header at all.
+// They contain:
+//
+//   PANIKULAM AGENCIES
+//   LINUX LABORATORIES PVT LTD
+//   PRODUCT NAME   RATE   QTY ... VALUE
+//
+// Product rows are fixed-width and contain many numeric
+// fields. We identify the first real product row and use
+// the preceding metadata row as the logical header anchor.
+// This prevents the first product from being skipped.
+//======================================================
+
+function looksLikePanikulamProductRow(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return false;
+
+    if (isFooterOrSummary(text))
+        return false;
+
+    if (isMetadataRow(text))
+        return false;
+
+    if (!/[A-Z]/.test(text))
+        return false;
+
+    // The product name must appear before the first numeric field.
+    const firstNumber = text.search(/\d/);
+
+    if (firstNumber <= 1)
+        return false;
+
+    const productName = text.slice(0, firstNumber).trim();
+
+    if (productName.length < 2)
+        return false;
+
+    // Panikulam rows contain a rate followed by many quantity/value fields.
+    const numericParts = text.match(/\d+(?:\.\d+)?/g) || [];
+
+    return numericParts.length >= 8;
+}
+
+function isPanikulamHeaderlessFormat(rows, rowIndex) {
+
+    const row = rows[rowIndex] || [];
+
+    if (row.length !== 1)
+        return false;
+
+    return looksLikePanikulamProductRow(row[0]);
+}
+
+
+//======================================================
+// FIXED-WIDTH IMPERIA / AMAR DRUGS DISTRIBUTORS FORMAT
+//======================================================
+//
+// Example:
+// Divison Item Code Item Name Packsize P. Rate PTR Opening
+// Opening Value Pur. Qty Pur. FQty Rpl. Qty Pur. Value
+// Pur. Ret. Qty Pur. Ret. FQty Sale Qty Sale FQty Sale Value
+// Sale Qty 1 Sale Qty 2 Sale Ret. Qty Sale Ret. FQty Other Qty
+// Closing Closing Amount(PTR) Stock Amount(Pur. Rate) Status
+//
+// The complete header is stored in ONE TXT cell.
+// Product rows are also stored in ONE TXT cell.
+//
+// This format is also used by similar statements such as
+// US PHARMA, where the same ITEMCODE / ITEMNAME / CLSTOCK
+// family is handled separately.
+//======================================================
+
+function isFixedWidthImperiaStockSalesHeader(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return false;
+
+    /*
+     * IMPERIA / AMAR DRUGS DISTRIBUTORS
+     *
+     * TXT examples can contain:
+     *
+     *   Item Code
+     *   ITEMCODE
+     *   P. Rate
+     *   P.RATE
+     *   Pur. Qty
+     *   Pur FQty
+     *   Sale Qty
+     *   Sale FQty
+     *
+     * normalize() already removes punctuation, so:
+     *
+     *   P. Rate  -> P RATE
+     *   Pur. Qty -> PUR QTY
+     *   Sale.Value -> SALE VALUE
+     *
+     * Do not require every possible column because different
+     * distributors can omit or rename some movement columns.
+     */
+
+    const has = (...terms) =>
+        terms.some(term => text.includes(term));
+
+    let score = 0;
+
+    // --------------------------------------------------
+    // CORE IDENTIFICATION
+    // --------------------------------------------------
+
+    if (has("ITEM CODE", "ITEMCODE"))
+        score += 2;
+
+    if (has("ITEM NAME", "ITEMNAME"))
+        score += 2;
+
+    if (has("PACKSIZE", "PACK SIZE"))
+        score += 1;
+
+    // --------------------------------------------------
+    // RATE
+    // --------------------------------------------------
+
+    if (has("P RATE", "PRATE"))
+        score += 1;
+
+    if (has("PTR"))
+        score += 1;
+
+    // --------------------------------------------------
+    // OPENING
+    // --------------------------------------------------
+
+    if (has("OPENING", "OPEN STOCK", "OP STOCK"))
+        score += 2;
+
+    // --------------------------------------------------
+    // PURCHASE
+    // --------------------------------------------------
+
+    if (has("PUR QTY", "PURQTY", "PURCHASE QTY"))
+        score += 1;
+
+    if (has("PUR FQTY", "PURFQTY", "PUR FREE", "FREE QTY"))
+        score += 1;
+
+    if (has("PUR VALUE", "PURVALUE", "PURCHASE VALUE"))
+        score += 1;
+
+    if (has("RPL QTY", "RPLQTY", "REPL QTY", "REPLACEMENT"))
+        score += 1;
+
+    // --------------------------------------------------
+    // SALES
+    // --------------------------------------------------
+
+    if (has("SALE QTY", "SALEQTY", "SALES QTY"))
+        score += 1;
+
+    if (has("SALE FQTY", "SALEFQTY", "SALE FREE", "SALES FREE"))
+        score += 1;
+
+    if (has("SALE VALUE", "SALEVALUE", "SALES VALUE"))
+        score += 1;
+
+    // --------------------------------------------------
+    // CLOSING
+    // --------------------------------------------------
+
+    if (has("CLOSING", "CLOSING STOCK", "CLOSE STOCK"))
+        score += 2;
+
+    // --------------------------------------------------
+    // STATUS
+    // --------------------------------------------------
+
+    if (has("STATUS"))
+        score += 1;
+
+    /*
+     * Strong core:
+     *
+     * ITEM CODE + ITEM NAME + OPENING + CLOSING
+     *
+     * Then require enough supporting columns.
+     *
+     * This prevents ordinary metadata/product rows from
+     * being incorrectly identified as the header while
+     * allowing legitimate variations in the TXT format.
+     */
+
+    const coreHeader =
+        has("ITEM CODE", "ITEMCODE") &&
+        has("ITEM NAME", "ITEMNAME") &&
+        has("OPENING") &&
+        has("CLOSING");
+
+    return (
+        coreHeader &&
+        score >= 7
+    );
+}
+
+//======================================================
+// FIXED-WIDTH OM DISTRIBUTORS STOCK & SALES FORMAT
+//======================================================
+//
+// Example:
+// ITEM NAME               BOX    PACK    OPQTY  P_QTY  REPL   S_QTY  B_QTY
+//
+// The complete header is stored in column A.
+// Product rows are also stored in column A.
+//======================================================
+
+function isFixedWidthOMDistributorsStockSalesHeader(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return false;
+
+    return (
+        text.includes("ITEM NAME") &&
+        text.includes("BOX") &&
+        text.includes("PACK") &&
+        text.includes("OPQTY") &&
+        text.includes("P QTY") &&
+        text.includes("REPL") &&
+        text.includes("S QTY") &&
+        text.includes("B QTY")
+    );
+}
+
+//======================================================
+// FIXED-WIDTH SENTHIL PHARMA STOCK & SALES FORMAT
+//======================================================
+//
+// Example:
+// No   Product Name              Pack        Opstk
+//      Pur      Sale        CurStk    StkVal
+//
+// The complete header is stored in column A.
+// Product rows are also stored completely in column A
+// and begin with a serial number.
+//
+// This is intentionally handled as a special fixed-width
+// format so the generic detector does not try to interpret
+// the serial number as the product column.
+//======================================================
+
+function isFixedWidthSenthilStockSalesHeader(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return false;
+
+    return (
+        text.includes("NO") &&
+        text.includes("PRODUCT NAME") &&
+        text.includes("PACK") &&
+        text.includes("OPSTK") &&
+        text.includes("PUR") &&
+        text.includes("SALE") &&
+        text.includes("CURSTK") &&
+        text.includes("STKVAL")
+    );
+}
+
+
+
+//======================================================
+// FIXED-WIDTH JYOTI STOCK & SALES CONTINUATION HEADER
+//======================================================
+//
+// Some Jyoti statements split the header across two lines:
+//   Product Name  Packing  Opening Stock  Purchases  Sales  Closing Stock
+//   Qty Value     Qty Value  Qty Value      Qty Value
+//
+// The first line is enough to identify the format.
+//======================================================
+
+function isJyotiStockSalesHeader(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return false;
+
+    return (
+        text.includes("PRODUCT NAME") &&
+        text.includes("PACKING") &&
+        text.includes("OPENING STOCK") &&
+        text.includes("PURCHASES") &&
+        text.includes("SALES") &&
+        text.includes("CLOSING STOCK")
+    );
+}
+
+
+//======================================================
+// FIXED-WIDTH DEEPAA STOCK & SALES FORMAT
+//======================================================
+//
+// Example:
+//
+// PRODUCT NAME               OPEN  REC-  ADJ   ADJ TOTAL SALES CLOSE   ORD.QTY  EXCES    JUN      MAY
+//
+// The complete header is stored in column A.
+// Product rows are also stored in column A.
+//======================================================
+
+function isFixedWidthDeepaaStockSalesHeader(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return false;
+
+    const hasProduct =
+        text.includes("PRODUCT NAME");
+
+    const hasOpen =
+        text.includes("OPEN");
+
+    const hasReceipt =
+        text.includes("REC");
+
+    const hasAdjustment =
+        text.includes("ADJ");
+
+    const hasSales =
+        text.includes("SALES");
+
+    const hasClose =
+        text.includes("CLOSE");
+
+    const hasOrderQty =
+        text.includes("ORD QTY");
+
+    const hasExcess =
+        text.includes("EXCES");
+
+    const hasJune =
+        text.includes("JUN");
+
+    const hasMay =
+        text.includes("MAY");
+
+    return (
+        hasProduct &&
+        hasOpen &&
+        hasReceipt &&
+        hasAdjustment &&
+        hasSales &&
+        hasClose &&
+        hasOrderQty &&
+        hasExcess &&
+        hasJune &&
+        hasMay
+    );
+}
+
+//======================================================
+// FIXED-WIDTH PRODUCT ROW
+//======================================================
+
+function looksLikeFixedWidthProduct(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return false;
+
+    // Footer / summary
+    if (isFooterOrSummary(text))
+        return false;
+
+    // Separator
+    if (/^-+$/.test(text))
+        return false;
+
+    // Known non-product section headings
+    if (
+        text === "LINUX LAB PVT LTD" ||
+        text === "LINUX LAB" ||
+        text === "LINUX INTEGRA"
+    ) {
+        return false;
+    }
+
+    // INTEGRA has its own fixed-width row structure.
+    if (looksLikeIntegraProduct(text))
+        return true;
+
+    // Metadata
+    if (isMetadataRow(text))
+        return false;
+
+    // Header
+    if (isProductHeader(text))
+        return false;
+
+    // Must contain letters
+    if (!/[A-Z]/.test(text))
+        return false;
+
+    // A fixed-width product row normally contains
+    // at least one numeric value somewhere in the text.
+    const numericParts =
+        text.match(/\d+(?:\.\d+)?/g);
+
+    if (!numericParts || numericParts.length < 2)
+        return false;
+
+    return true;
+}
+
+//======================================================
+// OPENING HEADER
+//======================================================
+
+function isOpeningHeader(value) {
+
+    const text = normalize(value);
+    const cmp = compact(value);
+
+    return (
+
+        text === "OPENING" ||
+        text === "OPEN" ||
+        text === "OP" ||
+
+        text.startsWith("OP ") ||
+
+        cmp.startsWith("OPENING") ||
+        cmp.startsWith("OPENBAL") ||
+        cmp.startsWith("OPENSTOCK") ||
+
+        cmp === "OS" ||
+        cmp === "OB"
+
+    );
+
+}
+
+//======================================================
+// PURCHASE HEADER
+//======================================================
+
+function isPurchaseHeader(value) {
+
+    const text = normalize(value);
+    const cmp = compact(value);
+
+    return (
+
+        text === "PURCHASE" ||
+        text === "PURCHASES" ||
+        text === "PUR" ||
+
+        text.startsWith("PUR ") ||
+
+        text === "RECEIPT" ||
+        text === "RECEIPTS" ||
+        text === "RCPT" ||
+        text === "RCPTS" ||
+        text === "RCVD" ||
+        text === "RECEIVED" ||
+        text === "INWARD" ||
+
+        cmp.startsWith("PURCHASE") ||
+        cmp === "PUR"
+
+    );
+
+}
+
+//======================================================
+// SALES HEADER
+//======================================================
+
+function isSalesHeader(value) {
+
+    const text = normalize(value);
+    const cmp = compact(value);
+
+    return (
+
+        text === "SALE" ||
+        text === "SALES" ||
+        text === "S" ||
+
+        text === "ISSUE" ||
+        text === "ISSUED" ||
+
+        text === "OUTWARD" ||
+        text === "OUT" ||
+
+        text.startsWith("SALE ") ||
+
+        cmp.startsWith("SALE") ||
+        cmp === "SALES"
+
+    );
+
+}
+
+//======================================================
+// PURCHASE RETURN
+//======================================================
+
+function isPurchaseReturnHeader(value) {
+
+    const text = normalize(value);
+    const cmp = compact(value);
+
+    return (
+
+        (
+            text.includes("PUR") &&
+            (
+                text.includes("RET") ||
+                text.includes("RETURN")
+            )
+        ) ||
+
+        cmp === "PRET" ||
+        cmp === "PURRET" ||
+        cmp === "PURRETURN"
+
+    );
+
+}
+
+//======================================================
+// SALES RETURN
+//======================================================
+
+function isSalesReturnHeader(value) {
+
+    const text = normalize(value);
+    const cmp = compact(value);
+
+    return (
+
+        (
+            (
+                text.includes("SAL") ||
+                text.includes("SALE")
+            ) &&
+            (
+                text.includes("RET") ||
+                text.includes("RETURN")
+            )
+        ) ||
+
+        cmp === "SRET" ||
+        cmp === "SALERETURN" ||
+        cmp === "SALESRETURN"
+
+    );
+
+}
+
+//======================================================
+// CLOSING HEADER
+//======================================================
+
+function isClosingHeader(value) {
+
+    const text = normalize(value);
+    const cmp = compact(value);
+
+    return (
+
+        text === "CLOSING" ||
+        text === "CLOSE" ||
+        text === "BALANCE" ||
+        text === "BAL" ||
+        text === "CL" ||
+
+        text.startsWith("CL ") ||
+        text.startsWith("CLOSING ") ||
+
+        cmp.startsWith("CLOSING") ||
+
+        cmp === "CB" ||
+        cmp === "CL" ||
+        cmp === "STOCK" ||
+        cmp === "STK"
+
+    );
+
+}
+
+//======================================================
+// VALUE HEADER
+//======================================================
+
+function isValueHeader(value) {
+
+    const text = normalize(value);
+    const cmp = compact(value);
+
+    return (
+
+        text === "VALUE" ||
+        text === "VAL" ||
+        text === "AMOUNT" ||
+
+        text.includes("VALUE") ||
+        text.includes("AMOUNT") ||
+
+        cmp.includes("VALUE") ||
+        cmp.includes("AMOUNT")
+
+    );
+
+}
+
+//======================================================
+// QUANTITY HEADER
+//======================================================
+
+function isQuantityHeader(value) {
+
+    const text = normalize(value);
+    const cmp = compact(value);
+
+    return (
+
+        text === "QTY" ||
+        text === "QUANTITY" ||
+        text === "PCS" ||
+        text === "NOS" ||
+        text === "UNITS" ||
+
+        text.includes("QTY") ||
+        text.includes("QUANTITY") ||
+
+        cmp.includes("QTY")
+
+    );
+
+}
+
+//======================================================
+// RATE HEADER
+//======================================================
+
+function isRateHeader(value) {
+
+    const text = normalize(value);
+    const cmp = compact(value);
+
+    return (
+
+        text === "RATE" ||
+        text === "PRICE" ||
+        text === "PTR" ||
+        text === "PTS" ||
+        text === "MRP" ||
+        text === "COST" ||
+
+        text.includes("RATE") ||
+        text.includes("PRICE") ||
+
+        cmp.includes("RATE")
+
+    );
+
+}
+
+
+//======================================================
+// FOOTER / SUMMARY
+//======================================================
+
+function isFooterOrSummary(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return false;
+
+    const exact = [
+
+        "TOTAL",
+        "GRAND TOTAL",
+        "SUB TOTAL",
+        "SUBTOTAL",
+
+        "SUMMARY",
+
+        "NET VALUE",
+        "NET TOTAL",
+        "NET AMOUNT",
+
+        "TOTAL VALUE",
+        "TOTAL QTY",
+        "TOTAL QUANTITY",
+
+        "PREPARED",
+        "PREPARED BY",
+
+        "AUTHORISED",
+        "AUTHORIZED",
+
+        "COMPUTER GENERATED"
+
+    ];
+
+    if (exact.includes(text))
+        return true;
+
+    if (
+        text.startsWith("TOTAL ") ||
+        text.startsWith("GRAND TOTAL") ||
+        text.startsWith("SUB TOTAL") ||
+        text.startsWith("SUMMARY") ||
+        text.startsWith("NET VALUE") ||
+        text.startsWith("NET TOTAL") ||
+        text.startsWith("NET AMOUNT")
+    ) {
+        return true;
+    }
+
+    return false;
+
+}
+
+//======================================================
+// NON PRODUCT / METADATA
+//======================================================
+
+function isMetadataRow(value) {
+
+    const text = normalize(value);
+
+    if (!text)
+        return true;
+
+    if (isFooterOrSummary(text))
+        return true;
+
+    if (
+        text.startsWith("COMPANY") ||
+        text.startsWith("GROUP") ||
+        text.startsWith("CATEGORY") ||
+        text.startsWith("DIVISION") ||
+        text.startsWith("MARKETING GROUP")
+    ) {
+        return true;
+    }
+
+    if (
+        text.startsWith("REPORT DATE") ||
+        text.startsWith("FROM ") ||
+        text.startsWith("TO ") ||
+        text.startsWith("DATE :") ||
+        text.startsWith("DATE:")
+    ) {
+        return true;
+    }
+
+    if (
+        text.startsWith("FOR MANUFACTURER") ||
+        text.startsWith("FOR DISTRIBUTOR") ||
+        text.startsWith("FOR STOCKIST")
+    ) {
+        return true;
+    }
+
+    if (
+        text.startsWith("PRINTED USING") ||
+        text.startsWith("PRINTED BY") ||
+        text.startsWith("GENERATED BY")
+    ) {
+        return true;
+    }
+
+    if (
+        text.startsWith("PAGE ") ||
+        text.match(/^PAGE\s+\d+/)
+    ) {
+        return true;
+    }
+
+    return false;
+
+}
+
+//======================================================
+// SCORE HEADER ROW
+//======================================================
+
+function scoreRow(row) {
+
+    let score = 0;
+
+    let productColumn = -1;
+
+    let productScore = 0;
+
+    let businessColumns = 0;
+
+    for (
+        let c = 0;
+        c < row.length;
+        c++
+    ) {
+
+        const cell = row[c];
+
+        const text = normalize(cell);
+
+        if (!text)
+            continue;
+
+        //--------------------------------------------------
+        // PRODUCT
+        //--------------------------------------------------
+
+        if (isProductHeader(cell)) {
+
+            let currentScore =
+                text === "PRODUCT"
+                    ? 150
+                    : 130;
+
+            /*
+             * Product / Company is a very strong
+             * product identifier.
+             */
+
+            if (
+                text === "PRODUCT / COMPANY" ||
+                text.includes("PRODUCT COMPANY")
+            ) {
+                currentScore = 145;
+            }
+
+            if (
+                currentScore > productScore
+            ) {
+
+                productScore =
+                    currentScore;
+
+                productColumn =
+                    c;
+
+            }
+
+        }
+
+        //--------------------------------------------------
+        // OPENING
+        //--------------------------------------------------
+
+        if (isOpeningHeader(cell)) {
+
+            score += 20;
+
+            businessColumns++;
+
+        }
+
+        //--------------------------------------------------
+        // PURCHASE
+        //--------------------------------------------------
+
+        if (isPurchaseHeader(cell)) {
+
+            score += 20;
+
+            businessColumns++;
+
+        }
+
+        //--------------------------------------------------
+        // PURCHASE RETURN
+        //--------------------------------------------------
+
+        if (isPurchaseReturnHeader(cell)) {
+
+            score += 15;
+
+            businessColumns++;
+
+        }
+
+        //--------------------------------------------------
+        // SALES
+        //--------------------------------------------------
+
+        if (isSalesHeader(cell)) {
+
+            score += 20;
+
+            businessColumns++;
+
+        }
+
+        //--------------------------------------------------
+        // SALES RETURN
+        //--------------------------------------------------
+
+        if (isSalesReturnHeader(cell)) {
+
+            score += 15;
+
+            businessColumns++;
+
+        }
+
+        //--------------------------------------------------
+        // CLOSING
+        //--------------------------------------------------
+
+        if (isClosingHeader(cell)) {
+
+            score += 20;
+
+            businessColumns++;
+
+        }
+
+        //--------------------------------------------------
+        // VALUE
+        //--------------------------------------------------
+
+        if (isValueHeader(cell)) {
+
+            score += 5;
+
+        }
+
+        //--------------------------------------------------
+        // QUANTITY
+        //--------------------------------------------------
+
+        if (isQuantityHeader(cell)) {
+
+            score += 5;
+
+        }
+
+        //--------------------------------------------------
+        // RATE
+        //--------------------------------------------------
+
+        if (isRateHeader(cell)) {
+
+            score += 5;
+
+        }
+
+    }
+
+    //--------------------------------------------------
+    // Product header bonus
+    //--------------------------------------------------
+
+    if (productColumn !== -1) {
+
+        score += productScore;
+
+    }
+
+    //--------------------------------------------------
+    // Strong business structure
+    //--------------------------------------------------
+
+    if (businessColumns >= 3) {
+
+        score += 40;
+
+    }
+
+    return {
+
+        score,
+
+        productColumn,
+
+        productScore,
+
+        businessColumns
+
+    };
+
+}
+
+//======================================================
+// VERIFY PRODUCT DATA
+//======================================================
+
+function verifyRows(
+
+    rows,
+
+    headerRow,
+
+    productColumn
+
+) {
+
+    let valid = 0;
+
+    let checked = 0;
+
+    for (
+
+        let r = headerRow + 1;
+
+        r < rows.length && checked < 50;
+
+        r++
+
+    ) {
+
+        const row =
+            rows[r] || [];
+
+        const product =
+            normalize(
+                row[productColumn]
+            );
+
+        if (!product)
+            continue;
+
+        //--------------------------------------------------
+        // Ignore metadata/footer
+        //--------------------------------------------------
+
+        if (isMetadataRow(product))
+            continue;
+
+        //--------------------------------------------------
+        // Repeated header
+        //--------------------------------------------------
+
+        if (
+            isProductHeader(product)
+        ) {
+            continue;
+        }
+
+        //--------------------------------------------------
+        // Count numeric values
+        //--------------------------------------------------
+
+        let numeric = 0;
+
+        for (
+            let c = 0;
+            c < row.length;
+            c++
+        ) {
+
+            if (
+                c === productColumn
+            ) {
+                continue;
+            }
+
+            if (
+                isNumeric(row[c])
+            ) {
+                numeric++;
+            }
+
+        }
+
+        checked++;
+
+        if (
+            product.length >= 2 &&
+            numeric >= 2
+        ) {
+
+            valid++;
+
+        }
+
+    }
+
+    return valid;
+
+}
+
+//======================================================
+// STRUCTURAL FALLBACK
+//======================================================
+
+function structuralCandidate(
+
+    rows,
+
+    headerRow
+
+) {
+
+    const header =
+        rows[headerRow] || [];
+
+    if (
+        header.length < 2
+    ) {
+        return null;
+    }
+
+    let best = null;
+
+    for (
+        let productColumn = 0;
+        productColumn < header.length;
+        productColumn++
+    ) {
+
+        let productRows = 0;
+
+        let numericRows = 0;
+
+        let checked = 0;
+
+        for (
+
+            let r = headerRow + 1;
+
+            r < rows.length &&
+            checked < 50;
+
+            r++
+
+        ) {
+
+            const row =
+                rows[r] || [];
+
+            const value =
+                normalize(
+                    row[productColumn]
+                );
+
+            if (!value)
+                continue;
+
+            if (
+    isMetadataRow(value)
+) {
+    continue;
+}
+
+if (
+    isProductHeader(value)
+) {
+    continue;
+}
+
+// Product column must contain meaningful text.
+// Numeric-only columns such as CL.Value, CL.Stk,
+// Sales Value, etc. must NEVER become product columns.
+if (isNumeric(value)) {
+    continue;
+}
+
+// Product name must contain at least one alphabetic character.
+if (!/[A-Z]/i.test(value)) {
+    continue;
+}
+
+checked++;
+
+            let numericCount = 0;
+
+            for (
+                let c = 0;
+                c < row.length;
+                c++
+            ) {
+
+                if (
+                    c === productColumn
+                ) {
+                    continue;
+                }
+
+                if (
+                    isNumeric(row[c])
+                ) {
+
+                    numericCount++;
+
+                }
+
+            }
+
+            if (
+                numericCount >= 2
+            ) {
+
+                productRows++;
+
+                numericRows++;
+
+            }
+
+        }
+
+        if (
+            productRows === 0
+        ) {
+            continue;
+        }
+
+        let score =
+            productRows * 20 +
+            numericRows * 5;
+
+        //--------------------------------------------------
+        // Product usually appears near left side
+        //--------------------------------------------------
+
+        if (
+            productColumn <= 2
+        ) {
+
+            score += 15;
+
+        }
+
+        //--------------------------------------------------
+        // Existing header
+        //--------------------------------------------------
+
+        if (
+            isProductHeader(
+                header[productColumn]
+            )
+        ) {
+
+            score += 100;
+
+        }
+
+        if (
+            !best ||
+            score > best.score
+        ) {
+
+            best = {
+
+                score,
+
+                productColumn,
+
+                headerRow,
+
+                productRows
+
+            };
+
+        }
+
+    }
+
+    return best;
+
+}
+
+//======================================================
+// FIND FIRST REAL PRODUCT DATA ROW
+//======================================================
+
+function findFirstDataRow(
+    rows,
+    headerRow,
+    productColumn,
+    specialFormat = false
+) {
+
+    /*
+     * IMPORTANT:
+     *
+     * Do NOT return the first non-empty row.
+     *
+     * Statements frequently contain:
+     *
+     * Header
+     * Company
+     * Address
+     * Date
+     * Manufacturer
+     * Blank
+     * Product rows
+     *
+     * We therefore require:
+     *
+     * 1. Non-empty product name
+     * 2. Not metadata/footer
+     * 3. Not repeated header
+     * 4. At least TWO numeric cells
+     *
+     * This fixes statements where the actual product
+     * data begins several rows below the header.
+     */
+
+    for (
+
+        let r = headerRow + 1;
+
+        r < rows.length;
+
+        r++
+
+    ) {
+
+        const row =
+            rows[r] || [];
+
+        const value =
+            normalize(
+                row[productColumn]
+            );
+
+        if (!value)
+            continue;
+
+//==================================================
+// FIXED-WIDTH STOCK & SALES FORMAT
+//==================================================
+
+if (Boolean(specialFormat)) {
+
+    if (looksLikeFixedWidthProduct(value)) {
+
+        console.log(
+            "FIRST FIXED-WIDTH PRODUCT ROW :",
+            r + 1
+        );
+
+        console.log(
+            "PRODUCT :",
+            value
+        );
+
+        return r;
+    }
+
+    continue;
+}
+
+        //--------------------------------------------------
+        // Ignore metadata
+        //--------------------------------------------------
+
+        if (
+            isMetadataRow(value)
+        ) {
+            continue;
+        }
+
+        //--------------------------------------------------
+        // Ignore repeated header
+        //--------------------------------------------------
+
+        if (
+            isProductHeader(value)
+        ) {
+            continue;
+        }
+
+        //--------------------------------------------------
+        // Ignore purely numeric product/code columns
+        //--------------------------------------------------
+
+        if (
+            isNumeric(value)
+        ) {
+            continue;
+        }
+
+        //--------------------------------------------------
+        // Count numeric cells
+        //--------------------------------------------------
+
+        let numericCount = 0;
+
+        for (
+            let c = 0;
+            c < row.length;
+            c++
+        ) {
+
+            if (
+                c === productColumn
+            ) {
+                continue;
+            }
+
+            if (
+                isNumeric(row[c])
+            ) {
+
+                numericCount++;
+
+            }
+
+        }
+
+        //--------------------------------------------------
+        // Real product row
+        //--------------------------------------------------
+
+        if (
+            value.length >= 2 &&
+            numericCount >= 2
+        ) {
+
+            return r;
+
+        }
+
+    }
+
+    return -1;
+
+}
+
+//======================================================
+// FIND LAST PRODUCT DATA ROW
+//======================================================
+
+function findLastDataRow(
+    rows,
+    firstDataRow,
+    productColumn,
+    specialFormat = false
+) {
+
+    if (
+        firstDataRow < 0
+    ) {
+        return -1;
+    }
+
+    let last = -1;
+
+
+    /*
+     * Blank rows are allowed inside the statement.
+     *
+     * We only stop after several consecutive blank rows
+     * OR a clear summary/footer section.
+     */
+
+    for (
+
+        let r = firstDataRow;
+
+        r < rows.length;
+
+        r++
+
+    ) {
+
+        const row =
+            rows[r] || [];
+
+        const value =
+            normalize(
+                row[productColumn]
+            );
+
+    //==================================================
+// FIXED-WIDTH STOCK & SALES FORMAT
+//==================================================
+
+if (Boolean(specialFormat)) {
+
+    //--------------------------------------------------
+    // Blank rows are allowed
+    //--------------------------------------------------
+
+    if (!value) {
+        continue;
+    }
+
+    //--------------------------------------------------
+    // TOTAL / SUMMARY = END OF PRODUCT DATA
+    //--------------------------------------------------
+
+    if (isFooterOrSummary(value)) {
+        break;
+    }
+
+    //--------------------------------------------------
+    // Section heading
+    //--------------------------------------------------
+
+    if (
+        value === "LINUX LAB PVT LTD" ||
+        value === "LINUX LAB"
+    ) {
+        continue;
+    }
+
+    //--------------------------------------------------
+    // Separator
+    //--------------------------------------------------
+
+    if (/^-+$/.test(value)) {
+        continue;
+    }
+
+    //--------------------------------------------------
+    // Repeated header
+    //--------------------------------------------------
+
+    if (isProductHeader(value)) {
+        continue;
+    }
+
+    //--------------------------------------------------
+    // Valid fixed-width product
+    //--------------------------------------------------
+
+    if (
+        looksLikeFixedWidthProduct(value)
+    ) {
+
+        last = r;
+
+    }
+
+    continue;
+}
+    //--------------------------------------------------
+// Blank rows
+//
+// Blank rows inside the product section are allowed.
+// They must NEVER terminate the data range.
+//--------------------------------------------------
+
+if (!value) {
+    continue;
+}
+
+        //--------------------------------------------------
+        // Footer / summary
+        //--------------------------------------------------
+
+        if (
+            isMetadataRow(value)
+        ) {
+
+            /*
+             * Once actual products have started,
+             * a summary/footer means the product section
+             * is finished.
+             */
+
+            if (last !== -1)
+                break;
+
+            continue;
+
+        }
+
+        //--------------------------------------------------
+        // Repeated header
+        //--------------------------------------------------
+
+        if (
+            isProductHeader(value)
+        ) {
+            continue;
+        }
+
+        //--------------------------------------------------
+        // Numeric product code is not a product name
+        //--------------------------------------------------
+
+        if (
+            isNumeric(value)
+        ) {
+            continue;
+        }
+
+        //--------------------------------------------------
+        // Numeric evidence
+        //--------------------------------------------------
+
+        let numericCount = 0;
+
+        for (
+            let c = 0;
+            c < row.length;
+            c++
+        ) {
+
+            if (
+                c === productColumn
+            ) {
+                continue;
+            }
+
+            if (
+                isNumeric(row[c])
+            ) {
+
+                numericCount++;
+
+            }
+
+        }
+
+        //--------------------------------------------------
+        // Valid product
+        //--------------------------------------------------
+
+        if (
+            value.length >= 2 &&
+            numericCount >= 2
+        ) {
+
+            last = r;
+
+        }
+
+    }
+
+    return last;
+
+}
+
+//======================================================
+// MAIN
+//======================================================
+
+function findHeaderRow(workbook) {
+
+    let best = null;
+
+    //--------------------------------------------------
+    // Scan every worksheet
+    //--------------------------------------------------
+
+    for (
+        const sheetName of workbook.SheetNames
+    ) {
+
+        const sheet =
+            workbook.Sheets[sheetName];
+
+        if (!sheet)
+            continue;
+
+        const rows =
+            XLSX.utils.sheet_to_json(
+
+                sheet,
+
+                {
+                    header: 1,
+                    blankrows: true,
+                    defval: ""
+                }
+
+            );
+
+        //--------------------------------------------------
+        // Explicit detection
+        //--------------------------------------------------
+
+        for (
+            let r = 0;
+            r < rows.length;
+            r++
+        ) {
+
+    const row =
+    rows[r] || [];
+
+
+//==================================================
+// FIXED-WIDTH INFINA TWO-LINE STOCK & SALES FORMAT
+//==================================================
+
+if (
+    isFixedWidthInfinaTwoLineStockSalesHeader(rows, r)
+) {
+
+    const firstHeader = rowText(rows[r] || []);
+    const secondHeader = rowText(rows[r + 1] || []);
+
+    const combinedHeader =
+        normalize(firstHeader + " " + secondHeader);
+
+    const infinaHeader = {
+
+        score: 690,
+
+        sheetName,
+
+        sheet,
+
+        rows,
+
+        // The first physical header line is the logical header row.
+        headerRow: r,
+
+        // Product rows are stored completely in column A.
+        productColumn: 0,
+
+        row: [combinedHeader],
+
+        verified: 0,
+
+        detection:
+            "FIXED_WIDTH_INFINA_TWO_LINE_STOCK_SALES",
+
+        specialFormat: true
+
+    };
+
+    if (
+        !best ||
+        infinaHeader.score > best.score
+    ) {
+
+        best = infinaHeader;
+
+    }
+
+    // The second physical line belongs to this header.
+    // Do not try to detect it as a separate header.
+    r++;
+
+    continue;
+}
+
+//==================================================
+// FIXED-WIDTH INTEGRA STOCK & SALES FORMAT
+//==================================================
+
+if (
+    row.length > 0 &&
+    isFixedWidthIntegraStockSalesHeader(rowText(row))
+) {
+
+    const integraHeader = {
+
+        score: 675,
+
+        sheetName,
+
+        sheet,
+
+        rows,
+
+        headerRow: r,
+
+        productColumn: 0,
+
+        row,
+
+        verified: 0,
+
+        detection:
+            "FIXED_WIDTH_INTEGRA_STOCK_SALES",
+
+        specialFormat:
+            "INTEGRA_STOCK_SALES"
+
+    };
+
+    if (
+        !best ||
+        integraHeader.score > best.score
+    ) {
+
+        best = integraHeader;
+
+    }
+
+    continue;
+}
+
+//==================================================
+// HEADERLESS PANIKULAM STOCK & SALES FORMAT
+//==================================================
+
+if (
+    isPanikulamHeaderlessFormat(rows, r)
+) {
+
+    const logicalHeaderRow =
+        r > 0 ? r - 1 : r;
+
+    const panikulamHeader = {
+
+        score: 670,
+
+        sheetName,
+
+        sheet,
+
+        rows,
+
+        headerRow: logicalHeaderRow,
+
+        productColumn: 0,
+
+        row: ["PRODUCT NAME", "RATE", "OPENING", "PURCHASE", "REPLACEMENT", "SALES", "BONUS", "SALES VALUE", "RETURN", "CLOSING", "VALUE"],
+
+        verified: 1,
+
+        detection:
+            "HEADERLESS_PANIKULAM_STOCK_SALES",
+
+        specialFormat:
+            "PANIKULAM_HEADERLESS_STOCK_SALES"
+
+    };
+
+    if (
+        !best ||
+        panikulamHeader.score > best.score
+    ) {
+
+        best = panikulamHeader;
+
+    }
+
+    // Do not continue here. There may be another
+    // stronger header later in the same statement.
+}
+
+//==================================================
+// FIXED-WIDTH IMPERIA / AMAR DRUGS DISTRIBUTORS FORMAT
+//==================================================
+
+if (
+    row.length > 0 &&
+    isFixedWidthImperiaStockSalesHeader(rowText(row))
+) {
+
+    const imperiaHeader = {
+
+        score: 680,
+
+        sheetName,
+
+        sheet,
+
+        rows,
+
+        headerRow: r,
+
+        // ITEM NAME is the product column when the TXT parser
+        // preserves tab-separated columns. If the entire header
+        // is stored in one cell, column 0 is used.
+        productColumn:
+            row.length > 2
+                ? Math.max(
+                    0,
+                    row.findIndex(cell =>
+                        normalize(cell) === "ITEM NAME" ||
+                        compact(cell) === "ITEMNAME"
+                    )
+                )
+                : 0,
+
+        row,
+
+        verified: 0,
+
+        detection:
+            "FIXED_WIDTH_IMPERIA_STOCK_SALES",
+
+        // Let the normal data-row validator handle tab-separated
+        // rows. The special fixed-width parser expects the product
+        // name and numeric values inside one cell.
+        specialFormat: false
+
+    };
+
+    if (
+        !best ||
+        imperiaHeader.score > best.score
+    ) {
+
+        best = imperiaHeader;
+
+    }
+
+    continue;
+}
+
+//==================================================
+// FIXED-WIDTH OM DISTRIBUTORS STOCK & SALES FORMAT
+//==================================================
+
+if (
+    row.length > 0 &&
+    isFixedWidthOMDistributorsStockSalesHeader(rowText(row))
+) {
+
+    const omHeader = {
+
+        score: 660,
+
+        sheetName,
+
+        sheet,
+
+        rows,
+
+        headerRow: r,
+
+        productColumn: 0,
+
+        row,
+
+        verified: 0,
+
+        detection:
+            "FIXED_WIDTH_OM_DISTRIBUTORS_STOCK_SALES",
+
+        specialFormat:
+            "OM_DISTRIBUTORS_STOCK_SALES"
+
+    };
+
+    if (
+        !best ||
+        omHeader.score > best.score
+    ) {
+
+        best = omHeader;
+
+    }
+
+    continue;
+}
+
+//==================================================
+// FIXED-WIDTH SENTHIL PHARMA STOCK & SALES FORMAT
+//==================================================
+
+if (
+    row.length > 0 &&
+    isFixedWidthSenthilStockSalesHeader(rowText(row))
+) {
+
+    const senthilHeader = {
+
+        score: 640,
+
+        sheetName,
+        sheet,
+        rows,
+
+        headerRow: r,
+        productColumn: 0,
+        row,
+
+        verified: 0,
+
+        detection:
+            "FIXED_WIDTH_SENTHIL_STOCK_SALES",
+
+        specialFormat:
+            "SENTHIL_STOCK_SALES"
+
+    };
+
+    if (
+        !best ||
+        senthilHeader.score > best.score
+    ) {
+
+        best = senthilHeader;
+
+    }
+
+    continue;
+}
+
+
+//==================================================
+// FIXED-WIDTH ITEMCODE / ITEMNAME STOCK & SALES FORMAT
+//==================================================
+
+if (
+    row.length > 0 &&
+    isFixedWidthItemCodeStockSalesHeader(rowText(row))
+) {
+
+    const itemCodeHeader = {
+
+        score: 645,
+
+        sheetName,
+        sheet,
+        rows,
+
+        headerRow: r,
+
+        productColumn: 0,
+
+        row,
+
+        verified: 0,
+
+        detection:
+            "FIXED_WIDTH_ITEMCODE_STOCK_SALES",
+
+        specialFormat:
+            "ITEMCODE_STOCK_SALES"
+
+    };
+
+    if (
+        !best ||
+        itemCodeHeader.score > best.score
+    ) {
+
+        best = itemCodeHeader;
+
+    }
+
+    continue;
+}
+
+//==================================================
+// FIXED-WIDTH JYOTI STOCK & SALES FORMAT
+//==================================================
+
+if (
+    row.length > 0 &&
+    isJyotiStockSalesHeader(rowText(row))
+) {
+
+    const jyotiHeader = {
+
+        score: 620,
+
+        sheetName,
+        sheet,
+        rows,
+        headerRow: r,
+        productColumn: 0,
+        row,
+        verified: 0,
+        detection: "FIXED_WIDTH_JYOTI_STOCK_SALES",
+        specialFormat: "JYOTI_STOCK_SALES"
+
+    };
+
+    if (
+        !best ||
+        jyotiHeader.score > best.score
+    ) {
+
+        best = jyotiHeader;
+
+    }
+
+    continue;
+}
+
+//==================================================
+// FIXED-WIDTH PRODUCT NAME FORMAT
+//==================================================
+//
+// Some legacy XLS statements store the complete
+// Product Name / Packing / movement header in one
+// fixed-width text cell (normally column A).
+//
+// Example:
+// Product Name   Packing   OP <---Receipts--->
+// <----Sales----> <---Closing--->
+//
+// This is intentionally checked before the normal
+// header scoring so it does not alter normal tables.
+//==================================================
+
+if (
+    row.length > 0 &&
+    isFixedWidthProductNameHeader(rowText(row))
+) {
+
+    const fixedHeader = {
+
+        score: 600,
+
+        sheetName,
+
+        sheet,
+
+        rows,
+
+        headerRow: r,
+
+        productColumn: 0,
+
+        row,
+
+        verified: 0,
+
+        detection:
+            "FIXED_WIDTH_PRODUCT_NAME",
+
+        specialFormat: true
+
+    };
+
+    if (
+        !best ||
+        fixedHeader.score > best.score
+    ) {
+
+        best = fixedHeader;
+
+    }
+
+    continue;
+}
+
+//==================================================
+// FIXED-WIDTH DEEPAA STOCK & SALES FORMAT
+//==================================================
+
+if (
+    row.length > 0 &&
+    isFixedWidthDeepaaStockSalesHeader(rowText(row))
+) {
+
+    const deepaaHeader = {
+
+        score: 650,
+
+        sheetName,
+
+        sheet,
+
+        rows,
+
+        headerRow: r,
+
+        productColumn: 0,
+
+        row,
+
+        verified: 0,
+
+        detection:
+            "FIXED_WIDTH_DEEPAA_STOCK_SALES",
+
+        specialFormat:
+            "DEEPAA_STOCK_SALES"
+
+    };
+
+    if (
+        !best ||
+        deepaaHeader.score > best.score
+    ) {
+
+        best = deepaaHeader;
+
+    }
+
+    continue;
+}
+
+
+//==================================================
+// FIXED-WIDTH STOCK & SALES FORMAT
+//==================================================
+
+if (
+    row.length > 0 &&
+    isFixedWidthStockSalesHeader(rowText(row))
+) {
+
+    const fixedHeader = {
+
+        score: 500,
+
+        sheetName,
+
+        sheet,
+
+        rows,
+
+        headerRow: r,
+
+        productColumn: 0,
+
+        row,
+
+        verified: 0,
+
+        detection:
+            "FIXED_WIDTH_STOCK_SALES",
+
+        specialFormat: true
+
+    };
+
+    if (
+        !best ||
+        fixedHeader.score > best.score
+    ) {
+
+        best = fixedHeader;
+
+    }
+
+    continue;
+}
+
+//==================================================
+// FIXED-WIDTH TXT SALES & STOCK FORMAT
+//==================================================
+
+if (
+    row.length > 0 &&
+    isFixedWidthTxtSalesStockHeader(rowText(row))
+) {
+
+    const fixedTxtHeader = {
+
+        score: 520,
+
+        sheetName,
+
+        sheet,
+
+        rows,
+
+        headerRow: r,
+
+        productColumn: 0,
+
+        row,
+
+        verified: 0,
+
+        detection:
+            "FIXED_WIDTH_TXT_SALES_STOCK",
+
+        specialFormat: true
+
+    };
+
+    if (
+        !best ||
+        fixedTxtHeader.score > best.score
+    ) {
+
+        best = fixedTxtHeader;
+
+    }
+
+    continue;
+}
+
+const result =
+    scoreRow(row);
+
+            if (
+                result.productColumn === -1
+            ) {
+                continue;
+            }
+
+            const verified =
+                verifyRows(
+
+                    rows,
+
+                    r,
+
+                    result.productColumn
+
+                );
+
+            let finalScore =
+                result.score +
+                Math.min(
+                    verified,
+                    10
+                ) * 10;
+
+            //--------------------------------------------------
+            // Accept header when:
+            //
+            // Strong product header
+            // OR
+            // business structure
+            // OR
+            // verified rows
+            //--------------------------------------------------
+
+        const acceptable =
+        verified >= 1 &&
+        (
+        result.productScore >= 100 ||
+        result.businessColumns >= 3 ||
+        verified >= 2
+    );
+
+            if (
+                !acceptable
+            ) {
+                continue;
+            }
+
+            if (
+                !best ||
+                finalScore > best.score
+            ) {
+
+                best = {
+
+                    score:
+                        finalScore,
+
+                    sheetName,
+
+                    sheet,
+
+                    rows,
+
+                    headerRow:
+                        r,
+
+                    productColumn:
+                        result.productColumn,
+
+                    row,
+
+                    verified,
+
+                    detection:
+                        "EXPLICIT"
+
+                };
+
+            }
+
+        }
+
+        //--------------------------------------------------
+        // Structural fallback
+        //--------------------------------------------------
+
+        if (!best) {
+
+            for (
+                let r = 0;
+
+                r < Math.min(
+                    rows.length,
+                    150
+                );
+
+                r++
+            ) {
+
+                const candidate =
+                    structuralCandidate(
+
+                        rows,
+
+                        r
+
+                    );
+
+                if (!candidate)
+                    continue;
+
+                if (
+                    candidate.score < 30
+                ) {
+                    continue;
+                }
+
+                if (
+                    !best ||
+                    candidate.score > best.score
+                ) {
+
+                    best = {
+
+                        score:
+                            candidate.score,
+
+                        sheetName,
+
+                        sheet,
+
+                        rows,
+
+                        headerRow:
+                            candidate.headerRow,
+
+                        productColumn:
+                            candidate.productColumn,
+
+                        row:
+                            rows[
+                                candidate.headerRow
+                            ],
+
+                        verified:
+                            candidate.productRows,
+
+                        detection:
+                            "STRUCTURAL"
+
+                    };
+
+                }
+
+            }
+
+        }
+
+    }
+
+    //--------------------------------------------------
+    // No header
+    //--------------------------------------------------
+
+    if (!best) {
+
+        return {
+
+            found: false,
+
+            sheetName: null,
+
+            sheet: null,
+
+            headerRow: -1,
+
+            dataStartsAt: -1,
+
+            productColumn: -1,
+
+            row: [],
+
+            headers: []
+
+        };
+
+    }
+
+    //--------------------------------------------------
+    // Find actual first product row
+    //--------------------------------------------------
+
+    const firstDataIndex =
+    findFirstDataRow(
+        best.rows,
+        best.headerRow,
+        best.productColumn,
+        best.specialFormat || false
+    );
+
+    //--------------------------------------------------
+    // Find actual last product row
+    //--------------------------------------------------
+
+    const lastDataIndex =
+    findLastDataRow(
+        best.rows,
+        firstDataIndex,
+        best.productColumn,
+        best.specialFormat || false
+    );
+
+    //--------------------------------------------------
+    // DEBUG
+    //--------------------------------------------------
+
+    console.log("");
+
+    console.log(
+        "========== HEADER SELECTED =========="
+    );
+
+    console.log(
+        "Detection    :",
+        best.detection
+    );
+
+    console.log(
+        "Sheet        :",
+        best.sheetName
+    );
+
+    console.log(
+        "Header Row   :",
+        best.headerRow + 1
+    );
+
+    console.log(
+        "Product Col  :",
+        best.productColumn
+    );
+
+    console.log(
+        "Product Head :",
+        best.row[
+            best.productColumn
+        ]
+    );
+
+    console.log(
+        "Data Starts  :",
+        firstDataIndex >= 0
+            ? firstDataIndex + 1
+            : "NOT FOUND"
+    );
+
+    console.log(
+        "Data Ends    :",
+        lastDataIndex >= 0
+            ? lastDataIndex + 1
+            : "NOT FOUND"
+    );
+
+    console.log(
+        "Verified     :",
+        best.verified
+    );
+
+    console.log(
+        "Confidence   :",
+        best.score
+    );
+
+    console.log(
+        "Headers      :",
+        best.row
+    );
+
+    console.log(
+        "======================================"
+    );
+
+    //--------------------------------------------------
+    // No actual product rows
+    //--------------------------------------------------
+
+    if (
+        firstDataIndex === -1
+    ) {
+
+        return {
+
+            found: true,
+
+            sheetName:
+                best.sheetName,
+
+            sheet:
+                best.sheet,
+
+            headerRow:
+                best.headerRow + 1,
+
+            dataStartsAt: -1,
+
+            dataEndsAt: -1,
+
+            productColumn:
+                best.productColumn,
+
+            row:
+                best.row,
+
+            headers:
+                best.row,
+
+            confidence:
+                best.score,
+
+            specialFormat:
+            best.specialFormat || false
+
+        };
+
+    }
+
+    //--------------------------------------------------
+    // RETURN
+    //--------------------------------------------------
+
+    return {
+
+        found: true,
+
+        sheetName:
+            best.sheetName,
+
+        sheet:
+            best.sheet,
+
+        headerRow:
+            best.headerRow + 1,
+
+        dataStartsAt:
+            firstDataIndex + 1,
+
+        dataEndsAt:
+            lastDataIndex >= 0
+                ? lastDataIndex + 1
+                : firstDataIndex + 1,
+
+        productColumn:
+            best.productColumn,
+
+        row:
+            best.row,
+
+        headers:
+            best.row,
+
+        confidence:
+        best.score,
+
+        specialFormat:
+        best.specialFormat || false
+
+    };
+
+}
+
+//======================================================
+// EXPORT
+//======================================================
+
+module.exports = {
+
+    findHeaderRow,
+
+    // Exported for isolated detector tests.
+    isFixedWidthInfinaTwoLineStockSalesHeader,
+    isFixedWidthIntegraStockSalesHeader,
+    looksLikeIntegraProduct
+
+};

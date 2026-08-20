@@ -24,28 +24,43 @@ router.post("/user-login", (req, res) => {
     const { id } = req.body;
 
     if (!id) {
-      return res.json({ success: false, message: "ID required" });
+      return res.json({
+        success: false,
+        message: "ID required"
+      });
     }
 
     const users = getUsers();
 
+    const loginId = String(id)
+      .trim()
+      .toLowerCase();
+
     const found = users.find(row =>
-      row.BH_ID === id ||
-      row.SM_ID === id ||
-      row.ZBM_ID === id ||
-      row.RBM_ID === id ||
-      row.ABM_ID === id
+      String(row.BH_ID || "").trim().toLowerCase() === loginId ||
+      String(row.SM_ID || "").trim().toLowerCase() === loginId ||
+      String(row.ZBM_ID || "").trim().toLowerCase() === loginId ||
+      String(row.RBM_ID || "").trim().toLowerCase() === loginId ||
+      String(row.ABM_ID || "").trim().toLowerCase() === loginId
     );
 
     if (found) {
-      return res.json({ success: true });
-    } else {
-      return res.json({ success: false, message: "Invalid ID" });
+      return res.json({
+        success: true
+      });
     }
+
+    return res.json({
+      success: false,
+      message: "Invalid ID"
+    });
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false });
+
+    return res.status(500).json({
+      success: false
+    });
   }
 });
 
@@ -58,10 +73,14 @@ router.post("/admin-login", (req, res) => {
 
   // 👉 Change credentials here
   if (email === "admin@gmail.com" && password === "admin123") {
-    return res.json({ success: true });
-  } else {
-    return res.json({ success: false });
+    return res.json({
+      success: true
+    });
   }
+
+  return res.json({
+    success: false
+  });
 });
 
 module.exports = router;

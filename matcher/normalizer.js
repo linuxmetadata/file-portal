@@ -9,30 +9,56 @@ const { normalizeWord, kb } = require("./knowledgeBase");
 
 function normalizeProduct(product) {
 
-    if (!product) return "";
+    if (!product)
+        return "";
 
-    let text = product.toUpperCase();
+    let text = String(product)
+        .toUpperCase()
 
-    // Apply word replacements
-    // Apply synonym normalization
-const words = text.split(/\s+/);
+        // Standardize separators
+        .replace(/[-_/]/g, " ")
 
-text = words
-    .map(normalizeWord)
-    .join(" ");
+        // Remove brackets
+        .replace(/[()[\]{}]/g, " ")
 
+        // Remove commas
+        .replace(/,/g, " ")
+
+        // Remove dots except decimal numbers
+        .replace(/\.(?!\d)/g, " ");
+
+    //-----------------------------------------
+    // Normalize individual words
+    //-----------------------------------------
+
+    const words = text
+        .split(/\s+/)
+        .filter(Boolean);
+
+    text = words
+        .map(normalizeWord)
+        .join(" ");
+
+    //-----------------------------------------
     // Join number + unit
+    //-----------------------------------------
+
     const unitPattern = kb.units.join("|");
 
-const unitRegex = new RegExp(
-    `(\\d+(?:\\.\\d+)?)\\s+(${unitPattern})\\b`,
-    "g"
-);
+    const unitRegex = new RegExp(
+        `(\\d+(?:\\.\\d+)?)\\s+(${unitPattern})\\b`,
+        "g"
+    );
 
-text = text.replace(unitRegex, "$1$2");
+    text = text.replace(unitRegex, "$1$2");
 
+    //-----------------------------------------
     // Remove duplicate spaces
-    text = text.replace(/\s+/g, " ").trim();
+    //-----------------------------------------
+
+    text = text
+        .replace(/\s+/g, " ")
+        .trim();
 
     return text;
 

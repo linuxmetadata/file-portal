@@ -3,45 +3,100 @@
  * PROGRESSIVE MATCHER
  * =====================================================
  *
- * Filters candidates using statement parts.
- *
- * No normalization.
- * No business rules.
- * No scoring.
+ * Scores candidates instead of repeatedly filtering.
+ * The best scoring candidate(s) are returned.
  */
+
+function normalizeToken(token) {
+
+    return String(token || "")
+        .toUpperCase()
+        .replace(/\s+/g, "")
+        .replace(/MG$/, "")
+        .replace(/GM$/, "")
+        .replace(/ML$/, "");
+
+}
+
+function tokenMatches(statementToken, candidateToken) {
+
+    return (
+        normalizeToken(statementToken) ===
+        normalizeToken(candidateToken)
+    );
+
+}
 
 function progressiveMatch(statementParts, candidates) {
 
-    let remaining = [...candidates];
+    const scored = candidates.map(candidate => {
 
-    const trace = [];
+        let matched = 0;
 
-    for (const part of statementParts) {
+        candidate.parsed.parts.forEach(candidatePart => {
 
-        const filtered = remaining.filter(candidate => {
+            const found = statementParts.some(statementPart =>
 
-            return candidate.parsed.parts.includes(part);
+                tokenMatches(statementPart, candidatePart)
 
-        });
+            );
 
-        trace.push({
-
-            searched: part,
-
-            before: remaining.length,
-
-            after: filtered.length
+            if (found)
+                matched++;
 
         });
 
-        // Keep filtered list only if something matched
-        if (filtered.length > 0) {
+        const total = candidate.parsed.parts.length;
 
-            remaining = filtered;
+        return {
 
-        }
+            ...candidate,
 
-    }
+            matched,
+
+            total,
+
+            score: total === 0 ? 0 : matched / total
+
+        };
+
+    });
+
+    //--------------------------------------------------
+    // Highest Score
+    //--------------------------------------------------
+
+    const maxScore = Math.max(
+
+        ...scored.map(x => x.score),
+
+        0
+
+    );
+
+    const remaining = scored.filter(
+
+        x => x.score === maxScore
+
+    );
+
+    //--------------------------------------------------
+    // Trace
+    //--------------------------------------------------
+
+    const trace = remaining.map(r => ({
+
+        product:
+
+            r.product["Product Description"],
+
+        matched: r.matched,
+
+        total: r.total,
+
+        score: r.score
+
+    }));
 
     return {
 

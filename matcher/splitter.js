@@ -52,15 +52,17 @@ function splitProduct(productName) {
 
     let text = original
 
-        .replace(/[()]/g, " ")
+    .replace(/[()]/g, " ")
 
-        .replace(/\+/g, " + ")
+    .replace(/\+/g, " + ")
 
-        .replace(/-/g, " ")
+    .replace(/-/g, "")
 
-        .replace(/\s+/g, " ")
+    .replace(/[\/_]/g, " ")
 
-        .trim();
+    .replace(/\s+/g, " ")
+
+    .trim();
 
     const tokens = text.split(" ");
 

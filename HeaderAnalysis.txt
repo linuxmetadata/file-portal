@@ -1,0 +1,1618 @@
+==============================================
+HEADER ANALYSIS
+==============================================
+
+Total Statements : 6871
+Unique Headers   : 1607
+
+==============================================
+HEADER FREQUENCY
+==============================================
+
+  489    QTY.
+  429    FREE
+  421    -
+  380    CLOSING STOCK
+  368    OPENING STOCK
+  346    RATE
+  343    PRODUCT DESCRIPTION
+  341    CLOSING VALUE
+  321    VALUE
+  316    OPENING VALUE
+  290    PACK
+  287    ISSUE QUANTITY
+  286    ISSUE VALUE
+  285    RECEIVE QUANTITY
+  281    RECEIVE VALUE
+  249    PRODUCT NAME
+  248    CLOSING
+  247    OPENING
+  228    SALE
+  218    QTY
+  201    AMOUNT
+  191    PACKING
+  183    OTHERS
+  181    PURCHASE
+  156    ITEM
+  136    SALE VALUE
+  136    STOCK
+  135    MRP
+  128    ITEMCODE
+  120    EXPIRY STOCK
+  110    D E S C R I P T I O N
+  102    REPLACE+ OTHERS
+   98    LAST MONTH SALE
+   96    PRODUCT
+   96    RECEIPT
+   88    SALES
+   86    ( % )
+   80    P.RETURN
+   80    S.RETURN
+   78    BRANCH TOTAL
+   78    UNIT
+   70    BATCH
+   69    ITEM DESCRIPTION
+   67    ISSUE
+   67    PINCODE
+   66    CUSTOMER NAME
+   64    RETURN
+   63    ---
+   63    BILL DATE
+   61    BARCODE
+   61    DIVISION
+   58    AREA NAME
+   56    SALE QUANTITY
+   55    PTR
+   55    TOTAL
+   54    PURCHASE QUANTITY
+   53    CUSTOMER
+   53    FQTY
+   51    P/R QUANTITY
+   51    SALE RETURN QUANTITY
+   51    TOTAL RECEIVE
+   49    EXPIRY
+   49    OP
+   48    CODE
+   48    SALE REGISTER DETAILED FROM 01/07/2026 TO 31/07/2026
+   47    PRODUCTNAME
+   46    ISSUE QTY.
+   46    RECEIPT QTY.
+   45    COMPANY
+   45    TOTAL QTY.
+   43    BILL NUMBER
+   43    CL.VALUE
+   42    BATCHNO
+   42    PUR. VALUE
+   42    TAX AMOUNT
+   41    OPENINGSTOCK
+   40    FREE QTY
+   40    ITEM NAME
+   39    AGE
+   39    CITY
+   39    DIVISION NAME
+   39    NAME
+   39    SALEVALUE
+   38    INVNO
+   37    ADDRESS1
+   37    ADDRESS2
+   37    PRODUCT_NAME
+   37    REPLACEMENT QTY
+   36    ADJ
+   36    PRODUCT CODE
+   36    QUANTITY
+   35    CLOSING BALANCE
+   35    DATE
+   35    MANUFACTURER_DIVISION
+   35    MANUFACTURER_NAME
+   35    PCODE
+   35    TOTALSTOCK
+   34    ADDRESS3
+   34    JUN
+   34    MAY
+   32    NETAMT
+   32    OP.BAL. QTY.
+   32    PURCHASEQUANTITY
+   30    AREA
+   30    GRSAMT
+   30    ITEM CATEGORY
+   30    WAREHOUSE
+   29    ILASTSALESQTY
+   29    ITEM CODE
+   29    SKULL_NAMESPACE
+   28    FREEQUANTITY
+   28    NETAMOUNT
+   28    PURC
+   27    CL QTY
+   27    CL.STOCK AS ON
+   27    SUB TOTAL
+   26    OTHER
+   26    SRATE
+   25    ADJUSTMENT
+   25    CUSTOMER CODE
+   25    DUMP STOCK
+   25    FLAG
+   25    ORDER QTY
+   25    PRODUCT WISE SALE & STOCK FROM 01/07/2026 TO 31/07/2026
+   25    PURCHASES
+   25    QOH
+   24    (Q+F)
+   24    BATCH NO
+   24    ENTRY DATE
+   24    SALEQUANTITY
+   23    BRANCH TRANSFER SENT
+   23    BRANCH TRANSFER SENT VALUE
+   23    CL VALUE
+   23    CLOSING STOCK VALUE
+   23    CLQTY
+   23    INFLIGHT_DETAILS
+   23    INFLIGHT_INVENTORY
+   23    MONTH
+   23    ORDER
+   23    PENDING PURCHASE
+   23    PURCHASE RETURN
+   23    STOCK END DATE
+   23    TOTQTY
+   22    CLVALUE
+   22    GST
+   22    NAMETODISPLAY
+   22    PRODUCT WISE STOCK & SALE FROM 01/07/2026 TO 31/07/2026
+   21    DATED
+   21    EXPQTY
+   21    GST%
+   21    OPSTOCK
+   21    OVERALL DISCOUNT AMOUNT
+   21    SALE RETURN
+   21    SI VALUE
+   20    ADDRESS
+   20    CITY NAME
+   20    CUSTOMER_ID
+   20    DIS%
+   20    NONMOVEQTY
+   20    PUR VALUE
+   20    PURCHASEVALUE
+   20    RETRN QTY
+   20    SCM
+   20    STOCKVALUE@PURCHASEPRICE(WITHOUT FREE)
+   20    TOTAL SALES
+   19    0
+   19    BRANCH
+   19    CUSTOMER ALTERNATECODE
+   19    EXPDATE
+   19    INV NO
+   19    NEAR EXPIRY
+   19    OPVAL
+   19    PARTY NAME
+   19    PREVIOUS LAST SALE
+   19    PREVIOUS SALE
+   19    PURCHASE RTN
+   19    SALE QTY
+   19    SALES RTN
+   18    --
+   18    ADJUSTMENT VALUE
+   18    AVG DISC%
+   18    CCODE
+   18    GST AMT
+   18    GSTIN
+   18    OVERALL DISCOUNT PERCENTAGE
+   18    SALESVALUE
+   18    ST VALUE
+   18    TAXABLE VALUE
+   17    AREANAME
+   17    BRANCH TRANSFER RECEIVED
+   17    BRANCH TRANSFER RECEIVED VALUE
+   17    CL VAL
+   17    CUSTCODE
+   17    DIS AMT
+   17    DIS PER
+   17    ENTRY #
+   17    FREE.
+   17    INVDT
+   17    INVOICENO
+   17    ITEMNAME
+   17    LOT NO
+   17    NEAR EXPIRY INVENTORY
+   17    NEAR EXPIRY INVENTORY VALUE
+   17    OPENING STOCK VALUE
+   17    OPVALUE
+   17    PENDING PURCHASE VALUE
+   17    PIN
+   17    PO #
+   17    PO DATE
+   17    PTS
+   17    RIO INVENTORY
+   17    SALESNET
+   17    TRAN TYPE
+   16    BILLED_QTY
+   16    CL.
+   16    CUST_AREA
+   16    CUST_STATE
+   16    CUSTOMER TYPE
+   16    DISCOUNTAMOUNT
+   16    EXPIRY_DATE
+   16    FROMDATE
+   16    INVOICEDATE
+   16    MEDICINENAME
+   16    N_MRP
+   16    PUR
+   16    PURCHASEQTY
+   16    QUANTITY_FREE
+   16    SALE_VALUE
+   16    SALESINVOICEDATE
+   16    SALESQTY
+   16    SCHQTY
+   16    TODATE
+   16    TRANSACTIONTYPE
+   16    WAREHOUSE_CITY
+   16    WAREHOUSE_NAME
+   16    WAREHOUSEID
+   15    10S
+   15    BILLED QTY
+   15    BVAL
+   15    COMPANY WISE STOCK SALES REPORT FROM 01/06/2025 TO 30/06/2025
+   15    CR
+   15    DB
+   15    NETSTOCKVALUE@PURCHASE
+   15    OP.
+   15    OPSTK
+   15    PARTICULARS
+   15    PUR. QTY
+   15    SP
+   15    SR
+   15    SS
+   14    BR
+   14    CLOSING BALANCE VALUE
+   14    CUST. CATEGORY
+   14    GOLD CODE
+   14    INVDATE
+   14    MARKETING GROUP
+   14    ORDER QUANTITY
+   14    OUTLET
+   14    PBILLDT
+   14    PBILLNO
+   14    PR
+   14    PUR. RATE
+   14    SALESMAN
+   14    SCMPER
+   14    SCMPERAMT
+   14    SVAL
+   13    BAL.
+   13    BASE
+   13    BILL NO.
+   13    BULK SALE
+   13    C_CODE
+   13    C_NAME
+   13    COMPANY NAME
+   13    CUST_PINCODE
+   13    CUSTOMER_NAME
+   13    ISSUE/SALES VALUE
+   13    LAST OFFER RECEIVED
+   13    MFGBY
+   13    NPR
+   13    OP. QTY.
+   13    PI
+   13    PIVAL
+   13    PURCHASE RETURN VALUE
+   13    PURCHASE VALUE
+   13    SALE RETURN VALUE
+   13    SALEVAT
+   13    UCODE
+   12    <-----
+   12    AGE OF ITEM
+   12    AMT(Q+F)
+   12    CLOSING QTY.
+   12    IILASTSALESQTY
+   12    MSR PRICE
+   12    SA VAL
+   12    SALEQTY
+   12    STRENGTH
+   12    T/F
+   12    TOTAL QTY
+   11    BILL NO#
+   11    CURRENT STOCK STATUS FROM 01/07/2026 TO 31/07/2026
+   11    DUMP
+   11    IN
+   11    MFGRCODE
+   11    OPENING BALANCE VALUE
+   11    ORDER VALUE
+   11    PARTY
+   11    PQ
+   11    RECEIPT/PURCHASE VALUE
+   11    SCHEME
+   11    SQ
+   10    AREA CITY
+   10    CGST
+   10    DISCOUNT VALUE
+   10    EXP
+   10    EXP SALE
+   10    GST NO.
+   10    NEAREXPIRYSTOCK
+   10    OPV
+   10    PRODUCT WISE - PARTY WISE SALE FROM 01/07/2026 TO 31/07/2026
+   10    PRODUCT WISE STOCK AND SALE FROM 01/07/2026 TO 31/07/2026
+   10    PURCHASERETURNQTY
+   10    QTY(UNIT1)
+   10    S.RET
+   10    SALES_SCHEME
+   10    SALEV
+   10    SALEVALUE@PURPRICE
+   10    SALEVALUE@SALEPRICE
+   10    SGST
+   10    ST
+   10    STOCKV
+    9    1
+    9    ADDR/UNIT
+    9    BAL
+    9    BATCHDESCRIPTION
+    9    CL.STK
+    9    COMP
+    9    DISCOUNT
+    9    FR
+    9    FREE QTY(UNIT1)
+    9    FREESTOCKRECEIVEDONPURCHASE
+    9    IN STOCK
+    9    INDENT NO.
+    9    ITEM DISC
+    9    ITEM TYPE
+    9    LASTSCH
+    9    LMS
+    9    MANUFACTURER / DIVISION
+    9    NAME TO DISPLAY
+    9    NE
+    9    NET AMOUNT
+    9    NEXPDAT
+    9    NM VAL
+    9    NM90D QTY
+    9    OP.STK
+    9    ORDER FREE QTY
+    9    OUT
+    9    OUT STOCK
+    9    OUT STOCK VALUE
+    9    PACKG
+    9    PURQTY
+    9    QTY. M.EXP
+    9    ROUTE
+    9    SALES REPLACEMENTQTY
+    9    SCHEME DISC.
+    9    SCM DISC
+    9    SCM QTY
+    9    SHIPPING TO
+    9    ST (IN)
+    9    ST (OUT)
+    9    STOCK ADJ.
+    9    STOCK ADJ. VALUE
+    9    STOCKVALUEATPURCHASEPRICE
+    9    TAXABLE
+    9    TOTAL_AMOUNT
+    9    USER NAME
+    8    *XY
+    8    DUMPSTOCK
+    8    FREESTOCKISSUEDONSALE
+    8    IGST
+    8    IIILASTSALESQTY
+    8    OPST
+    8    OSTK
+    8    PACKSIZE
+    8    PUR.VALUE
+    8    PURCV
+    8    PURTOT
+    8    QOHVALUE
+    8    QTY. FREE
+    8    REPL
+    8    REPL.
+    8    REPL./
+    8    REPLACEMENT VALUE
+    8    RETRUN
+    8    SALES RETURN
+    8    SALETOT
+    7    BILL NO
+    7    BILLNO
+    7    ENTRY NO.
+    7    EXP/DMG
+    7    EXPIRY DATE
+    7    FR1
+    7    GST %
+    7    HSN
+    7    HSN CODE
+    7    ITEM_AMOUNT
+    7    JUN SA
+    7    LEDGER ACCOUNT
+    7    LOCATION
+    7    MAY SA
+    7    MRGIN
+    7    NM60D QTY
+    7    OP. QTY
+    7    P.QTY
+    7    PLACE
+    7    PURCHASE FREE
+    7    PURCHASE QTY
+    7    RECIEPT
+    7    RP
+    7    RP2
+    7    SALE APOLLO
+    7    SALE TRADE
+    7    SALESRETURNQTY
+    7    SAMPLE
+    7    STATE
+    7    STOCKVALUE
+    7    TAXRATE
+    7    TOTAL PUR.
+    7    TRF.IN
+    7    TRF.OUT
+    7    WSALE
+    6    ____________________
+    6    ---->
+    6    --->
+    6    <--
+    6    10
+    6    10'S
+    6    10`S
+    6    7012306549
+    6    ADJ_VALUE
+    6    ALTERCODE
+    6    B2B_PURCHASE
+    6    B2B_PURCHASE_RETURN
+    6    B2B_PURCHASE_RETURN_VALUE
+    6    B2B_PURCHASE_VALUE
+    6    B2B_SALE
+    6    B2B_SALE_RETURN
+    6    B2B_SALE_RETURN_VALUE
+    6    B2B_SALE_VALUE
+    6    B2C_PURCHASE
+    6    B2C_PURCHASE_RETURN
+    6    B2C_PURCHASE_RETURN_VALUE
+    6    B2C_PURCHASE_VALUE
+    6    B2C_SALE
+    6    B2C_SALE_RETURN
+    6    B2C_SALE_RETURN_VALUE
+    6    B2C_SALE_VALUE
+    6    BATCH_ID
+    6    BRANCHTRANSFERRECEIVED
+    6    BRANCHTRANSFERRECEIVED_VALUE
+    6    BRANCHTRANSFERSENT
+    6    BRANCHTRANSFERSENT_VALUE
+    6    BRK/EXP
+    6    BSC QT
+    6    CESS_AMOUNT
+    6    CESS_PERCENT
+    6    CLOSING AMOUNT
+    6    CLOSING QTY
+    6    CLOSINGSTOCK
+    6    CLOSINGSTOCK_VALUE
+    6    CLSSTK
+    6    CLVAL
+    6    COLUMN1
+    6    COLUMN2
+    6    COMPNAME
+    6    CREATEDBY
+    6    CUST_ORDER_DATE
+    6    CUST_ORDER_NO
+    6    CUSTNAME
+    6    CUSTOMER_GROUP
+    6    DISAMT
+    6    DIVISION_NAME
+    6    FEEDDATE
+    6    FEEDNO
+    6    FREE SAMPLE
+    6    FREEVAL
+    6    IN STOCK VALUE
+    6    INV DATE
+    6    KOLLAM
+    6    LINEDISCAMT
+    6    MRP AMT
+    6    NETRATE
+    6    NR_EXP_QTY
+    6    NR_EXP_VALUE
+    6    OP QTY
+    6    OPENINGSTOCK_VALUE
+    6    OPN
+    6    OPNSTK
+    6    OPQTY
+    6    PENDINGPURCHASE
+    6    PENDINGPURCHASE_VALUE
+    6    PMSALEQTY
+    6    POB SALES
+    6    PREVMONTHSALQTYVALUE
+    6    PRODNAME
+    6    PRODUCT_CATEGORY
+    6    PRODUCTREMARK
+    6    PU.R
+    6    PUR QTY
+    6    PURCHASERTNVALUE
+    6    RECEVIED QTY
+    6    REPCELL
+    6    REPCODE
+    6    REPLQTY
+    6    REPNAME
+    6    REPORT_DATE
+    6    RIO_INVENTORY
+    6    S.VALUE
+    6    SALE REPORT PARTY +ITEM WISE FROM 01/11/2022 TO 30/11/2022
+    6    SALES AMOUNT
+    6    SALESFREE
+    6    SALESRETURNVALUE
+    6    SCM%
+    6    SCMAMT
+    6    SHELF ID
+    6    SHIPTO_CUST_CODE
+    6    SHIPTO_CUST_NAME
+    6    SHORTAGE
+    6    SHORTAGE QTY.
+    6    SNS_MONTH
+    6    SOFTWARE : BIOS
+    6    SVALUE
+    6    SYS_ORDER_DATE
+    6    SYS_ORDER_NO
+    6    TAX_AMOUNT
+    6    TAX_PER
+    6    TAXABLE_AMOUNT
+    6    TOTAL_AMT
+    6    TOTAL_BILLAMOUNT
+    6    TOTAL_PURCHASE
+    6    TOTAL_PURCHASE_RETURN
+    6    TOTAL_PURCHASE_RETURN_VALUE
+    6    TOTAL_PURCHASE_VALUE
+    6    TOTAL_SALE
+    6    TOTAL_SALE_RETURN
+    6    TOTAL_SALE_RETURN_VALUE
+    6    TOTAL_SALE_VALUE
+    6    TRADE DISC.
+    6    TRADEMODE_DESC
+    6    TYPE
+    6    UNIT_NAME
+    6    WANTED BOOK QUANTITY
+    5    # CITALIN 5MG  TAB 10S
+    5    %
+    5    ADJ.
+    5    ADJUSTMENTQUANTITY
+    5    AMT
+    5    APRSALESQTY
+    5    APRSALESVALUE
+    5    B.DIS%
+    5    CL.AMOUNT
+    5    CL.STOCK AS ON(UNIT1)
+    5    CLSTK
+    5    COMPANY GROUP
+    5    DIVISON
+    5    EX.DT.
+    5    EXPDT
+    5    FREE QTY FREE QTY
+    5    FREE QTY QTY
+    5    I/FREE
+    5    INSTITUTESALES
+    5    INV NO.
+    5    ISSUE  QTY
+    5    JUNSALESQTY
+    5    JUNSALESVALUE
+    5    LAST MONTH INSTITUTE SALES QTY
+    5    MAYSALESQTY
+    5    MAYSALESVALUE
+    5    NE VALUE
+    5    NEAR EXP.
+    5    NEAR EXPIRY STOCK
+    5    NET SALE VALUE
+    5    NET SRN VALUE
+    5    NETPURHASEVALUE
+    5    NETSTOCKVALUE@COST
+    5    OPENING QTY
+    5    OPSTOCK(UNIT1)
+    5    ORDERQTY
+    5    P RETURN QTY
+    5    P. RATE
+    5    P.DIS%
+    5    P.VAL
+    5    PREV.SAL
+    5    PRODUCT ALIAS
+    5    PURCHASE VALUE ON COST
+    5    PURCHASEQTY(UNIT1)
+    5    PURCHASERETURNQTY(UNIT1)
+    5    QOH VALUE
+    5    RE-
+    5    REC
+    5    REORDER - QTY
+    5    REPORT FROM:
+    5    RPL. QTY
+    5    S RETURN QTY
+    5    S. QTY
+    5    S.QTY
+    5    S.VAL
+    5    SALE AMO.
+    5    SALE RATE
+    5    SALERETURNQUANTITY
+    5    SALES FREE
+    5    SALES VALUE
+    5    SALESQTY(UNIT1)
+    5    SALESRETURNQTY(UNIT1)
+    5    SCHAMT
+    5    SL VAL
+    5    SM
+    5    SRN VALUE
+    5    STATUS
+    5    STOCKVALUEATCOSTPRICE
+    5    SUB-SALE VALUE
+    5    TO
+    5    TOTAL PURCHASE RETURN VALUE
+    5    TOTAL PURCHASE VALUE
+    5    TOTAL SALE RETURN VALUE
+    5    TOTAL SALE VALUE
+    5    TOTAL SALES W/O FREE
+    5    TR.RATE
+    5    VTYPE
+    4    .GABAGESIC NT 400GM TAB
+    4    % VALUE
+    4    2
+    4    BALANCE
+    4    BANK ACCT NO.
+    4    BFREE
+    4    BQTY
+    4    C. AMT(PTR)
+    4    CD%
+    4    COMPUTE_0005
+    4    COMPUTE_0006
+    4    CUSCODE
+    4    CUSTOMER GST NO
+    4    D2C PURCHASE
+    4    D2C PURCHASE RETURN
+    4    D2C PURCHASE RETURN VALUE
+    4    D2C PURCHASE VALUE
+    4    D2C SALE
+    4    D2C SALE RETURN
+    4    D2C SALE RETURN VALUE
+    4    D2C SALE VALUE
+    4    D2R PURCHASE
+    4    D2R PURCHASE RETURN
+    4    D2R PURCHASE RETURN VALUE
+    4    D2R PURCHASE VALUE
+    4    D2R SALE
+    4    D2R SALE RETURN
+    4    D2R SALE RETURN VALUE
+    4    D2R SALE VALUE
+    4    DIS.
+    4    DLNO
+    4    DLNO1
+    4    DOCDATE
+    4    FREESTOCKINHAND
+    4    FREESTOCKVALUE@PURCHASEPRICE
+    4    IFSC CODE
+    4    ISSUE QTY
+    4    LAST BILL DATE
+    4    LAST PURCHASE DATE
+    4    LLM
+    4    MFR
+    4    MOBILE
+    4    O. VAL.
+    4    OP VAL
+    4    OP VALUE
+    4    ORDER M.EXP
+    4    P. QTY
+    4    P.F. QTY
+    4    P.R.F. QTY
+    4    P.R.QTY
+    4    P.SCH
+    4    PACK.
+    4    PAN
+    4    PARTICULAR
+    4    PARTY CODE
+    4    PINVDT
+    4    PINVNO
+    4    PRDCODE
+    4    PRODUCT NAME & PACKING
+    4    PURC VAL
+    4    REMARKS
+    4    ROUTE NAME
+    4    RTNTYPE
+    4    S. F. QTY
+    4    S. VAL.
+    4    S.A.PUR. RATE
+    4    S.R.F. QTY
+    4    S.R.QTY
+    4    S.RATE PER UNIT
+    4    S.SCH
+    4    SALE %
+    4    SALE TYPE
+    4    SALEQTY.
+    4    SALESRET.
+    4    SALEVAL
+    4    SALEVALUE@SALEPRICEW/OFREE
+    4    T V
+    4    TAXPER
+    4    TELEPHONE
+    4    TEMPORARY STOCK
+    4    TOTAL PURCHASE
+    4    TOTAL PURCHASE RETURN
+    4    TOTAL SALE
+    4    TOTAL SALE RETURN
+    4    TOTALAMT
+    4    TOTALQTY
+    4    TOWN
+    4    VCH NO
+    3    01 JUL 2026
+    3    10TAB
+    3    31 JUL 2026
+    3    A
+    3    B
+    3    BATCH_NO
+    3    BILLDATE
+    3    BLTYPE
+    3    BRK
+    3    BT
+    3    C
+    3    C_ADD_2
+    3    CASHDISC
+    3    CDAMT
+    3    CGST/CSTAMT
+    3    CL ST
+    3    CL. AMT.
+    3    CL. QTY
+    3    CLOSE
+    3    CLOSING AMT.
+    3    COMMENTS
+    3    COMNET
+    3    CP
+    3    CUS NAME
+    3    CUSTOMER_ADDRESS2
+    3    CUSTOMER_PINCODE
+    3    D.C.
+    3    DISC
+    3    DISCOUNT_AMOUNT
+    3    DISCPER
+    3    DISPER
+    3    DIST.
+    3    DOCTOR NAME
+    3    DR/CR NET AMOUNT
+    3    F.QTY.
+    3    FREE_QTY
+    3    FREEAMT.
+    3    GOODS VA
+    3    GOODSVALUE(WITH DISC
+    3    GSTAMT
+    3    HQ
+    3    IDATE
+    3    INVOICE_DATE
+    3    INVOICE_NO
+    3    IPACK
+    3    ITEM DETAILS
+    3    ITEMDISCOUNT
+    3    LS
+    3    MFG_CODE
+    3    MODE
+    3    NET AMT
+    3    NETTVAL
+    3    O. QTY
+    3    OP.QTY
+    3    OPENING QTY VALUE
+    3    OPENINGFREESTOCK
+    3    OPENINGSTOCKVALUE@PURCHASE
+    3    OPENINGSTOCKVAT@PURCHASE
+    3    OPSTK+PUR
+    3    P.R.
+    3    PARTSHRT
+    3    PARTY ADDRESS
+    3    PARTY VS ITEM
+    3    PRETQTY
+    3    PREV.LAST
+    3    PROD NAME
+    3    PRODUCT_CODE
+    3    PRODUCT_DESC
+    3    PRODUCTCOMPANYNAME
+    3    PU
+    3    PU F
+    3    PU VAL
+    3    PUR RET
+    3    PUR TOT
+    3    PUR.BILL DATE
+    3    PUR.BILL NO.
+    3    PURCHASEVAT
+    3    PVALUE
+    3    QTY    VALUE
+    3    RATETYPE
+    3    RECEIPT QTY
+    3    RES.TELEPHONE NO.
+    3    RET QTY
+    3    RETURN VALUE
+    3    S.R.
+    3    SA
+    3    SA F
+    3    SALE FREE
+    3    SALE QTY W/O RET AND FREE
+    3    SALE TOT
+    3    SALEFREE
+    3    SALES_BASED_ON
+    3    SALES_SCH_VALUE
+    3    SALESRTN
+    3    SALFREE
+    3    SCH AMT
+    3    SCH QTY
+    3    SCH%
+    3    SCMDISC
+    3    SGST/VAT%
+    3    SGST/VATAMT
+    3    SRETQTY
+    3    ST-ADD
+    3    ST-LESS
+    3    STKAD
+    3    STOCK VALUE
+    3    STOCKIEST:
+    3    STOCKVALUE@SALEPRICE(WITHOUT FREE)
+    3    STOCKVALUEATSALEPRICE
+    3    TAX PAYABLE
+    3    THIR
+    3    TOT SAL
+    3    TOTAL_TAXABLE_AMOUNT
+    3    UDESC
+    2    ____________
+    2    _COLOR
+    2    <===SALE===>
+    2    <==CLOSING==>
+    2    10721.87
+    2    15S
+    2    1S
+    2    1X10
+    2    3
+    2    4
+    2    46204
+    2    46234
+    2    6703
+    2    69
+    2    75 GM
+    2    AC1
+    2    AC10
+    2    AC11
+    2    AC12
+    2    AC13
+    2    AC14
+    2    AC15
+    2    AC16
+    2    AC17
+    2    AC18
+    2    AC19
+    2    AC2
+    2    AC20
+    2    AC21
+    2    AC22
+    2    AC23
+    2    AC24
+    2    AC25
+    2    AC26
+    2    AC27
+    2    AC28
+    2    AC29
+    2    AC3
+    2    AC30
+    2    AC31
+    2    AC32
+    2    AC33
+    2    AC34
+    2    AC35
+    2    AC36
+    2    AC37
+    2    AC38
+    2    AC39
+    2    AC4
+    2    AC40
+    2    AC41
+    2    AC42
+    2    AC5
+    2    AC6
+    2    AC7
+    2    AC8
+    2    AC9
+    2    ADDRESS LINE 1
+    2    ADDRESS LINE 2
+    2    ADJUST/UNIT
+    2    AMINTOZ INJ
+    2    AMT.IN
+    2    AMT.OUT
+    2    ARASIKERE
+    2    AREA:
+    2    AVG. PRICE
+    2    BILL
+    2    BILL #
+    2    BILL SERIAL
+    2    BRANCH CODE
+    2    C/BAL
+    2    C/VAL
+    2    CASIL SOAP
+    2    CD AMOUNT
+    2    CD(%)
+    2    CGST/CST%
+    2    CL STK
+    2    CL_VALUE
+    2    CL.VAL
+    2    CLIENT NAME
+    2    CLOSEVAL
+    2    CLOSING AMT
+    2    CLOSING BAL VALUE
+    2    CLOSINGSTOCKVALUE BT
+    2    CLQ
+    2    CLV
+    2    CODE        NAME                          PACKING
+    2    COMPRET
+    2    COMPUTE_0009
+    2    COST
+    2    CRQTY
+    2    CVR
+    2    DBQTY
+    2    DEAL
+    2    DIS.%
+    2    DIS.AMT
+    2    DUMP QTY
+    2    EBERNET CREAM
+    2    EXCESS QTY
+    2    EXPIRY BREAKAGE
+    2    FREE QT
+    2    FREEQTY
+    2    FREESTOCKVALUE@COST
+    2    GENERIC
+    2    GODOWN
+    2    GOODS VALUE
+    2    GP%
+    2    GPAMT
+    2    GRAND TOTAL
+    2    HSNCODE
+    2    ICODE
+    2    ID
+    2    ILASTSALESVALUE
+    2    INSTSALES
+    2    INVN
+    2    INVNO.
+    2    INVOICE DATE
+    2    JUL
+    2    LASTMNTH
+    2    LASTMNTHVAL
+    2    LEDGER CODE
+    2    LOCATION2
+    2    M.OUT
+    2    M.R.P.
+    2    METIS G1 TAB
+    2    MSRP PRICE
+    2    NAME OF THE PRODUCT
+    2    NETSTOCKVALUE@SALE
+    2    NETVALUE SPLDISSPLDISAMT
+    2    NEXD
+    2    NVALUE
+    2    OP AMT
+    2    OP STK
+    2    OP.AMT.
+    2    OP.ST
+    2    OPEN
+    2    OPENING BAL VALUE
+    2    OPENINGSTOCKVALUE@COST
+    2    OPQ
+    2    ORD
+    2    ORDER ITEM LIST
+    2    ORDNO
+    2    OTH
+    2    OTHS
+    2    PARENT MANUFACTURER
+    2    PARK CHEMIST DELHI
+    2    PENDINGPOQUANTITY
+    2    PIQ
+    2    PIV (TAXABLE)
+    2    PKG.
+    2    PLEASE FOLLOW THE INSTRUCTIONS GIVEN BELOW:
+    2    PMFGR
+    2    PRATE
+    2    PREVLASTSALE
+    2    PREVSALE
+    2    PRICE
+    2    PRODUCT & PACK
+    2    PSCH
+    2    PSRI PHARMACY A UNIT OF PLUS DISTRIBUTION PVT. LTD.
+    2    PUR AMT
+    2    PUR_HIS
+    2    PUR.
+    2    PUR+RPL
+    2    PURC.
+    2    PURC.RETURN QTY
+    2    PURCHASE QTY W/O RET AND FREE
+    2    PURCHASE REPLACEMENTQTY
+    2    PURRTN
+    2    PV
+    2    RAMACHANDRA MEDICAL AGENCIES
+    2    RECEIPT VALUE
+    2    RECEIPT/PUR VALUE
+    2    REORDER - QTY.
+    2    REPL/
+    2    REPL/OTHER
+    2    RETURN QUANTITY
+    2    S.CODE
+    2    SALE * APPROX VALUE
+    2    SALE AMT
+    2    SALE RETURN QTY
+    2    SALE+RPL
+    2    SALERATE
+    2    SALESVALUE BT
+    2    SAQTY
+    2    SC%
+    2    SCAMT
+    2    SCM AMT
+    2    SCM PER
+    2    SCM PER AMT
+    2    SHORT EXP
+    2    SIQ
+    2    SIV (TAXABLE)
+    2    SL RET
+    2    SL RPL
+    2    SL.VAL
+    2    SP C.D.(%)
+    2    ST-IN
+    2    ST-OUT
+    2    STAR MEDICALS DR T V MALAI
+    2    STATION
+    2    STK_BAL
+    2    STK_ISS
+    2    STK_OPN
+    2    STK_RCV
+    2    STOCK & SALES STATEMENT FOR JUL-26
+    2    STOCKVALUE@COST(WITHOUT FREE)
+    2    SUBSALESVAL
+    2    SUPPLIER NAME
+    2    SV
+    2    SVC
+    2    TAXAMT.
+    2    TD AMOUNT
+    2    TD(%)
+    2    TD%
+    2    TDAMT
+    2    TOTAL VALUE
+    2    TOTALSTOCKWITHOUTFREE
+    2    TRANSIT
+    2    TRN.NO
+    2    UNITCOST
+    2    UPC
+    2    UTGST
+    2    WP%
+    2    WPAMT
+    1    -1
+    1    -2
+    1    -3
+    1    .EPITRA RTU 500MG INJ ( NO SALE )
+    1    .VYSOV DM 100/10/1000MG TAB 10S ( NO SALE )
+    1    .VYSOV MXR 100/1000MG TAB 15S ( NO SALE )
+    1    '01-JUL-2026
+    1    '31-JUL-2026
+    1    (9414088729)
+    1    #
+    1    00
+    1    03/08/2026
+    1    1*10
+    1    10 S
+    1    10 TAB
+    1    10"S
+    1    10+10
+    1    100ML
+    1    12169
+    1    142.14
+    1    14620
+    1    15 S
+    1    15'S
+    1    15147
+    1    15GM
+    1    15GMS
+    1    15ML
+    1    1636
+    1    16711
+    1    16721
+    1    180 DAYS
+    1    19073
+    1    19969
+    1    1ML
+    1    20
+    1    22743
+    1    23332
+    1    24 HOURS PHARMACY KARNAL
+    1    27.14
+    1    2ML
+    1    3059
+    1    30GM
+    1    320
+    1    33953
+    1    35809
+    1    37740
+    1    41201
+    1    418.9
+    1    46113
+    1    46143
+    1    46235
+    1    4ML
+    1    5
+    1    5  4/26
+    1    5099
+    1    55330
+    1    557.03
+    1    574.3
+    1    57821
+    1    60 DAYS
+    1    60GM
+    1    72993
+    1    74.21
+    1    75GM
+    1    8093
+    1    84586
+    1    AC43
+    1    AC44
+    1    AC45
+    1    AC46
+    1    AC47
+    1    AC48
+    1    AC49
+    1    ACNESTAL  5.5 75GM
+    1    ACNESTAL FACE WASH
+    1    ACNESTAL FACE WASH         60ML
+    1    ADD :BANK STREET
+    1    ADD :SULTAN BAZAR
+    1    ADJQTY
+    1    ADJUST
+    1    ADJUSTMENT QUANTITY
+    1    ADR. 1
+    1    ADR. 2
+    1    ADR. 3
+    1    AJ TRIEXER 2 TABS
+    1    AMBERNAT
+    1    AMINTOZ TAB                10 S
+    1    AMOUNT - ID
+    1    AMT. IN
+    1    AMT. OUT
+    1    AND
+    1    ANMOL ETHICAL PHARMACY (EAST DELHI)
+    1    ANTICLAV-625 TAB           6'S
+    1    AREA SPLIT
+    1    AREA_NAME
+    1    ARI59
+    1    ARIDAY 15 MG               1*10
+    1    ARIDAY 2.5 TAB
+    1    ARIDAY 2.5MG TAB
+    1    ASCLIN P TAB 10S
+    1    ATHARV MEDICA
+    1    AV.RATE
+    1    AZHAGAR MEDICAL AGENCIES
+    1    AZHAGAR MEDICAL SHOP BY-PAS
+    1    B50
+    1    BAL-QNTY
+    1    BAL.QTY
+    1    BATCH EXPIRY
+    1    BATCH NUMBER
+    1    BECOSTAR DROPS 15ML
+    1    BENFICA TAB
+    1    BETWEEN
+    1    BILAZO 40MG
+    1    BILL DIS
+    1    BILLQTY
+    1    BILLREF
+    1    BILLTYPE
+    1    BONTRIX                    1*10
+    1    BOX
+    1    BOXPACK
+    1    BRBSC QT
+    1    BRITAM 100 SR
+    1    BRITAM 100MG TAB
+    1    BRITAM 50
+    1    BRITAM 50MG
+    1    C_CITY
+    1    C_MOBILE
+    1    C_PHONE_1
+    1    C_PHONE_2
+    1    C_PIN
+    1    C.BALANCE
+    1    CARBANERVE  600
+    1    CARBANERVE 600MG TAB 10`S
+    1    CATEGORY
+    1    CGSTRS
+    1    CHAL
+    1    CHALLAN DATE
+    1    CHALLAN NO
+    1    CHEMIST NAME
+    1    CITIZAC  INJ
+    1    CITIZAC INJ 4ML            1*4ML
+    1    CL_STOCK
+    1    CL-BAL
+    1    CL. QNTY.
+    1    CL.QNT.
+    1    CL.QTY
+    1    CLAIM
+    1    CLBAL(VAL)
+    1    CLOS_QTY
+    1    CLOS_VALUE
+    1    CLOSESTK
+    1    CLOSING AMOUNT(PTR)
+    1    CLS
+    1    CLS VAL
+    1    CLS.STK
+    1    CLSTOCKVALUE
+    1    CLSVAL
+    1    CLUSTER
+    1    COMCODE
+    1    COMP SHORT NAME
+    1    COMPANY WISE STOCK SALES REPORT FROM 01/07/2026 TO 31/07/2026
+    1    COMPANY_NAME
+    1    COMPCODE
+    1    COMPNAY NAME
+    1    CONTAINS
+    1    COUNTER CUSTOMER
+    1    CRESTK
+    1    CST
+    1    CST%
+    1    CSTAMT
+    1    CUR.STOCK
+    1    CUST.CODE
+    1    CUSTOMER :BALAJI AGENCIES
+    1    CUSTOMER :GANESH DRUG HOUSE
+    1    CUSTOMERNAME
+    1    CYCLONOX 100MG
+    1    DAMAGE
+    1    DBSTK
+    1    DESAI PHARMA DISTRIBUTORS PVT. LTD,(MR-NEW-LOC) MUMBAI
+    1    DESCRIPTION
+    1    DIFF AMT
+    1    DISC %
+    1    DISCVALUE
+    1    DOWNLOAD:
+    1    DR.SARAN MOHAN.MBBS.
+    1    DROUTE
+    1    DS
+    1    DSTK
+    1    EASTERN AGENCIES HEALTHCARE PVT. LTD. (MR-BOM-AND)
+    1    EBERNET CREAM 15GMS
+    1    EBERNET CREAM 60GM
+    1    EDB
+    1    EX3M
+    1    EX6M
+    1    EXP_STKDT
+    1    EXP.
+    1    EXP3MV
+    1    EXP4
+    1    EXP6MV
+    1    EXPACK
+    1    EXPIRY VALUE
+    1    F_RE
+    1    FAMT
+    1    FER26
+    1    FERIZAC IV 5ML             5ML
+    1    FERIZAC TAB
+    1    FQNTY
+    1    FR.VALUE
+    1    FREE QTY UNIT
+    1    FREE QUANTITY
+    1    FREE VALUE(MRP)
+    1    FREE VALUE(PRATE)
+    1    FREE_I
+    1    FREE/RPL
+    1    FREESALES
+    1    FROM 01/07/2026
+    1    G.R.
+    1    GCCESS%
+    1    GCCESSAMT
+    1    GOODS
+    1    GOODS VALUE.
+    1    GREV
+    1    GRN QTY
+    1    GROSS AMT
+    1    GSTR TYPE
+    1    HMB MAX SACHET 3GM
+    1    HO80966
+    1    HOSPITAL
+    1    HSN_SAC CODE
+    1    HSN/SAC
+    1    IBFLUX 200ML       1
+    1    IBGLOW SKIN LIGHTE 1*20GM
+    1    ID %
+    1    ID AMT
+    1    IGST%
+    1    IGSTAMT
+    1    INST.
+    1    INTERNAL TRANSFER CR
+    1    INTERNAL TRANSFER DB
+    1    INV.NO.
+    1    INVNO WITH PREFIX
+    1    INVOICE NO
+    1    INVOICE NUMBER
+    1    INWARDS
+    1    ISS_QTY
+    1    ISS_VALUE
+    1    ITEM DIS 1
+    1    ITEM REMARKS
+    1    ITEM_NAME
+    1    ITEMNO
+    1    JUL AMT
+    1    JUL QTY
+    1    JUL SCM
+    1    JULY OPENING STOCK
+    1    JUNE SALES
+    1    K R.MEDICALS
+    1    K.R.MEDICALS
+    1    KANMANI MEDICALS   (THIRUVA
+    1    KHARGHAR
+    1    KMA002880
+    1    KMA002930
+    1    KMA003105
+    1    KP004905
+    1    LA-MATISSE SHAMPOO     1X150
+    1    LACOVE 200
+    1    LANDMARK
+    1    LAST MONTH SALES
+    1    LASTPURC
+    1    LATESTSALESRATE
+    1    LBT/LOC AMT
+    1    LBT/LOC%
+    1    LIFE CARE HOSPITAL
+    1    LINUX
+    1    LIPOSERIN CAPS
+    1    LM
+    1    LOCA
+    1    LOCN
+    1    LOOSE
+    1    LSQ
+    1    MAHESH VISHWAKARMA
+    1    MANUAL CR
+    1    MANUAL DEBIT
+    1    MANUFACTURER
+    1    MANUFACTURINGCO
+    1    MARKETER
+    1    MASSH PHARMACY OPD (A UNIT OF MINIMAL ACCESS SMART SURGERY HOSPITALS PRIVATE LIMITED)
+    1    MCODE
+    1    MEDCART (PITAMPURA)
+    1    METIS G1                   10
+    1    METIS G2
+    1    METRO MEDICAL SERVICES LIMITED (PREET VIHAR)
+    1    METRO PHARMACY (A UNIT OF N C HEALTHCARE PVT LTD) PREET VIHAR
+    1    MFGDATE
+    1    MFR.
+    1    MIT
+    1    MR:
+    1    MSR
+    1    MSR     PRICE
+    1    MTD QTY
+    1    NAME OF PARTY
+    1    NEAR  EXPIRY
+    1    NET AMOUNT.
+    1    NET SALE
+    1    NET SEC
+    1    NETSALESVALUE
+    1    NICK
+    1    NIL
+    1    NILA PHARMACY
+    1    NONMOOVEQTY
+    1    NONMOVE4
+    1    NONSALABLEQTY
+    1    NRV
+    1    NRVAMT
+    1    NSR
+    1    O.BALANCE
+    1    OC AMT
+    1    OCTROI%
+    1    OCTROIAMT
+    1    OP_STOCK
+    1    OP_VALUE
+    1    OP-BAL
+    1    OP-ST.
+    1    OP. AMT.
+    1    OP. BAL. QTY.
+    1    OP.BAL.
+    1    OP.BAL.QTY
+    1    OP.QNT.
+    1    OP.VALUE
+    1    OPENING BALANCE
+    1    OPENING QUANTITY
+    1    OPENINGSTOCKVALUE BT
+    1    OPENSTK
+    1    OPENVAL
+    1    OPNG
+    1    OPSTOCKVALUE
+    1    ORDER NO
+    1    ORDER QTY.
+    1    OTHER QTY
+    1    OUTWARDS
+    1    OVERALL PACK(Q)
+    1    P
+    1    P-CODE
+    1    P.FREE
+    1    P.RATE
+    1    P.RET
+    1    P.RET.QTY
+    1    P/R
+    1    PAC
+    1    PACK SIZE
+    1    PACKFOAM
+    1    PACKING.
+    1    PACKING(PER BOX)
+    1    PAGE 1 OF 1
+    1    PARK PHARMACY AGRA
+    1    PARK PHARMACY FARIDABAD
+    1    PARK PHARMACY MOHALI
+    1    PARK PHARMACY MOHALI (OPD)
+    1    PARTY REFERBY
+    1    PARTY/PRODUCT NAME
+    1    PBARCODE
+    1    PCATEGORY
+    1    PEDATE
+    1    PENO
+    1    PHAMILYMED PRIVATE LIMITED (WS)
+    1    PLUS DISTRIBUTION PRIVATE LIMITED (MANGOLPURI)
+    1    PLUS DISTRIBUTION PRIVATE LIMITED JAIPUR
+    1    PM
+    1    POSTING ACCOUNT
+    1    PREFIX
+    1    PRICE/DISC. REFERBY
+    1    PRN
+    1    PRODFOAM
+    1    PRODMRP
+    1    PRODUCT NA
+    1    PRODUCT NAME.
+    1    PRODUCTCODE
+    1    PRODUCTTYPE
+    1    PU.RET
+    1    PUR-QNTY
+    1    PUR. FQTY
+    1    PUR. RET. FQTY
+    1    PUR. RET. QTY
+    1    PUR.BILLDT
+    1    PUR.BILLNO
+    1    PUR.CSVNO
+    1    PUR.QNT.
+    1    PURCH.QTY
+    1    PURCH.VALUE
+    1    PURCHASE SCH
+    1    PURCHASEVALUE BT
+    1    PURSTK
+    1    PURVAL
+    1    QNTY
+    1    QTY VALUE(MRP)
+    1    QTY VALUE(PRATE)
+    1    QTY WITHOUT REPLCMENT
+    1    QTY. IN
+    1    QTY. OUT
+    1    QTY×RATE
+    1    RATE M.EXP
+    1    RCPT
+    1    RCPTFREE
+    1    RCT
+    1    RCT VAL
+    1    RDL 20MG TAB
+    1    RDL 5MG TAB 10S
+    1    RDL C20 CAPS
+    1    RDL F  TAB
+    1    RDL F TAB
+    1    RDL GOLD 10
+    1    RDL GOLD 10 CAP            10CAP
+    1    RDL GOLD 20 CAPS
+    1    RDL-C5
+    1    RDL-GOLD 10MG CAP 10S
+    1    REASON
+    1    REC_QTY
+    1    REC_VALUE
+    1    RECEIVED QTY
+    1    RECEIVED QUANTITY
+    1    RECPT
+    1    RECPTS
+    1    REF. NO.
+    1    REFER BY
+    1    REMARK
+    1    REORDER
+    1    REORDER QTY
+    1    REORDER VALUE
+    1    RETAILOUTLETID
+    1    RETFROMCUSTOMER VALUE
+    1    RETURNTOCOMPANY VALUE
+    1    RF-QNTY
+    1    RT-QNTY
+    1    S.FREE
+    1    S.RET.QTY
+    1    S.RTN
+    1    S/R
+    1    S/R FREE
+    1    S/R QTY
+    1    SAKINAKA
+    1    SALE FQTY
+    1    SALE QTY 1
+    1    SALE QTY 2
+    1    SALE REPORT PARTY +ITEM WISE FROM 01/07/2026 TO 31/07/2026
+    1    SALE RET.
+    1    SALE RET. FQTY
+    1    SALE RET. QTY
+    1    SALE-QNTY
+    1    SALE(VAL)
+    1    SALEAMT
+    1    SALEREPLACEMENT
+    1    SALES FREE TYPE
+    1    SALES MAN
+    1    SALES QTY
+    1    SALES QTY(WITHOUT BONUS)
+    1    SALES QUANTITY
+    1    SALES RET.
+    1    SALESTK
+    1    SANG
+    1    SCH DISC
+    1    SCHDISC
+    1    SCHEME QTY
+    1    SCHEME SALE QUANTITY
+    1    SCHEMEQTY
+    1    SCHEMEVAL
+    1    SCHPER
+    1    SCQ
+    1    SD AMT
+    1    SERLINUX TAB
+    1    SGSTRS
+    1    SHELF
+    1    SHREE SIMBA CHEMIST (DS), BHANDUP
+    1    SI
+    1    SIVAL
+    1    SL VALUE
+    1    SL.QNT.
+    1    SL.VALUE
+    1    SLS
+    1    SLS VAL
+    1    SMANNAME
+    1    SPUR RET
+    1    SRA03-AAR KAY & COMPANY.
+    1    SRET
+    1    SRI GANGANAGAR
+    1    SRN
+    1    ST120
+    1    STATE NAME
+    1    STERIGLU PLUS SACH 5GM
+    1    STKIN.QTY
+    1    STKOUT
+    1    STOCK    P/R
+    1    STOCK AMOUNT(PUR. RATE)
+    1    STOCK T/F
+    1    STORE
+    1    SUMMARY
+    1    SVP006634
+    1    SVP007849
+    1    SVP007938
+    1    TAB 15                    1*15
+    1    TADASURE 5MG
+    1    TAX RATE
+    1    TAXFORM
+    1    TAXFREE
+    1    TCP
+    1    TERRITORY
+    1    THERAPEUTIC
+    1    TNPR
+    1    TNSR
+    1    TO 31/07/2026
+    1    TOT.VALUE
+    1    TOTAL     QTY.
+    1    TOTAL AMT
+    1    TOTAL ORDER VALUE
+    1    TOTAL PURCHASE QUANTITY
+    1    TOTAL PURCHASE RETURN QUANTITY
+    1    TOTAL SALE QUANTITY
+    1    TOTAL SALE RETURN QUANTITY
+    1    TOTAL SCM
+    1    TOTAL STOCK
+    1    TRANSFER IN QUANTITY
+    1    TRANSFER IN VALUE
+    1    TRANSFER OUT QUANTITY
+    1    TRANSFER OUT VALUE
+    1    TRFIN
+    1    TRI
+    1    TRIEXER 1 KIT
+    1    TRR
+    1    TT/AT%
+    1    TT/ATAMT
+    1    TVMA
+    1    UCSTK
+    1    USER
+    1    VALUE(MRP)
+    1    VALUE(PRATE)
+    1    VATAMT
+    1    VENDOR
+    1    VENLITE CZ 100
+    1    VENLITE OD 100MG
+    1    VERTIREST OD 48MG
+    1    VERTIREST-16
+    1    VNO
+    1    VOF
+    1    VOM
+    1    VORTICA 5MG TAB
+    1    VOUCHERTYPE
+    1    VSAMT
+    1    VSP
+    1    VYSOV 50MG TAB             14'S
+    1    VYSOV D 100/10MG
+    1    VYSOV XR 100
+    1    VYSOV-M-50-500
+    1    WEB REP
+    1    XIGNICAR 200MG
+    1    YOU HAVE TO ENTER THE DATA FOR ALL PRODUCTS AND IF THE VALUES ARE ZERO  ENTER 0.

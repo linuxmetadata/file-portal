@@ -124,9 +124,10 @@
     const data = await res.json();
 
     if (data.success) {
-      localStorage.setItem("role", "user");
-      window.location.href = "/dashboard.html";
-    } else {
+  localStorage.setItem("user", id.trim());
+  localStorage.setItem("role", "user");
+  window.location.href = "/dashboard.html";
+} else {
       alert(data.message || "Invalid ID");
     }
   }
@@ -147,12 +148,10 @@
     const data = await res.json();
 
     if (data.success) {
-      localStorage.setItem("role", "admin");
-
-      // ✅ FINAL FIX (IMPORTANT)
-      window.location.href = "/dashboard.html";
-
-    } else {
+  localStorage.removeItem("user");
+  localStorage.setItem("role", "admin");
+  window.location.href = "/dashboard.html";
+} else {
       alert("Invalid admin login");
     }
   }

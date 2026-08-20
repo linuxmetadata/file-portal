@@ -962,7 +962,8 @@ function downloadExcel() {
 ========================= */
 function logout() {
 
-  localStorage.removeItem("role");
+  localStorage.removeItem("user");
+localStorage.removeItem("role");
 
   window.location.href = "index.html";
 }

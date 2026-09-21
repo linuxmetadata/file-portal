@@ -1,0 +1,51 @@
+CH     M
+                    DEEPAA  AGENCIES - ERODE
+                    ================================================                        Page: 1
+ STOCK AND SALES STATEMENT FOR THE MONTH OF JULY '2026                Run Date:31/07/2026   23:05:09
+ ====================================================================================================
+  PRODUCT NAME               OPEN  REC-  ADJ   ADJ TOTAL SALES CLOSE   ORD.QTY  EXCES    JUN      MAY
+                            STOCK  EIPT  (-)   (+) STOCK   QTY STOCK  (  1.00)  VALUE  SALES    SALES
+ ====================================================================================================
+SUP:LINUX LABORATORIES PVT.LTD., MFR:BQ LINUX - (META DIVISION)
+ ================================================================================================================================
+ RDL C 5MG CAPS.      10'S     53     0    0   0      53    28    25        0            18       46
+ RDL C 10MG CAPS.     10'S     92   100    0   0     192   120    72       48            86      117
+ RDL EZ 10MG TABS.    10'S      6     0    0   0       6     0     6       -6    942      0        0
+ RE XITE FORTE CAPS.  10'S     27    10    0   0      37    31     6       25            24        8
+ RDL 20MG TABS.       10'S     10     0    0   0      10     0    10      -10   1857      0        0
+ RDL 5MG TABS.        10'S     17     0    0   0      17     0    17      -17   1092      0        0
+ RDL 10MG TABS.       10'S     13     0    0   0 #    13     6     7       -1    107      1        6
+ TORDURA 20MG TABS.   10'S     10     0    0   0      10     0    10      -10    685      0        0
+ TORDURA 5MG TABS.    10'S     10     0    0   0      10     0    10      -10    381      0        0
+ TORDURA PLUS 5MG TABS.10'     10     0    0   0      10     0    10      -10    480      0        0
+ TORDURA PLUS 10MG TABS.10     10     0    0   0      10     0    10      -10    601      0        0
+ TRIEXER 1MG TABS.    10'S     33     0    0   0      33    13    20       -7    845      5       22
+ TORDURA 10MG TABS.   10'S     10     0    0   0      10     0    10      -10    533      0        0
+ TRIEXER 2MG TABS.    10'S     13     0    0   0      13     4     9       -5   1017      7        6
+ TRIEXER V1 TABS.     10'S      7     0    0   0       7     0     7       -7    853      0        3
+ TRIEXER V2 TABS.     10'S     10     0    0   0      10     0    10      -10   1447      0        0
+ VYSOV D 100/10MG TABS.10'     30    20    0   0      50    22    28       -6   1029     32       22
+ VYSOV DM 100/10/1000.10'S      8     0    0   0 #     8     2     6       -4    635      0        2
+ VYSOV D 100/5MG TABS.10'S      9     0    0   3      12     8     4        4             3        4
+ VYSOV DM 100/10/500MG.10'     11     0    0   0      11     6     5        1             4        0
+ VYSOV M 50/1000MG TABS15'     18    24    0   0      42    17    25       -8   1380     10       14
+ VYSOV M 50/500MG TABS.15'     79   160    0   0     239   122   117        5           154      141
+ VYSOV 50MG TABS.     15'S     36    20    0   0 #    56    39    17       22            11       30
+ VYSOV XR 100MG TABS. 15'S      0    50    0   0      50     3    47      -44   8883     21        9
+ VYSOV M 50/850MG TABS.15'      0     0    0   0       0     0     0        0             0        0
+ ----------------------------------------------------------------------------------------------------
+  Cl.Stk Value   Ex.Stk.Value    JUL-SALES      JUN-SALES      MAY-SALES
+      70385.23       22774.23     65480.99       61378.31       66608.35
+ PERUM-----------------------------------------------------------------------------------------------
+ - Excess Stock     ORDER DATE:03/08/2026  TIME:3.30PM  
+  
+     ----- SALES NOT ACCOUNTED FOR ORDER QTY ----
+ RDL C 5MG CAPS.      10'S                                   3
+  
+ LONG PENDING CLAIMS AS ON 31/07/26                                                Page: 1 
+------------------------------------------------------------------------------------------------
+   Referance No. / Date   Claim Type Amount Sent Throu /Referance & Date    C/R Ref.No.Dt Amount
+ ---------------------------------------Rs.------------------------------------------------------
+ 68523           10/05/26 Exp/Br/Sp    3666 COURIER    18901665  01.06.2026CN 836/24.06.2026        20812
+ 69405           15/07/26 Exp/Br/Sp    1225                                                       
+                         TOTAL   Rs.   4892                                                20812

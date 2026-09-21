@@ -217,6 +217,32 @@ function isFooterLine(
 
 
 // ============================================================
+// SUMMARY VALUE LINE
+// ============================================================
+
+function isSummaryValueLine(
+    line
+) {
+
+    const text =
+        normalizeHeader(line);
+
+    if (!text) {
+        return false;
+    }
+
+    return (
+        /\bOPENING\s+VALUE\s*:/.test(text) ||
+        /\bPURCHASE\s+VALUE\s*:/.test(text) ||
+        /\bSALE\s+VALUE\s*:/.test(text) ||
+        /\bSALES\s+VALUE\s*:/.test(text) ||
+        /\bCLOSING\s+VALUE\s*:/.test(text)
+    );
+
+}
+
+
+// ============================================================
 // PRODUCT WORDS
 // ============================================================
 
@@ -534,6 +560,12 @@ function isHeaderCandidate(
 
     if (
         isFooterLine(text)
+    ) {
+        return false;
+    }
+
+    if (
+        isSummaryValueLine(text)
     ) {
         return false;
     }
@@ -1448,6 +1480,16 @@ function findHeaderBlock(
 
             }
 
+            if (
+                isSummaryValueLine(
+                    next
+                )
+            ) {
+
+                break;
+
+            }
+
 
             const nextScore =
                 movementScore(
@@ -2306,6 +2348,8 @@ module.exports = {
     normalizeHeader,
 
     isSeparatorLine,
+
+    isSummaryValueLine,
 
     isHeaderCandidate,
 

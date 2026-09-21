@@ -1,0 +1,73 @@
+U S PHARMA
+STOCK & SALES REPORT 03-08-2026                            PAGE NO : 1
+SALES FROM : 01-Jul-26 TO 31-Jul-26 STOCK AS ON : 03-Aug-26
+LINUX LABORATORIES(DIVISION - DERMA)
+------------------------------------------------------------------------------------------------
+ITEMCODE  ITEMNAME                   CLSTOCK     CLVALUE     SALES SALESVALUE       LM 1    LM 2
+------------------------------------------------------------------------------------------------
+1200264   .HIKIDZ              75 GM       0        0.00        3       335.58         0       0 
+1200246   ACNESTAL 5.5 SOAP    75 GM       0        0.00       15      1810.20         0       0 
+1200287   ACNESTAL FACE WASH   100ML       0        0.00       12      3490.20         0      11 
+1200205   ACTIVE MF            100 G       0        0.00        9      2635.92         5       4 
+1200213   ACTIVE MF LOTION     200 M       0        0.00       52     22816.28         2      23 
+1200268   ACTIVE MF SOAP       75GM        2      216.00       15      1790.48         7      20 
+1200249   ADAPERO GEL          15 GM       0        0.00      176     49401.44        62      61 
+1200266   APRENEXT 30          10 S        0        0.00       18      4231.74        10       0 
+1200247   BILAZO 20MG          10 S        0        0.00       68      7812.00        30       0 
+1200242   BILAZO 40MG          10 S        1      133.03       79     11676.99        61       0 
+1200208   BIOWRIGHT OIL        80 ML       0        0.00        0         0.00         0       0 
+1200210   BIOWRIGHT SHAMPOO    60ML        0        0.00        0         0.00         0       0 
+1200209   BIOWRIGHTCREAM       50 GM       0        0.00        0         0.00         0       0 
+1200261   CYCLONOX 100MG       5 S         3     1131.03       37     15499.30         0      10 
+1200263   CYCLONOX 50MG        5 S         1      194.67       72     15573.60         8       0 
+1200320   EBERNET CREAM        15 GM       0        0.00       80     21684.80        53       0 
+1200321   EBERNET CREAM        30 GM       0        0.00       50     22232.00        10      10 
+1200322   EBERNET LOTION       40 GM       0        0.00        7      3761.24         0       3 
+1200323   EBERNET M CREAM      15 GM       0        0.00       32     10515.84        20       0 
+1200324   EBERNET+ CREAM       30 GM       0        0.00      151     67151.21        61      32 
+1200330   HIKIDZ               75 GM       0        0.00        5       610.15         0       0 
+1200243   IBITRA 100           10 S       15     1830.90       65      8815.30        50      40 
+1200244   IBITRA 200           10 S        0        0.00        0         0.00         0       0 
+1200245   IBITRET 20           10 S        0        0.00        0         0.00         0       0 
+1200206   KC LITE CREAM        20 GM       0        0.00       10      2027.10         2      14 
+1200238   KC LITE GOLD CREAM   20 GM       0        0.00      134     49874.80        61      70 
+1200207   KERAGRIS             60 ML       2     1742.66      130    125858.20        76      38 
+1200269   KERAGRIS MFR         60 ML       0        0.00       24     27337.20         3      23 
+1200294   KEROFA COMBIKIT      4 KIT       1      668.12       10      7423.32         2       5 
+1200251   LINTAR SOLUTION      100 M       0        0.00        6      2301.24         0       0 
+1200312   MOIMAX OC 75GM       1 S         0        0.00        3      1159.32         1       1 
+1200211   OXYTAN CREAM         50 GM      23    12560.30       77     46722.06        80      24 
+1200255   PROTEK               50 GM       0        0.00        0         0.00         0       0 
+1200254   PROTEK ANTI-DANDRUFF SHAM
+                               100 M       1      179.31       20      3984.80         5       6 
+1200250   PSORAXIB LOTION      150 M       0        0.00        0         0.00         0       0 
+1200212   VMELA                30 GM       4      988.48        1       274.58         0       5 
+                                             ===========           ===========
+                                                19644.50             538806.89
+                                             ===========           ===========
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,36 @@
+SENTHIL PHARMA - 612001                                    
+Stock & Sales Report From 01/07/2026 To 31/07/2026
+Company Name : LINUX-DERMASCIENCE DIVISION
+=================================================================================================
+No   Product Name              Pack        Opstk           Pur      Sale        CurStk    StkVal 
+=================================================================================================
+1   ACNESTAL SOAP             75gm          5+0             -         2           3+0    292.83 
+2   ACNESTAL SOAP 5.5         75GM          0+0             -         -           0+0         - 
+3   ACTIVE MF CREAM           50GMS         0+0             -         -           0+0         - 
+4   ACTIVE MF LOTION 200ML    200ML        10+0             -         -          10+0   3918.50 
+5   ACTIVE MF SOAP            75GM          9+0           186     62+12         121+0  13706.94 
+6   BIOSKIN SOAP              75GMS        25+0           141      51+8         107+0   9884.44 
+7   BIOWRIGHT OIL             80ML         22+0             -         -          12+0   2283.48 
+8   BIOWRIGHT SOAP 75G        75gm          0+0             -         -           0+0         - 
+9   CASIL SOAP                75gm          8+0             -         2           6+0    538.70 
+10  DOSIL  500 MG             10           12+0             -         -          12+0   1365.12 
+11  HIKIDZ SOAP               75GMS         0+0             -         -           0+0         - 
+12  HYTEC CREAM               20gms         0+0             -         -           0+0         - 
+13  IBITRET 10MG              10           17+0             -         -           0+0         - 
+14  IBITRET 20MG              10           25+0             -         -           0+0         - 
+15  KC-LITE CREAM -20GM       20GM          0+0             -         -           0+0         - 
+16  KC-LITE GOLD CREAM-20GM   20GM          0+0             -         -           0+0         - 
+17  KERAGRIS HAIR SERUM       60ML          3+0            11       5+1           8+0   6970.64 
+18  KERAGRIS MFR 60ML         60ml          0+0             -         -           0+0         - 
+19  N-RICH BABY SOAP          75GM          0+0             -         -           0+0         - 
+20  PROTEK SOAP               100GMS        0+0           146      44+8          94+0  12157.02 
+-------------------------------------------------------------------------------------------------
+    Total                                   136           484       166           373         - 
+-------------------------------------------------------------------------------------------------
+Opg.Stk Val:    23753.02 Purc.Value: :    57798.07 Sales Value::    23864.35
+Cl.Stk Val:     51117.67 Pur.RetVal ::     9178.66 SalRet Val: :        0.00
+                                     :             NetSal(GVal):    23864.35
+Oth.SalVal:         0.00 Tran.Stk.IN::        0.00 Tran.Stk.Out:        0.00
+-------------------------------------------------------------------------------------------------
+                                       *** END OF REPORT ***
+

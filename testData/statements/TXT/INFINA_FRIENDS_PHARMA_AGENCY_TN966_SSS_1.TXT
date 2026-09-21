@@ -1,0 +1,60 @@
+
+ME                                 FRIENDS PHARMA AGENCY                                  F                      
+                    Product wise sales from 01-07-2026 To 31-07-2026                                                 
+                                                                                                                     
+ECompany Name:LINUX INFINA                                          F                                              
+========================================================================================                             
+Date       Inv-no     Customer name               Addr  Qty Free  Price     Amount                                   
+========================================================================================                             
+                                                                                                                     
+AMINTOZ 1ML                                                                                                          
+ÄÄÄÄÄÄÄÄÄÄÄ                                                                                                          
+01-07-2026 FPA004523  SUNDARAM HEALTH CENTRE PHAR MR.S   15  ---   19.12     286.80                                  
+02-07-2026 FPA004615  SCUDDER MEMORIAL HOSPITAL   MR.S  500  ---   13.55    6775.00                                  
+07-07-2026 FPA004899  SUNDARAM HEALTH CENTRE PHAR MR.S   25  ---   19.12     478.00                                  
+13-07-2026 FPA005161  DR.SATHESKUMAR.J.T.,MD.,    AMMU    5  ---   19.12      95.60                                  
+14-07-2026 FPA005298  DR.KAMESHWARAN MBBS         WALA    5  ---   19.12      95.60                                  
+17-07-2026 FPA005452  GANDHI PHARMACY OZHUGHUR    WALA    5  ---   19.12      95.60                                  
+20-07-2026 FPA005542  DR.SATHESKUMAR.J.T.,MD.,    AMMU    4  ---   19.12      76.48                                  
+25-07-2026 FPA005842  DR.AJITHKUMAR MBBS           RAN   36  ---   19.12     688.32                                  
+           FPA005842  DR.AJITHKUMAR MBBS           RAN   14  ---   19.12     267.68   8859.08                        
+                                                                                                                     
+AMINTOZ TAB                                                                                                          
+ÄÄÄÄÄÄÄÄÄÄÄ                                                                                                          
+31-07-2026 FPA006084  DR.RAMESH BABU M.B.B.S.,     RAN   10  ---   34.56     345.60    345.60                        
+                                                                                                                     
+EPITRA 500MG TAB                                                                                                     
+ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ                                                                                                     
+21-07-2026       9611 SCUDDER MEMORIAL HOSPITAL   MR.S   -1  ---  117.68    -117.68                                  
+02-07-2026 FPA004584  SHIFA MEDICAL RPT            RAN    2  ---  163.40     326.80                                  
+           FPA004615  SCUDDER MEMORIAL HOSPITAL   MR.S   20  ---  115.65    2313.00                                  
+           FPA004615  SCUDDER MEMORIAL HOSPITAL   MR.S  100  ---  115.65   11565.00                                  
+06-07-2026 FPA004804  SCUDDER MEMORIAL HOSPITAL   MR.S  180  ---  115.65   20817.00                                  
+17-07-2026 FPA005452  GANDHI PHARMACY OZHUGHUR    WALA    2  ---  163.40     326.80                                  
+18-07-2026 FPA005517  DR VIVEKANANTHAN M.B.B.S.,  OFFI    8  ---  147.00    1176.00  36406.92                        
+                                                                                                                     
+EPITRA 750MG TAB                                                                                                     
+ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ                                                                                                     
+02-07-2026 FPA004615  SCUDDER MEMORIAL HOSPITAL   MR.S  100  ---  114.50   11450.00                                  
+08-07-2026 FPA004941  SCUDDER MEMORIAL HOSPITAL   MR.S  130  ---  114.50   14885.00                                  
+17-07-2026 FPA005441  SCUDDER MEMORIAL HOSPITAL   MR.S  100  ---  114.50   11450.00  37785.00                        
+                                                                                                                     
+GABAGESIC 100MG TAB                                                                                                  
+ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ                                                                                                  
+02-07-2026 FPA004615  SCUDDER MEMORIAL HOSPITAL   MR.S   60  ---   58.35    3501.00                                  
+06-07-2026 FPA004804  SCUDDER MEMORIAL HOSPITAL   MR.S   40  ---   58.35    2334.00                                  
+14-07-2026 FPA005276  SCUDDER MEMORIAL HOSPITAL   MR.S   87  ---   58.35    5076.45                                  
+17-07-2026 FPA005441  SCUDDER MEMORIAL HOSPITAL   MR.S  113  ---   58.35    6593.55  17505.00                        
+                                                                                                                     
+GABAGISIC 300MG                                                                                                      
+ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ                                                                                                      
+15-07-2026       9597 SHANTHI MEDICALS            WALA   -1  ---  203.89    -203.89                                  
+                 9599 SHANTHI MEDICALS            WALA   -2  ---  203.89    -407.78                                  
+07-07-2026 FPA004859  EYEDRATED PHARMACY           RAN    2  ---  203.89     407.78   -203.89                        
+========================================================================================                             
+                                                                      Gross:   100697.71                             
+                                                                        Fre:        0.00                             
+                                                                       Repl:        0.00                             
+                                                                      Total:   100697.71                             
+P                                                                                                                   
+P                                                                                                                  

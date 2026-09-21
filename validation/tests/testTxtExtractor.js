@@ -202,10 +202,26 @@ if (
 //======================================================
 // HEADER MAPPER
 //======================================================
+//
+// IMPORTANT:
+//
+// CODE_NAME_STOCK is a fixed-width data format.
+//
+// The mapper MUST receive the real reader result,
+// not only the header detection.
+//
+// This allows it to inspect actual data rows such as:
+//
+// ACNESTAL FACE WASH 60 ML    141.56  9  0 ...
+//
+// Therefore "60" stays inside PRODUCT and
+// 141.56 becomes RATE.
+//
 
 const mapperResult =
     mapTXTHeader(
-        detection
+        detection,
+        readerResult
     );
 
 console.log("");
@@ -232,6 +248,141 @@ console.log(
 console.log(
     "=============================="
 );
+
+
+//======================================================
+// COMPLETE MAPPING
+//======================================================
+
+console.log("");
+
+console.log(
+    "========== COMPLETE MAPPING =========="
+);
+
+console.dir(
+    mapperResult.mapping,
+    {
+        depth: null
+    }
+);
+
+console.log(
+    "======================================="
+);
+
+
+//======================================================
+// CODE_NAME_STOCK DATA COLUMNS
+//======================================================
+
+if (
+    mapperResult.columns &&
+    mapperResult.columns.length
+) {
+
+    console.log("");
+
+    console.log(
+        "========== CODE_NAME_STOCK COLUMNS =========="
+    );
+
+    console.table(
+        mapperResult.columns
+            .filter(
+                column =>
+                    column &&
+                    column.field
+            )
+            .map(
+                column => ({
+                    field:
+                        column.field,
+
+                    header:
+                        column.header,
+
+                    position:
+                        column.position,
+
+                    dataStart:
+                        column.dataStart,
+
+                    dataEnd:
+                        column.dataEnd,
+
+                    dataWidth:
+                        column.dataWidth,
+
+                    source:
+                        column.source,
+
+                    confidence:
+                        column.confidence
+                })
+            )
+    );
+
+    console.log(
+        "============================================="
+    );
+
+}
+
+
+//======================================================
+// RAW DATA SAMPLE
+//======================================================
+
+const dataStart =
+    Number.isInteger(
+        detection.dataStartsAt
+    )
+        ? detection.dataStartsAt
+        : null;
+
+if (
+    dataStart !== null &&
+    Array.isArray(lines)
+) {
+
+    console.log("");
+
+    console.log(
+        "========== RAW DATA SAMPLE =========="
+    );
+
+    console.log(
+        lines
+            .slice(
+                dataStart,
+                dataStart + 10
+            )
+            .join("\n")
+    );
+
+    console.log(
+        "====================================="
+    );
+
+}
+else {
+
+    console.log("");
+
+    console.log(
+        "========== RAW DATA SAMPLE =========="
+    );
+
+    console.log(
+        "Unable to determine data start."
+    );
+
+    console.log(
+        "====================================="
+    );
+
+}
 
 
 //======================================================
@@ -349,8 +500,18 @@ if (
     );
 
     console.log(
+        "Product Code  :",
+        first.productCode
+    );
+
+    console.log(
         "Packing       :",
         first.pack
+    );
+
+    console.log(
+        "Rate          :",
+        first.rate
     );
 
     console.log(
@@ -364,6 +525,16 @@ if (
     );
 
     console.log(
+        "Purchase Free :",
+        first.purchaseFree
+    );
+
+    console.log(
+        "Purchase Return:",
+        first.purchaseReturn
+    );
+
+    console.log(
         "Purchase Value:",
         first.purchaseValue
     );
@@ -374,13 +545,38 @@ if (
     );
 
     console.log(
+        "Sales Free    :",
+        first.salesFree
+    );
+
+    console.log(
+        "Sales Return  :",
+        first.salesReturn
+    );
+
+    console.log(
         "Sales Value   :",
         first.salesValue
     );
 
     console.log(
+        "Excess        :",
+        first.excess
+    );
+
+    console.log(
+        "Short         :",
+        first.short
+    );
+
+    console.log(
         "Closing       :",
         first.closing
+    );
+
+    console.log(
+        "Closing Free  :",
+        first.closingFree
     );
 
     console.log(

@@ -1,0 +1,102 @@
+CH
+                  VENKATA SURENDRA MEDICALS
+E                                            Stock & Sales Statement DetailedF
+From 01/07/2026 To 31/07/2026                                                                                Page : 1
+------------------------------------------------------------------------------------------------------------------------
+Product Name                Packing      O.Bal  Rcpts  Sal.Ret   Total   Sales  Pur.Ret    Total Cl.Bal Cl.Value  Age
+------------------------------------------------------------------------------------------------------------------------
+Company :LINUX                
+--------------
+AMINTOZ-2ML                  1              0      0        0        0       0        0        0      0     0.00  360 
+AMINTOZ-INJ                  1ml            0      0        0        0       0        0        0      0     0.00  987 
+AMINTOZ-TAB                  10S            0      0        0        0       0        0        0      0     0.00  150 
+BECOSTAR-G CAP               10S            0      0        0        0       0        0        0      0     0.00  550 
+BECOSTAR-SYP                 200ML          0      0        0        0       0        0        0      0     0.00  621 
+BECOSTAR-TAB                 15S            0      0        0        0       0        0        0      0     0.00 1858 
+BONTRIX-TAB                  10S            0      0        0        0       0        0        0      0     0.00  550 
+BRITAM 50MG TAB              15s           19     10        0       19      13        0       13     16  3059.06   15 
+BRITAM-100 SR TAB            10`S           0      0        0        0       0        0        0      0     0.00  441 
+BRITAM-100 TAB               10S           13      0        0       13       0        0        0     13  3278.18  205 
+BRITAM-25 TAB                10S            0      0        0        0       0        0        0      0     0.00  477 
+BRITAM-75 TAB                10s            6      0        0        6       0        0        0      6  1137.02  182 
+BRITAM-INJ                   5ml            0      0        0        0       0        0        0      0     0.00 1432 
+BRITAM-SYP                   100ML          0      0        0        0       0        0        0      0     0.00  514 
+CALMTRA 10MG TAB             10S            0      0        0        0       0        0        0      0     0.00  947 
+CELONG-TAB                   1X10           0      0        0        0       0        0        0      0     0.00 1925 
+CITALIN-10 TAB               15             0      0        0        0       0        0        0      0     0.00  217 
+CITALIN-20 TAB               10S            0      0        0        0       0        0        0      0     0.00 1829 
+CITALIN-5 TAB                10s            0      0        0        0       0        0        0      0     0.00  639 
+CITALIN-FORTE TAB            15             4     30        0        4       0        0        0     34  6049.01    8 
+CITALIN-LITE TAB             10s            5      0        0        5       0        0        0      5   432.55   89 
+CITALIN-PLUS TAB             10S            0      0        0        0       0        0        0      0     0.00  438 
+CLOBANIL-10-MG               1X10           0      0        0        0       0        0        0      0     0.00  448 
+CLOBANIL-5-MG                1X10           0      0        0        0       0        0        0      0     0.00  987 
+COGNITAM-400MG-TAB           1X10           0      0        0        0       0        0        0      0     0.00 2131 
+COGNITAM-800 TAB             10S            0      0        0        0       0        0        0      0     0.00  892 
+COGNITAM-INJ                 15ML           0      0        0        0       0        0        0      0     0.00 1534 
+COGNITAM-PLUS TAB            10S            0      0        0        0       0        0        0      0     0.00  315 
+COGNITAM-SYP                 100ml          0      0        0        0       0        0        0      0     0.00  578 
+COGNIVEL-D TAB               10S            0      0        0        0       0        0        0      0     0.00 1134 
+COGNIVEL-TAB                 10s           10      0        0       10       0        0        0     10  2117.85   49 
+EPITRA-RTU 500 INJ           100ml          0      0        0        0       0        0        0      0     0.00 1607 
+ETORIFLEX-MR 8 TAB           10s            0      0        0        0       0        0        0      0     0.00  621 
+FERIZAC-SYP                  200ML          0      0        0        0       0        0        0      0     0.00 1915 
+FERIZAC-TAB                  10S            0      0        0        0       0        0        0      0     0.00 1915 
+FLITRAZ-TAB                  10S            0      0        0        0       0        0        0      0     0.00  116 
+FOLITE-TAB                   10s            0      0        0        0       0        0        0      0     0.00 1101 
+IGNICAR DS PLUS SYRUP        150ML          0      0        0        0       0        0        0      0     0.00  435 
+IGNICAR-400 MG TAB           10S            0      0        0        0       0        0        0      0     0.00  292 
+IGNICAR-SYP                  200ml          4     41        0        4      42        0       42      3  2068.01    8 
+IGNICAR-TAB                  1X10           2     50        0        2      52        0       52      0     0.00   15 
+JOYPRIDE-100 TAB             10S            0      0        0        0       0        0        0      0     0.00  360 
+JOYPRIDE-200 TAB             10S            0      0        0        0       0        0        0      0     0.00  763 
+JOYPRIDE-50 TAB              10s            0      0        0        0       0        0        0      0     0.00  360 
+LINSOL- IV INJ               100ml          6     80        0        6      78        0       78      8  1206.16    8 
+MACROZAC-250 TAB             6S             0      0        0        0       0        0        0      0     0.00 1915 
+MACROZAC-500 TAB             3s             0      0        0        0       0        0        0      0     0.00 1650 
+MELANCO-25 TAB               10s            0      0        0        0       0        0        0      0     0.00  548 
+MELANCO-75 TAB               10a            0      0        0        0       0        0        0      0     0.00 1117 
+MYOCETAMOL-TAB               10S            0      0        0        0       0        0        0      0     0.00  236 
+NEULORA-1 TAB                10s            0      0        0        0       0        0        0      0     0.00 1016 
+NEULORA-2 TAB                10s            0     20        0        0       0        0        0     20   450.66   22 
+PATINEX 12.5MG TAB           10S            4      0        0        4       0        0        0      4   510.51   89 
+PATINEX-LS-TAB               1X10           0      0        0        0       0        0        0      0     0.00  205 
+PATINEX-PLUS TAB             10s            0      0        0        0       0        0        0      0     0.00 1554 
+PENRIDOL TAB                 4S             0      0        0        0       0        0        0      0     0.00 1432 
+PREGALIFT-D-50/20 CAP        10s            0      0        0        0       0        0        0      0     0.00  701 
+PREGALIFT-ER 50 TAB          1x15           6     10        0        6      13        0       13      3   292.13   15 
+PREGALIFT-ER 75 TAB          10s            0      0        0        0       0        0        0      0     0.00 1355 
+PREGALIFT-NT TAB             10s            6     80        0        6      78        0       78      8  1742.16   15 
+
+                                                                                                             Page : 2
+------------------------------------------------------------------------------------------------------------------------
+Product Name                Packing      O.Bal  Rcpts  Sal.Ret   Total   Sales  Pur.Ret    Total Cl.Bal Cl.Value  Age
+------------------------------------------------------------------------------------------------------------------------
+PREGALIFT-PLUS TAB           10s            6      0        0        6       0        0        0      6   928.68  400 
+RABELIN-20 MG                1X10           0      0        0        0       0        0        0      0     0.00 1675 
+RDL-C5 CAP                   10s            0      0        0        0       0        0        0      0     0.00  448 
+RE-XITE D3-TAB               1X10           0      0        0        0       0        0        0      0     0.00  444 
+REXITE PFS INJ               1ML            0     30        0        0       0        0        0     30  4430.16   22 
+RE-XITE PLUS CAP             15s            7     60        0        7      52        0       52     15  3536.98   15 
+REXITE-BT TAB                10s            0      0        0        0       0        0        0      0     0.00  796 
+REXITE-INJ                   1ml            0      0        0        0       0        0        0      0     0.00  971 
+RE-XITE-PLUS-ING             1X2ML         15      0        0       15       4        0        4     11   929.39   89 
+REXITE-SYP                   200ML          1      4        0        1       3        0        3      2   370.61   22 
+RISCURE- LS TAB              10s            0      0        0        0       0        0        0      0     0.00  495 
+RISCURE-0.5 TAB              10s            0      0        0        0       0        0        0      0     0.00  407 
+RISCURE-2  TAB               10S            0      0        0        0       0        0        0      0     0.00 1554 
+RISCURE-FORTE TAB            10s            0      0        0        0       0        0        0      0     0.00  639 
+RISCURE-PLUS TAB             10s            0      0        0        0       0        0        0      0     0.00  565 
+TYPIDOL-5 TAB                10s            0      0        0        0       0        0        0      0     0.00 1432 
+VERTIREST-16MG               1x10           0      0        0        0       0        0        0      0     0.00  691 
+VERTIREST-8 TAB              10S            0      0        0        0       0        0        0      0     0.00 1925 
+VORTICA-10 TAB               10s            0      0        0        0       0        0        0      0     0.00  639 
+VORTICA-20-MG-TAB            1X10           0      0        0        0       0        0        0      0     0.00  413 
+VORTICA-5 TAB                10s            0      0        0        0       0        0        0      0     0.00  495 
+ZOLCALM-10 TAB               10s            0      0        0        0       0        0        0      0     0.00  495 
+ZOLCALM-5 TAB                1x15          28     60        0       28      59        0       59     29  2716.44   18 
+------------------------------------------------------------------------------------------------------------------------
+Opening Value   :        0.00 SaleReturn  Value    :        0.00 Sale Value     :    83837.52 
+Purchase Value  :   105647.97 Pur.Return Value     :        0.00 Close Value    :    35255.56 
+------------------------------------------------------------------------------------------------------------------------
+

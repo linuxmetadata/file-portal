@@ -1,0 +1,31 @@
+
+MOHAK MEDICOS
+GST:09AAKFM5040N1ZV
+ SALES & STOCK REPORT   FROM 01/07/2026  TO 31/07/2026            Page: 1
+================================================================================
+DESCRIPTION/PACKING     Pro.  OPENING    PUR.   SALE   CR.NO.  DR.NO.  CLOSING   
+                        Age     QTY.     QTY.    QTY.  ST.[+]  ST.[-]    QTY.    
+================================================================================
+LXC  LINUX LABORATORIES 
+BECOSTAR SYP                     0       0       0       0       0       0
+BECOSTAR-G CAPS                  0       0       0       0       0       0
+BONTRIX TABS                     0       0       0       0       0       0
+CEFBULL-S-1.5 GM INJ             0       0       0       0       0       0
+ETORIFLEX-MR-4 MG TAB            0       0       0       0       0       0
+ETORIFLEX-MR-8 MG TAB            0       0       0       0       0       0
+FOLITE TAB                       0       0       0       0       0       0
+IBFLUX SYP                       0     500     240       0       0     260
+IBIPITAZ-4.5 INJ                 0       0       0       0       0       0
+IBITIG-50 MG INJ                 0       0       0       0       0       0
+LINCIPARA-100 ML IV             10       0       0       0       0      10
+MERATO-1 GM INJ                  0       0       0       0       0       0
+MONTGOLD TAB                     0       0       0       0       0       0
+PHYSIOLYTE-500 ML INJ          128       0       0       0       0     128
+STERIMINO 10 % IV               50       0       0       0       0      50
+STERIMINO 7 % IV                10       0       0       0       0      10
+STERMINO-10 % IV                 0       0       0       0       0       0
+================================================================================
+TOTAL QTY. IN UNIT/PCS.      198      500      240      0      0      458
+TOTAL AMOUNT >>>           33254    49350    24948      0      0    58916
+================================================================================
+

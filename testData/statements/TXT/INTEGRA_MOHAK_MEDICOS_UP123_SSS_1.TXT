@@ -1,0 +1,22 @@
+
+MOHAK MEDICOS
+GST:09AAKFM5040N1ZV
+ SALES & STOCK REPORT   FROM 01/07/2026  TO 31/07/2026            Page: 1
+================================================================================
+DESCRIPTION/PACKING     Pro.  OPENING    PUR.   SALE   CR.NO.  DR.NO.  CLOSING   
+                        Age     QTY.     QTY.    QTY.  ST.[+]  ST.[-]    QTY.    
+================================================================================
+LXI  LINUX LABORATORIES 
+DUBIZ TABS                       6       0       0       0       0       6
+LURASTAR-40 MG TAB              80       0       0       0       0      80
+PREGALIFT-D-75/20 MG CA          0       0       0       0       0       0
+REXITE-D3 TABS                   0       0       0       0       0       0
+TADASURE-10 MG STRIPS           50       0       0       0       0      50
+TADASURE-5 MG STRIPS            10       0       0       0       0      10
+TADAZA TABS                      0       0       0       0       0       0
+VERTIREST-16 MG TABS             0       0       0       0       0       0
+================================================================================
+TOTAL QTY. IN UNIT/PCS.      146        0        0      0      0      146
+TOTAL AMOUNT >>>           12863        0        0      0      0    12863
+================================================================================
+

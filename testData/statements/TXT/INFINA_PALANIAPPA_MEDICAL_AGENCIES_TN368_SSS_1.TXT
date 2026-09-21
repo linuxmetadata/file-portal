@@ -1,0 +1,61 @@
+
+PALANIAPPA MEDICAL AGENCIES,PUDUKKOTTAI.          COMPANY: LINUX INFINA                  
+STOCK & SALES STATEMENT AS ON 31/07/2026                                    Page No:  1
+----------------------------------------------------------------------------------------
+PRODUCT NAME      PACKG OPENING   RECEIPT  SALES RETAIL  CASH   CLO.STK    CLOSING   AGE
+                          QTY    QTY  FREE  LAST  SALES SALES  QTY  FREE    VALUE   DAYS
+----------------------------------------------------------------------------------------
+AMINTOZ INJ        2ML      63     -     -    42    33     -    30     -   1084.55   36
+AMINTOZ INJ 1ML    1ML      60     -     -     -    50     -    10     -    180.71   40
+AMINTOZ TAB        10'S     37   119     1    47    74     -    83     -   2710.37    8
+*ARIDAY 10 MG      10'S     30     -     -    24     -     -    30     -   3343.73   55
+ARIDAY 2.5MG TAB   10'S      -    50     -     -    22     -    28     -   1022.24    1
+*ARIDAY 20         10'S     21     -     -     -     -     -    21     -   3215.18  118
+ARIDAY 5MG TAB     10'S      9    80     -    44    42     -    47     -   2651.58    8
+BENFICA            10'S     16    30     -    45    11     -    35     -   3902.65   27
+*BENFICA FORTE     10'S      -     -     -     -     -     -     -     -         -     
+*CARNIGLO-M        10'S      -     -     -     -     -     -     -     -         -     
+*COGNIZA TAB       10'S      -     -     -     -     -     -     -     -         -     
+*DIVALID ER 250MG  10'S      -     -     -     -     -     -     -     -         -     
+*DIVALID ER 500MG  10'S      -     -     -     -     -     -     -     -         -     
+EPITRA 250MG TAB   10'S    130    38    22    60    60     -   130     -   6368.05   15
+EPITRA 500MG TAB   15'S      -   360     -   231   210     -   150     -  22059.45    1
+*EPITRA INJ        5ML       -     -     -     -     -     -     -     -         -     
+*EPITRA SYRUP      100ML     -     -     -     -     -     -     -     -         -     
+*GABAGESIC 100MG   10'S      -     -     -     -     -     -     -     -         -     
+*GABAGESIC 300MG   10'S      -     -     -     -     -     -     -     -         -     
+*GABAGESIC GEL     30GM      -     -     -     -     -     -     -     -         -     
+*GABAGESIC M       10'S      -     -     -     -     -     -     -     -         -     
+*GABAGESIC NT 100  10'S      -     -     -     -     -     -     -     -         -     
+*GABAGESIC NT 200  10'S      -     -     -     -     -     -     -     -         -     
+*GABAGESIC NT 400M 10'S      -     -     -     -     -     -     -     -         -     
+*GABAGESIC PLUS    10'S      -     -     -     -     -     -     -     -         -     
+NEULORA 1MG        10'S     20    70    20    53    69     -    41     -    757.68    8
+NEULORA 2MG        10'S     92    60    20   128    89     -    83     -   1870.24    1
+*OLINSTAB 2.5      10S       -     -     -     -     -     -     -     -         -     
+*OLINSTAB 5 MG     10S       -     -     -     -     -     -     -     -         -     
+*PALMIDA TAB       10'S      -     -     -     -     -     -     -     -         -     
+*PRONATE 10MG      10'S      -     -     -     -     -     -     -     -         -     
+*PRONATE 20MG      10'S      -     -     -     -     -     -     -     -         -     
+*PRONATE 40MG      10'S      -     -     -     -     -     -     -     -         -     
+*PRONATE TR 40MG   10'S      -     -     -     -     -     -     -     -         -     
+*QLINO CAPS        1'S       -     -     -     -     -     -     -     -         -     
+*VALEPTOL SYP      100ML     -     -     -     -     -     -     -     -         -     
+VALEPTOL SYRUP     200ML     6     -     -    24     2     -     4     -    415.21   46
+*VENLITE OD 100MG  10'S     30     -     -     -     -     -    30     -   6443.33   66
+VENLITE OD 50MG    10'S      8    60    60    66    77     -    51     -   6047.94   15
+* ---> Non Moving Products Above 30 Days
+----------------------------------------------------------------------------------------
+OPENING VALUE      :       30,245.11  PURCHASE VALUE   :       79,232.44
+RETAIL SALES       :       53,801.55  CASH SALES       :            0.00
+TOTAL SALES        :       53,801.55  CLOSING VALUE    :       62,072.91
+LAST MONTH SALES   :       62,317.20  TRANSIT VALUE    :            0.00
+----------------------------------------------------------------------------------------
+PENDING EXPIRY/BROKEN/P.RETURN CLAIM DETAILS  Page No.:  1
+----------------------------------------------------------------------------------------
+CLAIM No.     DATE           AMOUNT      RECD.AMT  DESCRIPTION
+----------------------------------------------------------------------------------------
+  1735     16/11/2022      8,208.00          0.00  Purchase Return
+                        -------------------------
+Receivable Claim Amount  :         8,208.00
+----------------------------------------------------------------------------------------

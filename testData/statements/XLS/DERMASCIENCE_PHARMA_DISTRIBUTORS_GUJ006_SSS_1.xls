@@ -1,0 +1,544 @@
+﻿
+        <table>
+            <tr><td colspan="20" style="text-align:center;font-size:18px;font-weight:bold;">
+                PHARMA DISTRIBUTORS
+            </td></tr>
+
+            <tr><td colspan="20" style="text-align:center;font-size:16px;font-weight:bold;">
+                Product Stock Report
+            </td></tr>
+
+            <tr><td colspan="20" style="text-align:center;font-size:14px;">
+                Mfg : <b>LINUX [ DERMASCIENCE ]</b>
+            </td></tr>
+
+            <tr><td colspan="20" style="text-align:center;font-size:12px;">
+                From: <b>01/07/2026</b> &nbsp;&nbsp;&nbsp; To: <b>31/07/2026</b>
+            </td></tr>
+
+            <tr><td colspan="20">&nbsp;</td></tr>
+        </table>
+    <table id="reportTable" class="table table-bordered table-sm">
+          <thead class="table-secondary">
+            <tr class="text-center">
+              <th class="text-start">Product Name</th>
+              <th>Opening</th>
+                <th>Purchase</th>
+              <th>Total</th>
+                <th>Sale</th>
+              <th>SaleRet</th>
+              <th>Exp/Dmg</th>
+              <th>ClosStock</th>
+              <th>Clos.Amt</th>
+              <th>OrderQty</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr>
+                <td class="text-start">ACNESTAL 5.5  SOAP 75 GM</td>
+                <td class="text-end">59.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">59.00</td>
+
+                  <td class="text-end">5.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">54.00</td>
+                <td class="text-end">6419.31</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">ACNESTAL FACE WASH 100ML</td>
+                <td class="text-end">87.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">87.00</td>
+
+                  <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">87.00</td>
+                <td class="text-end">22535.99</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">ACNESTAL FACE WASH 60ML</td>
+                <td class="text-end">80.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">80.00</td>
+
+                  <td class="text-end">14.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">66.00</td>
+                <td class="text-end">9342.96</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">ACTIVE MF CREAM 100GM</td>
+                <td class="text-end">96.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">96.00</td>
+
+                  <td class="text-end">17.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">79.00</td>
+                <td class="text-end">20823.61</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">ACTIVE MF LOTION 200ML</td>
+                <td class="text-end">11.00</td>
+                  <td class="text-end">100.00</td>
+                <td class="text-end">111.00</td>
+
+                  <td class="text-end">9.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">102.00</td>
+                <td class="text-end">40703.10</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">ACTIVE MF SOAP 75GM</td>
+                <td class="text-end">38.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">38.00</td>
+
+                  <td class="text-end">9.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">29.00</td>
+                <td class="text-end">3132.00</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">ADAPERO GEL (D3)</td>
+                <td class="text-end">66.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">66.00</td>
+
+                  <td class="text-end">25.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">41.00</td>
+                <td class="text-end">10357.40</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">AMORFINE CREAM</td>
+                <td class="text-end">39.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">39.00</td>
+
+                  <td class="text-end">26.00</td>
+                <td class="text-end">15.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">28.00</td>
+                <td class="text-end">7509.04</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">APRENEXT 30 TAB</td>
+                <td class="text-end">9.00</td>
+                  <td class="text-end">103.00</td>
+                <td class="text-end">112.00</td>
+
+                  <td class="text-end">47.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">65.00</td>
+                <td class="text-end">14076.70</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">BILAZO 20MG TAB</td>
+                <td class="text-end">24.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">24.00</td>
+
+                  <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">24.00</td>
+                <td class="text-end">2345.04</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">BILAZO 40MG TAB</td>
+                <td class="text-end">17.00</td>
+                  <td class="text-end">200.00</td>
+                <td class="text-end">217.00</td>
+
+                  <td class="text-end">41.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">176.00</td>
+                <td class="text-end">25278.18</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">BIOWRIGHT CREAM 50GM</td>
+                <td class="text-end">1.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">1.00</td>
+
+                  <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">1.00</td>
+                <td class="text-end">107.39</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">BIOWRIGHT OIL 80ML</td>
+                <td class="text-end">-2.00</td>
+                  <td class="text-end">30.00</td>
+                <td class="text-end">28.00</td>
+
+                  <td class="text-end">15.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">13.00</td>
+                <td class="text-end">2607.53</td>
+                <td class="text-end">2.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">CYCLONOX 100MG CAP</td>
+                <td class="text-end">-2.00</td>
+                  <td class="text-end">30.00</td>
+                <td class="text-end">28.00</td>
+
+                  <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">28.00</td>
+                <td class="text-end">10569.16</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">CYCLONOX 50MG CAP</td>
+                <td class="text-end">18.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">18.00</td>
+
+                  <td class="text-end">6.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">12.00</td>
+                <td class="text-end">2369.04</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">DOSIL 500MG  CAP</td>
+                <td class="text-end">9.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">9.00</td>
+
+                  <td class="text-end">6.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">3.00</td>
+                <td class="text-end">303.44</td>
+                <td class="text-end">3.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">EBERNET 30GM CREAM</td>
+                <td class="text-end">180.00</td>
+                  <td class="text-end">250.00</td>
+                <td class="text-end">430.00</td>
+
+                  <td class="text-end">281.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">149.00</td>
+                <td class="text-end">60053.70</td>
+                <td class="text-end">132.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">EBERNET CREAM 15GM</td>
+                <td class="text-end">177.00</td>
+                  <td class="text-end">250.00</td>
+                <td class="text-end">427.00</td>
+
+                  <td class="text-end">293.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">134.00</td>
+                <td class="text-end">32689.30</td>
+                <td class="text-end">159.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">EBERNET CREAM 60GM</td>
+                <td class="text-end">91.00</td>
+                  <td class="text-end">109.00</td>
+                <td class="text-end">200.00</td>
+
+                  <td class="text-end">119.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">81.00</td>
+                <td class="text-end">55569.74</td>
+                <td class="text-end">38.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">EBERNET LOTION 40GM</td>
+                <td class="text-end">117.00</td>
+                  <td class="text-end">110.00</td>
+                <td class="text-end">227.00</td>
+
+                  <td class="text-end">92.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">135.00</td>
+                <td class="text-end">65284.65</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">EBERNET M CREAM 15 GM</td>
+                <td class="text-end">156.00</td>
+                  <td class="text-end">110.00</td>
+                <td class="text-end">266.00</td>
+
+                  <td class="text-end">165.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">101.00</td>
+                <td class="text-end">29871.76</td>
+                <td class="text-end">64.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">EBERNET+ CREAM 30 GM</td>
+                <td class="text-end">105.00</td>
+                  <td class="text-end">100.00</td>
+                <td class="text-end">205.00</td>
+
+                  <td class="text-end">45.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">160.00</td>
+                <td class="text-end">62946.70</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">HIKIDZ SOAP 75 GM</td>
+                <td class="text-end">38.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">38.00</td>
+
+                  <td class="text-end">3.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">35.00</td>
+                <td class="text-end">3844.02</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">IBITRA 100 CAP</td>
+                <td class="text-end">204.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">204.00</td>
+
+                  <td class="text-end">100.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">104.00</td>
+                <td class="text-end">12694.24</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">IBITRA 200 CAP</td>
+                <td class="text-end">23.00</td>
+                  <td class="text-end">100.00</td>
+                <td class="text-end">123.00</td>
+
+                  <td class="text-end">101.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">22.00</td>
+                <td class="text-end">3563.12</td>
+                <td class="text-end">79.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">IBITRET 10 SOFT GEL CAP</td>
+                <td class="text-end">26.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">26.00</td>
+
+                  <td class="text-end">1.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">25.00</td>
+                <td class="text-end">3314.86</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">KC LITE CREAM 20GM</td>
+                <td class="text-end">23.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">23.00</td>
+
+                  <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">23.00</td>
+                <td class="text-end">4152.20</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">KC LITE GOLD CREAM 20GM</td>
+                <td class="text-end">92.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">92.00</td>
+
+                  <td class="text-end">50.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">42.00</td>
+                <td class="text-end">14246.74</td>
+                <td class="text-end">8.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">KERAGRIS 60ML SERUM</td>
+                <td class="text-end">69.00</td>
+                  <td class="text-end">45.00</td>
+                <td class="text-end">114.00</td>
+
+                  <td class="text-end">62.00</td>
+                <td class="text-end">5.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">57.00</td>
+                <td class="text-end">49901.96</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">KERAGRIS MFR 60ML</td>
+                <td class="text-end">30.00</td>
+                  <td class="text-end">80.00</td>
+                <td class="text-end">110.00</td>
+
+                  <td class="text-end">83.00</td>
+                <td class="text-end">8.00</td>
+                <td class="text-end">8.00</td>
+                <td class="text-end">27.00</td>
+                <td class="text-end">27248.21</td>
+                <td class="text-end">48.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">KEROFA COMBIKIT</td>
+                <td class="text-end">37.00</td>
+                  <td class="text-end">200.00</td>
+                <td class="text-end">237.00</td>
+
+                  <td class="text-end">111.00</td>
+                <td class="text-end">2.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">128.00</td>
+                <td class="text-end">93794.06</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">LINTAR SOLUTION</td>
+                <td class="text-end">26.00</td>
+                  <td class="text-end">80.00</td>
+                <td class="text-end">106.00</td>
+
+                  <td class="text-end">19.00</td>
+                <td class="text-end">1.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">88.00</td>
+                <td class="text-end">30225.52</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">MOIMAX OC 75GM (D3)</td>
+                <td class="text-end">83.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">83.00</td>
+
+                  <td class="text-end">33.00</td>
+                <td class="text-end">1.00</td>
+                <td class="text-end">1.00</td>
+                <td class="text-end">50.00</td>
+                <td class="text-end">17390.00</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">OXYTAN CREAM 50GM</td>
+                <td class="text-end">35.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">35.00</td>
+
+                  <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">35.00</td>
+                <td class="text-end">19113.50</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">PROTEK SHAMPOO 100ML</td>
+                <td class="text-end">4.00</td>
+                  <td class="text-end">150.00</td>
+                <td class="text-end">154.00</td>
+
+                  <td class="text-end">88.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">66.00</td>
+                <td class="text-end">11863.34</td>
+                <td class="text-end">22.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">PSORAXIB LOTION</td>
+                <td class="text-end">78.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">78.00</td>
+
+                  <td class="text-end">4.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">0.00</td>
+                <td class="text-end">74.00</td>
+                <td class="text-end">22531.52</td>
+                <td class="text-end">0.00</td>
+              </tr>
+              <tr>
+                <td class="text-start">VMELA 30GM GEL</td>
+                <td class="text-end">33.00</td>
+                  <td class="text-end">0.00</td>
+                <td class="text-end">33.00</td>
+
+                  <td class="text-end">8.00</td>
+                <td class="text-end">1.00</td>
+                <td class="text-end">1.00</td>
+                <td class="text-end">25.00</td>
+                <td class="text-end">6605.20</td>
+                <td class="text-end">0.00</td>
+              </tr>
+
+            <tr class="fw-bold table-warning">
+              <td style='font-weight:bold;background-color:#FFF3CD;' class="text-start">GRAND TOTAL</td>
+              <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">2177.00</td>
+                <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">2047.00</td>
+              <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">4224.00</td>
+                <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">1878.00</td>
+              <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">33.00</td>
+              <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">10.00</td>
+              <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">2369.00</td>
+              <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">805384.23</td>
+              <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">555.00</td>
+            </tr>
+            <tr class="fw-bold table-warning">
+              <td style='font-weight:bold;background-color:#FFF3CD;' class="text-start">Amount TOTAL</td>
+              <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">706985</td>
+                <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">806557</td>
+              <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">1513542</td>
+                <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">528141</td>
+              <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">13749</td>
+              <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">8283</td>
+              <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">805384</td>
+              <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end">805384</td>
+              <td style='font-weight:bold;background-color:#FFF3CD;' class="text-end"></td>
+            </tr>
+          </tbody>
+        </table>

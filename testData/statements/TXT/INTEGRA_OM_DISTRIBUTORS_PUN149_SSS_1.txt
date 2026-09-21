@@ -1,0 +1,30 @@
+01/08/26 15:05:44          PAGE: 1
+                    OM DISTRIBUTORS,JALGAON
+                    INTEGRA*DIV:LINUX LABORATORIES
+STOCK & SALE REPORT FROM 01/07/26 TO 31/07/26 (Based on delivery dates)
+--------------------------------------------------------------------------
+ITEM NAME               BOX    PACK    OPQTY  P_QTY  REPL   S_QTY  B_QTY
+==========================================================================
+DIVISION NAME : INTEGRA*DIV:LINUX LABORATORIES
+
+DUBIZ TAB 10'           10X10' 10'        21      0      0      0     21
+ETORIFLEX MR-4 TAB 10'  10X10' 10'        35      0      0     16     19
+OXVUN 100MG.TAB 10'     10X10' 10'        12      0      0      0     12
+PREGALIFT-D 50/20 CAPS  10X10' 10'        24      0      0      0     24
+PREGALIFT-D 75/20 CAPS  10X10' 10'        19      0      0      0     19
+PREGALIFT-D 75/30 CAPS  10X10' 10'        17      0      0     12      5
+REXITE SYP.200ML.       10X200 200ML.      2      0      0      0      2
+SERMIND 25MG.TAB 10'    10X10' 10'        10      0      0      0     10
+TADASURE-10MG.TAB 10'   10X10' 10'         1      0      0      0      1
+TADAZA TAB 4'           10X04' 4'         10      0      0      0     10
+TRIPTAZ 10MG.TAB 10'    10X10' 10'        35      0      4      0     39
+TRIPTAZ 25MG.TAB 10'    10X10' 10'        15      0      0      0     15
+VERTIREST-16MG.TAB 10'  10X10' 10         21      0      0      2     19
+VERTIREST-16MG.TAB 15'  10X15' 15'        66      0      0      0     66
+VERTIREST-8MG.TAB 10'   10X10' 10'        60      0      0      0     60
+VERTIREST-OD 24MG.TAB 1 10X10' 10'        36      0      0      2     34
+VERTIREST-OD 48MG.TAB 1 10X10' 10'        28      0      0      4     24
+==========================================================================
+                                      OP_VAL     P_VAL         S_VAL    B_VAL
+TOTAL AMOUNT                           51285         0          6264    44503
+==========================================================================

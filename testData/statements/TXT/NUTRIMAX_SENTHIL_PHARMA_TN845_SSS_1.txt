@@ -1,0 +1,52 @@
+SENTHIL PHARMA - 612001                                    
+Stock & Sales Report From 01/07/2026 To 31/07/2026
+Company Name : LINUX-NUTRIMAX DIVISION 
+=================================================================================================
+No   Product Name              Pack        Opstk           Pur      Sale        CurStk    StkVal 
+=================================================================================================
+1   ANTICLAV 375 TAB          6`S           0+0             -         -           0+0         - 
+2   ANTICLAV 625 TAB          6`S           0+0             -         -           0+0         - 
+3   ASCLIN P TAB              10            0+0             -         -           0+0         - 
+4   BECOSTAR DROPS            15ML          0+0             -         -           0+0         - 
+5   BECOSTAR G CAP            10`s         78+0            43      48+9          64+0   9560.32 
+6   BECOSTAR SYP              200ML         0+0             -         -           0+0         - 
+7   BECOSTAR TAB              15`S         29+0            20      10+2          37+0   2884.89 
+8   BONTRIX TAB               10`S         10+0             -         -           0+0         - 
+9   CELONG TAB                10           48+0            98      75+4          67+0   3684.33 
+10  CLOBANIL MD 5MG TAB       10           30+0             -         -          30+0   1275.00 
+11  FERIZAC IV -5ML           5 ml          0+0             -         -           0+0         - 
+12  FERIZAC SYP               200ML         0+0             -         -           0+0         - 
+13  FERIZAC TAB               10`S          0+0             -         -           0+0         - 
+14  FEXINEX 100DT             10`S          0+0             -         -           0+0         - 
+15  FEXINEX 200 DT            10`S          0+0             -         -           0+0         - 
+16  FEXINEX DRY SYP           30ML          0+0             -         -           0+0         - 
+17  FLAMCOR SYRUP             30ML          0+0             -         -           0+0         - 
+18  FLAMCOR TAB               10            0+0             -         -           0+0         - 
+19  FOLITE TAB                10`S          0+0             -         -           0+0         - 
+20  LIN-FCM IV                10 ML         0+0             -         -           0+0         - 
+21  LINCIPARA 100ML IV        100ml         0+0             -         -           0+0         - 
+22  MACROZAC 250MG            6`S           0+0             -         -           0+0         - 
+23  MACROZAC 500MG            3`S           0+0             -         -           0+0         - 
+24  MONTGOLD KID              10`S          0+0             -         -           0+0         - 
+25  MONTGOLD TAB              10`S          0+0             -         -           0+0         - 
+26  MYOCETAMOL TAB            10`S         74+0           110      90+6          88+0   6061.44 
+27  PHYSIOLYTE  500ML INJ     500 ML       41+0            45        41          45+0   4050.00 
+28  RABELIN D CAP             10`S          0+0             -         -           0+0         - 
+29  RDL C10 CAP               10`S         16+0             -         -          16+0   2020.66 
+30  RDL C5 CAP                10            0+0             -         -           0+0         - 
+31  SERLINUX TAB              10            0+0             -         -           0+0         - 
+32  STERIGLU 100 ML IV        100ML         0+0             -         -           0+0         - 
+33  STERIMINO  10% IV 200ML   200ML        30+0             -         -          15+0   3975.00 
+34  TYPIDOL 1.5MG TAB         10`S          0+0             -         -           0+0         - 
+35  TYPIDOL 5MG TAB           10`S          0+0             -         -           0+0         - 
+36  ZINCDRIP 10ML INJ         10ML         30+0             -         -          15+0   4500.00 
+-------------------------------------------------------------------------------------------------
+    Total                                   386           316       264           377         - 
+-------------------------------------------------------------------------------------------------
+Opg.Stk Val:    47784.07 Purc.Value: :    22533.36 Sales Value::    31785.37
+Cl.Stk Val:     38011.64 Pur.RetVal ::    10059.00 SalRet Val: :        0.00
+                                     :             NetSal(GVal):    31785.37
+Oth.SalVal:         0.00 Tran.Stk.IN::        0.00 Tran.Stk.Out:        0.00
+-------------------------------------------------------------------------------------------------
+                                       *** END OF REPORT ***
+

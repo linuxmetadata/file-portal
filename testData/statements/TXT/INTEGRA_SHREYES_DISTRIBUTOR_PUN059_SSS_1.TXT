@@ -1,0 +1,71 @@
+
+                                                                                  
+ SHREYES DISTRIBUTOR                              Page : 1
+ SHOP NO.1,AMBIANCE 999,SADASHIV PETH,            From : 01/07/26  To : 31/07/26
+ PUNE-411030.                                     Date :  1-Aug-2026
+ Company Name : LINUX LABORATORIES-INTEGRA    
+
+ STOCK & SALE STATEMENT 
+ -----------------------------------------------------------------------------------------------
+ SNo Particulars                OPstk   Pur StkIn Sale  UCS.  StkOt ClStk SaleValue  Stock Value
+ -----------------------------------------------------------------------------------------------
+   1 CARBANERVE 150MG    10 TAB    10     0     0     0     0     0    10       0.00     454.50
+   2 CARBANERVE 300 TAB 1.         28     0     0     0     0     0    28       0.00    2350.88
+   3 CARBANERVE 450 TAB 1.          0     0     0     0     0     0     0       0.00       0.00
+   4 DUBIZ TAB 10'S      10'S      20     0     0     0     0     0    20       0.00    1564.80
+   5 ECITANE TAB 10'S    10 TAB    30     0     0     0     0     0    30       0.00     305.70
+   6 ETORIFLEX MR 8MG TAB.         18     0     0     2     0     0    16     389.44    3115.52
+   7 ETORIFLEX MR-4      10TAB      6     0     0     0     0     0     6       0.00    1010.94
+   8 IDEBEST 45MG TAB 10'.         50     0     0     6     0     0    44     942.36    6910.64
+   9 LACOVE 100MG TAB 10'.         18     0     0     0     0     0    18       0.00    1765.80
+  10 LACOVE 150MG TAB 10'.          0     0     0     0     0     0     0       0.00       0.00
+  11 LACOVE 200MG TAB 10'.          0     0     0     0     0     0     0       0.00       0.00
+  12 LACOVE 50MG TAB 10'S.         13    10     0    17     0     0     6     947.07     334.26
+  13 LINOTRIL 0.25MG TAB .         32     0     0     4     0     0    28      60.48     423.36
+  14 LINOTRIL 0.5MG TAB 1.         45     0     0     0     0     0    45       0.00    1174.50
+  15 LINOTRIL-2MG        10TAB      0     0     0     0     0     0     0       0.00       0.00
+  16 LIPOSERIN CAP 10'   .         20     0     0     2     0     0    18    1002.66    9023.94
+  17 LURASTAR 40MG TAB   10'S      13     0     0     5     0     0     8     561.60     898.56
+  18 LURASTAR 80MG TAB 10.         15     0     0     3     0     0    12     562.11    2248.44
+  19 OXVUN 100MG TAB 10'S.         12    20     0    30     0     0     2    7010.70     467.38
+  20 OXVUN 25MG TAB 10'S .          0     0     0     0     0     0     0       0.00       0.00
+  21 OXVUN 50MG TAB 10'S .          0     0     0     0     0     0     0       0.00       0.00
+  22 OXVUN ER 100MG 10TAB.         30     0     0     0     0     0    30       0.00    7010.70
+  23 OXVUN ER 150 MG 10'S.          0    20     0     0     0     0    20       0.00    5485.60
+  24 PREGALIFT D-50/20 CA.          2    30     0    12     0     0    20    1257.36    2095.60
+  25 PREGALIFT D-75/20 CA.          5    30     0    15     0     0    20    2448.00    2973.80
+  26 PREGALIFT D-75/30 CA.         15     0     0    15     0     0     0    2691.85       0.00
+  27 QUTIWEL 100 TAB 10'S.         21     0     0    13     0     0     8     904.80     507.60
+  28 QUTIWEL 25 TAB 10'S .         21     0     0     9     0     0    12     234.90     313.20
+  29 QUTIWEL 50 TAB 10'S .         17     0     0     0     0     0    17       0.00     900.49
+  30 QUTIWEL SR 200MG TAB.          0     0     0     0     0     0     0       0.00       0.00
+  31 QUTIWEL SR 50MG     10 TAB     0     0     0     0     0     0     0       0.00       0.00
+  32 QUTIWELL SR 100MG TA10 TAB     0     0     0     0     0     0     0       0.00       0.00
+  33 REXITE PLUS INJ     2ML        0     0     0     0     0     0     0       0.00       0.00
+  34 REXITE SYRUP 200ML  .         30     0     0     1     0     0    29     192.89    5593.81
+  35 RIBOTAB M 10'S      .         30    30     0    60     0     0     0   12301.80       0.00
+  36 SERMIND 100MG TAB 1010'S      26     4     6     0     0     0    36       0.00    3594.24
+  37 SERMIND 25MG TAB    10'S      61     0     1    31     0     0    31    1235.04    1125.61
+  38 SERMIND 50MG TAB 10'10'S      57     8     0    27     0     0    38    1948.59    2498.88
+  39 TADASURE 10MG       1's       31     0     0     0     0     0    31       0.00     836.38
+  40 TADASURE 20MG       1's       38     0     0     0     0     0    38       0.00    1270.34
+  41 TADASURE 5 TAB 10'S .          0     0     0     0     0     0     0       0.00       0.00
+  42 TADAZA TAB 4'S      .          9     0     0     0     0     0     9       0.00    1710.81
+  43 TOPITAB 100MG TAB'S 10*10      0     0     0     0     0     0     0       0.00       0.00
+  44 TOPITAB 25 TAB 10'S 10'S      14     0     0     0     0     0    14       0.00     536.34
+  45 TOPITAB 50MG TAB 10'10*10     30     0     0     0     0     0    30       0.00    2275.80
+  46 TRIPTAZ 10 TAB 10'S .         22     0     0     0     0     0    22       0.00     390.72
+  47 TRIPTAZ 25 TAB 10'S .         11     0     0     3     0     0     8      55.20     147.20
+ 
+ Company Name : LINUX LABORATORIES-INTEGRA    
+
+ STOCK & SALE STATEMENT 
+ -----------------------------------------------------------------------------------------------
+ SNo Particulars                OPstk   Pur StkIn Sale  UCS.  StkOt ClStk SaleValue  Stock Value
+ -----------------------------------------------------------------------------------------------
+  48 TRIPTAZ 75 TAB      10 TAB     0     0     0     0     0     0     0       0.00       0.00
+  49 VERTIREST 16 TAB 10'.          0     0     0     0     0     0     0       0.00       0.00
+  50 VERTIREST 8 TAB 10'S.          0     0     0     0     0     0     0       0.00       0.00
+ -----------------------------------------------------------------------------------------------
+                      Value of :: OpStk:  79533.05                          34746.85   71316.34
+ -----------------------------------------------------------------------------------------------

@@ -1,0 +1,56 @@
+CH     M
+                    DEEPAA  AGENCIES - ERODE
+                    ================================================                        Page: 1
+ STOCK AND SALES STATEMENT FOR THE MONTH OF JULY '2026                Run Date:31/07/2026   23:05:07
+ ====================================================================================================
+  PRODUCT NAME               OPEN  REC-  ADJ   ADJ TOTAL SALES CLOSE   ORD.QTY  EXCES    JUN      MAY
+                            STOCK  EIPT  (-)   (+) STOCK   QTY STOCK  (  1.00)  VALUE  SALES    SALES
+ ====================================================================================================
+SUP:LINUX LABORATORIES PVT LTD MFR:ZX LINUX - (ACUTECARE)
+ ====================================================================================================================
+ ANTICLAV 375MG TABS.  6'S      0     0    0   0       0     0     0        0             0        0
+ ASCLIN P TABS.       10'S     36    40    0   0      76    35    41       -6    247     16       25
+ ANTICLAV 625MG TABS.  6'S      0     0    0   0       0     0     0        0             0        0
+ BECOSTAR DROPS.      15ML      0     0    0   0       0     0     0        0             0        0
+ BECOSTAR G CAPS.     10'S     40    80    0   1     121    74    47       27            78       45
+ BONTRIX TABS.        10'S     48    30    0   0      78    25    53      -28   5410     51       29
+ BECOSTAR SYRUP.     200ML      0     0    0   1       1     0     1       -1    106      0        0
+ BECOSTAR TABS.       15'S     43   110    0   0     153    85    68       17            66       63
+ CELONG TABS.         10'S     38    24    0   0      62    47    15       32            26       41
+ FEXINEX 200 DT TABS. 10'S      0     0    0   0       0     0     0        0             0        0
+ FEXINEX 100 DT TABS. 10'S      0     0    0   0       0     0     0        0             0        0
+ FOLITE 5MG TABS.     10'S     14    30    0   0      44    20    24       -4     49     23       10
+ FEXINEX DS DRY SYP.  30ML      0     0    0   0       0     0     0        0             0        0
+ FERIZAC SYRUP.      200ML     15     0    0   0 #    15     4    11       -7    800      1        6
+ FLAMCOR SUSP.        30ML      4     0    0   0       4     0     4       -4    219      0        0
+ FLAMCOR 6MG TABS.    10'S     48     0    0   0 #    48    16    32      -16   1766      4       35
+ FERIZAC TABS.        10'S     24     0    0   3      27     9    18       -9    804      9       21
+ MACROZAC 500MG TABS.  3'S      0     0    0   0       0     0     0        0             0        0
+ MONTGOLD KID TABS.   10'S      0     0    0   0       0     0     0        0             0        0
+ MONTGOLD TABS.       10'S     12    10    0   0      22     7    15       -8    808     10       11
+ MACROZAC 250MG TABS.  6'S      0     0    0   0       0     0     0        0             0        0
+ MYOCETAMOL TABS.     10'S     21    20    0   0 #    41    36     5       31             9       17
+ RABELIN D CAPS.      10'S     47    80    0   0     127    49    78      -29   2793     80       32
+ RABELIN 20MG TABS.   10'S     67   100    4   0     163   106    57       49           103       80
+ SERLINUX TABS.       10'S      0     0    0   0       0     0     0        0             0        0
+ TYPIDOL 1.5MG TABS.  10'S      0     0    0   0       0     0     0        0             0        0
+ TYPIDOL 5MG TABS.    10'S      0     0    0   0       0     0     0        0             0        0
+ ----------------------------------------------------------------------------------------------------
+  Cl.Stk Value   Ex.Stk.Value    JUL-SALES      JUN-SALES      MAY-SALES
+      46625.78       13006.49     50805.63       54572.90       44413.52
+ PERUM-----------------------------------------------------------------------------------------------
+ - Excess Stock     ORDER DATE:03/08/2026  TIME:3.30PM  
+  
+     ----- SALES NOT ACCOUNTED FOR ORDER QTY ----
+ SHORT EXPIRY PRODUCTS 
+ Product Name              Qty  ExpDt    M.R.P
+ BECOSTAR SYRUP.     200ML   1  10-26   139.20
+  
+ LONG PENDING CLAIMS AS ON 31/07/26                                                Page: 1 
+------------------------------------------------------------------------------------------------
+   Referance No. / Date   Claim Type Amount Sent Throu /Referance & Date    C/R Ref.No.Dt Amount
+ ---------------------------------------Rs.------------------------------------------------------
+ 68518           10/05/26 Exp/Br/Sp    2946 COURIER    18901665  01.06.2026CN 836/24.06.2026        20812
+ 68964           11/06/26 Exp/Br/Sp    1363 COURIER    18914163  01.07.2026                       
+ 69400           15/07/26 Exp/Br/Sp    2352                                                       
+                         TOTAL   Rs.   6662                                                20812

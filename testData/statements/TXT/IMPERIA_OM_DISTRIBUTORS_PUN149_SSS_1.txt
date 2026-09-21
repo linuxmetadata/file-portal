@@ -1,0 +1,60 @@
+01/08/26 15:05:13          PAGE: 1
+                    OM DISTRIBUTORS,JALGAON
+                    IMPERIA*DIVN:LINUX LABORATORIE
+STOCK & SALE REPORT FROM 01/07/26 TO 31/07/26 (Based on delivery dates)
+--------------------------------------------------------------------------
+ITEM NAME               BOX    PACK    OPQTY  P_QTY  REPL   S_QTY  B_QTY
+==========================================================================
+DIVISION NAME : IMPERIA*DIVN:LINUX LABORATORIE
+
+BRITAM INJ.5ML.         10X5ML 5ML.       28      0      0      0     28
+BRITAM SR 100 TAB 15'   10X15' 15'        39     50      0     33     56
+BRITAM SYP.100ML.       25X100 100ML.     11      0      0      5      6
+BRITAM-100 TAB 10'      10X10' 10'        30      0      0      0     30
+BRITAM-25MG.TAB 10'     10X10' 10'        22      0      0      0     22
+BRITAM-50MG.TAB 10'     10X10' 10'        -1      0      0      0     -1
+BRITAM-50MG.TAB 15'     10X15' 15'       111     50     30    116     75
+BRITAM-75MG.TAB 10'     10X10' 10'        35      0      0      0     35
+CITALIN FORTE TAB 10'   10X10' 10'         2      0      0      0      2
+CITALIN PLUS TAB 10'    10X10' 10'        14      0      0      0     14
+CITALIN-10MG.TAB 10'    10X10' 10'         7      0      0      0      7
+CITALIN-20MG.TAB 10'    10X10' 10'        27      0      3      0     30
+CITALIN-5MG.TAB 10'     10X10' 10'        27      0      0      0     27
+CLOBANIL 10MG.TAB 10'   10X10' 10'        23      0      2     12     13
+CLOBANIL 5MG.TAB 10'    10X10' 10'        22      0      2      6     18
+COGNITAM 800MG.TAB 10'  10X10' 10'        73      0      0     39     34
+COGNITAM INJ.15ML.      10X15M 15ML.      88      0      0     39     49
+COGNITAM PLUS TAB 10'   10X10' 10'        42      0      6     26     22
+COGNIVEL TAB 10'        10X10' 10'        47      0      5     33     19
+COGNIVEL-D TAB 10'      10X10' 10'        21     20      0     16     25
+IGNICAR DS PLUS SYP.150 10X150 150ML.     13      8      0      6     15
+IGNICAR SYP.200ML.      10X200 200ML.     18      6      2     25      1
+IGNICAR TAB 10'         10X10' 10'        31      0      0      2     29
+IGNICAR-400 TAB 10'     10X10' 10'        69      0      9     26     52
+LINSOL INFUSION 100ML.  24X100 100ML.    189    151    124    438     26
+MELANCO 25MG.TAB 10'    10X10' 10'        15      0      0      0     15
+MELANCO 50MG.TAB 10'    10X10' 10'        20      0      0      0     20
+PATINEX 12.5MG.TAB 10'  10X10' 10'        17     10      0      9     18
+PATINEX 37.5MG.TAB 10'  10X10' 10'        20      0      0      0     20
+PREGALIFT NT TAB 15'    10X15' 15'        69     20     11     84     16
+PREGALIFT PLUS TAB 15'  10X15' 15'        54     20      0     38     36
+PREGALIFT-ER 50MG.TAB 1 10X10' 10'        24      0      0      0     24
+PREGALIFT-ER 75MG.TAB 1 10X10' 10'         5      0      0      0      5
+PREGALIFT-ER 75MG.TAB 1 10X15' 15'        30      0      4      0     34
+PREGALIFT-NT TAB 10'    10X10' 10'        14      0      0      0     14
+REXITE D3 TAB 10'       10X10' 10'         7      0      0      0      7
+REXITE D3 TAB 15'       10X15' 15'        58      0      0      2     56
+REXITE PFS 1ML.         10XPFS PFS        74      0      5     12     67
+REXITE PLUS CAPS 15'    10X15' 15'       110      0      1     28     83
+REXITE PLUS INJ.2ML.    5X2ML. 2ML.       32      0      2     30      4
+REXITE-BT TAB 10'       10X10' 10'        10      0      0      0     10
+REXITE-BT TAB 15'       10X15' 15'         8      0      0      0      8
+RISCURE 1MG.TAB 10'     10X10' 10'        10      0      0      0     10
+VORTICA-20MG.TAB 10'    10X10' 10'        20      0      0      0     20
+ZOLCALM-10MG.TAB 10'    10X10' 10'         6      0      0      0      6
+ZOLCALM-10MG.TAB 15'    10X15' 15'       152      0      0     14    138
+ZOLCALM-5MG.TAB 15'     10X15' 15'       129     60     18     95    112
+==========================================================================
+                                      OP_VAL     P_VAL         S_VAL    B_VAL
+TOTAL AMOUNT                          375507     74903        191273   266865
+==========================================================================

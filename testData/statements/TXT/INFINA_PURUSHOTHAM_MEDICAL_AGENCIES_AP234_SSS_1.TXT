@@ -1,0 +1,54 @@
+CHM
+          PURUSHOTHAM MEDICAL AGENCIES
+E                                    Stock & Sales StatementF
+From 01/07/2026 To 31/07/2026                                                        Page : 1
+------------------------------------------------------------------------------------------------
+Product Name                 Packing  O.Stk    Purc      Tot    Sale     Qoh        Value  Age
+------------------------------------------------------------------------------------------------
+Company :LINUX(INFINA)        
+----------------------
+ARIDAY 10 MG                 10S         60       0       60       0      60      6210.67  110 
+ARIDAY 15 MG                 10           0       0        0       0       0         0.00 2424 
+ARIDAY 2.5 MG                10S         80       0       80       0      80      2920.68  110 
+ARIDAY 5 MG                  10S         40       0       40       0      40      2256.66  110 
+BENFICA FORTE CAPS           15S         10       1       11      11       0         0.00   10 
+BENFICA TAB                  10S         15       0       15       0      15      1540.67  125 
+CARNIGLO M TAB               15S         40       0       40       0      40     10666.85   41 
+COGNIZA ING 60MG             VILAS        0       0        0       0       0         0.00 1528 
+COGNIZA TAB                  10S          0       0        0       0       0         0.00 1470 
+EPITRA RTU 1000MG ING        SINGLE     100       0      100      45      55      7706.16   69 
+GABAGESIC 100 MG             10S         15       0       15       0      15      1261.42  130 
+GABAGESIC 300MG              15S          6       0        6       6       0         0.00   41 
+GABAGESIC GEL(30GM)          30GM         0       0        0       0       0         0.00  484 
+GABAGESIC GEL(50GM)          50GM        13       0       13      13       0         0.00   69 
+GABAGESIC NT 100 MG          15S         48       0       48       4      44      5179.48  146 
+GABAGESIC NT 400 MG          15S         28       0       28       0      28      8121.46  251 
+GABAGESIC PLUS TAB           10S         16      30       46      16      30      3663.45    9 
+LIVIZ TAB                    10S          0       0        0       0       0         0.00  550 
+METHONAC EVT                 10S         30       0       30       0      30      5871.92  146 
+METHONAC TAB                 10S          0      20       20       2      18      2890.00    9 
+MITRAZAC 15 MG               10S          0       0        0       0       0         0.00 2424 
+MITRAZAC 7.5 MG              10S          0       0        0       0       0         0.00 2321 
+OLINSTAB 10 MG               10S          0       0        0       0       0         0.00 2411 
+OLINSTAB 2.5 MG              10s          0       0        0       0       0         0.00 2103 
+OLINSTAB 5 MG                10S          0       0        0       0       0         0.00 2411 
+OLINSTAB F TAB               10S         10       0       10       0      10       803.57  307 
+PALMIDA TAB                  15S         32       0       32       0      32     11758.20   41 
+PRONATE 10 MG                10s          0       0        0       0       0         0.00  530 
+PRONATE 40 MG                10S          0       0        0       0       0         0.00  530 
+PRONATE EZ TAB               10S         30       0       30       0      30      1769.04   41 
+PRONATE F TAB                10S         20       0       20       0      20      1918.77  110 
+PRONATE TR 40 MG             10S          0       0        0       0       0         0.00  484 
+QLINO TAB                    10S         30       0       30       0      30     14016.24  110 
+VALEPTOL 500 MG              10s          0       0        0       0       0         0.00 2532 
+VALEPTOL CR 300MG            10S          0       0        0       0       0         0.00 2041 
+VALEPTOL CR 500 MG           10s          0       0        0       0       0         0.00 1779 
+VALEPTOL SYP                 100ML        0       0        0       0       0         0.00  579 
+VENLITE CZ 100 MG            10S         60       0       60       6      54     11815.71   94 
+VENLITE CZ 50MG              10S         63       0       63      11      52      3054.65   41 
+VENLITE OD 50 MG             10S          0       0        0       0       0         0.00  191 
+------------------------------------------------------------------------------------------------
+Opening Value  :   121500.24 Sale Value    :    19608.61 
+Purchase Value :     6874.56 Closing Value :   103425.58 
+------------------------------------------------------------------------------------------------
+P

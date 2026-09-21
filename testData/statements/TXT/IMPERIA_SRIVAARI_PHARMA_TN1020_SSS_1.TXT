@@ -1,0 +1,60 @@
+
+SRIVAARI PARMA,POLLACHI.                          COMPANY: LINUX IMPERIA                 
+STOCK & SALES STATEMENT AS ON 31/07/2026                                   Page No.    1
+-------------------------------------------------------------------------------------------
+PRODUCT NAME       PACKG OPENING  RECEIPT   <-----SALES---->  ADJMT   CLOSING   CLOSING AGE
+                           QTY   QTY  FREE  LAST   QTY  FREE  STOCK  QTY  FREE   VALUE DAYS
+-------------------------------------------------------------------------------------------
+BRITAM 100MG TAB   10'S     10    10     -    60     5     1          14     -    3896    2
+BRITAM 25MG TAB    10'S     57     -    20    42    25     5          47     -    3265   13
+BRITAM 50MG TAB    15'S     99    80    51    61   120    24          86     -   16910    2
+BRITAM SYP         100ML     -     -     -     -     -     -           -     -       -     
+CALMTRA 10MG TAB   10'S     18     -     -     -     -     -          18     -     732  139
+CALMTRA 5MG        10'S     10     -     -     -     -     -          10     -     300  122
+CITALIN 10MG TAB   10'S     20    70     -    24    50     6          34     -    3684    2
+CITALIN 20MG TAB   10'S      7     -     -     -     -     -           7     -     805  239
+CITALIN 5MG TAB    10'S     72     -     -    30     -     -          72     -    4355   44
+CITALIN FORTE TAB  15'S     58     -    20    78    20     4          54     -    9607   13
+CITALIN LITE TAB   10'S     14     -     -    16     5     -           9     -     779   32
+CITALIN PLUS TAB   10'S     14    39     1    12    35     7          12     -     855    9
+CLOBANIL 10MG TAB  10'S      -     -     -     -     -     -           -     -       -     
+CLOBANIL 5MG TAB   10'S      -     -     -     -     -     -           -     -       -     
+COGNITAM 400MG TAB 10'S      -     -     -     -     -     -           -     -       -     
+COGNITAM 800MG     10        -     -     -     -     -     -           -     -       -     
+COGNITAM INJ       60ML    150    80     -    56   130    48          52     -   20933    2
+COGNITAM INJ 15ML  5'S     102     -     -    78    50    10          42     -    4654   31
+COGNITAM PLUS TAB  10'S     31   130   100   246   110    30         121     -   60713    2
+COGNITAM SYP       100ML     -    30     -    30    20     4           6     -    1279    2
+COGNIVEL TAB       10'S      -     -     -     -     -     -           -     -       -     
+COGNIVEL-D TAB     10        -     -     -     -     -     -           -     -       -     
+IGNICAR DS PLUS SY 150ML    13     -     -     -     -     -          13     -   13159   34
+IGNICAR SYP        200ML    23    20     -    30    31     6           6     -    4136    2
+IGNICAR TAB        10'S     40     -    50    78    35     7          48     -   16713   13
+JOYPRIDE 100MG TAB 10'S      -     -     -     -     -     -           -     -       -     
+LINSOL IV INJ      100ML    55     -     -    56     -     -          55     -    8292   34
+MELANCO 75MG TAB   10'S      -     -     -     -     -     -           -     -       -     
+PREGALIFT ER 50MG  15'S      7     -    10    50     2     -          15     -    1604   13
+PREGALIFT ER 75MG  15'S      4     -     -     -     -     -           4     -     681   65
+PREGALIFT ER 75MG  15'S     12     -     -     -     -     -          12     -    2011   84
+PREGALIFT NT TAB   15'S      -     -    10    10     1     -           9     -    2179   13
+PREGALIFT PLUS TAB 15'S      7    40     -    26    20     6          21     -    5352    2
+REXITE BT TAB      10'S      -     -     -     -     -     -           -     -       -     
+REXITE D3 TAB      15'S     21   120    10    17    59    10          82     -   15702   13
+REXITE PFS INJ     1ML     100   100     -    96    99    19          82     -   12109   13
+REXITE PLUS CAPS   15'S     47   380     -   463   240    90          97     -   22872    2
+REXITE PLUS INJ    2ML      69   101     -    31    75    21          74     -    6303   13
+RISCURE 2MG TAB    10        -     -     -     -     -     -           -     -       -     
+RISCURE FORTE TAB  10'S      -     -     -     -     -     -           -     -       -     
+RISCURE LS TAB     10'S      -     -     -     -     -     -           -     -       -     
+RISCURE PLUS TAB   10'S      -     -     -     -     -     -           -     -       -     
+VORTICA 10MG TAB   10'S      -     -     -     -     -     -           -     -       -     
+VORTICA 20MG TAB   10'S     14     -     -     -     -     -          14     -    3354  202
+VORTICA 5MG TAB    10'S      -     -     -     -     -     -           -     -       -     
+ZOLCALM 10MG TAB   15'S     44   110     -    80    95    12          47     -    6112    2
+ZOLCALM 5MG TAB    15'S     35   130     -    75   101    18          46     -    4309    2
+* ---> Non Moving Products Above 30 Days
+-------------------------------------------------------------------------------------------
+OPENING VALUE      :     2,38,573.75  PURCHASE VALUE   :     3,19,031.92
+SALES VALUE        :     3,29,489.40  CLOSING VALUE    :     2,57,654.16
+LAST MONTH SALES   :     3,78,845.52  TRANSIT VALUE    :            0.00
+-------------------------------------------------------------------------------------------

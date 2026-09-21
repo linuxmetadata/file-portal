@@ -1,0 +1,956 @@
+/**
+ * ============================================================
+ * SINGLE ROW TXT HEADER EXTRACTOR
+ * ============================================================
+ *
+ * NEW / INDEPENDENT PROCESS
+ *
+ * Purpose:
+ *   - Read a TXT statement
+ *   - Find a SINGLE physical header row
+ *   - Preserve the original header text
+ *   - Detect exact header token positions
+ *   - Determine the first probable data row
+ *
+ * IMPORTANT:
+ *   - Does NOT extract data values
+ *   - Does NOT map common fields
+ *   - Does NOT modify the existing TXT extractor
+ *   - Does NOT modify headerMapperTXT.js
+ *   - Does NOT calculate or infer numeric values
+ *
+ * ============================================================
+ */
+
+const fs = require("fs");
+const path = require("path");
+
+// ============================================================
+// HEADER TOKEN DEFINITIONS
+// ============================================================
+
+const HEADER_TOKENS = [
+    "PRODUCT NAME",
+    "PRODUCTNAME",
+    "PRODUCT",
+    "ITEM NAME",
+    "ITEMNAME",
+    "MEDICINE NAME",
+    "MEDICINE",
+    "DESCRIPTION",
+    "PARTICULARS",
+
+    "PACKING",
+    "PACK",
+    "PACKG",
+    "PACKSIZE",
+    "BOX",
+
+    "O.STK",
+    "OP.STK",
+    "OPSTK",
+    "OPENING",
+    "OPENING BAL",
+    "OPNG.BAL",
+    "O.BAL",
+    "O.B",
+    "OPQTY",
+
+    "PURC",
+    "PURCHASE",
+    "P.QTY",
+    "PQTY",
+    "PUR",
+    "PUR.",
+    "RECEIPT",
+    "RECEIPTS",
+    "RCPT",
+    "RECD.",
+
+    "TOT",
+    "TOTAL",
+    "TOTALS",
+
+    "SALE",
+    "SALES",
+    "S.QTY",
+    "SQTY",
+
+    "QOH",
+    "QTY",
+    "CLOSING",
+    "C.STOCK",
+    "CL.ST",
+    "CLSTK",
+    "CL.BAL",
+    "CURSTK",
+
+    "VALUE",
+    "STKVAL",
+    "STOCK VALUE",
+    "STOCKVAL",
+
+    "AGE",
+    "DAY",
+
+    "REPL",
+    "REPLACEMENT",
+
+    "FREE",
+    "ADJ",
+    "ADJUSTMENT",
+
+    "P.RE",
+    "S.RE",
+    "PUR.RET",
+    "SAL.RET",
+
+    "ITEM CODE",
+    "ITEMCODE",
+    "HSNCODE",
+    "HSN CODE",
+
+    "SNO",
+    "NO",
+
+    "SALEVALUE",
+    "SALESVALUE"
+];
+
+// ============================================================
+// NORMALIZE LINE
+// ============================================================
+
+function normalizeLine(value) {
+    return String(value ?? "")
+        .replace(/\r/g, "")
+        .replace(/\t/g, " ")
+        .replace(/\u00A0/g, " ");
+}
+
+// ============================================================
+// NORMALIZE TOKEN FOR COMPARISON
+// ============================================================
+
+function normalizeToken(value) {
+    return String(value ?? "")
+        .toUpperCase()
+        .replace(/[.,:;()[\]{}]/g, "")
+        .replace(/\s+/g, "")
+        .trim();
+}
+
+// ============================================================
+// CHECK IF TOKEN LOOKS LIKE A HEADER TOKEN
+// ============================================================
+
+function isKnownHeaderToken(value) {
+    const normalized = normalizeToken(value);
+
+    if (!normalized) {
+        return false;
+    }
+
+    return HEADER_TOKENS.some(
+        token => normalizeToken(token) === normalized
+    );
+}
+
+// ============================================================
+// TOKENIZE A FIXED-WIDTH HEADER
+//
+// IMPORTANT:
+// We preserve the character position of every token.
+//
+// Example:
+//
+// Product Name                 Packing  O.Stk    Purc
+//
+// Product Name -> position 0
+// Packing      -> position 29
+// O.Stk        -> position 38
+// Purc         -> position 47
+// ============================================================
+
+function tokenizeHeader(line) {
+
+    const text = normalizeLine(line);
+
+    const tokens = [];
+
+    const regex = /\S(?:.*?\S)?(?=\s{2,}|$)/g;
+
+    let match;
+
+    while ((match = regex.exec(text)) !== null) {
+
+        const raw = match[0];
+
+        const trimmed = raw.trim();
+
+        if (!trimmed) {
+            continue;
+        }
+
+        const leadingSpaces =
+            raw.search(/\S/);
+
+        const position =
+            match.index + leadingSpaces;
+
+        tokens.push({
+            text: trimmed,
+            position,
+            end: position + trimmed.length,
+            normalized: normalizeToken(trimmed),
+            known: isKnownHeaderToken(trimmed)
+        });
+    }
+
+    /*
+     * The regex above intentionally prefers fixed-width spacing.
+     *
+     * Some TXT statements may have headers separated by only one
+     * space. In that case, perform a fallback scan using known
+     * header phrases.
+     */
+
+    if (tokens.length < 2) {
+
+        const fallbackTokens = [];
+
+        const upperLine = text.toUpperCase();
+
+        const candidates =
+            [...HEADER_TOKENS]
+                .sort((a, b) => b.length - a.length);
+
+        const usedRanges = [];
+
+        for (const candidate of candidates) {
+
+            const upperCandidate =
+                candidate.toUpperCase();
+
+            let start = 0;
+
+            while (true) {
+
+                const index =
+                    upperLine.indexOf(
+                        upperCandidate,
+                        start
+                    );
+
+                if (index === -1) {
+                    break;
+                }
+
+                const end =
+                    index + upperCandidate.length;
+
+                const overlaps =
+                    usedRanges.some(range =>
+                        index < range.end &&
+                        end > range.start
+                    );
+
+                if (!overlaps) {
+
+                    /*
+                     * Require reasonable token boundaries.
+                     */
+                    const before =
+                        index === 0
+                            ? " "
+                            : upperLine[index - 1];
+
+                    const after =
+                        end >= upperLine.length
+                            ? " "
+                            : upperLine[end];
+
+                    const validBefore =
+                        /\s/.test(before);
+
+                    const validAfter =
+                        /\s/.test(after);
+
+                    if (validBefore && validAfter) {
+
+                        fallbackTokens.push({
+                            text: text.slice(index, end).trim(),
+                            position: index,
+                            end,
+                            normalized:
+                                normalizeToken(
+                                    text.slice(index, end)
+                                ),
+                            known: true
+                        });
+
+                        usedRanges.push({
+                            start: index,
+                            end
+                        });
+                    }
+                }
+
+                start = index + 1;
+            }
+        }
+
+        fallbackTokens.sort(
+            (a, b) => a.position - b.position
+        );
+
+        if (fallbackTokens.length > tokens.length) {
+            return fallbackTokens;
+        }
+    }
+
+    return tokens;
+}
+
+
+
+// ============================================================
+// TOKENIZE SEMICOLON HEADER
+// ============================================================
+
+function tokenizeSemicolonHeader(line) {
+
+    const text =
+        normalizeLine(line);
+
+    if (!text.includes(";")) {
+        return [];
+    }
+
+    const tokens = [];
+    const parts = text.split(";");
+    let searchFrom = 0;
+
+    for (const part of parts) {
+
+        const header = part.trim();
+
+        if (!header) {
+            searchFrom += part.length + 1;
+            continue;
+        }
+
+        const position =
+            text.indexOf(header, searchFrom);
+
+        const actualPosition =
+            position >= 0
+                ? position
+                : searchFrom;
+
+        tokens.push({
+            text: header,
+            position: actualPosition,
+            end: actualPosition + header.length,
+            normalized: normalizeToken(header),
+            known: isKnownHeaderToken(header)
+        });
+
+        searchFrom =
+            actualPosition + header.length + 1;
+    }
+
+    return tokens;
+}
+
+// ============================================================
+// SCORE A POSSIBLE SINGLE-ROW HEADER
+// ============================================================
+
+function scoreHeaderLine(line) {
+
+    const text = normalizeLine(line).trim();
+
+    if (!text) {
+        return {
+            score: 0,
+            tokens: []
+        };
+    }
+
+    /*
+     * Reject obvious report/title/footer lines.
+     */
+    const upper = text.toUpperCase();
+
+    // ========================================================
+    // PALANIAPPA EXACT HEADER
+    // ========================================================
+
+    if (
+        /^PRODUCT\s+NAME\s+PACKG\s+SALES\s+CLOSING\s+DAY$/i.test(
+            text
+        )
+    ) {
+        const productPosition =
+            text.search(/PRODUCT\s+NAME/i);
+
+        const packgPosition =
+            text.search(/PACKG/i);
+
+        const salesPosition =
+            text.search(/SALES/i);
+
+        const closingPosition =
+            text.search(/CLOSING/i);
+
+        const dayPosition =
+            text.search(/DAY/i);
+
+        return {
+            score: 300,
+            tokens: [
+                {
+                    text: "PRODUCT NAME",
+                    position: productPosition,
+                    end: productPosition + 12,
+                    normalized: "PRODUCTNAME",
+                    known: true
+                },
+                {
+                    text: "PACKG",
+                    position: packgPosition,
+                    end: packgPosition + 5,
+                    normalized: "PACKG",
+                    known: true
+                },
+                {
+                    text: "SALES",
+                    position: salesPosition,
+                    end: salesPosition + 5,
+                    normalized: "SALES",
+                    known: true
+                },
+                {
+                    text: "CLOSING",
+                    position: closingPosition,
+                    end: closingPosition + 7,
+                    normalized: "CLOSING",
+                    known: true
+                },
+                {
+                    text: "DAY",
+                    position: dayPosition,
+                    end: dayPosition + 3,
+                    normalized: "DAY",
+                    known: true
+                }
+            ]
+        };
+    }
+
+    // Never treat the PALANIAPPA sales/closing summary as a header.
+    if (
+        /SALES\s*:\s*[-\d,.\s]+CLOSING\s*:/i.test(text)
+    ) {
+        return {
+            score: 0,
+            tokens: []
+        };
+    }
+
+    if (
+        upper.includes("STOCK & SALES STATEMENT") ||
+        upper.includes("STOCK & SALE REPORT") ||
+        upper.includes("STATEMENT AS ON") ||
+        upper.includes("FROM ") && upper.includes(" TO ") ||
+        upper.startsWith("COMPANY :") ||
+        upper.startsWith("COMPANY:") ||
+        upper.includes("OPENING VALUE") ||
+        upper.includes("PURCHASE VALUE") ||
+        upper.includes("CLOSING VALUE")
+    ) {
+        return {
+            score: 0,
+            tokens: []
+        };
+    }
+
+    let tokens;
+
+    if (text.includes(";")) {
+        tokens = tokenizeSemicolonHeader(text);
+    } else {
+        tokens = tokenizeHeader(text);
+    }
+
+    const knownTokens =
+        tokens.filter(token => token.known);
+
+    if (knownTokens.length < 2) {
+        return {
+            score: 0,
+            tokens
+        };
+    }
+
+    let score =
+        knownTokens.length * 20;
+
+    /*
+     * Strong product-column evidence.
+     */
+    if (
+        knownTokens.some(token =>
+            [
+                "PRODUCTNAME",
+                "PRODUCT",
+                "ITEMNAME",
+                "MEDICINENAME",
+                "DESCRIPTION",
+                "PARTICULARS"
+            ].includes(token.normalized)
+        )
+    ) {
+        score += 35;
+    }
+
+    /*
+     * Strong stock/transaction evidence.
+     */
+    if (
+        knownTokens.some(token =>
+            [
+                "OPENING",
+                "OSTK",
+                "OPSTK",
+                "OPQTY",
+                "PURC",
+                "PURCHASE",
+                "SALE",
+                "SALES",
+                "QOH",
+                "CLOSING",
+                "CLSTK",
+                "CLST",
+                "VALUE"
+            ].includes(token.normalized)
+        )
+    ) {
+        score += 25;
+    }
+
+    // ========================================================
+    // META HOSUR SEMICOLON STRUCTURE
+    // ========================================================
+
+    const normalizedHeaders =
+        knownTokens.map(
+            token => token.normalized
+        );
+
+    const isMetaSemicolonStructure =
+        text.includes(";") &&
+        normalizedHeaders.includes("PRODUCTNAME") &&
+        normalizedHeaders.includes("PACKING") &&
+        normalizedHeaders.includes("OPENING") &&
+        normalizedHeaders.includes("PURCHASE") &&
+        normalizedHeaders.includes("SALES") &&
+        normalizedHeaders.includes("CSTOCK") &&
+        normalizedHeaders.includes("EXPIRY") &&
+        normalizedHeaders.includes("PRSALE");
+
+    if (isMetaSemicolonStructure) {
+        score += 100;
+    }
+
+    /*
+     * A true single-row header should normally contain
+     * multiple columns.
+     */
+    if (knownTokens.length >= 4) {
+        score += 20;
+    }
+
+    return {
+        score,
+        tokens
+    };
+}
+
+// ============================================================
+// FIND DATA START
+// ============================================================
+
+function looksLikeDataLine(line, headerTokens) {
+
+    const text =
+        normalizeLine(line).trim();
+
+    if (!text) {
+        return false;
+    }
+
+    const upper =
+        text.toUpperCase();
+
+    /*
+     * Never consider these as product rows.
+     */
+    if (
+        upper.startsWith("COMPANY :") ||
+        upper.startsWith("COMPANY:") ||
+        upper.startsWith("DIVISION :") ||
+        upper.startsWith("DIVISON :") ||
+        upper.startsWith("OPENING VALUE") ||
+        upper.startsWith("PURCHASE VALUE") ||
+        upper.startsWith("CLOSING VALUE") ||
+        /^[-=]{5,}$/.test(text)
+    ) {
+        return false;
+    }
+
+    // ========================================================
+    // SEMICOLON-DELIMITED DATA
+    // ========================================================
+
+    if (text.includes(";")) {
+
+        const parts = text.split(";");
+
+        const nonEmpty =
+            parts.filter(
+                part =>
+                    String(part).trim() !== ""
+            );
+
+        if (nonEmpty.length < 2) {
+            return false;
+        }
+
+        const product =
+            String(parts[0] ?? "").trim();
+
+        if (
+            !product ||
+            /^TOTAL\s*:/i.test(product) ||
+            /^TOTAL$/i.test(product)
+        ) {
+            return false;
+        }
+
+        const hasNumeric =
+            parts.some(
+                part =>
+                    /(^|\s)-?\d+(?:,\d{3})*(?:\.\d+)?(\s|$)/
+                        .test(
+                            String(part).trim()
+                        )
+            );
+
+        const hasExpiry =
+            parts.some(
+                part =>
+                    /^\d{1,2}[-/]\d{4}$/
+                        .test(
+                            String(part).trim()
+                        )
+            );
+
+        return hasNumeric || hasExpiry;
+    }
+
+    /*
+     * If the line contains several known header tokens,
+     * it is probably another header rather than data.
+     */
+    const knownCount =
+        tokenizeHeader(text)
+            .filter(token => token.known)
+            .length;
+
+    if (
+        knownCount >=
+        Math.min(3, headerTokens.length)
+    ) {
+        return false;
+    }
+
+    /*
+     * A data line normally contains at least one numeric
+     * value somewhere after the product text.
+     */
+    const numeric =
+        /(^|\s)-?\d+(?:,\d{3})*(?:\.\d+)?(?=\s|$)/.test(text);
+
+    // PALANIAPPA can contain "-" for missing transaction values.
+    const isPalaniappa =
+        headerTokens.some(
+            token => token.normalized === "PACKG"
+        ) &&
+        headerTokens.some(
+            token => token.normalized === "DAY"
+        );
+
+    if (isPalaniappa) {
+
+        const palaniappaData =
+            /^.+\s+\S+\s+(?:-|\d+(?:,\d{3})*(?:\.\d+)?)\s+(?:-|\d+(?:,\d{3})*(?:\.\d+)?)\s*(?:-|\d+(?:,\d{3})*(?:\.\d+)?)?\s*$/
+                .test(text);
+
+        if (palaniappaData) {
+            return true;
+        }
+    }
+
+    return numeric;
+}
+
+// ============================================================
+// FIND HEADER
+// ============================================================
+
+function findSingleRowHeader(lines) {
+
+    const candidates = [];
+
+    for (
+        let index = 0;
+        index < lines.length;
+        index++
+    ) {
+
+        const result =
+            scoreHeaderLine(lines[index]);
+
+        if (result.score <= 0) {
+            continue;
+        }
+
+        candidates.push({
+            lineNumber: index,
+            line: normalizeLine(lines[index]),
+            score: result.score,
+            tokens: result.tokens
+        });
+    }
+
+    if (!candidates.length) {
+        return null;
+    }
+
+    /*
+     * Prefer the highest scoring candidate.
+     *
+     * If scores tie, prefer the earliest candidate.
+     */
+    candidates.sort((a, b) => {
+
+        if (b.score !== a.score) {
+            return b.score - a.score;
+        }
+
+        return a.lineNumber - b.lineNumber;
+    });
+
+    const selected =
+        candidates[0];
+
+    /*
+     * Determine data start after header.
+     */
+    let dataStart = null;
+
+    for (
+        let index =
+            selected.lineNumber + 1;
+        index < lines.length;
+        index++
+    ) {
+
+        if (
+            looksLikeDataLine(
+                lines[index],
+                selected.tokens
+            )
+        ) {
+            dataStart = index;
+            break;
+        }
+    }
+
+    return {
+        headerLineNumber:
+            selected.lineNumber,
+
+        headerLineNumberOneBased:
+            selected.lineNumber + 1,
+
+        headerText:
+            selected.line,
+
+        score:
+            selected.score,
+
+        tokens:
+            selected.tokens,
+
+        dataStart,
+
+        dataStartOneBased:
+            dataStart === null
+                ? null
+                : dataStart + 1
+    };
+}
+
+// ============================================================
+// MAIN FUNCTION
+// ============================================================
+
+function extractSingleRowHeader(filePath) {
+
+    if (!filePath) {
+        throw new Error(
+            "TXT file path is required."
+        );
+    }
+
+    const absolutePath =
+        path.resolve(filePath);
+
+    if (!fs.existsSync(absolutePath)) {
+        throw new Error(
+            `TXT file not found: ${absolutePath}`
+        );
+    }
+
+    const content =
+        fs.readFileSync(
+            absolutePath,
+            "utf8"
+        );
+
+    const lines =
+        content
+            .replace(/^\uFEFF/, "")
+            .split(/\r?\n/);
+
+    const result =
+        findSingleRowHeader(lines);
+
+    if (!result) {
+
+        return {
+            success: false,
+            file: absolutePath,
+            message:
+                "Unable to identify a single-row header.",
+            lines: lines.length
+        };
+    }
+
+    return {
+        success: true,
+
+        file: absolutePath,
+
+        totalLines:
+            lines.length,
+
+        header: {
+            lineNumber:
+                result.headerLineNumberOneBased,
+
+            text:
+                result.headerText,
+
+            score:
+                result.score,
+
+            columns:
+                result.tokens.map(
+                    (token, index) => ({
+                        index,
+
+                        header:
+                            token.text,
+
+                        normalized:
+                            token.normalized,
+
+                        position:
+                            token.position,
+
+                        end:
+                            token.end
+                    })
+                )
+        },
+
+        dataStart:
+            result.dataStartOneBased,
+
+        rawLines:
+            lines
+    };
+}
+
+// ============================================================
+// EXPORT
+// ============================================================
+
+module.exports = {
+    extractSingleRowHeader,
+    findSingleRowHeader,
+    tokenizeHeader,
+    tokenizeSemicolonHeader,
+    normalizeToken
+};
+
+// ============================================================
+// DIRECT CLI TEST
+// ============================================================
+
+if (require.main === module) {
+
+    const filePath =
+        process.argv[2];
+
+    if (!filePath) {
+
+        console.error(
+            "Usage:"
+        );
+
+        console.error(
+            'node validation/singleRow/singleRowHeaderExtractor.js "path\\file.txt"'
+        );
+
+        process.exit(1);
+    }
+
+    try {
+
+        const result =
+            extractSingleRowHeader(
+                filePath
+            );
+
+        console.log(
+            JSON.stringify(
+                result,
+                null,
+                2
+            )
+        );
+
+    } catch (error) {
+
+        console.error(
+            error.message
+        );
+
+        process.exit(1);
+    }
+}

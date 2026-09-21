@@ -1,0 +1,483 @@
+
+============================================================
+FILE: DERMASCIENCE_OM_DISTRIBUTORS_PUN149_SSS_1.txt
+============================================================
+
+01/08/26 15:04:49          PAGE: 1
+                    OM DISTRIBUTORS,JALGAON
+                    DERMASCIENCE*DIVN:LINUX LABORA
+STOCK & SALE REPORT FROM 01/07/26 TO 31/07/26 (Based on delivery dates)
+--------------------------------------------------------------------------
+ITEM NAME               BOX    PACK    OPQTY  P_QTY  REPL   S_QTY  B_QTY
+==========================================================================
+DIVISION NAME : DERMASCIENCE*DIVN:LINUX LABORA
+
+ACNESTAL FACE WASH 60ML 08X60M 60ML.      13      0      0      0     13
+ACNESTAL SOAP 75GM.     10X75G 75GM.       9      0      0      0      9
+ACTIVE MF CREAM 100GM.  10X100 100GM.      4      0      0      0      4
+ACTIVE MF CREAM 100GM.( 25X100 100GM.     -3      6      0      0      3
+ACTIVE MF LOTION 200ML. 10X200 200ML.     10      0      0      9      1
+ACTIVE MF SOAP 75GM.    10X75G 75GM.      18      0      0      0     18
+ADAPERO GEL 20GM.       10X20G 20GM.       6      0      0      0      6
+AMORFINE 0.25% CREAM 30 10X30G 30GM.      11      0      0      0     11
+APRENEXT 30MG.TAB 10'   10X10' 10'         0     12      0      0     12
+BILAZO-20MG.TAB 10'     10X10' 10'         0      0      0      0      0
+BILAZO-40MG.TAB 10'     10X10' 10'        10      0      0      0     10
+CYCLONOX 50MG.CAPS 5'   10X05' 05'         8      0      0      0      8
+CYCLONOX-100MG.CAPS 5'  10X05' 05'         6      0      0      0      6
+EBERNET CREAM 15GM.     20X15G 15GM.      12      0      0     11      1
+HIKIDZ SOAP             10X75G 75GM.      49      0      0      0     49
+IBITRA-100MG.CAPS 10'   10X10' 10'         5      0      0      0      5
+IBITRA-200MG.CAPS 10'   10X10' 10'         8      0      0      0      8
+IBITRET-10MG.TAB 10'    10X10' 10'         4     30      0      3     31
+IBITRET-20MG.TAB 10'    10X10' 10'        37      0      0      0     37
+KC LITE CREAM 20GM.     10X20G 20GM.       4      0      0      0      4
+KC LITE GOLD CR.20GM.   10X20G 20GM.       3     10      0      0     13
+KERAGRIS 60ML.          10X60M 60ML.       1      5      0      4      2
+KEROFA KITT 28'         10X28' 28'         1      5      0      2      4
+LINTAR SCALPE SOLN.100M 10X100 100ML.      3      0      0      1      2
+MOIMAX-OC MOIST.CR.75GM 10X75G 75GM.       2      0      0      1      1
+OXYTAN CREAM 50GM.      10X50G 50GM.      15      0      0      0     15
+PROTEK ANTI-DAND.SHAMPO 10X100 100ML.      6      0      0      0      6
+PROTEK SOAP 100GM.      10X100 100GM.      6      0      0      0      6
+PROTEK SOAP 50GM.       10X50G 50GM.      21      0      0      0     21
+PSORAXIB MOIST.LOTION 1 10X150 150ML.      3      0      0      0      3
+VMELA GEL 30GM.         10X30G 30GM.       9      0      0      5      4
+==========================================================================
+                                      OP_VAL     P_VAL         S_VAL    B_VAL
+TOTAL AMOUNT                           60243     19236         13311    67108
+==========================================================================
+
+
+============================================================
+FILE: IMPERIA_OM_DISTRIBUTORS_PUN149_SSS_1.txt
+============================================================
+
+01/08/26 15:05:13          PAGE: 1
+                    OM DISTRIBUTORS,JALGAON
+                    IMPERIA*DIVN:LINUX LABORATORIE
+STOCK & SALE REPORT FROM 01/07/26 TO 31/07/26 (Based on delivery dates)
+--------------------------------------------------------------------------
+ITEM NAME               BOX    PACK    OPQTY  P_QTY  REPL   S_QTY  B_QTY
+==========================================================================
+DIVISION NAME : IMPERIA*DIVN:LINUX LABORATORIE
+
+BRITAM INJ.5ML.         10X5ML 5ML.       28      0      0      0     28
+BRITAM SR 100 TAB 15'   10X15' 15'        39     50      0     33     56
+BRITAM SYP.100ML.       25X100 100ML.     11      0      0      5      6
+BRITAM-100 TAB 10'      10X10' 10'        30      0      0      0     30
+BRITAM-25MG.TAB 10'     10X10' 10'        22      0      0      0     22
+BRITAM-50MG.TAB 10'     10X10' 10'        -1      0      0      0     -1
+BRITAM-50MG.TAB 15'     10X15' 15'       111     50     30    116     75
+BRITAM-75MG.TAB 10'     10X10' 10'        35      0      0      0     35
+CITALIN FORTE TAB 10'   10X10' 10'         2      0      0      0      2
+CITALIN PLUS TAB 10'    10X10' 10'        14      0      0      0     14
+CITALIN-10MG.TAB 10'    10X10' 10'         7      0      0      0      7
+CITALIN-20MG.TAB 10'    10X10' 10'        27      0      3      0     30
+CITALIN-5MG.TAB 10'     10X10' 10'        27      0      0      0     27
+CLOBANIL 10MG.TAB 10'   10X10' 10'        23      0      2     12     13
+CLOBANIL 5MG.TAB 10'    10X10' 10'        22      0      2      6     18
+COGNITAM 800MG.TAB 10'  10X10' 10'        73      0      0     39     34
+COGNITAM INJ.15ML.      10X15M 15ML.      88      0      0     39     49
+COGNITAM PLUS TAB 10'   10X10' 10'        42      0      6     26     22
+COGNIVEL TAB 10'        10X10' 10'        47      0      5     33     19
+COGNIVEL-D TAB 10'      10X10' 10'        21     20      0     16     25
+IGNICAR DS PLUS SYP.150 10X150 150ML.     13      8      0      6     15
+IGNICAR SYP.200ML.      10X200 200ML.     18      6      2     25      1
+IGNICAR TAB 10'         10X10' 10'        31      0      0      2     29
+IGNICAR-400 TAB 10'     10X10' 10'        69      0      9     26     52
+LINSOL INFUSION 100ML.  24X100 100ML.    189    151    124    438     26
+MELANCO 25MG.TAB 10'    10X10' 10'        15      0      0      0     15
+MELANCO 50MG.TAB 10'    10X10' 10'        20      0      0      0     20
+PATINEX 12.5MG.TAB 10'  10X10' 10'        17     10      0      9     18
+PATINEX 37.5MG.TAB 10'  10X10' 10'        20      0      0      0     20
+PREGALIFT NT TAB 15'    10X15' 15'        69     20     11     84     16
+PREGALIFT PLUS TAB 15'  10X15' 15'        54     20      0     38     36
+PREGALIFT-ER 50MG.TAB 1 10X10' 10'        24      0      0      0     24
+PREGALIFT-ER 75MG.TAB 1 10X10' 10'         5      0      0      0      5
+PREGALIFT-ER 75MG.TAB 1 10X15' 15'        30      0      4      0     34
+PREGALIFT-NT TAB 10'    10X10' 10'        14      0      0      0     14
+REXITE D3 TAB 10'       10X10' 10'         7      0      0      0      7
+REXITE D3 TAB 15'       10X15' 15'        58      0      0      2     56
+REXITE PFS 1ML.         10XPFS PFS        74      0      5     12     67
+REXITE PLUS CAPS 15'    10X15' 15'       110      0      1     28     83
+REXITE PLUS INJ.2ML.    5X2ML. 2ML.       32      0      2     30      4
+REXITE-BT TAB 10'       10X10' 10'        10      0      0      0     10
+REXITE-BT TAB 15'       10X15' 15'         8      0      0      0      8
+RISCURE 1MG.TAB 10'     10X10' 10'        10      0      0      0     10
+VORTICA-20MG.TAB 10'    10X10' 10'        20      0      0      0     20
+ZOLCALM-10MG.TAB 10'    10X10' 10'         6      0      0      0      6
+ZOLCALM-10MG.TAB 15'    10X15' 15'       152      0      0     14    138
+ZOLCALM-5MG.TAB 15'     10X15' 15'       129     60     18     95    112
+==========================================================================
+                                      OP_VAL     P_VAL         S_VAL    B_VAL
+TOTAL AMOUNT                          375507     74903        191273   266865
+==========================================================================
+
+
+============================================================
+FILE: INFINA_OM_DISTRIBUTORS_PUN149_SSS_1.txt
+============================================================
+
+01/08/26 15:05:29          PAGE: 1
+                    OM DISTRIBUTORS,JALGAON
+                    INFINA*DIVN:LINUX LABORATORIES
+STOCK & SALE REPORT FROM 01/07/26 TO 31/07/26 (Based on delivery dates)
+--------------------------------------------------------------------------
+ITEM NAME               BOX    PACK    OPQTY  P_QTY  REPL   S_QTY  B_QTY
+==========================================================================
+DIVISION NAME : INFINA*DIVN:LINUX LABORATORIES
+
+AMINTOZ INJ.1ML.        10X1ML 1ML.       22      0      0      0     22
+AMINTOZ INJ.2ML.        10X2ML 2ML.       68     50     10    100     28
+AMINTOZ TAB 10'         10X10' 10'        77     50     12     54     85
+ARIDAY 20MG.TAB 10'     10X10' 10'        29      0      0      0     29
+BENFICA CAPS 10'        10X10' 10'        17      0      0      0     17
+BENFICA FORTE CAPS 10'  10X10' 10'        -8      0      0      0     -8
+BENFICA FORTE CAPS 15'  10X15' 15'        57      0      0     10     47
+BONTRIX TAB 10'         10X10' 10'        10      0      0      0     10
+CARBANERVE 300MG.TAB 10 10X10' 10'        16      0      0      0     16
+CARBANERVE 450MG.TAB 10 10X10' 10'        12      0      0      0     12
+CARNIGLO TAB 10'        10X10' 10'         1      0      0      0      1
+CLOBANIL MD 10MG.TAB 10 10X10' 10'        20      0      0      0     20
+CLOBANIL MD 5MG.TAB 10' 10X10' 10'        20      0      0      0     20
+COGNIZA-90 TAB 10'      10X10' 10'        27      0      0      0     27
+DIVALID ER 250MG.TAB 10 10X10' 10'        30      0      0      0     30
+DIVALID ER 500MG.TAB 10 10X10' 10'        20      0      0      0     20
+EPITRA ER-1GM.TAB 10'   10X10' 10'         9      0      0      0      9
+EPITRA RTU IV-500MG.100 10X100 100ML.     36      0      0      0     36
+EPITRA SYP.100ML.       10X100 100ML.     18     10      0     15     13
+EPITRA-250MG.TAB 10'    10X10' 10'       213      0      0      0    213
+EPITRA-500 TAB 15'      10X15' 15'       278     50      0    128    200
+EPITRA-500MG.TAB 10'    10X10' 10'         1      0      0      0      1
+EPITRA-750 TAB 10'      10X10' 10'        22     10      0     13     19
+GABAGESIC GEL 50GM.     10X50G 50GM.      27      0      0      6     21
+GABAGESIC NT 100MG.TAB  10X15' 15'        16     10      0      4     22
+GABAGESIC NT 200MG.TAB  10X10' 10'        18      0      1      0     19
+GABAGESIC NT 400MG TAB  10X15' 15'        23      0      0      4     19
+GABAGESIC NT 400MG.TAB  10X10' 10'         5      0      0      0      5
+GABAGESIC-100 TAB 10'   10X10' 10'         1      0      0      0      1
+GABAGESIC-100MG.TAB 15' 10X15' 15'        20      0      0      1     19
+GABAGESIC-M TAB 10'     10X10' 10'         4      0      0      0      4
+GABAGESIC-M TAB 15'     10X10' 15'        22      0      0      4     18
+PALMIDA TAB 10'         10X10' 10'        20      0      0      0     20
+PALMIDA TAB 15'         10X15' 15'        34     40     12     39     47
+PRONATE-20MG.TAB 10'    10X10' 10'        24      0      0      0     24
+PRONATE-TR-40MG.TAB 10' 10X10' 10'        22      0      0      0     22
+REXITE CD3 10'          10X10' 10'        54     50      6     39     71
+VENLITE CZ 100MG.TAB 10 10X10' 10'        42     50      0     39     53
+VENLITE CZ 50MG.TAB 10' 10X10' 10'        29      0      0      3     26
+VENLITE OD 100MG.TAB 10 10X10' 10'        12      0      0      0     12
+VENLITE OD 50MG.TAB 10' 10X10' 10'         6      0      0      0      6
+==========================================================================
+                                      OP_VAL     P_VAL         S_VAL    B_VAL
+TOTAL AMOUNT                          198209     54776         63607   188517
+==========================================================================
+
+
+============================================================
+FILE: INTEGRA_OM_DISTRIBUTORS_PUN149_SSS_1.txt
+============================================================
+
+01/08/26 15:05:44          PAGE: 1
+                    OM DISTRIBUTORS,JALGAON
+                    INTEGRA*DIV:LINUX LABORATORIES
+STOCK & SALE REPORT FROM 01/07/26 TO 31/07/26 (Based on delivery dates)
+--------------------------------------------------------------------------
+ITEM NAME               BOX    PACK    OPQTY  P_QTY  REPL   S_QTY  B_QTY
+==========================================================================
+DIVISION NAME : INTEGRA*DIV:LINUX LABORATORIES
+
+DUBIZ TAB 10'           10X10' 10'        21      0      0      0     21
+ETORIFLEX MR-4 TAB 10'  10X10' 10'        35      0      0     16     19
+OXVUN 100MG.TAB 10'     10X10' 10'        12      0      0      0     12
+PREGALIFT-D 50/20 CAPS  10X10' 10'        24      0      0      0     24
+PREGALIFT-D 75/20 CAPS  10X10' 10'        19      0      0      0     19
+PREGALIFT-D 75/30 CAPS  10X10' 10'        17      0      0     12      5
+REXITE SYP.200ML.       10X200 200ML.      2      0      0      0      2
+SERMIND 25MG.TAB 10'    10X10' 10'        10      0      0      0     10
+TADASURE-10MG.TAB 10'   10X10' 10'         1      0      0      0      1
+TADAZA TAB 4'           10X04' 4'         10      0      0      0     10
+TRIPTAZ 10MG.TAB 10'    10X10' 10'        35      0      4      0     39
+TRIPTAZ 25MG.TAB 10'    10X10' 10'        15      0      0      0     15
+VERTIREST-16MG.TAB 10'  10X10' 10         21      0      0      2     19
+VERTIREST-16MG.TAB 15'  10X15' 15'        66      0      0      0     66
+VERTIREST-8MG.TAB 10'   10X10' 10'        60      0      0      0     60
+VERTIREST-OD 24MG.TAB 1 10X10' 10'        36      0      0      2     34
+VERTIREST-OD 48MG.TAB 1 10X10' 10'        28      0      0      4     24
+==========================================================================
+                                      OP_VAL     P_VAL         S_VAL    B_VAL
+TOTAL AMOUNT                           51285         0          6264    44503
+==========================================================================
+
+
+============================================================
+FILE: DERMASCIENCE_SENTHIL_PHARMA_TN845_SSS_1.txt
+============================================================
+
+SENTHIL PHARMA - 612001                                    
+Stock & Sales Report From 01/07/2026 To 31/07/2026
+Company Name : LINUX-DERMASCIENCE DIVISION
+=================================================================================================
+No   Product Name              Pack        Opstk           Pur      Sale        CurStk    StkVal 
+=================================================================================================
+1   ACNESTAL SOAP             75gm          5+0             -         2           3+0    292.83 
+2   ACNESTAL SOAP 5.5         75GM          0+0             -         -           0+0         - 
+3   ACTIVE MF CREAM           50GMS         0+0             -         -           0+0         - 
+4   ACTIVE MF LOTION 200ML    200ML        10+0             -         -          10+0   3918.50 
+5   ACTIVE MF SOAP            75GM          9+0           186     62+12         121+0  13706.94 
+6   BIOSKIN SOAP              75GMS        25+0           141      51+8         107+0   9884.44 
+7   BIOWRIGHT OIL             80ML         22+0             -         -          12+0   2283.48 
+8   BIOWRIGHT SOAP 75G        75gm          0+0             -         -           0+0         - 
+9   CASIL SOAP                75gm          8+0             -         2           6+0    538.70 
+10  DOSIL  500 MG             10           12+0             -         -          12+0   1365.12 
+11  HIKIDZ SOAP               75GMS         0+0             -         -           0+0         - 
+12  HYTEC CREAM               20gms         0+0             -         -           0+0         - 
+13  IBITRET 10MG              10           17+0             -         -           0+0         - 
+14  IBITRET 20MG              10           25+0             -         -           0+0         - 
+15  KC-LITE CREAM -20GM       20GM          0+0             -         -           0+0         - 
+16  KC-LITE GOLD CREAM-20GM   20GM          0+0             -         -           0+0         - 
+17  KERAGRIS HAIR SERUM       60ML          3+0            11       5+1           8+0   6970.64 
+18  KERAGRIS MFR 60ML         60ml          0+0             -         -           0+0         - 
+19  N-RICH BABY SOAP          75GM          0+0             -         -           0+0         - 
+20  PROTEK SOAP               100GMS        0+0           146      44+8          94+0  12157.02 
+-------------------------------------------------------------------------------------------------
+    Total                                   136           484       166           373         - 
+-------------------------------------------------------------------------------------------------
+Opg.Stk Val:    23753.02 Purc.Value: :    57798.07 Sales Value::    23864.35
+Cl.Stk Val:     51117.67 Pur.RetVal ::     9178.66 SalRet Val: :        0.00
+                                     :             NetSal(GVal):    23864.35
+Oth.SalVal:         0.00 Tran.Stk.IN::        0.00 Tran.Stk.Out:        0.00
+-------------------------------------------------------------------------------------------------
+                                       *** END OF REPORT ***
+
+
+
+
+============================================================
+FILE: IMPERIA_SENTHIL_PHARMA_TN845_SSS_1.txt
+============================================================
+
+SENTHIL PHARMA - 612001                                    
+Stock & Sales Report From 01/07/2026 To 31/07/2026
+Company Name : LINUX-IMPERIA DIVISION 
+==================================================================================
+No   Product Name              Pack    Opstk       Pur      Sale CurStk    StkVal 
+==================================================================================
+1   BRITAM 100MG SR TAB       10          0         -         -      0         - 
+2   BRITAM 100MG TAB          10         22        10        12     19   5035.00 
+3   BRITAM 10MG TAB           10          0         -         -      0         - 
+4   BRITAM 25MG TAB           10          0         -         -      0         - 
+5   BRITAM 50 TAB             15`s       31        80        43     62  11610.74 
+6   BRITAM 75MG TAB           10         19         -         7     11   2179.54 
+7   BRITAM INJ                5ML        48        80        50     65   7015.45 
+8   BRITAM SR 50MG            10          0         -         -      0         - 
+9   BRITAM SYRUP              100ML      13         -         -     13   4223.18 
+10  CALMTRA 10MG TAB          10         24         -         -     24    929.76 
+11  CALMTRA 5MG               10`s       27         -         -      0         - 
+12  CITALIN 10 MG 15`S        15`S        7         -         -      0         - 
+13  CITALIN 10MG TAB          10          2         -         -      0         - 
+14  CITALIN 20MG TAB          10         10         -         -      0         - 
+15  CITALIN 5MG TAB           15         14         -         -     14    806.40 
+16  CITALIN FORTE TAB         15`S       43       100        60     71  12030.24 
+17  CITALIN LITE              10`S       19        20        15     21   1722.89 
+18  CITALIN PLUS TAB          10         48       200       120    108   7315.74 
+19  CLOBANIL 10MG             10`S       26         -         -     26   1909.44 
+20  CLOBANIL 5MG              10`S       55        30        35     44   1870.00 
+21  COGNITAM 400MG TAB        10         19        10        12     17   1053.32 
+22  COGNITAM 800MG TAB        10         10         -         -      0         - 
+23  COGNITAM INJ              15ml        0         -         -      0         - 
+24  COGNITAM INJ 60ML         60ml        0         -         -      0         - 
+25  COGNITAM PLUS TAB         10`S       23        10        15     18   8601.66 
+26  COGNITAM SYP              100ML      10         -         -     10   2029.70 
+27  COGNIVEL D TAB            10`S        0         -         -      0         - 
+28  COGNIVEL TAB              10`S       38       110        66     68  15084.44 
+29  FLITRAZ TAB               10`S       30         -         -     30   1530.60 
+30  IGNICAR  400MG            10          0         -         -      0         - 
+31  IGNICAR DS PLUS SYR       150ML       9         5         7      7   6748.28 
+32  IGNICAR SYP 200 ML        200ML      31        55        47     35  22977.85 
+33  IGNICAR TAB               10`S       16        50        26     35  11606.35 
+34  JOYPRIDE 100MG TAB        10         32         -         5     26   2980.90 
+35  JOYPRIDE 200MG TAB        10         16         -         3     13   2335.58 
+36  JOYPRIDE 300MG            10`S       14         -         -     14   2616.04 
+37  JOYPRIDE 400MG            10`S        9        10         8     10   2808.00 
+38  JOYPRIDE 50MG TAB         10         14        50        29     35   2083.20 
+39  LINSOL IV                 100ML      12         -         -     12   1697.44 
+40  MELANCO 25MG TAB          10`S       59       200       110    126   4039.56 
+41  MELANCO 50MG TAB          10`S        0         -         -      0         - 
+42  MELANCO 75 MG TAB         10          0         -         -      0         - 
+43  PATINEX 12.5MG TAB        10         14         -         -     14   1701.70 
+44  PATINEX LS                10`S       16        20        15     20   2470.60 
+45  PATINEX PLUS              10`S        0         -         -      0         - 
+46  PENDRIDOL TAB             4`S         0         -         -      0         - 
+47  PREGALIFT ER 50 TAB 15`S  15         50         -        25     25   2545.75 
+48  PREGALIFT ER 50MG         10`S        0         -         -      0         - 
+49  PREGALIFT ER 75MG TAB     10`S        0         -         -      0         - 
+50  PREGALIFT ER75 MG  15`S   15`S       28        50        47     30   4861.20 
+51  PREGALIFT NT TAB          15         81       300       198    153  35271.09 
+52  PREGALIFT PLUS  15`S      15`s      107       150       120    111  26944.14 
+53  PREGALIFT PLUS TAB        10`S        0         -         -      0         - 
+54  REXITE -PFS -1500mg       1ML         8       100        80     11   1547.04 
+55  REXITE BT TAB             10`S       66       160       107     98   5725.16 
+56  REXITE D3 TAB             15         28       260       178     91  16595.67 
+57  REXITE PLUS CAP           15`S       88       300       213    140  31439.80 
+58  REXITE PLUS INJ           2ML        67       420       301    164  13303.68 
+59  RISCURE 0.5MG TAB         10         10         -         -     10    204.30 
+60  RISCURE 1MG TAB           10          0         -         -      0         - 
+61  RISCURE 2MG TAB           10`s        0         -         -      0         - 
+62  RISCURE FORTE TAB         10          0         -         -      0         - 
+63  RISCURE LS TAB            10`S       23        30        10     41   1778.17 
+64  RISCURE PLUS TAB          10`S        0         -         -      0         - 
+65  VORTICA 10MG TAB          10         11         -         -     11   1445.05 
+66  VORTICA 20MG TAB          10          0         -         -      0         - 
+67  VORTICA 5MG TAB           10         12         -         -     12    814.68 
+68  VYSOV D 100/10MG TAB      10          0         -         -      0         - 
+69  ZOLCALM 10MG TAB          15        105       220       186    117  14466.86 
+70  ZOLCALM 5MG TAB           15`s       51       310       237    105   9367.05 
+----------------------------------------------------------------------------------
+    Total                              1515      3340      2387   2087         - 
+----------------------------------------------------------------------------------
+Opg.Stk Val:   234640.21 Purc.Value: :   461938.37 Sales Value::   396974.94
+Cl.Stk Val:    315323.24 Pur.RetVal ::     7027.76 SalRet Val: :        0.00
+Jun Sal:       358185.00 May Sal:    :   326448.00 NetSal(GVal):   396974.94
+Oth.SalVal:         0.00 Tran.Stk.IN::        0.00 Tran.Stk.Out:        0.00
+----------------------------------------------------------------------------------
+                                  *** END OF REPORT ***
+
+
+
+
+============================================================
+FILE: INTEGRA_SENTHIL_PHARMA_TN845_SSS_1.txt
+============================================================
+
+SENTHIL PHARMA - 612001                                    
+Stock & Sales Report From 01/07/2026 To 31/07/2026
+Company Name : LINUX-INTEGRA DIVISION
+=================================================================================================
+No   Product Name              Pack        Opstk           Pur      Sale        CurStk    StkVal 
+=================================================================================================
+1   CARBANERVE 150MG TAB      10           18+0             -         -          18+0    897.30 
+2   CARBANERVE 300MG [15`S]   15          120+0           210     149+4         177+0  24459.63 
+3   CARBANERVE 300MG TAB      10           25+0             -        25           0+0         - 
+4   CITIZAC INJ 2ML           2ML          30+0             -         -          30+0   3390.00 
+5   CITIZAC INJ 4ML           4ML           0+0             -         -           0+0         - 
+6   CITIZAC TAB               10`S         12+0             -         -           6+0   2749.98 
+7   DUBIZ TAB                 10`S          0+0             -         -           0+0         - 
+8   ECITANE TAB               10`S         43+0           220     162+2          99+0   1025.64 
+9   ETORIFLEX MR 4MG TAB      10`S         21+0             -         1          20+0   3534.50 
+10  ETORIFLEX MR 8MG TAB      10`S         26+0            50      24+6          46+0  10642.20 
+11  IDEBEST 45MG TAB          10            0+0             -         -           0+0         - 
+12  LACOVE 100MG TAB          10           22+0            10        10          22+0   2368.52 
+13  LACOVE 200MG              10`s          0+0             -         -           0+0         - 
+14  LACOVE 50MG               10`s         21+0             -         -          21+0   1164.99 
+15  LACOVE SYP                200ML        10+0             -         -           0+0         - 
+16  LINOTRIL 0.25MG TAB       10`S         25+0            90      63+4          68+0   1040.40 
+17  LINOTRIL 0.5MG TAB        10`S          8+0           100      41+1          66+0   1732.20 
+18  LINOTRIL 1MG TAB          10            0+0             -         -           0+0         - 
+19  LINOTRIL 2MG TAB          10            0+0             -         -           0+0         - 
+20  LIPOSERIN CAP             10`S          0+0             -         -           0+0         - 
+21  OXVUN 100MG TAB           10            0+0             -         -           0+0         - 
+22  OXVUN 25MG TAB            10           20+0             -         -          20+0   1361.20 
+23  OXVUN 50MG                10            0+0             -         -           0+0         - 
+24  OXVUN ER 150MG            10            0+0            10         -          10+0   2742.80 
+25  PREGALIFT  D -50/20       10           68+0           210    140+24         114+0  13122.38 
+26  PREGALIFT  D-75/30        10           95+0           100     80+16          99+0  20134.62 
+27  PREGALIFT D 75/20 CAP     10`s         12+0            30      15+3          24+0   3916.80 
+28  QUTIWEL 100MG             10`s          0+0             -         -           0+0         - 
+29  QUTIWEL 100MG             10`S          0+0             -         -           0+0         - 
+30  QUTIWEL 25MG              10`S         29+0             -         3          26+0    743.34 
+31  QUTIWEL 50MG              10            0+0             -         -           0+0         - 
+32  QUTIWEL SR 200MG TAB      10            0+0             -         -           0+0         - 
+33  QUTIWEL SR 300 TAB        10            0+0             -         -           0+0         - 
+34  QUTIWEL SR 50MG TAB       10`S          0+0             -         -           0+0         - 
+35  REXITE INJ                1            56+0            20         -          38+0   2593.00 
+36  REXITE SYP                200ML        13+0            10       5+1          17+0   3471.83 
+37  REXITE TAB                10`S          9+0             -         -           9+0    478.62 
+38  RIBOTAB M                 10           12+0            10         5          17+0   3485.51 
+39  SERMIND 100MG             10            0+0             -         -           0+0         - 
+40  SERMIND 25MG              10`S         22+0             -         6          16+0    637.44 
+41  SERMIND 50MG              10`S         68+0             -       5+1          62+0   4474.54 
+42  TADASURE 10MG             1`S           0+0             -         -           0+0         - 
+43  TADASURE 20MG TAB         1`S          18+0             -         -          18+0    660.42 
+44  TADASURE 5MG              10`s          0+0             -         -           0+0         - 
+45  TADAZA TAB                4`S          13+0             -         -          13+0   2712.58 
+46  TOPITAB 25MG              10`s         66+0            20      30+6          50+0   2101.50 
+47  TOPITAB 50MG              10`s         77+0             -         3          74+0   6170.12 
+48  TRIPTAZ 10 MG TAB         10`S         29+0             -         -          29+0    521.25 
+49  TRIPTAZ 25 MG TAB         10`S         19+0            20        19          20+0    370.20 
+50  VERTIREST -16 15`S        15`S         16+0            20      10+2          24+0   3637.92 
+51  VERTIREST 8MG TAB         10`S         27+0            90      47+6          64+0   3583.36 
+52  VERTIREST OD 24MG TAB     10           32+0           247    145+29         105+0  16671.90 
+53  VERTIREST OD 48MG TAB     10`S         33+0            80      28+5          80+0  17285.60 
+-------------------------------------------------------------------------------------------------
+    Total                                  1115          1547      1016          1502         - 
+-------------------------------------------------------------------------------------------------
+Opg.Stk Val:   121529.39 Purc.Value: :   155288.96 Sales Value::   116799.16
+Cl.Stk Val:    163882.29 Pur.RetVal ::    12605.18 SalRet Val: :        0.00
+                                     :             NetSal(GVal):   116799.16
+Oth.SalVal:         0.00 Tran.Stk.IN::        0.00 Tran.Stk.Out:        0.00
+-------------------------------------------------------------------------------------------------
+                                       *** END OF REPORT ***
+
+
+
+
+============================================================
+FILE: NUTRIMAX_SENTHIL_PHARMA_TN845_SSS_1.txt
+============================================================
+
+SENTHIL PHARMA - 612001                                    
+Stock & Sales Report From 01/07/2026 To 31/07/2026
+Company Name : LINUX-NUTRIMAX DIVISION 
+=================================================================================================
+No   Product Name              Pack        Opstk           Pur      Sale        CurStk    StkVal 
+=================================================================================================
+1   ANTICLAV 375 TAB          6`S           0+0             -         -           0+0         - 
+2   ANTICLAV 625 TAB          6`S           0+0             -         -           0+0         - 
+3   ASCLIN P TAB              10            0+0             -         -           0+0         - 
+4   BECOSTAR DROPS            15ML          0+0             -         -           0+0         - 
+5   BECOSTAR G CAP            10`s         78+0            43      48+9          64+0   9560.32 
+6   BECOSTAR SYP              200ML         0+0             -         -           0+0         - 
+7   BECOSTAR TAB              15`S         29+0            20      10+2          37+0   2884.89 
+8   BONTRIX TAB               10`S         10+0             -         -           0+0         - 
+9   CELONG TAB                10           48+0            98      75+4          67+0   3684.33 
+10  CLOBANIL MD 5MG TAB       10           30+0             -         -          30+0   1275.00 
+11  FERIZAC IV -5ML           5 ml          0+0             -         -           0+0         - 
+12  FERIZAC SYP               200ML         0+0             -         -           0+0         - 
+13  FERIZAC TAB               10`S          0+0             -         -           0+0         - 
+14  FEXINEX 100DT             10`S          0+0             -         -           0+0         - 
+15  FEXINEX 200 DT            10`S          0+0             -         -           0+0         - 
+16  FEXINEX DRY SYP           30ML          0+0             -         -           0+0         - 
+17  FLAMCOR SYRUP             30ML          0+0             -         -           0+0         - 
+18  FLAMCOR TAB               10            0+0             -         -           0+0         - 
+19  FOLITE TAB                10`S          0+0             -         -           0+0         - 
+20  LIN-FCM IV                10 ML         0+0             -         -           0+0         - 
+21  LINCIPARA 100ML IV        100ml         0+0             -         -           0+0         - 
+22  MACROZAC 250MG            6`S           0+0             -         -           0+0         - 
+23  MACROZAC 500MG            3`S           0+0             -         -           0+0         - 
+24  MONTGOLD KID              10`S          0+0             -         -           0+0         - 
+25  MONTGOLD TAB              10`S          0+0             -         -           0+0         - 
+26  MYOCETAMOL TAB            10`S         74+0           110      90+6          88+0   6061.44 
+27  PHYSIOLYTE  500ML INJ     500 ML       41+0            45        41          45+0   4050.00 
+28  RABELIN D CAP             10`S          0+0             -         -           0+0         - 
+29  RDL C10 CAP               10`S         16+0             -         -          16+0   2020.66 
+30  RDL C5 CAP                10            0+0             -         -           0+0         - 
+31  SERLINUX TAB              10            0+0             -         -           0+0         - 
+32  STERIGLU 100 ML IV        100ML         0+0             -         -           0+0         - 
+33  STERIMINO  10% IV 200ML   200ML        30+0             -         -          15+0   3975.00 
+34  TYPIDOL 1.5MG TAB         10`S          0+0             -         -           0+0         - 
+35  TYPIDOL 5MG TAB           10`S          0+0             -         -           0+0         - 
+36  ZINCDRIP 10ML INJ         10ML         30+0             -         -          15+0   4500.00 
+-------------------------------------------------------------------------------------------------
+    Total                                   386           316       264           377         - 
+-------------------------------------------------------------------------------------------------
+Opg.Stk Val:    47784.07 Purc.Value: :    22533.36 Sales Value::    31785.37
+Cl.Stk Val:     38011.64 Pur.RetVal ::    10059.00 SalRet Val: :        0.00
+                                     :             NetSal(GVal):    31785.37
+Oth.SalVal:         0.00 Tran.Stk.IN::        0.00 Tran.Stk.Out:        0.00
+-------------------------------------------------------------------------------------------------
+                                       *** END OF REPORT ***
+
+
+

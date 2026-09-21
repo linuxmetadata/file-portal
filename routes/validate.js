@@ -2816,6 +2816,7 @@ router.post(
         "csv",
         "doc",
         "docx",
+        "rtf",
         "txt",
         "html",
         "htm"

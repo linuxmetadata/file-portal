@@ -1,0 +1,97 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                    
+ SHREYES DISTRIBUTOR                              Page : 1
+ SHOP NO.1,AMBIANCE 999,SADASHIV PETH,            From : 01/07/26  To : 31/07/26
+ PUNE-411030.                                     Date :  1-Aug-2026
+ Company Name : LINUX-INFINA                  
+
+ STOCK & SALE STATEMENT 
+ -----------------------------------------------------------------------------------------------
+ SNo Particulars                OPstk   Pur StkIn Sale  UCS.  StkOt ClStk SaleValue  Stock Value
+ -----------------------------------------------------------------------------------------------
+   1 AMINTOZ INJ 1ML     .          0     0     0     0     0     0     0       0.00       0.00
+   2 ARIDAY 10 TAB 10'S  .          0     0     0     0     0     0     0       0.00       0.00
+   3 ARIDAY 15 TAB 10'S  10 TAB     0     0     0     0     0     0     0       0.00       0.00
+   4 ARIDAY 2.5 TAB 10'S           15    50     0    25     0     0    40     869.25    1390.80
+   5 ARIDAY 20MG TAB 10'S.          0     0     0     0     0     0     0       0.00       0.00
+   6 ARIDAY 30MG TAB 10'S.          0     0     0     0     0     0     0       0.00       0.00
+   7 ARIDAY 5 TAB 10'S   .         10    20     0     8     0     0    22     429.84    1182.06
+   8 BENFICA CAP'S       10'S      14     0     0     6     0     0     8     586.92     782.72
+   9 BENFICA FORTE CAPS 1.         31    50     0    31     0     0    50    7484.64   10995.50
+  10 CARNIGLO TAB 10'S   .         21     0     2    18     0     0     5    2996.28     832.30
+  11 CARNIGLO-M TAB 10'S .          1    20     0    12     0     0     9    3054.48    2086.56
+  12 COGNIZA TAB 10'S    .          0     0     0     0     0     0     0       0.00       0.00
+  13 DIVALID ER 1GM TAB  10'S       0     0     0     0     0     0     0       0.00       0.00
+  14 DIVALID ER 250 TAB 1.          0     0     0     0     0     0     0       0.00       0.00
+  15 DIVALID ER 500 TAB 1.          0     0     0     0     0     0     0       0.00       0.00
+  16 EPITRA 250MG TAB 10'.         14     0     0     0     0     0    14       0.00     667.80
+  17 EPITRA 500 TAB 15'S 10TAB     23    33     0    13     0     0    43    1911.78    6323.58
+  18 EPITRA 750MG TAB    .         50    66     2    52     0     0    66    7598.76    9185.88
+  19 EPITRA ER-1GM TAB 10.         14     0     0     0     0     0    14       0.00    4464.04
+  20 EPITRA INJ.5ML      5ML        0     0     0     0     0     0     0       0.00       0.00
+  21 EPITRA RTU 1000MG   .        100     0     0     0     0     0   100       0.00   13344.00
+  22 EPITRA RTU 500MG    .        100     0     0     0     0     0   100       0.00    9127.00
+  23 EPITRA SYRUP 100ML  .          5     0     0     0     0     0     5       0.00    1499.75
+  24 GABAGESIC ER 300MG 1.          0    30     0     0     0     0    30       0.00    5410.20
+  25 GABAGESIC GEL 50GM  .          6     0     0     5     0     0     1    1410.85     282.17
+  26 GABAGESIC NT 100MG T10'S      12    20     0    16     0     0    16    1733.71    1793.76
+  27 GABAGESIC NT 200 TAB.         11     0     0     0     0     0    11       0.00    1358.06
+  28 GABAGESIC NT 400MG T.         78    59     0    91     0     0    46   27630.33   13966.98
+  29 GABAGESIC-M TAB     10'S       0     0     0     0     0     0     0       0.00       0.00
+  30 LIVIZ TAB 10'S      .         75    14     0    12     0     0    77    1950.12   12513.27
+  31 NEULORA 1MG TAB 10'S.          0     0     0     0     0     0     0       0.00       0.00
+  32 NEULORA 2MG TAB 10'S.          0     0     0     0     0     0     0       0.00       0.00
+  33 OLINSTAB 10 TAB 10'S10'S      30     0     0     0     0     0    30       0.00    1787.70
+  34 OLINSTAB 2.5 TAB 10'10'S       7     0     0     0     0     0     7       0.00     184.10
+  35 OLINSTAB 5 TAB 10'S 10'S      20    30     0    15     0     0    35     451.05    1052.45
+  36 OLINSTAB 7.5 TAB 10'.         20     0     0     0     0     0    20       0.00    1168.40
+  37 OLINSTAB F TAB 10'S 10 TAB    15     0     0     8     0     0     7     613.66     505.89
+  38 OLINSTAB TAB 10'S   .          0     0     0     0     0     0     0       0.00       0.00
+  39 PALMIDA TAB 15'S    .         72    24     0    41     0     0    55   15634.53   20973.15
+  40 PRONATE 10MG TAB    10TAB      0     0     0     0     0     0     0       0.00       0.00
+  41 PRONATE 20MG TAB    10TAB     40     0     0     0     0     0    40       0.00     902.40
+  42 PRONATE 40MG        .         40     0     0     0     0     0    40       0.00     982.00
+  43 PRONATE EZ TAB 10'S .          6     0     0     0     0     0     6       0.00     306.90
+  44 PRONATE F TAB 10'S  .          0     0     0     0     0     0     0       0.00       0.00
+  45 PRONATE TR 40 TAB 10.         15     0     0     0     0     0    15       0.00     368.25
+  46 QLINO CAPS 1'S      1'S       33     2     0     3     0     0    32    1334.88   14238.72
+  47 VALEPTOL CR 200 TAB .          0     0     0     0     0     0     0       0.00       0.00
+ 
+ Company Name : LINUX-INFINA                  
+
+ STOCK & SALE STATEMENT 
+ -----------------------------------------------------------------------------------------------
+ SNo Particulars                OPstk   Pur StkIn Sale  UCS.  StkOt ClStk SaleValue  Stock Value
+ -----------------------------------------------------------------------------------------------
+  48 VALEPTOL CR 300 TAB .          0     0     0     0     0     0     0       0.00       0.00
+  49 VALEPTOL CR 500 TAB .          0     0     0     0     0     0     0       0.00       0.00
+  50 VENLITE CZ 100MG TAB.          0     0     0     0     0     0     0       0.00       0.00
+  51 VENLITE OD 100MG TAB10'S      40     0     0     8     0     0    32    1636.40    6545.60
+  52 VENLITE OD 50MG TAB .         35     0     0     0     0     0    35       0.00    3952.90
+ -----------------------------------------------------------------------------------------------
+                      Value of :: OpStk: 154344.62                          77327.48  150174.89
+ -----------------------------------------------------------------------------------------------

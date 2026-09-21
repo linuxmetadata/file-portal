@@ -1,0 +1,72 @@
+
+
+
+SRI VENKATESWARA PHARMA
+No.4,Bharathidhasan Street,Manjakuppam,Cuddalore-607001
+Stock And Sales Report(Month)
+of Jul2026 for LINUX META
+-------------------------------------------------------------------------------------------
+ProductName                   Pack  OpStk   Rcpt PrvSa Sale Cl.St StockVal  SaleValue Orde 
+-------------------------------------------------------------------------------------------
+METIS G1 TAB                  10`S      7                       7   472.24                 
+METIS G2 TAB                  10`S            10    10         10   944.58                 
+RDL 10 MG TAB                 10`S     22            5   15     5   506.26    1576.03      
+RDL 20 MG TAB                 10`S     20                      20  3509.94                 
+RDL 40 MG TAB                 10`S     10                      10  2699.97                 
+RDL 5 MG TAB                  10`S     47                10    35  2125.73     642.90      
+RDL C10 CAPS                  10's     13     50    23   38    22  2950.10    5130.39      
+RDL C20 CAP                   10`S     10                      10  1754.66                 
+RDL C5 CAPS                   10`S     13     50    56   26    37  3894.71    2746.88      
+RDL EZ TAB                    10`S     10                      10  1485.02                 
+RDL F TAB                     10`S     10                      10  1754.66                 
+RDL GOLD 10 CAP               10`S     17                      17  2325.50                 
+RDL GOLD 20 CAP               10`S     10                      10  1822.28                 
+RE XITE FORTE CAP             10`S      2     50    25   36    11  1386.00    4673.22      
+TORDURA  5 TAB                10'S     28           26   10    16   576.07     381.00      
+TORDURA 10 TAB                10`S     10     40         10    38  1915.20     533.30      
+TORDURA 20 TAB                10`S     10                      10   647.96                 
+TORDURA PLUS 10 TAB           10`S     10                 2     8   455.03     114.36      
+TORDURA PLUS 5 TAB            10`S     10                      10   453.60                 
+TRIEXER 1 TAB                 10`S            30         10    20  2283.12    1159.68      
+TRIEXER 2 TAB                 10`S            50     7   19    31  5961.53    3705.74      
+TRIEXER V1 TAB                10`S     11     11    13   11    10  1151.96    1273.86      
+TRIEXER V2 TAB                10`S     18     20    27   17    21  2872.67    2337.87      
+VYSOV 50 TAB                  15'S     46     30    25   34    42  6162.98    4995.36      
+VYSOV D 100/10 MG TAB         10`S     13            2    7     6   886.47    1042.79      
+VYSOV DM 100/10/1000 TAB      10`S     10                      10  1500.45                 
+VYSOV DM 100/10/500 TAB       10`S      9                       9  1223.40                 
+VYSOV M 50/1000 MG TAB        15`S      9     24    13    7    26  4208.74    1021.03      
+VYSOV M 50/500MG TAB          15'S     61    204   165  192    73 11284.41   29552.36      
+VYSOV XR 100MG TAB            15'S      7     40    17   26    21  4006.71    4916.27      
+-------------------------------------------------------------------------------------------
+                                                              565 73221.91   65803.02      
+-------------------------------------------------------------------------------------------
+
+Op.Stk.Val:54675.54      Sales Val - Prv.Mth: 57944.10   Cur.Mth.Sal:  69093.18   Stk.Val:69735.15      Pur.Val:85637.16     
+Stock Value is Calculated Using Purchase Price                                                                      
+Grand Total Of Currnt Month Sales Value:  69093.18       Stock Value:73221.91                                       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

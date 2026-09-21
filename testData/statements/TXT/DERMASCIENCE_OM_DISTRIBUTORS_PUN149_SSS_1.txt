@@ -1,0 +1,44 @@
+01/08/26 15:04:49          PAGE: 1
+                    OM DISTRIBUTORS,JALGAON
+                    DERMASCIENCE*DIVN:LINUX LABORA
+STOCK & SALE REPORT FROM 01/07/26 TO 31/07/26 (Based on delivery dates)
+--------------------------------------------------------------------------
+ITEM NAME               BOX    PACK    OPQTY  P_QTY  REPL   S_QTY  B_QTY
+==========================================================================
+DIVISION NAME : DERMASCIENCE*DIVN:LINUX LABORA
+
+ACNESTAL FACE WASH 60ML 08X60M 60ML.      13      0      0      0     13
+ACNESTAL SOAP 75GM.     10X75G 75GM.       9      0      0      0      9
+ACTIVE MF CREAM 100GM.  10X100 100GM.      4      0      0      0      4
+ACTIVE MF CREAM 100GM.( 25X100 100GM.     -3      6      0      0      3
+ACTIVE MF LOTION 200ML. 10X200 200ML.     10      0      0      9      1
+ACTIVE MF SOAP 75GM.    10X75G 75GM.      18      0      0      0     18
+ADAPERO GEL 20GM.       10X20G 20GM.       6      0      0      0      6
+AMORFINE 0.25% CREAM 30 10X30G 30GM.      11      0      0      0     11
+APRENEXT 30MG.TAB 10'   10X10' 10'         0     12      0      0     12
+BILAZO-20MG.TAB 10'     10X10' 10'         0      0      0      0      0
+BILAZO-40MG.TAB 10'     10X10' 10'        10      0      0      0     10
+CYCLONOX 50MG.CAPS 5'   10X05' 05'         8      0      0      0      8
+CYCLONOX-100MG.CAPS 5'  10X05' 05'         6      0      0      0      6
+EBERNET CREAM 15GM.     20X15G 15GM.      12      0      0     11      1
+HIKIDZ SOAP             10X75G 75GM.      49      0      0      0     49
+IBITRA-100MG.CAPS 10'   10X10' 10'         5      0      0      0      5
+IBITRA-200MG.CAPS 10'   10X10' 10'         8      0      0      0      8
+IBITRET-10MG.TAB 10'    10X10' 10'         4     30      0      3     31
+IBITRET-20MG.TAB 10'    10X10' 10'        37      0      0      0     37
+KC LITE CREAM 20GM.     10X20G 20GM.       4      0      0      0      4
+KC LITE GOLD CR.20GM.   10X20G 20GM.       3     10      0      0     13
+KERAGRIS 60ML.          10X60M 60ML.       1      5      0      4      2
+KEROFA KITT 28'         10X28' 28'         1      5      0      2      4
+LINTAR SCALPE SOLN.100M 10X100 100ML.      3      0      0      1      2
+MOIMAX-OC MOIST.CR.75GM 10X75G 75GM.       2      0      0      1      1
+OXYTAN CREAM 50GM.      10X50G 50GM.      15      0      0      0     15
+PROTEK ANTI-DAND.SHAMPO 10X100 100ML.      6      0      0      0      6
+PROTEK SOAP 100GM.      10X100 100GM.      6      0      0      0      6
+PROTEK SOAP 50GM.       10X50G 50GM.      21      0      0      0     21
+PSORAXIB MOIST.LOTION 1 10X150 150ML.      3      0      0      0      3
+VMELA GEL 30GM.         10X30G 30GM.       9      0      0      5      4
+==========================================================================
+                                      OP_VAL     P_VAL         S_VAL    B_VAL
+TOTAL AMOUNT                           60243     19236         13311    67108
+==========================================================================

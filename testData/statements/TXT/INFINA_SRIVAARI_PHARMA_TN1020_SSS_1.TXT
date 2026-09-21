@@ -1,0 +1,33 @@
+
+SRIVAARI PARMA,POLLACHI.                          COMPANY: LINUX INFINA                  
+STOCK & SALES STATEMENT AS ON 31/07/2026                                   Page No.    1
+-------------------------------------------------------------------------------------------
+PRODUCT NAME       PACKG OPENING  RECEIPT   <-----SALES---->  ADJMT   CLOSING   CLOSING AGE
+                           QTY   QTY  FREE  LAST   QTY  FREE  STOCK  QTY  FREE   VALUE DAYS
+-------------------------------------------------------------------------------------------
+AMINTOZ INJ        2ML      60     -     -    20    60     -           -     -       -     
+AMINTOZ INJ        1ML       -     -     -     -     -     -           -     -       -     
+AMINTOZ TAB        10'S     30     -     -     -     -     -          30     -     980   59
+COGNITAM INJ       5'S       -     -     -     -     -     -           -     -       -     
+COGNIZA TAB        10'S      -     -     -     -     -     -           -     -       -     
+EPITRA 250MG TAB   10'S      -     -     -     -     -     -           -     -       -     
+EPITRA 500MG TAB   10'S      -     -     -     -     -     -           -     -       -     
+EPITRA SYP         100ML     -     -     -     -     -     -           -     -       -     
+GABAGESIC 100MG TA 15'S      -     -     -     -     -     -           -     -       -     
+GABAGESIC M TAB    15'S      -     -     -     -     -     -           -     -       -     
+GABAGESIC NT 100MG 10'S      -     -     -     -     -     -           -     -       -     
+GABAGESIC PLUS TAB 10        -     -     -     -     -     -           -     -       -     
+GABAGESIC-300      10'S      -     -     -     -     -     -           -     -       -     
+LIVIZ TAB          10'S      -     -     -     -     -     -           -     -       -     
+METHONAC 600 TAB   10'S      -     -     -     -     -     -           -     -       -     
+NEULORA 1MG TAB    10'S      -     -     -     -     -     -           -     -       -     
+NEULORA 2MG TAB    10'S      -     -     -     -     -     -           -     -       -     
+OLINSTAB 5 TAB     10'S      -     -     -     -     -     -           -     -       -     
+PALMIDA TAB        10'S      -     -     -     -     -     -           -     -       -     
+VALEPTOL CR 500    10'S      -     -     -     -     -     -           -     -       -     
+* ---> Non Moving Products Above 30 Days
+-------------------------------------------------------------------------------------------
+OPENING VALUE      :        3,149.38  PURCHASE VALUE   :            0.00
+SALES VALUE        :        2,295.60  CLOSING VALUE    :          980.28
+LAST MONTH SALES   :          771.33  TRANSIT VALUE    :            0.00
+-------------------------------------------------------------------------------------------

@@ -1,0 +1,2848 @@
+
+################################################################
+FILE: validation\singleRow\singleRowDataExtractor.js
+################################################################
+
+/**
+ * ============================================================
+ * SINGLE ROW TXT DATA EXTRACTOR
+ * ============================================================
+ *
+ * SCRIPT 2
+ *
+ * Depends on:
+ *   singleRowHeaderExtractor.js
+ *
+ * Purpose:
+ *   - Detect header using Script 1
+ *   - Extract product/packing text
+ *   - Extract numeric values directly from each data row
+ *   - Preserve exact numeric meaning/order from source
+ *   - Do NOT calculate values
+ *   - Do NOT map common fields yet
+ *
+ * IMPORTANT:
+ *   Header establishes the column ORDER.
+ *   Data rows provide the actual values.
+ *
+ * ============================================================
+ */
+
+const fs = require("fs");
+const path = require("path");
+
+const {
+    extractSingleRowHeader
+} = require("./singleRowHeaderExtractor");
+
+// ============================================================
+// NUMERIC TOKEN
+// ============================================================
+
+function isNumericToken(value) {
+
+    const text =
+        String(value ?? "")
+            .trim()
+            .replace(/,/g, "");
+
+    return /^-?(?:\d+(?:\.\d+)?|\.\d+)$/.test(text);
+}
+
+// ============================================================
+// PARSE NUMERIC
+// ============================================================
+
+function parseNumeric(value) {
+
+    const text =
+        String(value ?? "")
+            .trim()
+            .replace(/,/g, "");
+
+    if (!isNumericToken(text)) {
+        return null;
+    }
+
+    return Number(text);
+}
+
+// ============================================================
+// CLEAN TEXT
+// ============================================================
+
+function cleanText(value) {
+
+    return String(value ?? "")
+        .replace(/\r/g, "")
+        .replace(/\u0000/g, "")
+        .trim();
+}
+
+// ============================================================
+// GET NON-BLANK TOKENS
+// ============================================================
+
+function tokenizeDataLine(line) {
+
+    const text =
+        String(line ?? "");
+
+    const tokens = [];
+
+    const regex = /\S+/g;
+
+    let match;
+
+    while ((match = regex.exec(text)) !== null) {
+
+        tokens.push({
+            text: match[0],
+            start: match.index,
+            end:
+                match.index +
+                match[0].length
+        });
+    }
+
+    return tokens;
+}
+
+// ============================================================
+// FIND NUMERIC TOKENS
+// ============================================================
+
+function getNumericTokens(line) {
+
+    return tokenizeDataLine(line)
+        .filter(token =>
+            isNumericToken(token.text)
+        )
+        .map(token => ({
+            ...token,
+            value:
+                parseNumeric(token.text)
+        }));
+}
+
+// ============================================================
+// HEADER FORMAT HELPERS
+// ============================================================
+
+function normalizeHeaderName(value) {
+    return String(value ?? "")
+        .toUpperCase()
+        .replace(/[.,:;()[\]{}]/g, "")
+        .replace(/\s+/g, "")
+        .trim();
+}
+
+function isPalaniappaHeader(header) {
+    const names =
+        (header.columns || []).map(
+            column => normalizeHeaderName(column.header)
+        );
+
+    return (
+        names.includes("PRODUCTNAME") &&
+        names.includes("PACKG") &&
+        names.includes("SALES") &&
+        names.includes("CLOSING") &&
+        names.includes("DAY")
+    );
+}
+
+function isSemicolonStockHeader(header) {
+    const names =
+        (header.columns || []).map(
+            column => normalizeHeaderName(column.header)
+        );
+
+    return (
+        names.includes("PRODUCTNAME") &&
+        names.includes("PACKING") &&
+        names.includes("OPENING") &&
+        names.includes("PURCHASE") &&
+        names.includes("SALES") &&
+        names.includes("CSTOCK") &&
+        names.includes("EXPIRY") &&
+        names.includes("PRSALE")
+    );
+}
+
+// ============================================================
+// SEMICOLON DATA TOKENS
+// ============================================================
+
+function tokenizeSemicolonDataLine(line) {
+
+    const text =
+        String(line ?? "");
+
+    return text
+        .split(";")
+        .map(
+            (value, index, parts) => {
+
+                const raw =
+                    String(value ?? "");
+
+                const trimmed =
+                    raw.trim();
+
+                return {
+                    text: trimmed,
+                    rawText: raw,
+                    index,
+                    start:
+                        parts
+                            .slice(0, index)
+                            .reduce(
+                                (total, part) =>
+                                    total +
+                                    String(part ?? "").length +
+                                    1,
+                                0
+                            ),
+                    end:
+                        parts
+                            .slice(0, index + 1)
+                            .reduce(
+                                (total, part) =>
+                                    total +
+                                    String(part ?? "").length,
+                                0
+                            )
+                };
+            }
+        );
+}
+
+// ============================================================
+// PARSE SOURCE VALUE
+//
+// Numeric source values become numbers.
+// Non-numeric values remain exact text.
+// Empty source values remain null.
+// ============================================================
+
+function parseSourceValue(value) {
+
+    const text =
+        cleanText(value);
+
+    if (!text) {
+        return null;
+    }
+
+    if (isNumericToken(text)) {
+        return parseNumeric(text);
+    }
+
+    return text;
+}
+
+// ============================================================
+// PALANIAPPA FIXED-WIDTH ROW
+// ============================================================
+
+function extractPalaniappaRow(
+    line,
+    header,
+    rowNumber
+) {
+
+    const columns =
+        [...header.columns]
+            .sort(
+                (a, b) =>
+                    a.position - b.position
+            );
+
+    const productColumn =
+        columns.find(
+            column =>
+                normalizeHeaderName(
+                    column.header
+                ) === "PRODUCTNAME"
+        );
+
+    const packingColumn =
+        columns.find(
+            column =>
+                normalizeHeaderName(
+                    column.header
+                ) === "PACKG"
+        );
+
+    const salesColumn =
+        columns.find(
+            column =>
+                normalizeHeaderName(
+                    column.header
+                ) === "SALES"
+        );
+
+    const closingColumn =
+        columns.find(
+            column =>
+                normalizeHeaderName(
+                    column.header
+                ) === "CLOSING"
+        );
+
+    const dayColumn =
+        columns.find(
+            column =>
+                normalizeHeaderName(
+                    column.header
+                ) === "DAY"
+        );
+
+    if (
+        !productColumn ||
+        !packingColumn ||
+        !salesColumn ||
+        !closingColumn ||
+        !dayColumn
+    ) {
+        return null;
+    }
+
+    /*
+     * Fixed-width boundaries come directly from the detected
+     * header positions.
+     *
+     * Product: 0 -> PACKG position
+     * Packing: PACKG position -> SALES position
+     * Sales: SALES position -> CLOSING position
+     * Closing: CLOSING position -> DAY position
+     * Day: DAY position -> end
+     */
+
+    // PALANIAPPA fixed-width product field.
+    // Product starts at column 0 and ends immediately before PACKG.
+    // Do not depend on numeric tokens because rows may contain "-".
+    const product =
+        cleanText(
+            line.slice(
+                productColumn.position,
+                packingColumn.position
+            )
+        );
+
+    // PALANIAPPA fixed-width packing field.
+    const packing =
+        cleanText(
+            line.slice(
+                packingColumn.position,
+                salesColumn.position
+            )
+        );
+
+    const salesRaw =
+        cleanText(
+            line.slice(
+                salesColumn.position,
+                closingColumn.position
+            )
+        );
+
+    const closingRaw =
+        cleanText(
+            line.slice(
+                closingColumn.position,
+                dayColumn.position
+            )
+        );
+
+    const dayRaw =
+        cleanText(
+            line.slice(
+                dayColumn.position
+            )
+        );
+
+    /*
+     * Preserve "-" exactly in raw values.
+     * Common mapping can decide later whether "-" means null.
+     */
+
+    const rawValues = {
+        "Product Name": product,
+        "PACKG": packing,
+        "SALES": salesRaw,
+        "CLOSING": closingRaw,
+        "DAY": dayRaw
+    };
+
+    const values = {
+        "Product Name": product,
+        "PACKG": packing,
+        "SALES":
+            salesRaw === "-"
+                ? null
+                : parseSourceValue(salesRaw),
+        "CLOSING":
+            closingRaw === "-"
+                ? null
+                : parseSourceValue(closingRaw),
+        "DAY":
+            dayRaw === "-"
+                ? null
+                : parseSourceValue(dayRaw)
+    };
+
+    return {
+        rowNumber,
+        rawLine: line,
+        numericTokenCount:
+            [salesRaw, closingRaw, dayRaw]
+                .filter(
+                    value =>
+                        value !== ""
+                )
+                .length,
+        expectedNumericCount: 3,
+        numericCountMatches:
+            true,
+        rawValues,
+        values
+    };
+}
+
+// ============================================================
+// META / SEMICOLON STOCK ROW
+// ============================================================
+
+function extractSemicolonStockRow(
+    line,
+    header,
+    rowNumber
+) {
+
+    const tokens =
+        tokenizeSemicolonDataLine(line);
+
+    const columns =
+        [...header.columns]
+            .sort(
+                (a, b) =>
+                    a.index - b.index
+            );
+
+    const rawValues = {};
+    const values = {};
+
+    /*
+     * Map by header column order, not by whitespace.
+     * This is essential because blank fields are meaningful.
+     */
+
+    for (
+        let index = 0;
+        index < columns.length;
+        index++
+    ) {
+
+        const column =
+            columns[index];
+
+        const token =
+            tokens[index];
+
+        const raw =
+            token
+                ? token.text
+                : "";
+
+        rawValues[column.header] =
+            raw;
+
+        values[column.header] =
+            parseSourceValue(raw);
+    }
+
+    return {
+        rowNumber,
+        rawLine: line,
+        numericTokenCount:
+            tokens.filter(
+                token =>
+                    isNumericToken(token.text)
+            ).length,
+        expectedNumericCount:
+            columns.length,
+        numericCountMatches:
+            true,
+        rawValues,
+        values
+    };
+}
+
+// ============================================================
+// DETERMINE PRODUCT / PACKING SPLIT
+// ============================================================
+
+function findFirstNumericToken(line) {
+
+    const tokens =
+        tokenizeDataLine(line);
+
+    for (const token of tokens) {
+
+        if (
+            isNumericToken(token.text)
+        ) {
+            return token;
+        }
+    }
+
+    return null;
+}
+
+// ============================================================
+// EXTRACT PRODUCT + PACKING
+// ============================================================
+
+function extractLeadingText(
+    line,
+    firstNumericToken
+) {
+
+    const beforeNumeric =
+        firstNumericToken
+            ? line.slice(
+                0,
+                firstNumericToken.start
+            )
+            : line;
+
+    /*
+     * The first numeric token belongs to O.Stk
+     *
+     * Everything before it contains:
+     *
+     *   Product Name
+     *   Packing
+     *
+     * We use the known header's packing position to
+     * identify the boundary when possible.
+     */
+
+    return cleanText(beforeNumeric);
+}
+
+// ============================================================
+// SPLIT PRODUCT AND PACKING
+// ============================================================
+
+function splitProductPacking(
+    line,
+    header,
+    firstNumericToken
+) {
+
+    const beforeNumeric =
+        extractLeadingText(
+            line,
+            firstNumericToken
+        );
+
+    /*
+     * Product Name is the first column.
+     * Packing is the second column.
+     *
+     * Script 1 detected the packing header at position 29
+     * for the current structure.
+     *
+     * We use that as the starting reference, but do NOT
+     * use it to extract numeric values.
+     */
+
+    const packingColumn =
+        header.columns.find(
+            column =>
+                String(column.header)
+                    .toUpperCase()
+                    .replace(/\s+/g, "") ===
+                "PACKING"
+        );
+
+    if (packingColumn) {
+
+        const position =
+            packingColumn.position;
+
+        if (
+            position >= 0 &&
+            position < line.length
+        ) {
+
+            const productPart =
+                cleanText(
+                    line.slice(
+                        0,
+                        position
+                    )
+                );
+
+            const packingPart =
+                cleanText(
+                    beforeNumeric.slice(
+                        Math.max(
+                            0,
+                            position
+                        )
+                    )
+                );
+
+            if (
+                productPart &&
+                packingPart
+            ) {
+                return {
+                    product:
+                        productPart,
+
+                    packing:
+                        packingPart
+                };
+            }
+        }
+    }
+
+    /*
+     * Fallback:
+     *
+     * Product and packing are separated by the first
+     * large whitespace boundary before the first numeric.
+     */
+
+    const leading =
+        beforeNumeric;
+
+    const match =
+        leading.match(
+            /^(.+?)\s{2,}(\S+)\s*$/
+        );
+
+    if (match) {
+
+        return {
+            product:
+                cleanText(match[1]),
+
+            packing:
+                cleanText(match[2])
+        };
+    }
+
+    return {
+        product:
+            leading,
+
+        packing:
+            ""
+    };
+}
+
+// ============================================================
+// CHECK DATA ROW
+// ============================================================
+
+function isDataRow(line, header) {
+
+    const text =
+        String(line ?? "");
+
+    if (!text.trim()) {
+        return false;
+    }
+
+    const trimmed =
+        text.trim();
+
+    const upper =
+        trimmed.toUpperCase();
+
+    // --------------------------------------------------------
+    // PALANIAPPA SPECIAL FORMAT
+    // --------------------------------------------------------
+
+    if (isPalaniappaHeader(header)) {
+
+        if (
+            /^[-=_]{5,}$/.test(trimmed) ||
+            upper.startsWith("SALES:") ||
+            upper.startsWith("CLOSING:") ||
+            upper.startsWith("* --->")
+        ) {
+            return false;
+        }
+
+        /*
+         * A PALANIAPPA row has:
+         *
+         * Product + Packing + Sales + Closing + Day
+         *
+         * Values may be "-" when no movement exists.
+         */
+
+        const columns =
+            [...header.columns]
+                .sort(
+                    (a, b) =>
+                        a.position - b.position
+                );
+
+        const pack =
+            columns.find(
+                column =>
+                    normalizeHeaderName(
+                        column.header
+                    ) === "PACKG"
+            );
+
+        const sales =
+            columns.find(
+                column =>
+                    normalizeHeaderName(
+                        column.header
+                    ) === "SALES"
+            );
+
+        if (!pack || !sales) {
+            return false;
+        }
+
+        const packing =
+            cleanText(
+                text.slice(
+                    pack.position,
+                    sales.position
+                )
+            );
+
+        const transaction =
+            cleanText(
+                text.slice(
+                    sales.position
+                )
+            );
+
+        return (
+            text.slice(0, pack.position).trim().length > 0 &&
+            packing.length > 0 &&
+            /(?:^|\s)(?:-|-?\d+(?:,\d{3})*(?:\.\d+)?)\s+(?:-|-?\d+(?:,\d{3})*(?:\.\d+)?)(?:\s+(?:-|-?\d+(?:,\d{3})*(?:\.\d+)?))?\s*$/
+                .test(transaction)
+        );
+    }
+
+    // --------------------------------------------------------
+    // META SEMICOLON FORMAT
+    // --------------------------------------------------------
+
+    if (isSemicolonStockHeader(header)) {
+
+        if (
+            /^[-=_]{5,}$/.test(trimmed) ||
+            /^TOTAL\s*:/i.test(trimmed)
+        ) {
+            return false;
+        }
+
+        const parts =
+            text.split(";");
+
+        const product =
+            String(
+                parts[0] ?? ""
+            ).trim();
+
+        if (!product) {
+            return false;
+        }
+
+        if (
+            /^TOTAL\s*:/i.test(product)
+        ) {
+            return false;
+        }
+
+        /*
+         * The report contains a trailing semicolon, so the
+         * actual source fields are the header field count.
+         */
+
+        return (
+            parts.length >=
+            header.columns.length
+        );
+    }
+
+    // --------------------------------------------------------
+    // ORIGINAL GENERIC SINGLE-ROW LOGIC
+    // --------------------------------------------------------
+
+    if (
+        /^[-=_]{5,}$/.test(trimmed)
+    ) {
+        return false;
+    }
+
+    if (
+        upper.startsWith("COMPANY :") ||
+        upper.startsWith("COMPANY:") ||
+        upper.startsWith("DIVISION :") ||
+        upper.startsWith("DIVISON :") ||
+        upper.startsWith("OPENING VALUE") ||
+        upper.startsWith("PURCHASE VALUE") ||
+        upper.startsWith("CLOSING VALUE")
+    ) {
+        return false;
+    }
+
+    const numericTokens =
+        getNumericTokens(text);
+
+    return numericTokens.length >= 3;
+}
+
+// ============================================================
+// EXTRACT DATA ROW
+// ============================================================
+
+function extractRow(
+    line,
+    header,
+    rowNumber
+) {
+
+    // --------------------------------------------------------
+    // PALANIAPPA
+    // --------------------------------------------------------
+
+    if (isPalaniappaHeader(header)) {
+        return extractPalaniappaRow(
+            line,
+            header,
+            rowNumber
+        );
+    }
+
+    // --------------------------------------------------------
+    // META / SEMICOLON STOCK
+    // --------------------------------------------------------
+
+    if (isSemicolonStockHeader(header)) {
+        return extractSemicolonStockRow(
+            line,
+            header,
+            rowNumber
+        );
+    }
+
+    // --------------------------------------------------------
+    // ORIGINAL GENERIC EXTRACTION
+    // --------------------------------------------------------
+
+    const numericTokens =
+        getNumericTokens(line);
+
+    if (!numericTokens.length) {
+        return null;
+    }
+
+    /*
+     * Find the first numeric token.
+     *
+     * For the original structure this is O.Stk.
+     */
+
+    const firstNumeric =
+        numericTokens[0];
+
+    const leading =
+        splitProductPacking(
+            line,
+            header,
+            firstNumeric
+        );
+
+    /*
+     * The remaining numeric values stay in SOURCE ORDER.
+     *
+     * No arithmetic.
+     * No recalculation.
+     * No inferred values.
+     */
+
+    const numericValues =
+        numericTokens.map(
+            token => token.value
+        );
+
+    const rawNumericValues =
+        numericTokens.map(
+            token => token.text
+        );
+
+    /*
+     * Determine numeric header columns.
+     */
+
+    const numericHeaders =
+        header.columns
+            .slice(2)
+            .map(
+                column =>
+                    column.header
+            );
+
+    const rawValues = {};
+    const values = {};
+
+    /*
+     * Product and packing
+     */
+
+    rawValues["Product Name"] =
+        leading.product;
+
+    rawValues["Packing"] =
+        leading.packing;
+
+    values["Product Name"] =
+        leading.product;
+
+    values["Packing"] =
+        leading.packing;
+
+    /*
+     * Numeric values
+     */
+
+    for (
+        let index = 0;
+        index < numericHeaders.length;
+        index++
+    ) {
+
+        const headerName =
+            numericHeaders[index];
+
+        const raw =
+            rawNumericValues[index];
+
+        const value =
+            numericValues[index];
+
+        rawValues[headerName] =
+            raw !== undefined
+                ? raw
+                : null;
+
+        values[headerName] =
+            value !== undefined
+                ? value
+                : null;
+    }
+
+    return {
+
+        rowNumber,
+
+        rawLine:
+            line,
+
+        numericTokenCount:
+            numericTokens.length,
+
+        expectedNumericCount:
+            numericHeaders.length,
+
+        numericCountMatches:
+            numericTokens.length ===
+            numericHeaders.length,
+
+        rawValues,
+
+        values
+    };
+}
+
+// ============================================================
+// FIND END OF DATA
+// ============================================================
+
+function isEndOfData(line) {
+
+    const text =
+        String(line ?? "")
+            .trim()
+            .toUpperCase();
+
+    if (!text) {
+        return false;
+    }
+
+    return (
+        text.startsWith("OPENING VALUE") ||
+        text.startsWith("PURCHASE VALUE") ||
+        text.startsWith("CLOSING VALUE") ||
+        /^TOTAL\s*:/i.test(text)
+    );
+}
+
+// ============================================================
+// MAIN EXTRACTION
+// ============================================================
+
+function extractSingleRowData(
+    filePath
+) {
+
+    const absolutePath =
+        path.resolve(filePath);
+
+    if (!fs.existsSync(absolutePath)) {
+
+        throw new Error(
+            `TXT file not found: ${absolutePath}`
+        );
+    }
+
+    /*
+     * Script 1 identifies the header.
+     */
+    const headerResult =
+        extractSingleRowHeader(
+            absolutePath
+        );
+
+    if (!headerResult.success) {
+
+        return {
+            success: false,
+
+            file:
+                absolutePath,
+
+            message:
+                "Single-row header could not be identified.",
+
+            records: []
+        };
+    }
+
+    const lines =
+        headerResult.rawLines;
+
+    const header =
+        headerResult.header;
+
+    const dataStart =
+        headerResult.dataStart;
+
+    if (dataStart === null) {
+
+        return {
+            success: false,
+
+            file:
+                absolutePath,
+
+            header,
+
+            message:
+                "Data start could not be identified.",
+
+            records: []
+        };
+    }
+
+    const records = [];
+
+    for (
+        let index =
+            dataStart - 1;
+
+        index < lines.length;
+
+        index++
+    ) {
+
+        const line =
+            lines[index];
+
+        /*
+         * Summary section ends product data.
+         */
+        if (
+            isEndOfData(line)
+        ) {
+            break;
+        }
+
+        /*
+         * Ignore non-data lines.
+         */
+        if (
+            !isDataRow(
+                line,
+                header
+            )
+        ) {
+            continue;
+        }
+
+        const record =
+            extractRow(
+                line,
+                header,
+                index + 1
+            );
+
+        if (record) {
+            records.push(record);
+        }
+    }
+
+    return {
+
+        success: true,
+
+        file:
+            absolutePath,
+
+        header: {
+            lineNumber:
+                header.lineNumber,
+
+            text:
+                header.text,
+
+            columns:
+                header.columns
+        },
+
+        dataStart,
+
+        recordCount:
+            records.length,
+
+        records
+    };
+}
+
+// ============================================================
+// EXPORT
+// ============================================================
+
+module.exports = {
+    extractSingleRowData,
+    extractRow,
+    getNumericTokens,
+    parseNumeric
+};
+
+// ============================================================
+// CLI
+// ============================================================
+
+if (require.main === module) {
+
+    const filePath =
+        process.argv[2];
+
+    if (!filePath) {
+
+        console.error(
+            "Usage:"
+        );
+
+        console.error(
+            'node validation/singleRow/singleRowDataExtractor.js "path\\file.txt"'
+        );
+
+        process.exit(1);
+    }
+
+    try {
+
+        const result =
+            extractSingleRowData(
+                filePath
+            );
+
+        console.log(
+            JSON.stringify(
+                result,
+                null,
+                2
+            )
+        );
+
+    } catch (error) {
+
+        console.error(
+            error.stack ||
+            error.message
+        );
+
+        process.exit(1);
+    }
+}
+
+
+################################################################
+FILE: validation\singleRow\singleRowHeaderMapper.js
+################################################################
+
+/**
+ * ============================================================
+ * SINGLE ROW TXT COMMON HEADER MAPPER
+ * ============================================================
+ *
+ * SCRIPT 3
+ *
+ * Purpose:
+ *   Convert source-specific headers into common master fields
+ *   while ALWAYS preserving the original source header.
+ *
+ * IMPORTANT:
+ *   - Does not read/extract TXT rows
+ *   - Does not calculate anything
+ *   - Does not modify Script 1
+ *   - Does not modify Script 2
+ *   - Unknown headers are retained as UNKNOWN
+ *
+ * ============================================================
+ */
+
+// ============================================================
+// NORMALIZE HEADER
+// ============================================================
+
+function normalizeHeader(value) {
+
+    return String(value ?? "")
+        .toUpperCase()
+        .replace(/[<>{}()[\]:;,|]/g, "")
+        .replace(/\./g, "")
+        .replace(/\s+/g, "")
+        .trim();
+}
+
+// ============================================================
+// HEADER ALIASES
+// ============================================================
+//
+// The LEFT side is the source/header token.
+//
+// The RIGHT side is the common master field.
+//
+// Keep this mapping conservative.
+// Do NOT map an unknown header by guesswork.
+// ============================================================
+
+const HEADER_ALIASES = {
+
+    // --------------------------------------------------------
+    // PRODUCT
+    // --------------------------------------------------------
+
+    PRODUCTNAME: "product",
+    PRODUCT: "product",
+    ITEMNAME: "product",
+    ITEM: "product",
+    MEDICINENAME: "product",
+    MEDICINE: "product",
+    DESCRIPTION: "product",
+    PARTICULARS: "product",
+
+    // --------------------------------------------------------
+    // PACKING
+    // --------------------------------------------------------
+
+    PACKING: "pack",
+    PACK: "pack",
+    PACKG: "pack",
+    PACKSIZE: "pack",
+    BOX: "pack",
+
+    // --------------------------------------------------------
+    // OPENING
+    // --------------------------------------------------------
+
+    OSTK: "opening",
+    OPSTK: "opening",
+    OPENING: "opening",
+    OPENINGBAL: "opening",
+    OPENINGBALANCE: "opening",
+    OPNGBAL: "opening",
+    OBAL: "opening",
+    OB: "opening",
+    OPQTY: "opening",
+
+    // --------------------------------------------------------
+    // PURCHASE
+    // --------------------------------------------------------
+
+    PURC: "purchase",
+    PURCHASE: "purchase",
+    PQTY: "purchase",
+    PUR: "purchase",
+    RECEIPT: "purchase",
+    RECEIPTS: "purchase",
+    RCPT: "purchase",
+    RECD: "purchase",
+
+    // --------------------------------------------------------
+    // TOTAL
+    // --------------------------------------------------------
+
+    TOT: "total",
+    TOTAL: "total",
+    TOTALS: "total",
+
+    // --------------------------------------------------------
+    // SALES
+    // --------------------------------------------------------
+
+    SALE: "sales",
+    SALES: "sales",
+    SQTY: "sales",
+
+    // --------------------------------------------------------
+    // CLOSING / QOH
+    // --------------------------------------------------------
+
+    QOH: "closing",
+    CLOSING: "closing",
+    CSTOCK: "closing",
+    CLST: "closing",
+    CLSTK: "closing",
+    CLBAL: "closing",
+    CURSTK: "closing",
+
+    // --------------------------------------------------------
+    // VALUE
+    // --------------------------------------------------------
+
+    VALUE: "closingValue",
+    STOCKVALUE: "closingValue",
+    STOCKVAL: "closingValue",
+    STKVAL: "closingValue",
+    SALEVALUE: "salesValue",
+    SALESVALUE: "salesValue",
+
+    // --------------------------------------------------------
+    // AGE
+    // --------------------------------------------------------
+
+    AGE: "age",
+    DAY: "day",
+
+    // --------------------------------------------------------
+    // EXPIRY
+    // --------------------------------------------------------
+
+    EXPIRY: "expiry",
+
+    // --------------------------------------------------------
+    // PRICE / SALE RATE
+    // --------------------------------------------------------
+
+    PRSALE: "prSale",
+
+    // --------------------------------------------------------
+    // REPLACEMENT
+    // --------------------------------------------------------
+
+    REPL: "replacement",
+    REPLACEMENT: "replacement",
+
+    // --------------------------------------------------------
+    // FREE
+    // --------------------------------------------------------
+
+    FREE: "free",
+
+    // --------------------------------------------------------
+    // ADJUSTMENT
+    // --------------------------------------------------------
+
+    ADJ: "adjustment",
+    ADJUSTMENT: "adjustment",
+
+    // --------------------------------------------------------
+    // RETURNS
+    // --------------------------------------------------------
+
+    PRET: "purchaseReturn",
+    PURRET: "purchaseReturn",
+    PURCHASERETURN: "purchaseReturn",
+
+    SRET: "salesReturn",
+    SALRET: "salesReturn",
+    SALESRETURN: "salesReturn",
+
+    // --------------------------------------------------------
+    // PRODUCT CODE
+    // --------------------------------------------------------
+
+    ITEMCODE: "productCode",
+    PRODUCTCODE: "productCode",
+    HSNCODE: "hsnCode",
+    HSN: "hsnCode",
+
+    // --------------------------------------------------------
+    // SERIAL
+    // --------------------------------------------------------
+
+    SNO: "serialNumber",
+    NO: "serialNumber"
+};
+
+// ============================================================
+// MAP ONE HEADER
+// ============================================================
+
+function mapHeader(
+    sourceHeader,
+    position = null,
+    index = null
+) {
+
+    const original =
+        String(sourceHeader ?? "").trim();
+
+    const normalized =
+        normalizeHeader(original);
+
+    const commonField =
+        HEADER_ALIASES[normalized] ||
+        null;
+
+    return {
+
+        index,
+
+        position,
+
+        sourceHeader:
+            original,
+
+        normalizedHeader:
+            normalized,
+
+        commonField,
+
+        status:
+            commonField
+                ? "MAPPED"
+                : "UNIDENTIFIED"
+    };
+}
+
+// ============================================================
+// MAP HEADER OBJECT
+// ============================================================
+
+function mapHeaders(header) {
+
+    if (
+        !header ||
+        !Array.isArray(header.columns)
+    ) {
+
+        return {
+            success: false,
+
+            message:
+                "Header columns are required.",
+
+            columns: []
+        };
+    }
+
+    const columns =
+        header.columns.map(
+            column =>
+                mapHeader(
+                    column.header,
+                    column.position,
+                    column.index
+                )
+        );
+
+    return {
+
+        success: true,
+
+        sourceHeader:
+            header.text,
+
+        headerLineNumber:
+            header.lineNumber,
+
+        columns
+    };
+}
+
+// ============================================================
+// MAP EXTRACTED RECORD
+// ============================================================
+//
+// This function takes Script 2 output:
+//
+// values: {
+//   "Product Name": "...",
+//   "Packing": "100ML",
+//   "O.Stk": 0,
+//   ...
+// }
+//
+// and creates:
+//
+// common: {
+//   product: "...",
+//   pack: "100ML",
+//   opening: 0,
+//   ...
+// }
+//
+// The source values remain untouched.
+// ============================================================
+
+function mapRecord(
+    record,
+    mappedHeader
+) {
+
+    if (
+        !record ||
+        !mappedHeader ||
+        !Array.isArray(mappedHeader.columns)
+    ) {
+
+        throw new Error(
+            "Record and mapped header are required."
+        );
+    }
+
+    const common = {};
+
+    const source = {};
+
+    const unidentified = {};
+
+    for (
+        const column
+        of mappedHeader.columns
+    ) {
+
+        const sourceHeader =
+            column.sourceHeader;
+
+        /*
+         * Read the value by exact source header first.
+         * If the extractor's object key differs only by whitespace,
+         * punctuation, or casing, use normalized-header lookup.
+         *
+         * This is mapping only. Script 3 never re-extracts the TXT row.
+         */
+        let value =
+            record.values
+                ? record.values[sourceHeader]
+                : undefined;
+
+        let rawValue =
+            record.rawValues
+                ? record.rawValues[sourceHeader]
+                : undefined;
+
+        if (
+            (value === undefined || value === null) &&
+            record.values &&
+            typeof record.values === "object"
+        ) {
+            const matchingKey =
+                Object.keys(record.values).find(
+                    key =>
+                        normalizeHeader(key) ===
+                        column.normalizedHeader
+                );
+
+            if (matchingKey !== undefined) {
+                value = record.values[matchingKey];
+            }
+        }
+
+        if (
+            (rawValue === undefined || rawValue === null) &&
+            record.rawValues &&
+            typeof record.rawValues === "object"
+        ) {
+            const matchingRawKey =
+                Object.keys(record.rawValues).find(
+                    key =>
+                        normalizeHeader(key) ===
+                        column.normalizedHeader
+                );
+
+            if (matchingRawKey !== undefined) {
+                rawValue = record.rawValues[matchingRawKey];
+            }
+        }
+
+        /*
+         * Always preserve the source header/value.
+         */
+        source[sourceHeader] = {
+            value:
+                value !== undefined
+                    ? value
+                    : null,
+
+            rawValue:
+                rawValue !== undefined
+                    ? rawValue
+                    : null,
+
+            position:
+                column.position,
+
+            normalizedHeader:
+                column.normalizedHeader,
+
+            commonField:
+                column.commonField,
+
+            status:
+                column.status
+        };
+
+        if (column.commonField) {
+
+            common[column.commonField] =
+                value !== undefined
+                    ? value
+                    : null;
+
+        } else {
+
+            /*
+             * Unknown fields are NOT discarded.
+             */
+            unidentified[sourceHeader] = {
+                value:
+                    value !== undefined
+                        ? value
+                        : null,
+
+                rawValue:
+                    rawValue !== undefined
+                        ? rawValue
+                        : null,
+
+                position:
+                    column.position
+            };
+        }
+    }
+
+    return {
+
+        rowNumber:
+            record.rowNumber,
+
+        rawLine:
+            record.rawLine,
+
+        common,
+
+        source,
+
+        unidentified
+    };
+}
+
+// ============================================================
+// MAP COMPLETE EXTRACTION RESULT
+// ============================================================
+
+function mapExtractionResult(
+    extractionResult
+) {
+
+    if (
+        !extractionResult ||
+        !extractionResult.success
+    ) {
+
+        return {
+
+            success: false,
+
+            message:
+                "Valid extraction result is required.",
+
+            records: []
+        };
+    }
+
+    const mappedHeader =
+        mapHeaders(
+            extractionResult.header
+        );
+
+    const records =
+        extractionResult.records.map(
+            record =>
+                mapRecord(
+                    record,
+                    mappedHeader
+                )
+        );
+
+    return {
+
+        success: true,
+
+        file:
+            extractionResult.file,
+
+        header: mappedHeader,
+
+        dataStart:
+            extractionResult.dataStart,
+
+        recordCount:
+            records.length,
+
+        records
+    };
+}
+
+// ============================================================
+// EXPORT
+// ============================================================
+
+module.exports = {
+
+    normalizeHeader,
+
+    mapHeader,
+
+    mapHeaders,
+
+    mapRecord,
+
+    mapExtractionResult,
+
+    HEADER_ALIASES
+};
+
+// ============================================================
+// DIRECT CLI TEST
+// ============================================================
+//
+// This test uses Script 2.
+// It does NOT reimplement extraction.
+// ============================================================
+
+if (require.main === module) {
+
+    const filePath =
+        process.argv[2];
+
+    if (!filePath) {
+
+        console.error(
+            "Usage:"
+        );
+
+        console.error(
+            'node validation/singleRow/singleRowHeaderMapper.js "path\\file.txt"'
+        );
+
+        process.exit(1);
+    }
+
+    try {
+
+        const {
+            extractSingleRowData
+        } =
+            require(
+                "./singleRowDataExtractor"
+            );
+
+        const extraction =
+            extractSingleRowData(
+                filePath
+            );
+
+        const result =
+            mapExtractionResult(
+                extraction
+            );
+
+        console.log(
+            JSON.stringify(
+                result,
+                null,
+                2
+            )
+        );
+
+    } catch (error) {
+
+        console.error(
+            error.stack ||
+            error.message
+        );
+
+        process.exit(1);
+    }
+}
+
+
+################################################################
+FILE: validation\singleRow\singleRowExtractionMaster.js
+################################################################
+
+/**
+ * ============================================================
+ * SINGLE ROW RAW EXTRACTION MASTER
+ * ============================================================
+ *
+ * SCRIPT 4
+ *
+ * RAW SOURCE COLUMNS + COMMON MAPPING
+ *
+ * IMPORTANT:
+ *   Script 4 does NOT re-extract the TXT file.
+ *   It uses Script 2 + Script 3 output.
+ *
+ * RAW SOURCE VALUES come from:
+ *     mappedRecord.source
+ *
+ * COMMON VALUES come from:
+ *     mappedRecord.common
+ *
+ * This keeps the original statement data intact.
+ * ============================================================
+ */
+
+const fs = require("fs");
+const path = require("path");
+const XLSX = require("xlsx");
+
+const {
+    extractSingleRowData
+} = require("./singleRowDataExtractor");
+
+const {
+    mapExtractionResult
+} = require("./singleRowHeaderMapper");
+
+// ============================================================
+// MASTER FILE
+// ============================================================
+
+const MASTER_DIR =
+    path.resolve(
+        __dirname,
+        "../../storage/extraction/SSS"
+    );
+
+const MASTER_FILE =
+    path.join(
+        MASTER_DIR,
+        "Master_Extraction.xlsx"
+    );
+
+// ============================================================
+// FIXED COMMON COLUMNS
+// ============================================================
+
+const COMMON_COLUMNS = [
+    "Common Product",
+    "Common Pack",
+    "Common Opening",
+    "Common Purchase",
+    "Common Total",
+    "Common Sales",
+    "Common Closing",
+    "Common Closing Value",
+    "Common Age"
+];
+
+// ============================================================
+// SYSTEM COLUMNS
+// ============================================================
+
+const SYSTEM_COLUMNS = [
+    "Source File",
+    "Source Row",
+    "Statement Structure"
+];
+
+// ============================================================
+// SUPPORT COLUMNS
+// ============================================================
+
+const SUPPORT_COLUMNS = [
+    "Raw Source Values",
+    "Header Mapping",
+    "Unidentified Headers"
+];
+
+// ============================================================
+// SAFE VALUE
+// ============================================================
+
+function safeValue(value) {
+
+    if (
+        value === undefined ||
+        value === null
+    ) {
+        return "";
+    }
+
+    return value;
+}
+
+// ============================================================
+// ENSURE MASTER DIRECTORY
+// ============================================================
+
+function ensureMasterDirectory() {
+
+    if (
+        !fs.existsSync(
+            MASTER_DIR
+        )
+    ) {
+
+        fs.mkdirSync(
+            MASTER_DIR,
+            {
+                recursive: true
+            }
+        );
+    }
+}
+
+// ============================================================
+// GET RAW HEADERS
+// ============================================================
+
+function getRawHeaders(
+    extraction
+) {
+
+    if (
+        !extraction ||
+        !extraction.header ||
+        !Array.isArray(
+            extraction.header.columns
+        )
+    ) {
+        return [];
+    }
+
+    return extraction.header.columns
+        .map(
+            column =>
+                String(
+                    column.header ?? ""
+                ).trim()
+        )
+        .filter(
+            Boolean
+        );
+}
+
+// ============================================================
+// GET RAW SOURCE VALUE
+// ============================================================
+//
+// IMPORTANT:
+//
+// Script 3 creates:
+//
+// mappedRecord.source = {
+//     "Product Name": {
+//         value: "ACNESTAL FASH WASH",
+//         rawValue: "ACNESTAL FASH WASH",
+//         ...
+//     },
+//     "Packing": {
+//         value: "100ML",
+//         rawValue: "100ML",
+//         ...
+//     }
+// }
+//
+// Therefore Script 4 must read:
+//
+// mappedRecord.source[header].value
+//
+// NOT:
+//
+// record.values[header]
+//
+// ============================================================
+
+function getRawSourceValue(
+    mappedRecord,
+    header
+) {
+
+    const source =
+        mappedRecord.source || {};
+
+    const entry =
+        source[header];
+
+    if (
+        !entry
+    ) {
+        return "";
+    }
+
+    return safeValue(
+        entry.value
+    );
+}
+
+// ============================================================
+// GET RAW TEXT VALUE
+// ============================================================
+
+function getRawTextValue(
+    mappedRecord,
+    header
+) {
+
+    const source =
+        mappedRecord.source || {};
+
+    const entry =
+        source[header];
+
+    if (
+        !entry
+    ) {
+        return "";
+    }
+
+    return safeValue(
+        entry.rawValue
+    );
+}
+
+// ============================================================
+// CREATE RAW SOURCE OBJECT
+// ============================================================
+
+function createRawSourceObject(
+    mappedRecord,
+    rawHeaders
+) {
+
+    const raw = {};
+
+    for (
+        const header
+        of rawHeaders
+    ) {
+
+        raw[header] =
+            getRawSourceValue(
+                mappedRecord,
+                header
+            );
+    }
+
+    return raw;
+}
+
+// ============================================================
+// CREATE RAW TEXT OBJECT
+// ============================================================
+
+function createRawTextObject(
+    mappedRecord,
+    rawHeaders
+) {
+
+    const rawText = {};
+
+    for (
+        const header
+        of rawHeaders
+    ) {
+
+        rawText[header] =
+            getRawTextValue(
+                mappedRecord,
+                header
+            );
+    }
+
+    return rawText;
+}
+
+// ============================================================
+// CREATE HEADER MAPPING TEXT
+// ============================================================
+
+function createMappingText(
+    mappedHeader
+) {
+
+    if (
+        !mappedHeader ||
+        !Array.isArray(
+            mappedHeader.columns
+        )
+    ) {
+        return "";
+    }
+
+    return mappedHeader.columns
+        .map(
+            column =>
+                `${column.sourceHeader} -> ${
+                    column.commonField ||
+                    "UNIDENTIFIED"
+                }`
+        )
+        .join(" | ");
+}
+
+// ============================================================
+// CREATE MASTER ROW
+// ============================================================
+
+function createMasterRow(
+    mappedRecord,
+    extraction,
+    mappedHeader
+) {
+
+    const rawHeaders =
+        getRawHeaders(
+            extraction
+        );
+
+    const raw =
+        createRawSourceObject(
+            mappedRecord,
+            rawHeaders
+        );
+
+    const rawText =
+        createRawTextObject(
+            mappedRecord,
+            rawHeaders
+        );
+
+    const common =
+        mappedRecord.common || {};
+
+    const unidentified =
+        mappedRecord.unidentified || {};
+
+    const row = {};
+
+    // --------------------------------------------------------
+    // SYSTEM
+    // --------------------------------------------------------
+
+    row["Source File"] =
+        path.basename(
+            extraction.file
+        );
+
+    row["Source Row"] =
+        safeValue(
+            mappedRecord.rowNumber
+        );
+
+    row["Statement Structure"] =
+        "SINGLE_ROW";
+
+    // --------------------------------------------------------
+    // EXACT RAW SOURCE HEADERS
+    // --------------------------------------------------------
+
+    for (
+        const header
+        of rawHeaders
+    ) {
+
+        row[header] =
+            raw[header];
+    }
+
+    // --------------------------------------------------------
+    // RAW ORIGINAL VALUES
+    // --------------------------------------------------------
+
+    row["Raw Source Values"] =
+        JSON.stringify(
+            rawText
+        );
+
+    // --------------------------------------------------------
+    // COMMON MAPPING
+    // --------------------------------------------------------
+
+    row["Common Product"] =
+        safeValue(
+            common.product
+        );
+
+    row["Common Pack"] =
+        safeValue(
+            common.pack
+        );
+
+    row["Common Opening"] =
+        safeValue(
+            common.opening
+        );
+
+    row["Common Purchase"] =
+        safeValue(
+            common.purchase
+        );
+
+    row["Common Total"] =
+        safeValue(
+            common.total
+        );
+
+    row["Common Sales"] =
+        safeValue(
+            common.sales
+        );
+
+    row["Common Closing"] =
+        safeValue(
+            common.closing
+        );
+
+    row["Common Closing Value"] =
+        safeValue(
+            common.closingValue
+        );
+
+    row["Common Age"] =
+        safeValue(
+            common.age
+        );
+
+    // --------------------------------------------------------
+    // HEADER MAPPING
+    // --------------------------------------------------------
+
+    row["Header Mapping"] =
+        createMappingText(
+            mappedHeader
+        );
+
+    // --------------------------------------------------------
+    // UNIDENTIFIED
+    // --------------------------------------------------------
+
+    row["Unidentified Headers"] =
+        Object.keys(
+            unidentified
+        ).join(" | ");
+
+    return row;
+}
+
+// ============================================================
+// READ EXISTING MASTER
+// ============================================================
+
+function readExistingMaster() {
+
+    if (
+        !fs.existsSync(
+            MASTER_FILE
+        )
+    ) {
+
+        return {
+            rows: [],
+            headers: []
+        };
+    }
+
+    const workbook =
+        XLSX.readFile(
+            MASTER_FILE
+        );
+
+    if (
+        !workbook.SheetNames.length
+    ) {
+
+        return {
+            rows: [],
+            headers: []
+        };
+    }
+
+    const sheet =
+        workbook.Sheets[
+            workbook.SheetNames[0]
+        ];
+
+    const rows =
+        XLSX.utils.sheet_to_json(
+            sheet,
+            {
+                defval: ""
+            }
+        );
+
+    const range =
+        XLSX.utils.decode_range(
+            sheet["!ref"] ||
+            "A1:A1"
+        );
+
+    const headers = [];
+
+    for (
+        let column =
+            range.s.c;
+
+        column <= range.e.c;
+
+        column++
+    ) {
+
+        const cell =
+            sheet[
+                XLSX.utils.encode_cell({
+                    r: range.s.r,
+                    c: column
+                })
+            ];
+
+        if (
+            cell &&
+            cell.v !== undefined
+        ) {
+
+            headers.push(
+                String(cell.v)
+            );
+        }
+    }
+
+    return {
+        rows,
+        headers
+    };
+}
+
+// ============================================================
+// RECORD KEY
+// ============================================================
+
+function recordKey(
+    row
+) {
+
+    return [
+
+        String(
+            row["Source File"] ??
+            ""
+        )
+            .trim()
+            .toUpperCase(),
+
+        String(
+            row["Source Row"] ??
+            ""
+        )
+            .trim()
+
+    ].join("::");
+}
+
+// ============================================================
+// HEADER KEY
+// ============================================================
+
+function headerKey(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .trim()
+        .toUpperCase();
+}
+
+// ============================================================
+// MERGE HEADERS
+// ============================================================
+//
+// Existing headers are preserved.
+// New source headers are added.
+// Nothing is discarded.
+// ============================================================
+
+function mergeHeaders(
+    existingHeaders,
+    newHeaders
+) {
+
+    const result = [];
+
+    const seen =
+        new Set();
+
+    function add(
+        header
+    ) {
+
+        const key =
+            headerKey(
+                header
+            );
+
+        if (!key) {
+            return;
+        }
+
+        if (
+            seen.has(key)
+        ) {
+            return;
+        }
+
+        seen.add(key);
+
+        result.push(
+            header
+        );
+    }
+
+    for (
+        const header
+        of existingHeaders
+    ) {
+        add(header);
+    }
+
+    for (
+        const header
+        of newHeaders
+    ) {
+        add(header);
+    }
+
+    return result;
+}
+
+// ============================================================
+// APPEND TO MASTER
+// ============================================================
+
+function appendToMaster(
+    rows
+) {
+
+    ensureMasterDirectory();
+
+    const existing =
+        readExistingMaster();
+
+    const existingRows =
+        existing.rows || [];
+
+    const existingHeaders =
+        existing.headers || [];
+
+    const existingKeys =
+        new Set(
+            existingRows.map(
+                recordKey
+            )
+        );
+
+    const addedRows = [];
+
+    for (
+        const row
+        of rows
+    ) {
+
+        const key =
+            recordKey(
+                row
+            );
+
+        if (
+            existingKeys.has(key)
+        ) {
+            continue;
+        }
+
+        existingKeys.add(key);
+
+        addedRows.push(
+            row
+        );
+    }
+
+    const allRows =
+        existingRows.concat(
+            addedRows
+        );
+
+    const rowHeaders =
+        allRows.flatMap(
+            row =>
+                Object.keys(
+                    row
+                )
+        );
+
+    const headers =
+        mergeHeaders(
+            existingHeaders,
+            rowHeaders
+        );
+
+    const worksheet =
+        XLSX.utils.json_to_sheet(
+            allRows,
+            {
+                header: headers
+            }
+        );
+
+    worksheet["!cols"] =
+        headers.map(
+            header => {
+
+                if (
+                    header ===
+                    "Source File"
+                ) {
+                    return {
+                        wch: 45
+                    };
+                }
+
+                if (
+                    header ===
+                    "Raw Source Values"
+                ) {
+                    return {
+                        wch: 90
+                    };
+                }
+
+                if (
+                    header ===
+                    "Header Mapping"
+                ) {
+                    return {
+                        wch: 100
+                    };
+                }
+
+                if (
+                    header ===
+                    "Unidentified Headers"
+                ) {
+                    return {
+                        wch: 40
+                    };
+                }
+
+                if (
+                    header ===
+                    "Product Name"
+                ) {
+                    return {
+                        wch: 35
+                    };
+                }
+
+                return {
+                    wch: 18
+                };
+            }
+        );
+
+    const workbook =
+        XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Raw Extraction"
+    );
+
+    XLSX.writeFile(
+        workbook,
+        MASTER_FILE
+    );
+
+    return {
+
+        success: true,
+
+        masterFile:
+            MASTER_FILE,
+
+        existingRecords:
+            existingRows.length,
+
+        addedRecords:
+            addedRows.length,
+
+        skippedDuplicates:
+            rows.length -
+            addedRows.length,
+
+        totalRecords:
+            allRows.length,
+
+        columns:
+            headers
+    };
+}
+
+// ============================================================
+// PROCESS ONE FILE
+// ============================================================
+
+function processFile(
+    filePath
+) {
+
+    // --------------------------------------------------------
+    // SCRIPT 2
+    // --------------------------------------------------------
+
+    const extraction =
+        extractSingleRowData(
+            filePath
+        );
+
+    if (
+        !extraction ||
+        !extraction.success
+    ) {
+
+        return {
+
+            success: false,
+
+            stage:
+                "EXTRACTION",
+
+            message:
+                extraction?.message ||
+                "Extraction failed."
+        };
+    }
+
+    // --------------------------------------------------------
+    // SCRIPT 3
+    // --------------------------------------------------------
+
+    const mapped =
+        mapExtractionResult(
+            extraction
+        );
+
+    if (
+        !mapped ||
+        !mapped.success
+    ) {
+
+        return {
+
+            success: false,
+
+            stage:
+                "MAPPING",
+
+            message:
+                mapped?.message ||
+                "Mapping failed."
+        };
+    }
+
+    // --------------------------------------------------------
+    // CREATE RAW MASTER ROWS
+    // --------------------------------------------------------
+
+    const rows =
+        mapped.records.map(
+            record =>
+                createMasterRow(
+                    record,
+                    extraction,
+                    mapped.header
+                )
+        );
+
+    // --------------------------------------------------------
+    // WRITE
+    // --------------------------------------------------------
+
+    const result =
+        appendToMaster(
+            rows
+        );
+
+    return {
+
+        ...result,
+
+        success: true,
+
+        file:
+            filePath,
+
+        extractedRecords:
+            mapped.records.length
+    };
+}
+
+// ============================================================
+// EXPORT
+// ============================================================
+
+module.exports = {
+
+    processFile,
+
+    appendToMaster,
+
+    createMasterRow,
+
+    readExistingMaster,
+
+    MASTER_FILE
+};
+
+// ============================================================
+// CLI
+// ============================================================
+
+if (
+    require.main === module
+) {
+
+    const filePath =
+        process.argv[2];
+
+    if (!filePath) {
+
+        console.error(
+            "Usage:"
+        );
+
+        console.error(
+            'node validation\\singleRow\\singleRowExtractionMaster.js "path\\file.txt"'
+        );
+
+        process.exit(1);
+    }
+
+    try {
+
+        const absolutePath =
+            path.resolve(
+                filePath
+            );
+
+        if (
+            !fs.existsSync(
+                absolutePath
+            )
+        ) {
+
+            throw new Error(
+                `File not found: ${absolutePath}`
+            );
+        }
+
+        console.log(
+            "============================================================"
+        );
+
+        console.log(
+            "SINGLE ROW RAW EXTRACTION MASTER"
+        );
+
+        console.log(
+            "============================================================"
+        );
+
+        console.log(
+            `Source : ${absolutePath}`
+        );
+
+        console.log(
+            `Master : ${MASTER_FILE}`
+        );
+
+        console.log("");
+
+        const result =
+            processFile(
+                absolutePath
+            );
+
+        console.log(
+            JSON.stringify(
+                result,
+                null,
+                2
+            )
+        );
+
+        if (
+            !result.success
+        ) {
+
+            process.exit(1);
+        }
+
+    } catch (error) {
+
+        console.error(
+            error.stack ||
+            error.message
+        );
+
+        process.exit(1);
+    }
+}
+

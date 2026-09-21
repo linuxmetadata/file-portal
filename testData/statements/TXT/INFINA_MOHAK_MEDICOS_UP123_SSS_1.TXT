@@ -1,0 +1,43 @@
+
+MOHAK MEDICOS
+GST:09AAKFM5040N1ZV
+ SALES & STOCK REPORT   FROM 01/07/2026  TO 31/07/2026            Page: 1
+================================================================================
+DESCRIPTION/PACKING     Pro.  OPENING    PUR.   SALE   CR.NO.  DR.NO.  CLOSING   
+                        Age     QTY.     QTY.    QTY.  ST.[+]  ST.[-]    QTY.    
+================================================================================
+LXN  LINUX LABORATORIES 
+BENFICA FORTE CAPS              20       0       0       0       0      20
+CARNIGLO TABS                  172     200     173      14      13     200
+CARNIGLO-M TABS                 47       0       2       0       0      45
+COGNIZA TABS                    36       0      12       0       0      24
+EPITRA INJ                       0       0       0       0       0       0
+EPITRA-250 MG TABS              10      30      10       0       0      30
+EPITRA-500 MG TABS              36       0       8       0       0      28
+EPITRA-750 MG TABS              20       0       0       0       0      20
+EPITRA-ER-1 GM TABS              7       0       0       0       0       7
+EPITRA-RTU-500 MG I.V.           0       0       0       0       0       0
+GABAGESIC GEL                   28      40      30       0       0      38
+GABAGESIC-M TABS                13       0       1       0       0      12
+GABAGESIC-NT-100 MG TAB          0       0       0       0       0       0
+GABAGESIC-NT-400 MG TAB          0       0       0       0       0       0
+GABAGESIC-PLUS TABS              0       0       0       0       0       0
+LIVIZ TABS                       0       0       0       0       0       0
+OLINSTAB-F TABS                  0       0       0       0       0       0
+PALMIDA TABS                    83      60      67       0       0      76
+PERCOMPA-2 MG TABS              20       0       0       0       0      20
+QLINO CAPS                      45      60      32       0       0      73
+VALEPTOL-100 ML SYP              0       0       0       0       0       0
+VALEPTOL-200 ML SYP             87      30      45       0       0      72
+VALEPTOL-CR-200 MG TABS         70      20      30       0       0      60
+VALEPTOL-CR-300 MG TABS         24     100       0       0       0     124
+VALEPTOL-CR-500 MG TABS         70     120     100       0       0      90
+VENLITE-CZ-100 MG TABS           0       0       0       0       0       0
+VENLITE-CZ-50 MG TABS          595       0      21       0       0     574
+VENLITE-OD-100 MG TABS          40      20      23       0       0      37
+VENLITE-OD-50 MG TABS           50       0       0       0       0      50
+================================================================================
+TOTAL QTY. IN UNIT/PCS.     1473      680      554     14     13     1600
+TOTAL AMOUNT >>>          248315   123135    99692   2447   2069   267047
+================================================================================
+

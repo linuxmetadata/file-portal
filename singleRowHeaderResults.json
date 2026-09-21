@@ -1,0 +1,713 @@
+[
+  {
+    "file": "DERMANEX_GOEL_DRUGS_TEL022_SSS_1.txt",
+    "success": true,
+    "structure": "H001",
+    "headerLine": 9,
+    "header": "Product Name               Packing       OP <---Receipts--->  <----Sales---->  <---Closing---->",
+    "dataStart": 12,
+    "message": ""
+  },
+  {
+    "file": "DERMANEX_MOHAK_MEDICOS_UP123_SSS_1.TXT",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "DERMASCIENCE_DEEPAA_AGENCIES_TN949_SSS_1.txt",
+    "success": true,
+    "structure": "H003",
+    "headerLine": 7,
+    "header": "  PRODUCT NAME               OPEN  REC-  ADJ   ADJ TOTAL SALES CLOSE   ORD.QTY  EXCES    JUN      MAY",
+    "dataStart": 10,
+    "message": ""
+  },
+  {
+    "file": "DERMASCIENCE_GOEL_DRUGS_TEL022_SSS_1.txt",
+    "success": true,
+    "structure": "H001",
+    "headerLine": 9,
+    "header": "Product Name               Packing       OP <---Receipts--->  <----Sales---->  <---Closing---->",
+    "dataStart": 12,
+    "message": ""
+  },
+  {
+    "file": "DERMASCIENCE_JYOTI_MEDICAL_HALL_TEL085_SSS_1.txt",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "DERMASCIENCE_KANAKADURGA_DRUGS_TEL084_SSS_1.txt",
+    "success": true,
+    "structure": "H005",
+    "headerLine": 7,
+    "header": "Product Name                 Packing  O.Stk    Purc      Tot    Sale     Qoh        Value  Age",
+    "dataStart": 9,
+    "message": ""
+  },
+  {
+    "file": "DERMASCIENCE_MEENAKSHY_MEDICAL_AGENCIES_KER337_SSS_1.TXT",
+    "success": true,
+    "structure": "H006",
+    "headerLine": 6,
+    "header": "ITEMCODE  ITEMNAME                   CLSTOCK     CLVALUE     SALES          SALESVALUE    LM 1    LM 2",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "DERMASCIENCE_OM_DISTRIBUTORS_PUN149_SSS_1.txt",
+    "success": true,
+    "structure": "H007",
+    "headerLine": 6,
+    "header": "ITEM NAME               BOX    PACK    OPQTY  P_QTY  REPL   S_QTY  B_QTY",
+    "dataStart": 10,
+    "message": ""
+  },
+  {
+    "file": "DERMASCIENCE_PANIKULAM_AGENCIES_KER414_SSS_1.txt",
+    "success": true,
+    "structure": "H008",
+    "headerLine": 6,
+    "header": "Code     Name                Prate OpStock       Purchase    Preturn     Sales       SValue SReturn Excess Short   ClStock     Cl Value",
+    "dataStart": 9,
+    "message": ""
+  },
+  {
+    "file": "DERMASCIENCE_SENTHIL_PHARMA_TN845_SSS_1.txt",
+    "success": true,
+    "structure": "H009",
+    "headerLine": 5,
+    "header": "No   Product Name              Pack        Opstk           Pur      Sale        CurStk    StkVal ",
+    "dataStart": 7,
+    "message": ""
+  },
+  {
+    "file": "DERMASCIENCE_SHUBHAM_AGENCIES_PUN160_SSS_1.TXT",
+    "success": true,
+    "structure": "H010",
+    "headerLine": 5,
+    "header": "Product Name              Pack   LstSL  Open Recd. Sales Close  Order  Pend Stk.Value   ",
+    "dataStart": 7,
+    "message": ""
+  },
+  {
+    "file": "DERMASCIENCE_SIDDARTHA_MEDICALSURGICAL_AGENCIES_AP271_SSS_1.txt",
+    "success": true,
+    "structure": "H012",
+    "headerLine": 7,
+    "header": "Code   Product Name             Packing  Opening  Receipts    Total    Sales  Closing    Closing",
+    "dataStart": 10,
+    "message": ""
+  },
+  {
+    "file": "DERMASCIENCE_SRI_VASAVI_MEDICAL_DISTRIBUTORS_AP282_SSS_1.txt",
+    "success": true,
+    "structure": "H012",
+    "headerLine": 7,
+    "header": "Code   Product Name             Packing  LM   Opening  Receipts    Total    Sales  Closing    Closing AGE",
+    "dataStart": 10,
+    "message": ""
+  },
+  {
+    "file": "DERMASCIENCE_SRI_VENKATESHWARA_PHARMA_TN485_SSS_1.txt",
+    "success": true,
+    "structure": "H013",
+    "headerLine": 9,
+    "header": "ProductName                   Pack  OpStk   Rcpt PrvSa Sale Cl.St StockVal  SaleValue Orde ",
+    "dataStart": 11,
+    "message": ""
+  },
+  {
+    "file": "DERMASCIENCE_S_V_PHARMA_DISTRIBUTORS_AP280_SSS_1.Txt",
+    "success": true,
+    "structure": "H005",
+    "headerLine": 6,
+    "header": "Product Name                 Packing  O.Stk    Purc      Tot    Sale     Qoh        Value  Age",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "DERMASCIENCE_USPHARMA_KER009_SSS_1.txt",
+    "success": true,
+    "structure": "H006",
+    "headerLine": 6,
+    "header": "ITEMCODE  ITEMNAME                   CLSTOCK     CLVALUE     SALES SALESVALUE       LM 1    LM 2",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "DERMASCIENCE_VASU_MEDICAL_ENTERPRIESES_AP340_SSS_1.txt",
+    "success": true,
+    "structure": "H014",
+    "headerLine": 6,
+    "header": "Product Name                 Packing  O.Stk    Purc      Tot    LM2    LM1    Sale     Qoh        Value  Age",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "IMPERIA_AMAR_DRUGS_DISTRIBUTORS_UP199_SSS_1.txt",
+    "success": true,
+    "structure": "H015",
+    "headerLine": 7,
+    "header": "Divison\tItem Code\tItem Name\tPacksize\tP. Rate\tPTR\tOpening\tOpening Value\tPur. Qty\tPur. FQty\tRpl. Qty\tPur. Value\tPur. Ret. Qty\tPur. Ret. FQty\tSale Qty\tSale FQty\tSale Value\tSale Qty 1\tSale Qty 2\tSale Ret. Qty\tSale Ret. FQty\tOther Qty\tClosing\tClosing Amount(PTR)\tStock Amount(Pur. Rate)\tStatus",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "IMPERIA_BALAMANIKANTA_MEDICAL__GENERAL_AGENCIES_AP365_SSS_1.txt",
+    "success": true,
+    "structure": "H005",
+    "headerLine": 6,
+    "header": "Product Name                 Packing  O.Stk    Purc      Tot    Sale     Qoh        Value  Age",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "IMPERIA_CHELLAS_PHARMA_DISTRIBUTOR_TN03_SSS_1.TXT",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "IMPERIA_DEEPAA_AGENCIES_TN949_SSS_1.txt",
+    "success": true,
+    "structure": "H003",
+    "headerLine": 7,
+    "header": "  PRODUCT NAME               OPEN  REC-  ADJ   ADJ TOTAL SALES CLOSE   ORD.QTY  EXCES    JUN      MAY",
+    "dataStart": 10,
+    "message": ""
+  },
+  {
+    "file": "IMPERIA_FRIENDS_PHARMA_AGENCY_TN966_SSS_1.TXT",
+    "success": true,
+    "structure": "H017",
+    "headerLine": 6,
+    "header": "\u000fMEDICINE NAME      PACK    O.B  PURC TOTAL  PRTN L_SLE ADJ SALES FREE REPL    SAL.VAL CL.ST   CLST.VAL Ord.1 Ord.2                    ",
+    "dataStart": 7,
+    "message": ""
+  },
+  {
+    "file": "IMPERIA_GOEL_DRUGS_TEL022_SSS_1.txt",
+    "success": true,
+    "structure": "H001",
+    "headerLine": 9,
+    "header": "Product Name               Packing       OP <---Receipts--->  <----Sales---->  <---Closing---->",
+    "dataStart": 12,
+    "message": ""
+  },
+  {
+    "file": "IMPERIA_MOHAK_MEDICOS_UP123_SSS_1.TXT",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "IMPERIA_OM_DISTRIBUTORS_PUN149_SSS_1.txt",
+    "success": true,
+    "structure": "H007",
+    "headerLine": 6,
+    "header": "ITEM NAME               BOX    PACK    OPQTY  P_QTY  REPL   S_QTY  B_QTY",
+    "dataStart": 10,
+    "message": ""
+  },
+  {
+    "file": "IMPERIA_PADMA_PHARMA_AGENCIES_TN028_SSS_1.TXT",
+    "success": true,
+    "structure": "H018",
+    "headerLine": 6,
+    "header": "MEDICINE NAME      PACK    O.B  PURC TOTAL L_SLE ADJ SALES    SAL.VAL CL.ST   CLST.VAL",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "IMPERIA_PALANIAPPA_MEDICAL_AGENCIES_TN368_SSS_1.TXT",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "IMPERIA_PURUSHOTHAM_MEDICAL_AGENCIES_AP234_SSS_1.TXT",
+    "success": true,
+    "structure": "H005",
+    "headerLine": 6,
+    "header": "Product Name                 Packing  O.Stk    Purc      Tot    Sale     Qoh        Value  Age",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "IMPERIA_RADHAKRISHNA_PHARMA_AP332_SSS_1.Txt",
+    "success": true,
+    "structure": "H020",
+    "headerLine": 6,
+    "header": "  Product Name         Packing  Op.Stk    P.Qtye    Tot    S.Qty    Qoh       Value  Age",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "IMPERIA_ROSHCHEMS_PHARMACEUTICALS_AP207_SSS_1.txt",
+    "success": true,
+    "structure": "H005",
+    "headerLine": 6,
+    "header": "Product Name                 Packing  O.Stk    Purc      Tot    Sale     Qoh        Value  Age",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "IMPERIA_SENTHIL_PHARMA_TN845_SSS_1.txt",
+    "success": true,
+    "structure": "H009",
+    "headerLine": 5,
+    "header": "No   Product Name              Pack    Opstk       Pur      Sale CurStk    StkVal ",
+    "dataStart": 7,
+    "message": ""
+  },
+  {
+    "file": "IMPERIA_SHRI_LAKSHMI_PHARMACEUTICALS_TN709_SSS_1.TXT",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "IMPERIA_SRIVAARI_PHARMA_TN1020_SSS_1.TXT",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "IMPERIA_SRI_VENKATESHWARA_PHARMA_TN485_SSS_1.txt",
+    "success": true,
+    "structure": "H013",
+    "headerLine": 9,
+    "header": "ProductName                   Pack  OpStk   Rcpt PrvSa Sale Cl.St StockVal  SaleValue Orde ",
+    "dataStart": 11,
+    "message": ""
+  },
+  {
+    "file": "IMPERIA_SSDRUGS_KOL131_SSS_1.TXT",
+    "success": true,
+    "structure": "H022",
+    "headerLine": 7,
+    "header": "Description         Pack  hsncode Opening       Purchase       Sale       P.Re     S.Re         Adj.    Closing     ",
+    "dataStart": 9,
+    "message": ""
+  },
+  {
+    "file": "IMPERIA_VENKATA_SURENDERA_MEDICALS_AP291_SSS_1.txt",
+    "success": true,
+    "structure": "H024",
+    "headerLine": 6,
+    "header": "Product Name                Packing      O.Bal  Rcpts  Sal.Ret   Total   Sales  Pur.Ret    Total Cl.Bal Cl.Value  Age",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "INFINA_DEEPAA_AGENCIES_TN949_SSS_1.txt",
+    "success": true,
+    "structure": "H003",
+    "headerLine": 7,
+    "header": "  PRODUCT NAME               OPEN  REC-  ADJ   ADJ TOTAL SALES CLOSE   ORD.QTY  EXCES    JUN      MAY",
+    "dataStart": 10,
+    "message": ""
+  },
+  {
+    "file": "INFINA_GOEL_DRUGS_TEL022_SSS_1.txt",
+    "success": true,
+    "structure": "H001",
+    "headerLine": 9,
+    "header": "Product Name               Packing       OP <---Receipts--->  <----Sales---->  <---Closing---->",
+    "dataStart": 12,
+    "message": ""
+  },
+  {
+    "file": "INFINA_MOHAK_MEDICOS_UP123_SSS_1.TXT",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "INFINA_OM_DISTRIBUTORS_PUN149_SSS_1.txt",
+    "success": true,
+    "structure": "H007",
+    "headerLine": 6,
+    "header": "ITEM NAME               BOX    PACK    OPQTY  P_QTY  REPL   S_QTY  B_QTY",
+    "dataStart": 10,
+    "message": ""
+  },
+  {
+    "file": "INFINA_PADMA_PHARMA_AGENCIES_TN028_SSS_1.TXT",
+    "success": true,
+    "structure": "H018",
+    "headerLine": 6,
+    "header": "MEDICINE NAME      PACK    O.B  PURC TOTAL L_SLE ADJ SALES    SAL.VAL CL.ST   CLST.VAL",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "INFINA_PALANIAPPA_MEDICAL_AGENCIES_TN368_SSS_1.TXT",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "INFINA_PURUSHOTHAM_MEDICAL_AGENCIES_AP234_SSS_1.TXT",
+    "success": true,
+    "structure": "H005",
+    "headerLine": 6,
+    "header": "Product Name                 Packing  O.Stk    Purc      Tot    Sale     Qoh        Value  Age",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "INFINA_ROSHCHEMS_PHARMACEUTICALS_AP207_SSS_1.txt",
+    "success": true,
+    "structure": "H005",
+    "headerLine": 6,
+    "header": "Product Name                 Packing  O.Stk    Purc      Tot    Sale     Qoh        Value  Age",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "INFINA_SHREYES_DISTRIBUTOR_PUN059_SSS_1.TXT",
+    "success": true,
+    "structure": "H026",
+    "headerLine": 34,
+    "header": " SNo Particulars                OPstk   Pur StkIn Sale  UCS.  StkOt ClStk SaleValue  Stock Value",
+    "dataStart": 36,
+    "message": ""
+  },
+  {
+    "file": "INFINA_SRIVAARI_PHARMA_TN1020_SSS_1.TXT",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "INFINA_SRI_VENKATESHWARA_PHARMA_TN485_SSS_1.txt",
+    "success": true,
+    "structure": "H013",
+    "headerLine": 9,
+    "header": "ProductName                   Pack  OpStk   Rcpt PrvSa Sale Cl.St StockVal  SaleValue Orde ",
+    "dataStart": 11,
+    "message": ""
+  },
+  {
+    "file": "INFINA_USPHARMA_KER009_SSS_2.txt",
+    "success": true,
+    "structure": "H008",
+    "headerLine": 6,
+    "header": "Code     Name                Prate OpStock       Purchase    Preturn     Sales       SValue SReturn Excess Short   ClStock     Cl Value",
+    "dataStart": 9,
+    "message": ""
+  },
+  {
+    "file": "INFINA_VENKATA_SURENDERA_MEDICALS_AP291_SSS_1.txt",
+    "success": true,
+    "structure": "H024",
+    "headerLine": 6,
+    "header": "Product Name                Packing      O.Bal  Rcpts  Sal.Ret   Total   Sales  Pur.Ret    Total Cl.Bal Cl.Value  Age",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "INTEGRA_BALAMANIKANTA_MEDICAL__GENERAL_AGENCIES_AP365_SSS_1.txt",
+    "success": true,
+    "structure": "H005",
+    "headerLine": 6,
+    "header": "Product Name                 Packing  O.Stk    Purc      Tot    Sale     Qoh        Value  Age",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "INTEGRA_CHELLAS_PHARMA_DISTRIBUTOR_TN03_SSS_1.txt",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "INTEGRA_DEEPAA_AGENCIES_TN949_SSS_1.txt",
+    "success": true,
+    "structure": "H003",
+    "headerLine": 7,
+    "header": "  PRODUCT NAME               OPEN  REC-  ADJ   ADJ TOTAL SALES CLOSE   ORD.QTY  EXCES    JUN      MAY",
+    "dataStart": 10,
+    "message": ""
+  },
+  {
+    "file": "INTEGRA_FRIENDS_PHARMA_AGENCY_TN966_SSS_1.TXT",
+    "success": true,
+    "structure": "H017",
+    "headerLine": 6,
+    "header": "\u000fMEDICINE NAME      PACK    O.B  PURC TOTAL  PRTN L_SLE ADJ SALES FREE REPL    SAL.VAL CL.ST   CLST.VAL Ord.1 Ord.2                    ",
+    "dataStart": 7,
+    "message": ""
+  },
+  {
+    "file": "INTEGRA_GOEL_DRUGS_TEL022_SSS_1.txt",
+    "success": true,
+    "structure": "H001",
+    "headerLine": 9,
+    "header": "Product Name               Packing       OP <---Receipts--->  <----Sales---->  <---Closing---->",
+    "dataStart": 12,
+    "message": ""
+  },
+  {
+    "file": "INTEGRA_MOHAK_MEDICOS_UP123_SSS_1.TXT",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "INTEGRA_OM_DISTRIBUTORS_PUN149_SSS_1.txt",
+    "success": true,
+    "structure": "H007",
+    "headerLine": 6,
+    "header": "ITEM NAME               BOX    PACK    OPQTY  P_QTY  REPL   S_QTY  B_QTY",
+    "dataStart": 10,
+    "message": ""
+  },
+  {
+    "file": "INTEGRA_PADMA_PHARMA_AGENCIES_TN028_SSS_1.txt",
+    "success": true,
+    "structure": "H018",
+    "headerLine": 6,
+    "header": "MEDICINE NAME      PACK    O.B  PURC TOTAL L_SLE ADJ SALES    SAL.VAL CL.ST   CLST.VAL",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "INTEGRA_PALANIAPPA_MEDICAL_AGENCIES_TN368_SSS_1.TXT",
+    "success": true,
+    "structure": "H028",
+    "headerLine": 5,
+    "header": "PRODUCT NAME       PACKG SALES CLOSING DAY",
+    "dataStart": 7,
+    "message": ""
+  },
+  {
+    "file": "INTEGRA_ROSHCHEMS_PHARMACEUTICALS_AP207_SSS_1.txt",
+    "success": true,
+    "structure": "H005",
+    "headerLine": 6,
+    "header": "Product Name                 Packing  O.Stk    Purc      Tot    Sale     Qoh        Value  Age",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "INTEGRA_SANDEEP_PHARMA_AP333_SSS_1.txt",
+    "success": true,
+    "structure": "H029",
+    "headerLine": 10,
+    "header": "Product Name              Pack      O.Stk    Purc     Tot    Sale     Qoh        Value  Age",
+    "dataStart": 12,
+    "message": ""
+  },
+  {
+    "file": "INTEGRA_SENTHIL_PHARMA_TN845_SSS_1.txt",
+    "success": true,
+    "structure": "H009",
+    "headerLine": 5,
+    "header": "No   Product Name              Pack        Opstk           Pur      Sale        CurStk    StkVal ",
+    "dataStart": 7,
+    "message": ""
+  },
+  {
+    "file": "INTEGRA_SHREYES_DISTRIBUTOR_PUN059_SSS_1.TXT",
+    "success": true,
+    "structure": "H026",
+    "headerLine": 10,
+    "header": " SNo Particulars                OPstk   Pur StkIn Sale  UCS.  StkOt ClStk SaleValue  Stock Value",
+    "dataStart": 12,
+    "message": ""
+  },
+  {
+    "file": "INTEGRA_SRIVAARI_PHARMA_TN1020_SSS_1.txt",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "INTEGRA_SRI_VENKATESHWARA_PHARMA_TN485_SSS_1.txt",
+    "success": true,
+    "structure": "H013",
+    "headerLine": 9,
+    "header": "ProductName                   Pack  OpStk   Rcpt PrvSa Sale Cl.St StockVal  SaleValue Orde ",
+    "dataStart": 11,
+    "message": ""
+  },
+  {
+    "file": "INTEGRA_UNIQUE_CORPORATION_PUN175_SSS_1.txt",
+    "success": true,
+    "structure": "H030",
+    "headerLine": 12,
+    "header": "Particulars               Pkg.       Op.Qty. Pr.Qty. Sl Ret  Sale    M.Out   Cl.Stk  Sal.Val Cl.Val ",
+    "dataStart": 14,
+    "message": ""
+  },
+  {
+    "file": "INTEGRA_USPHARMA_KER009_SSS_1.txt",
+    "success": true,
+    "structure": "H008",
+    "headerLine": 6,
+    "header": "Code     Name                Prate OpStock       Purchase    Preturn     Sales       SValue SReturn Excess Short   ClStock     Cl Value",
+    "dataStart": 9,
+    "message": ""
+  },
+  {
+    "file": "META_DEEPAA_AGENCIES_TN949_SSS_1.txt",
+    "success": true,
+    "structure": "H003",
+    "headerLine": 7,
+    "header": "  PRODUCT NAME               OPEN  REC-  ADJ   ADJ TOTAL SALES CLOSE   ORD.QTY  EXCES    JUN      MAY",
+    "dataStart": 10,
+    "message": ""
+  },
+  {
+    "file": "META_HOSUR_SENTHIL_PHARMA_DISTRIBUTORS_TN944_SSS_1.TXT",
+    "success": true,
+    "structure": "H031",
+    "headerLine": 5,
+    "header": "Product Name;Packing;Opening;Purchase;Sales;C.Stock;Expiry;Pr.Sale;",
+    "dataStart": 7,
+    "message": ""
+  },
+  {
+    "file": "META_KRISHNA_MEDICAL_STORE_RAJ122_SSS_1.txt",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "META_MOHAK_MEDICOS_UP123_SSS_1.TXT",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "META_ROSHCHEMS_PHARMACEUTICALS_AP207_SSS_1.txt",
+    "success": true,
+    "structure": "H005",
+    "headerLine": 6,
+    "header": "Product Name                 Packing  O.Stk    Purc      Tot    Sale     Qoh        Value  Age",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "META_SRI_VENKATESHWARA_PHARMA_TN485_SSS_1.txt",
+    "success": true,
+    "structure": "H013",
+    "headerLine": 9,
+    "header": "ProductName                   Pack  OpStk   Rcpt PrvSa Sale Cl.St StockVal  SaleValue Orde ",
+    "dataStart": 11,
+    "message": ""
+  },
+  {
+    "file": "NUTRIMAX_CHELLAS_PHARMA_DISTRIBUTOR_TN03_SSS_1.TXT",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "NUTRIMAX_DEEPAA_AGENCIES_TN949_SSS_1.txt",
+    "success": true,
+    "structure": "H003",
+    "headerLine": 7,
+    "header": "  PRODUCT NAME               OPEN  REC-  ADJ   ADJ TOTAL SALES CLOSE   ORD.QTY  EXCES    JUN      MAY",
+    "dataStart": 10,
+    "message": ""
+  },
+  {
+    "file": "NUTRIMAX_MOHAK_MEDICOS_UP123_SSS_1.TXT",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "NUTRIMAX_PADMA_PHARMA_AGENCIES_TN028_SSS_1.TXT",
+    "success": true,
+    "structure": "H018",
+    "headerLine": 6,
+    "header": "MEDICINE NAME      PACK    O.B  PURC TOTAL L_SLE ADJ SALES    SAL.VAL CL.ST   CLST.VAL",
+    "dataStart": 8,
+    "message": ""
+  },
+  {
+    "file": "NUTRIMAX_PALANIAPPA_MEDICAL_AGENCIES_TN368_SSS_1.TXT",
+    "success": false,
+    "structure": "",
+    "headerLine": "",
+    "header": "",
+    "dataStart": "",
+    "message": "Header candidate was not strong enough for a safe structure assignment."
+  },
+  {
+    "file": "NUTRIMAX_SENTHIL_PHARMA_TN845_SSS_1.txt",
+    "success": true,
+    "structure": "H009",
+    "headerLine": 5,
+    "header": "No   Product Name              Pack        Opstk           Pur      Sale        CurStk    StkVal ",
+    "dataStart": 7,
+    "message": ""
+  },
+  {
+    "file": "NUTRIMAX_SRI_VENKATESHWARA_PHARMA_TN485_SSS_1.txt",
+    "success": true,
+    "structure": "H013",
+    "headerLine": 9,
+    "header": "ProductName                   Pack  OpStk   Rcpt PrvSa Sale Cl.St StockVal  SaleValue Orde ",
+    "dataStart": 11,
+    "message": ""
+  }
+]

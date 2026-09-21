@@ -1,0 +1,144 @@
+
+
+
+SRI VENKATESWARA PHARMA
+No.4,Bharathidhasan Street,Manjakuppam,Cuddalore-607001
+Stock And Sales Report(Month)
+of Jul2026 for LINUX INTEGRA
+-------------------------------------------------------------------------------------------
+ProductName                   Pack  OpStk   Rcpt PrvSa Sale Cl.St StockVal  SaleValue Orde 
+-------------------------------------------------------------------------------------------
+CARBANERVE 150 MG TAB         10`S      9            5    3     6   314.06     157.86      
+CARBANERVE 300MG TAB          10`S      6     40    21   16    27  3917.69    2120.39      
+CARBANERVE 450 MG TAB         10`S                                                         
+CITIZAC INJ 2 ML              2 ML      4    351   246  170   134 15899.10   21345.20      
+CITIZAC INJ 4 ML              4 ML                                                         
+CITIZAC TAB                   10`S      2     22    21    8    15  7940.21    4413.98      
+DUBIZ TAB                     10`S     40                      40  3285.01                 
+ECITANE  TAB                  10'S      5    356   258  174   147  1599.07    1944.99      
+ETORIFLEX-MR 4MG TAB          10'S      7     90    38   53    32  6214.99   10728.67      
+ETORIFLEX-MR 8MG TAB          10'S      1     20    17   -5    27  6507.25   -1187.45      
+IDEBEST 45MG TAB              10`S     37     20     9   17    39  6431.61    2905.59      
+LACOVE 100MG TAB              10'S     21           12    5    16  1808.69     556.23      
+LACOVE 150MG TAB              10'S                                                         
+LACOVE 200MG TAB              10'S            50    22   21    29  5709.68    4229.30      
+LACOVE 50MG TAB               10'S     38     20     9   31    24  2164.30    1843.38      
+LINOTRIL  0.25MG TA           10'S     35    350   296  183   180  2891.70    2961.91      
+LINOTRIL  0.5MG TAB           10'S     33    450   361  267   184  5073.43    7380.89      
+LINOTRIL  1MG TAB             10'S     84    100   121   50   130  4982.25    1904.29      
+LINOTRIL  2MG                 10'S     20           16    6    14  1120.31     443.47      
+LIPOSERIN CAP                 10`S    101            4   20    81 42638.12   10511.15      
+LURASTAR 40MG TAB             10`S     25     60    44   30    49  5778.86    3594.24      
+LURASTAR 80 MG TAB            10`S     20     40         25    30  5902.16    4996.56      
+OXVUN 100MG TAB               10'S      5     10         15                   3514.56      
+OXVUN 25MG TAB                10'S                                                         
+OXVUN 50MG TAB                10'S     50           62   19    27  3968.11    2829.95      
+OXVUN ER 100 MG TAB           10`S            30               30  7361.24                 
+OXVUN ER 150 MG TAB           10`S                                                         
+PREGALIFT D 50/20             10'S     10     10     8   14     5   604.80    1587.03      
+PREGALIFT D 75/20             10'S     15     10    13   12    13  2227.68    2049.03      
+PREGALIFT D 75/30             10'S                                                         
+QUTIWEL 100 MG TAB            10`S     57           61   18    37  2703.96    1342.45      
+QUTIWEL 25MG                  15'S     21    160   180  150     3   135.10    5154.54      
+QUTIWEL 50MG TAB              10`S      3    100   121   39    58  3545.60    2418.11      
+QUTIWEL SR 100MG  T           10'S     27            3    4    23  1785.17     305.52      
+QUTIWEL SR 200MG  T           10'S     22           13   10    10  1328.78    1349.86      
+QUTIWEL SR 300MG TAB          10`S     11     30    12   16    23  4087.15    2888.29      
+QUTIWEL SR 50MG  TA           10'S                                                         
+RE XITE AMP                    1ML     40           11    7    33  2248.79     469.44      
+RE XITE SYRUP                200ML      7     10     8    7    10  2227.68    1414.51      
+RE XITE TAB                   10'S      7     70    28   31    46  2568.59    1720.11      
+RIBOTAB M TAB                 10`S     45     60     5   32    69 14854.42    6957.32      
+SERMIND  50MG TAB             10`S     63    150   144   96   105  9850.94    7351.82      
+SERMIND 100MG TAB             10`S    128    220   165  175   146 16798.61   20394.34      
+SERMIND 25MG TAB              10`S     26     10    25   10    26  1087.63     415.70      
+TADASURE 10MG TAB              1`S     10            5         10   283.29                 
+TADASURE 20MG TAB             10`S                                                         
+TADASURE 5MG TAB              10`S                                                         
+TADAZA TAB                     4`S     41            9   16    24  5258.23    3623.82      
+TRIPTAZ  10MG                 10'S     27    550   292  301   204  3855.60    5793.80      
+TRIPTAZ  25MG                 10'S     70     60    16   71    44   855.16    1432.36      
+TRIPTAZ 75MG TAB              10's     53            1    2    51  2160.59      83.75      
+VERTIREST 16MG                10'S     25            5    6    19  3024.02     986.94      
+VERTIREST 8MG                 10'S     20           14    6    14   823.05     350.86      
+VERTIREST OD 24MG TAB         10`S     21            3    8    13  1974.06    1214.82      
+VERTIREST OD 48MG TAB         10`S                                                         
+-------------------------------------------------------------------------------------------
+                                                             2247 225796.7  156499.60      
+-------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+Op.Stk.Val:165031.45     Sales Val - Prv.Mth: 159042.23  Cur.Mth.Sal:  164324.59  Stk.Val:215044.49     Pur.Val:204768.0     
+Stock Value is Calculated Using Purchase Price                                                                      
+Grand Total Of Currnt Month Sales Value:  164324.59      Stock Value:225796.71                                      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

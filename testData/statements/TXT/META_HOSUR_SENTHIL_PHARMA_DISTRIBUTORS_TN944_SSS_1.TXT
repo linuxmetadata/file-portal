@@ -1,0 +1,70 @@
+HOSUR SENTHIL PHARMA DISTRIBUTORS
+
+Stock report as on 31/07/2026 for M/s. CIPLA LTD (VITALIS-4)
+
+Product Name;Packing;Opening;Purchase;Sales;C.Stock;Expiry;Pr.Sale;
+
+AMLOPRES  TL TAB         ;   15'S;         36;         54;         73;         17; 2-2028;        364;
+AMLOPRES "AT 25MG" TA    ;   15'S;           ;           ;           ;           ; 2-2028;           ;
+AMLOPRES "AT"50MG(60     ;   15'S;         30;         60;         41;         49;10-2027;         27;
+AMLOPRES "L"5MG TAB      ;   15'S;           ;           ;           ;           ;10-2027;           ;
+AMLOPRES 10MG TA(50)     ;   10'S;         16;           ;           ;         16; 6-2028;           ;
+AMLOPRES 2.5MG TAB       ;   15'S;           ;           ;           ;           ; 6-2028;           ;
+AMLOPRES 5MG (10)        ;   30'S;         67;           ;          5;         62;11-2028;          6;
+ARNICOR 100MG TAB        ;   10'S;           ;           ;           ;           ;11-2028;           ;
+ARNICOR 200MG TAB        ;   10'S;           ;           ;           ;           ;11-2028;           ;
+ARNICOR 50MG TAB         ;   10'S;           ;           ;           ;           ;11-2028;           ;
+ATORLIP "20MG TA"(3)     ;   15'S;         21;           ;          8;         13; 1-2029;          5;
+ATORLIP "5MG" TAB(3)     ;   15'S;         39;           ;          2;         37;10-2028;        201;
+ATORLIP "F" TAB (10)     ;   15'S;         17;         20;         17;         20; 3-2028;          6;
+ATORLIP 10MG TAB(3)      ;   15'S;         26;           ;         26;           ; 3-2028;        414;
+ATORLIP 40MG TAB(3)      ;   10'S;          7;         10;          9;          8; 1-2029;         12;
+ATORLIP ASP 10 CAP'S     ;   10'S;         10;           ;          6;          4; 9-2027;          5;
+ATORLIP CV 10            ;   10'S;         27;           ;         15;         12;10-2027;         16;
+CRESAR "AM" TAB          ;   15'S;           ;         30;          7;         23; 3-2028;          4;
+CRESAR "H"TAB(10)        ;   15'S;          5;           ;          5;           ; 3-2028;          2;
+CRESAR 20MG TAB          ;   15'S;           ;           ;           ;           ; 3-2028;           ;
+CRESAR 40MG TA(10)       ;   15'S;          6;         40;         26;         20; 5-2028;         19;
+CRESAR 80MG TAB(10)      ;   10'S;           ;           ;           ;           ; 5-2028;           ;
+CRESAR PLUS TAB          ;   10'S;           ;           ;           ;           ; 5-2028;           ;
+DAPASACH 10MG TAB        ;   10'S;           ;           ;           ;           ; 5-2028;           ;
+DAPASACH S 10/100 TAB    ;   10'S;           ;           ;           ;           ; 5-2028;           ;
+DYTOR 100MG TAB          ;   10'S;           ;           ;           ;           ; 5-2028;           ;
+DYTOR 10MG TAB           ;   15'S;       1607;           ;       1083;        524; 3-2028;       1109;
+DYTOR 20MG TAB           ;   15'S;        379;           ;        217;        162;10-2028;         44;
+DYTOR 40MG TAB           ;   10'S;        227;           ;        157;         70; 3-2029;         32;
+DYTOR 5MG TAB            ;   15'S;       1575;           ;       1157;        418; 3-2029;       1071;
+DYTOR INJ                ;    2ML;           ;           ;           ;           ; 3-2029;           ;
+DYTOR PLUS 10MG TAB(3)   ;   15'S;        504;         60;        430;        134; 3-2028;        589;
+DYTOR PLUS 20MG CAPS     ;   15'S;         13;         60;          3;         70; 6-2027;        308;
+DYTOR PLUS 5MG TAB(3)    ;   15'S;        421;           ;        284;        137; 4-2027;         29;
+DYTOR PLUS LS 10MG TAB   ;   15'S;        204;         90;        202;         92; 3-2028;        360;
+EMPACIP SM 25/100/1000TAB;   10'S;           ;           ;           ;           ; 3-2028;           ;
+EMPASOV S 10/100 TAB     ;   10'S;           ;           ;           ;           ; 3-2028;           ;
+EMPASOV S 25/100 TAB     ;   10'S;           ;           ;           ;           ; 3-2028;           ;
+METOLAR "25MG" TAB       ;   15'S;         15;         50;         30;         35; 2-2029;         27;
+METOLAR "50MG" TAB       ;   15'S;          4;         50;         33;         21;10-2028;         20;
+METOLAR "AM 25MG"        ;   10'S;         15;           ;           ;         15; 8-2027;          2;
+METOLAR "AM 50MG"        ;   10'S;           ;         20;         11;          9; 2-2028;         11;
+METOLAR "XR 25MG" CAP    ;   15'S;         30;           ;         26;          4; 1-2028;         22;
+METOLAR "XR 50MG" CAP    ;   15'S;         33;           ;         24;          9; 8-2027;          8;
+METOLAR 100MG TAB        ;   10'S;           ;           ;           ;           ; 8-2027;           ;
+METOLAR TL 25 TAB        ;   10'S;           ;           ;           ;           ; 8-2027;           ;
+METOLAR TL 50 TAB        ;   10'S;           ;           ;           ;           ; 8-2027;           ;
+METOLAR XR 100MG CAPS    ;   10'S;           ;           ;           ;           ; 8-2027;           ;
+METOLAR XR 12.5MG CAPS   ;   15'S;           ;           ;           ;           ; 8-2027;           ;
+METOLAR XT 25MG TAB      ;   15'S;           ;           ;           ;           ; 8-2027;           ;
+METOLAR XT 50MG TAB      ;   15'S;           ;           ;           ;           ; 8-2027;           ;
+OLMECIP 20MG TAB         ;   10'S;         17;         10;          1;          6; 4-2028;           ;
+OLMECIP AM TAB           ;   10'S;           ;           ;           ;           ; 4-2028;           ;
+OLMECIP H 40 TAB         ;   10'S;           ;           ;           ;           ; 4-2028;           ;
+OLMECIP H TAB            ;   10'S;           ;           ;           ;           ; 4-2028;           ;
+PLETOZ 100MG TAB         ;   10'S;           ;         20;          9;         11; 9-2028;          2;
+PLETOZ 50MG TAB(10)      ;   10'S;         28;           ;         28;           ; 9-2028;          9;
+RAMIPRES 2.5MG TAB (10)  ;   10'S;          7;           ;           ;          7;12-2027;          3;
+RAMIPRES 5MG TAB         ;   10'S;           ;         10;           ;         10; 2-2028;          3;
+VYSOV 50MG TAB           ;   15'S;         22;          2;          2;         18; 6-2027;           ;
+VYSOV M 50/1000          ;   15'S;           ;         30;         14;         16; 3-2028;         22;
+VYSOV M 50/500MG TAB     ;   15'S;           ;        240;        183;         57; 4-2028;        102;
+
+Total :                  ;       ;           ;           ;  393362.99;  203643.76;       ;  413217.03;

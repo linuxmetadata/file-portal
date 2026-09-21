@@ -1,0 +1,69 @@
+SENTHIL PHARMA - 612001                                    
+Stock & Sales Report From 01/07/2026 To 31/07/2026
+Company Name : LINUX-INTEGRA DIVISION
+=================================================================================================
+No   Product Name              Pack        Opstk           Pur      Sale        CurStk    StkVal 
+=================================================================================================
+1   CARBANERVE 150MG TAB      10           18+0             -         -          18+0    897.30 
+2   CARBANERVE 300MG [15`S]   15          120+0           210     149+4         177+0  24459.63 
+3   CARBANERVE 300MG TAB      10           25+0             -        25           0+0         - 
+4   CITIZAC INJ 2ML           2ML          30+0             -         -          30+0   3390.00 
+5   CITIZAC INJ 4ML           4ML           0+0             -         -           0+0         - 
+6   CITIZAC TAB               10`S         12+0             -         -           6+0   2749.98 
+7   DUBIZ TAB                 10`S          0+0             -         -           0+0         - 
+8   ECITANE TAB               10`S         43+0           220     162+2          99+0   1025.64 
+9   ETORIFLEX MR 4MG TAB      10`S         21+0             -         1          20+0   3534.50 
+10  ETORIFLEX MR 8MG TAB      10`S         26+0            50      24+6          46+0  10642.20 
+11  IDEBEST 45MG TAB          10            0+0             -         -           0+0         - 
+12  LACOVE 100MG TAB          10           22+0            10        10          22+0   2368.52 
+13  LACOVE 200MG              10`s          0+0             -         -           0+0         - 
+14  LACOVE 50MG               10`s         21+0             -         -          21+0   1164.99 
+15  LACOVE SYP                200ML        10+0             -         -           0+0         - 
+16  LINOTRIL 0.25MG TAB       10`S         25+0            90      63+4          68+0   1040.40 
+17  LINOTRIL 0.5MG TAB        10`S          8+0           100      41+1          66+0   1732.20 
+18  LINOTRIL 1MG TAB          10            0+0             -         -           0+0         - 
+19  LINOTRIL 2MG TAB          10            0+0             -         -           0+0         - 
+20  LIPOSERIN CAP             10`S          0+0             -         -           0+0         - 
+21  OXVUN 100MG TAB           10            0+0             -         -           0+0         - 
+22  OXVUN 25MG TAB            10           20+0             -         -          20+0   1361.20 
+23  OXVUN 50MG                10            0+0             -         -           0+0         - 
+24  OXVUN ER 150MG            10            0+0            10         -          10+0   2742.80 
+25  PREGALIFT  D -50/20       10           68+0           210    140+24         114+0  13122.38 
+26  PREGALIFT  D-75/30        10           95+0           100     80+16          99+0  20134.62 
+27  PREGALIFT D 75/20 CAP     10`s         12+0            30      15+3          24+0   3916.80 
+28  QUTIWEL 100MG             10`s          0+0             -         -           0+0         - 
+29  QUTIWEL 100MG             10`S          0+0             -         -           0+0         - 
+30  QUTIWEL 25MG              10`S         29+0             -         3          26+0    743.34 
+31  QUTIWEL 50MG              10            0+0             -         -           0+0         - 
+32  QUTIWEL SR 200MG TAB      10            0+0             -         -           0+0         - 
+33  QUTIWEL SR 300 TAB        10            0+0             -         -           0+0         - 
+34  QUTIWEL SR 50MG TAB       10`S          0+0             -         -           0+0         - 
+35  REXITE INJ                1            56+0            20         -          38+0   2593.00 
+36  REXITE SYP                200ML        13+0            10       5+1          17+0   3471.83 
+37  REXITE TAB                10`S          9+0             -         -           9+0    478.62 
+38  RIBOTAB M                 10           12+0            10         5          17+0   3485.51 
+39  SERMIND 100MG             10            0+0             -         -           0+0         - 
+40  SERMIND 25MG              10`S         22+0             -         6          16+0    637.44 
+41  SERMIND 50MG              10`S         68+0             -       5+1          62+0   4474.54 
+42  TADASURE 10MG             1`S           0+0             -         -           0+0         - 
+43  TADASURE 20MG TAB         1`S          18+0             -         -          18+0    660.42 
+44  TADASURE 5MG              10`s          0+0             -         -           0+0         - 
+45  TADAZA TAB                4`S          13+0             -         -          13+0   2712.58 
+46  TOPITAB 25MG              10`s         66+0            20      30+6          50+0   2101.50 
+47  TOPITAB 50MG              10`s         77+0             -         3          74+0   6170.12 
+48  TRIPTAZ 10 MG TAB         10`S         29+0             -         -          29+0    521.25 
+49  TRIPTAZ 25 MG TAB         10`S         19+0            20        19          20+0    370.20 
+50  VERTIREST -16 15`S        15`S         16+0            20      10+2          24+0   3637.92 
+51  VERTIREST 8MG TAB         10`S         27+0            90      47+6          64+0   3583.36 
+52  VERTIREST OD 24MG TAB     10           32+0           247    145+29         105+0  16671.90 
+53  VERTIREST OD 48MG TAB     10`S         33+0            80      28+5          80+0  17285.60 
+-------------------------------------------------------------------------------------------------
+    Total                                  1115          1547      1016          1502         - 
+-------------------------------------------------------------------------------------------------
+Opg.Stk Val:   121529.39 Purc.Value: :   155288.96 Sales Value::   116799.16
+Cl.Stk Val:    163882.29 Pur.RetVal ::    12605.18 SalRet Val: :        0.00
+                                     :             NetSal(GVal):   116799.16
+Oth.SalVal:         0.00 Tran.Stk.IN::        0.00 Tran.Stk.Out:        0.00
+-------------------------------------------------------------------------------------------------
+                                       *** END OF REPORT ***
+

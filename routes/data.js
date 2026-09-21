@@ -60,7 +60,8 @@ async function validateFile(file) {
     ".doc",
     ".docx",
     ".txt",
-    ".html"
+    ".html",
+    ".csv"
   ];
 
   /* INVALID FORMAT */

@@ -1,0 +1,49 @@
+
+PALANIAPPA MEDICAL AGENCIES,PUDUKKOTTAI.          COMPANY: LINUX NUTRIMAX                
+STOCK & SALES STATEMENT AS ON 31/07/2026                                    Page No:  1
+----------------------------------------------------------------------------------------
+PRODUCT NAME      PACKG OPENING   RECEIPT  SALES RETAIL  CASH   CLO.STK    CLOSING   AGE
+                          QTY    QTY  FREE  LAST  SALES SALES  QTY  FREE    VALUE   DAYS
+----------------------------------------------------------------------------------------
+*ANTICLAV 375      6'S       -     -     -     -     -     -     -     -         -     
+*ANTICLAV 625      6'S       -     -     -     -     -     -     -     -         -     
+*ASCLIN P          10'S      -     -     -     -     -     -     -     -         -     
+*BECOSTAR          15'S     14     9     1     6     -     -    24     -   1964.85    8
+*BECOSTAR DROPS    15ML      -     -     -     -     -     -     -     -         -     
+*BECOSTAR G        10'S      -     -     -     -     -     -     -     -         -     
+*BECOSTAR SYP      200ML     -     -     -     -     -     -     -     -         -     
+*BONTRIX TAB       10        -     -     -     -     -     -     -     -         -     
+*CELONG TAB        10'S      -     -     -     -     -     -     -     -         -     
+*FERIZAC           10'S     21     -     -     -     -     -    21     -   1773.48  163
+*FERIZAC SYP       200ML     -     -     -     -     -     -     -     -         -     
+*FEXINEX 100DT     10'S      -     -     -     -     -     -     -     -         -     
+*FEXINEX 200DT     10'S      -     -     -     -     -     -     -     -         -     
+*FEXINEX DRY SYP   30ML      -     -     -     -     -     -     -     -         -     
+*FLAMCOR           10'S      -     -     -     -     -     -     -     -         -     
+*FLAMCOR SYRUP     30ML      -     -     -     -     -     -     -     -         -     
+*MACROZAC 500MG    3'S       -     -     -     -     -     -     -     -         -     
+*MONTGOLD          10'S      -     -     -     -     -     -     -     -         -     
+*MONTGOLD KID      10'S      -     -     -     -     -     -     -     -         -     
+MYOCETAMOL         10'S     61    60    16   101    83     -    54     -   3905.50    8
+*RABELIN D         10'S      -     -     -     -     -     -     -     -         -     
+* ---> Non Moving Products Above 30 Days
+----------------------------------------------------------------------------------------
+OPENING VALUE      :        7,331.40  PURCHASE VALUE   :        5,076.44
+RETAIL SALES       :        6,396.40  CASH SALES       :            0.00
+TOTAL SALES        :        6,396.40  CLOSING VALUE    :        7,643.83
+LAST MONTH SALES   :        7,349.42  TRANSIT VALUE    :            0.00
+----------------------------------------------------------------------------------------
+PENDING EXPIRY/BROKEN/P.RETURN CLAIM DETAILS  Page No.:  1
+----------------------------------------------------------------------------------------
+CLAIM No.     DATE           AMOUNT      RECD.AMT  DESCRIPTION
+----------------------------------------------------------------------------------------
+  1854     14/06/2023      6,387.00          0.00  Purchase Return
+  1938     15/09/2023        982.00          0.00  Purchase Return
+  1977     11/12/2023      1,931.00          0.00  Purchase Return
+  2019     12/02/2024        484.00          0.00  Purchase Return
+  2119     16/04/2024        119.00          0.00  Purchase Return
+  2128     11/05/2024        399.00          0.00  Purchase Return
+  2187     06/07/2024      7,598.00          0.00  Purchase Return
+                        -------------------------
+Receivable Claim Amount  :        17,900.00
+----------------------------------------------------------------------------------------

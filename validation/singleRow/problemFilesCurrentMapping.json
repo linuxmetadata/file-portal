@@ -1,0 +1,2623 @@
+[
+  {
+    "file": "DERMASCIENCE_OM_DISTRIBUTORS_PUN149_SSS_1.txt",
+    "success": true,
+    "header": {
+      "lineNumber": 6,
+      "text": "ITEM NAME               BOX    PACK    OPQTY  P_QTY  REPL   S_QTY  B_QTY",
+      "columns": [
+        {
+          "index": 0,
+          "header": "ITEM NAME",
+          "normalized": "ITEMNAME",
+          "position": 0,
+          "end": 9
+        },
+        {
+          "index": 1,
+          "header": "BOX",
+          "normalized": "BOX",
+          "position": 24,
+          "end": 27
+        },
+        {
+          "index": 2,
+          "header": "PACK",
+          "normalized": "PACK",
+          "position": 31,
+          "end": 35
+        },
+        {
+          "index": 3,
+          "header": "OPQTY",
+          "normalized": "OPQTY",
+          "position": 39,
+          "end": 44
+        },
+        {
+          "index": 4,
+          "header": "P_QTY",
+          "normalized": "P_QTY",
+          "position": 46,
+          "end": 51
+        },
+        {
+          "index": 5,
+          "header": "REPL",
+          "normalized": "REPL",
+          "position": 53,
+          "end": 57
+        },
+        {
+          "index": 6,
+          "header": "S_QTY",
+          "normalized": "S_QTY",
+          "position": 60,
+          "end": 65
+        },
+        {
+          "index": 7,
+          "header": "B_QTY",
+          "normalized": "B_QTY",
+          "position": 67,
+          "end": 72
+        }
+      ]
+    },
+    "extracted": 32,
+    "firstRecords": [
+      {
+        "rowNumber": 10,
+        "rawLine": "ACNESTAL FACE WASH 60ML 08X60M 60ML.      13      0      0      0     13",
+        "common": {
+          "product": null,
+          "pack": 13,
+          "opening": 0,
+          "replacement": 0
+        },
+        "source": {
+          "ITEM NAME": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "ITEMNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "BOX": {
+            "value": null,
+            "rawValue": null,
+            "position": 24,
+            "normalizedHeader": "BOX",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "PACK": {
+            "value": 13,
+            "rawValue": "13",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "OPQTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 39,
+            "normalizedHeader": "OPQTY",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46,
+            "normalizedHeader": "P_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "REPL": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 53,
+            "normalizedHeader": "REPL",
+            "commonField": "replacement",
+            "status": "MAPPED"
+          },
+          "S_QTY": {
+            "value": 13,
+            "rawValue": "13",
+            "position": 60,
+            "normalizedHeader": "S_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67,
+            "normalizedHeader": "B_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          }
+        },
+        "unidentified": {
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46
+          },
+          "S_QTY": {
+            "value": 13,
+            "rawValue": "13",
+            "position": 60
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67
+          }
+        }
+      },
+      {
+        "rowNumber": 11,
+        "rawLine": "ACNESTAL SOAP 75GM.     10X75G 75GM.       9      0      0      0      9",
+        "common": {
+          "product": null,
+          "pack": 9,
+          "opening": 0,
+          "replacement": 0
+        },
+        "source": {
+          "ITEM NAME": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "ITEMNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "BOX": {
+            "value": null,
+            "rawValue": null,
+            "position": 24,
+            "normalizedHeader": "BOX",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "PACK": {
+            "value": 9,
+            "rawValue": "9",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "OPQTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 39,
+            "normalizedHeader": "OPQTY",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46,
+            "normalizedHeader": "P_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "REPL": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 53,
+            "normalizedHeader": "REPL",
+            "commonField": "replacement",
+            "status": "MAPPED"
+          },
+          "S_QTY": {
+            "value": 9,
+            "rawValue": "9",
+            "position": 60,
+            "normalizedHeader": "S_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67,
+            "normalizedHeader": "B_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          }
+        },
+        "unidentified": {
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46
+          },
+          "S_QTY": {
+            "value": 9,
+            "rawValue": "9",
+            "position": 60
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67
+          }
+        }
+      },
+      {
+        "rowNumber": 12,
+        "rawLine": "ACTIVE MF CREAM 100GM.  10X100 100GM.      4      0      0      0      4",
+        "common": {
+          "product": null,
+          "pack": 4,
+          "opening": 0,
+          "replacement": 0
+        },
+        "source": {
+          "ITEM NAME": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "ITEMNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "BOX": {
+            "value": null,
+            "rawValue": null,
+            "position": 24,
+            "normalizedHeader": "BOX",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "PACK": {
+            "value": 4,
+            "rawValue": "4",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "OPQTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 39,
+            "normalizedHeader": "OPQTY",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46,
+            "normalizedHeader": "P_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "REPL": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 53,
+            "normalizedHeader": "REPL",
+            "commonField": "replacement",
+            "status": "MAPPED"
+          },
+          "S_QTY": {
+            "value": 4,
+            "rawValue": "4",
+            "position": 60,
+            "normalizedHeader": "S_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67,
+            "normalizedHeader": "B_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          }
+        },
+        "unidentified": {
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46
+          },
+          "S_QTY": {
+            "value": 4,
+            "rawValue": "4",
+            "position": 60
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "IMPERIA_OM_DISTRIBUTORS_PUN149_SSS_1.txt",
+    "success": true,
+    "header": {
+      "lineNumber": 6,
+      "text": "ITEM NAME               BOX    PACK    OPQTY  P_QTY  REPL   S_QTY  B_QTY",
+      "columns": [
+        {
+          "index": 0,
+          "header": "ITEM NAME",
+          "normalized": "ITEMNAME",
+          "position": 0,
+          "end": 9
+        },
+        {
+          "index": 1,
+          "header": "BOX",
+          "normalized": "BOX",
+          "position": 24,
+          "end": 27
+        },
+        {
+          "index": 2,
+          "header": "PACK",
+          "normalized": "PACK",
+          "position": 31,
+          "end": 35
+        },
+        {
+          "index": 3,
+          "header": "OPQTY",
+          "normalized": "OPQTY",
+          "position": 39,
+          "end": 44
+        },
+        {
+          "index": 4,
+          "header": "P_QTY",
+          "normalized": "P_QTY",
+          "position": 46,
+          "end": 51
+        },
+        {
+          "index": 5,
+          "header": "REPL",
+          "normalized": "REPL",
+          "position": 53,
+          "end": 57
+        },
+        {
+          "index": 6,
+          "header": "S_QTY",
+          "normalized": "S_QTY",
+          "position": 60,
+          "end": 65
+        },
+        {
+          "index": 7,
+          "header": "B_QTY",
+          "normalized": "B_QTY",
+          "position": 67,
+          "end": 72
+        }
+      ]
+    },
+    "extracted": 48,
+    "firstRecords": [
+      {
+        "rowNumber": 10,
+        "rawLine": "BRITAM INJ.5ML.         10X5ML 5ML.       28      0      0      0     28",
+        "common": {
+          "product": null,
+          "pack": 28,
+          "opening": 0,
+          "replacement": 0
+        },
+        "source": {
+          "ITEM NAME": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "ITEMNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "BOX": {
+            "value": null,
+            "rawValue": null,
+            "position": 24,
+            "normalizedHeader": "BOX",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "PACK": {
+            "value": 28,
+            "rawValue": "28",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "OPQTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 39,
+            "normalizedHeader": "OPQTY",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46,
+            "normalizedHeader": "P_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "REPL": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 53,
+            "normalizedHeader": "REPL",
+            "commonField": "replacement",
+            "status": "MAPPED"
+          },
+          "S_QTY": {
+            "value": 28,
+            "rawValue": "28",
+            "position": 60,
+            "normalizedHeader": "S_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67,
+            "normalizedHeader": "B_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          }
+        },
+        "unidentified": {
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46
+          },
+          "S_QTY": {
+            "value": 28,
+            "rawValue": "28",
+            "position": 60
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67
+          }
+        }
+      },
+      {
+        "rowNumber": 11,
+        "rawLine": "BRITAM SR 100 TAB 15'   10X15' 15'        39     50      0     33     56",
+        "common": {
+          "product": null,
+          "pack": 100,
+          "opening": 39,
+          "replacement": 0
+        },
+        "source": {
+          "ITEM NAME": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "ITEMNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "BOX": {
+            "value": null,
+            "rawValue": null,
+            "position": 24,
+            "normalizedHeader": "BOX",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "PACK": {
+            "value": 100,
+            "rawValue": "100",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "OPQTY": {
+            "value": 39,
+            "rawValue": "39",
+            "position": 39,
+            "normalizedHeader": "OPQTY",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "P_QTY": {
+            "value": 50,
+            "rawValue": "50",
+            "position": 46,
+            "normalizedHeader": "P_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "REPL": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 53,
+            "normalizedHeader": "REPL",
+            "commonField": "replacement",
+            "status": "MAPPED"
+          },
+          "S_QTY": {
+            "value": 33,
+            "rawValue": "33",
+            "position": 60,
+            "normalizedHeader": "S_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "B_QTY": {
+            "value": 56,
+            "rawValue": "56",
+            "position": 67,
+            "normalizedHeader": "B_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          }
+        },
+        "unidentified": {
+          "P_QTY": {
+            "value": 50,
+            "rawValue": "50",
+            "position": 46
+          },
+          "S_QTY": {
+            "value": 33,
+            "rawValue": "33",
+            "position": 60
+          },
+          "B_QTY": {
+            "value": 56,
+            "rawValue": "56",
+            "position": 67
+          }
+        }
+      },
+      {
+        "rowNumber": 12,
+        "rawLine": "BRITAM SYP.100ML.       25X100 100ML.     11      0      0      5      6",
+        "common": {
+          "product": null,
+          "pack": 11,
+          "opening": 0,
+          "replacement": 5
+        },
+        "source": {
+          "ITEM NAME": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "ITEMNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "BOX": {
+            "value": null,
+            "rawValue": null,
+            "position": 24,
+            "normalizedHeader": "BOX",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "PACK": {
+            "value": 11,
+            "rawValue": "11",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "OPQTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 39,
+            "normalizedHeader": "OPQTY",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46,
+            "normalizedHeader": "P_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "REPL": {
+            "value": 5,
+            "rawValue": "5",
+            "position": 53,
+            "normalizedHeader": "REPL",
+            "commonField": "replacement",
+            "status": "MAPPED"
+          },
+          "S_QTY": {
+            "value": 6,
+            "rawValue": "6",
+            "position": 60,
+            "normalizedHeader": "S_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67,
+            "normalizedHeader": "B_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          }
+        },
+        "unidentified": {
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46
+          },
+          "S_QTY": {
+            "value": 6,
+            "rawValue": "6",
+            "position": 60
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "INFINA_OM_DISTRIBUTORS_PUN149_SSS_1.txt",
+    "success": true,
+    "header": {
+      "lineNumber": 6,
+      "text": "ITEM NAME               BOX    PACK    OPQTY  P_QTY  REPL   S_QTY  B_QTY",
+      "columns": [
+        {
+          "index": 0,
+          "header": "ITEM NAME",
+          "normalized": "ITEMNAME",
+          "position": 0,
+          "end": 9
+        },
+        {
+          "index": 1,
+          "header": "BOX",
+          "normalized": "BOX",
+          "position": 24,
+          "end": 27
+        },
+        {
+          "index": 2,
+          "header": "PACK",
+          "normalized": "PACK",
+          "position": 31,
+          "end": 35
+        },
+        {
+          "index": 3,
+          "header": "OPQTY",
+          "normalized": "OPQTY",
+          "position": 39,
+          "end": 44
+        },
+        {
+          "index": 4,
+          "header": "P_QTY",
+          "normalized": "P_QTY",
+          "position": 46,
+          "end": 51
+        },
+        {
+          "index": 5,
+          "header": "REPL",
+          "normalized": "REPL",
+          "position": 53,
+          "end": 57
+        },
+        {
+          "index": 6,
+          "header": "S_QTY",
+          "normalized": "S_QTY",
+          "position": 60,
+          "end": 65
+        },
+        {
+          "index": 7,
+          "header": "B_QTY",
+          "normalized": "B_QTY",
+          "position": 67,
+          "end": 72
+        }
+      ]
+    },
+    "extracted": 42,
+    "firstRecords": [
+      {
+        "rowNumber": 10,
+        "rawLine": "AMINTOZ INJ.1ML.        10X1ML 1ML.       22      0      0      0     22",
+        "common": {
+          "product": null,
+          "pack": 22,
+          "opening": 0,
+          "replacement": 0
+        },
+        "source": {
+          "ITEM NAME": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "ITEMNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "BOX": {
+            "value": null,
+            "rawValue": null,
+            "position": 24,
+            "normalizedHeader": "BOX",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "PACK": {
+            "value": 22,
+            "rawValue": "22",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "OPQTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 39,
+            "normalizedHeader": "OPQTY",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46,
+            "normalizedHeader": "P_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "REPL": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 53,
+            "normalizedHeader": "REPL",
+            "commonField": "replacement",
+            "status": "MAPPED"
+          },
+          "S_QTY": {
+            "value": 22,
+            "rawValue": "22",
+            "position": 60,
+            "normalizedHeader": "S_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67,
+            "normalizedHeader": "B_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          }
+        },
+        "unidentified": {
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46
+          },
+          "S_QTY": {
+            "value": 22,
+            "rawValue": "22",
+            "position": 60
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67
+          }
+        }
+      },
+      {
+        "rowNumber": 11,
+        "rawLine": "AMINTOZ INJ.2ML.        10X2ML 2ML.       68     50     10    100     28",
+        "common": {
+          "product": null,
+          "pack": 68,
+          "opening": 50,
+          "replacement": 100
+        },
+        "source": {
+          "ITEM NAME": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "ITEMNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "BOX": {
+            "value": null,
+            "rawValue": null,
+            "position": 24,
+            "normalizedHeader": "BOX",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "PACK": {
+            "value": 68,
+            "rawValue": "68",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "OPQTY": {
+            "value": 50,
+            "rawValue": "50",
+            "position": 39,
+            "normalizedHeader": "OPQTY",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "P_QTY": {
+            "value": 10,
+            "rawValue": "10",
+            "position": 46,
+            "normalizedHeader": "P_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "REPL": {
+            "value": 100,
+            "rawValue": "100",
+            "position": 53,
+            "normalizedHeader": "REPL",
+            "commonField": "replacement",
+            "status": "MAPPED"
+          },
+          "S_QTY": {
+            "value": 28,
+            "rawValue": "28",
+            "position": 60,
+            "normalizedHeader": "S_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67,
+            "normalizedHeader": "B_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          }
+        },
+        "unidentified": {
+          "P_QTY": {
+            "value": 10,
+            "rawValue": "10",
+            "position": 46
+          },
+          "S_QTY": {
+            "value": 28,
+            "rawValue": "28",
+            "position": 60
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67
+          }
+        }
+      },
+      {
+        "rowNumber": 12,
+        "rawLine": "AMINTOZ TAB 10'         10X10' 10'        77     50     12     54     85",
+        "common": {
+          "product": null,
+          "pack": 77,
+          "opening": 50,
+          "replacement": 54
+        },
+        "source": {
+          "ITEM NAME": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "ITEMNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "BOX": {
+            "value": null,
+            "rawValue": null,
+            "position": 24,
+            "normalizedHeader": "BOX",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "PACK": {
+            "value": 77,
+            "rawValue": "77",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "OPQTY": {
+            "value": 50,
+            "rawValue": "50",
+            "position": 39,
+            "normalizedHeader": "OPQTY",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "P_QTY": {
+            "value": 12,
+            "rawValue": "12",
+            "position": 46,
+            "normalizedHeader": "P_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "REPL": {
+            "value": 54,
+            "rawValue": "54",
+            "position": 53,
+            "normalizedHeader": "REPL",
+            "commonField": "replacement",
+            "status": "MAPPED"
+          },
+          "S_QTY": {
+            "value": 85,
+            "rawValue": "85",
+            "position": 60,
+            "normalizedHeader": "S_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67,
+            "normalizedHeader": "B_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          }
+        },
+        "unidentified": {
+          "P_QTY": {
+            "value": 12,
+            "rawValue": "12",
+            "position": 46
+          },
+          "S_QTY": {
+            "value": 85,
+            "rawValue": "85",
+            "position": 60
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "INTEGRA_OM_DISTRIBUTORS_PUN149_SSS_1.txt",
+    "success": true,
+    "header": {
+      "lineNumber": 6,
+      "text": "ITEM NAME               BOX    PACK    OPQTY  P_QTY  REPL   S_QTY  B_QTY",
+      "columns": [
+        {
+          "index": 0,
+          "header": "ITEM NAME",
+          "normalized": "ITEMNAME",
+          "position": 0,
+          "end": 9
+        },
+        {
+          "index": 1,
+          "header": "BOX",
+          "normalized": "BOX",
+          "position": 24,
+          "end": 27
+        },
+        {
+          "index": 2,
+          "header": "PACK",
+          "normalized": "PACK",
+          "position": 31,
+          "end": 35
+        },
+        {
+          "index": 3,
+          "header": "OPQTY",
+          "normalized": "OPQTY",
+          "position": 39,
+          "end": 44
+        },
+        {
+          "index": 4,
+          "header": "P_QTY",
+          "normalized": "P_QTY",
+          "position": 46,
+          "end": 51
+        },
+        {
+          "index": 5,
+          "header": "REPL",
+          "normalized": "REPL",
+          "position": 53,
+          "end": 57
+        },
+        {
+          "index": 6,
+          "header": "S_QTY",
+          "normalized": "S_QTY",
+          "position": 60,
+          "end": 65
+        },
+        {
+          "index": 7,
+          "header": "B_QTY",
+          "normalized": "B_QTY",
+          "position": 67,
+          "end": 72
+        }
+      ]
+    },
+    "extracted": 18,
+    "firstRecords": [
+      {
+        "rowNumber": 10,
+        "rawLine": "DUBIZ TAB 10'           10X10' 10'        21      0      0      0     21",
+        "common": {
+          "product": null,
+          "pack": 21,
+          "opening": 0,
+          "replacement": 0
+        },
+        "source": {
+          "ITEM NAME": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "ITEMNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "BOX": {
+            "value": null,
+            "rawValue": null,
+            "position": 24,
+            "normalizedHeader": "BOX",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "PACK": {
+            "value": 21,
+            "rawValue": "21",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "OPQTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 39,
+            "normalizedHeader": "OPQTY",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46,
+            "normalizedHeader": "P_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "REPL": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 53,
+            "normalizedHeader": "REPL",
+            "commonField": "replacement",
+            "status": "MAPPED"
+          },
+          "S_QTY": {
+            "value": 21,
+            "rawValue": "21",
+            "position": 60,
+            "normalizedHeader": "S_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67,
+            "normalizedHeader": "B_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          }
+        },
+        "unidentified": {
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46
+          },
+          "S_QTY": {
+            "value": 21,
+            "rawValue": "21",
+            "position": 60
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67
+          }
+        }
+      },
+      {
+        "rowNumber": 11,
+        "rawLine": "ETORIFLEX MR-4 TAB 10'  10X10' 10'        35      0      0     16     19",
+        "common": {
+          "product": null,
+          "pack": 35,
+          "opening": 0,
+          "replacement": 16
+        },
+        "source": {
+          "ITEM NAME": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "ITEMNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "BOX": {
+            "value": null,
+            "rawValue": null,
+            "position": 24,
+            "normalizedHeader": "BOX",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "PACK": {
+            "value": 35,
+            "rawValue": "35",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "OPQTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 39,
+            "normalizedHeader": "OPQTY",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46,
+            "normalizedHeader": "P_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "REPL": {
+            "value": 16,
+            "rawValue": "16",
+            "position": 53,
+            "normalizedHeader": "REPL",
+            "commonField": "replacement",
+            "status": "MAPPED"
+          },
+          "S_QTY": {
+            "value": 19,
+            "rawValue": "19",
+            "position": 60,
+            "normalizedHeader": "S_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67,
+            "normalizedHeader": "B_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          }
+        },
+        "unidentified": {
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46
+          },
+          "S_QTY": {
+            "value": 19,
+            "rawValue": "19",
+            "position": 60
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67
+          }
+        }
+      },
+      {
+        "rowNumber": 12,
+        "rawLine": "OXVUN 100MG.TAB 10'     10X10' 10'        12      0      0      0     12",
+        "common": {
+          "product": null,
+          "pack": 12,
+          "opening": 0,
+          "replacement": 0
+        },
+        "source": {
+          "ITEM NAME": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "ITEMNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "BOX": {
+            "value": null,
+            "rawValue": null,
+            "position": 24,
+            "normalizedHeader": "BOX",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "PACK": {
+            "value": 12,
+            "rawValue": "12",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "OPQTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 39,
+            "normalizedHeader": "OPQTY",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46,
+            "normalizedHeader": "P_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "REPL": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 53,
+            "normalizedHeader": "REPL",
+            "commonField": "replacement",
+            "status": "MAPPED"
+          },
+          "S_QTY": {
+            "value": 12,
+            "rawValue": "12",
+            "position": 60,
+            "normalizedHeader": "S_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67,
+            "normalizedHeader": "B_QTY",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          }
+        },
+        "unidentified": {
+          "P_QTY": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 46
+          },
+          "S_QTY": {
+            "value": 12,
+            "rawValue": "12",
+            "position": 60
+          },
+          "B_QTY": {
+            "value": null,
+            "rawValue": null,
+            "position": 67
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "DERMASCIENCE_SENTHIL_PHARMA_TN845_SSS_1.txt",
+    "success": true,
+    "header": {
+      "lineNumber": 5,
+      "text": "No   Product Name              Pack        Opstk           Pur      Sale        CurStk    StkVal ",
+      "columns": [
+        {
+          "index": 0,
+          "header": "No",
+          "normalized": "NO",
+          "position": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "header": "Product Name",
+          "normalized": "PRODUCTNAME",
+          "position": 5,
+          "end": 17
+        },
+        {
+          "index": 2,
+          "header": "Pack",
+          "normalized": "PACK",
+          "position": 31,
+          "end": 35
+        },
+        {
+          "index": 3,
+          "header": "Opstk",
+          "normalized": "OPSTK",
+          "position": 43,
+          "end": 48
+        },
+        {
+          "index": 4,
+          "header": "Pur",
+          "normalized": "PUR",
+          "position": 59,
+          "end": 62
+        },
+        {
+          "index": 5,
+          "header": "Sale",
+          "normalized": "SALE",
+          "position": 68,
+          "end": 72
+        },
+        {
+          "index": 6,
+          "header": "CurStk",
+          "normalized": "CURSTK",
+          "position": 80,
+          "end": 86
+        },
+        {
+          "index": 7,
+          "header": "StkVal",
+          "normalized": "STKVAL",
+          "position": 90,
+          "end": 96
+        }
+      ]
+    },
+    "extracted": 11,
+    "firstRecords": [
+      {
+        "rowNumber": 7,
+        "rawLine": "1   ACNESTAL SOAP             75gm          5+0             -         2           3+0    292.83 ",
+        "common": {
+          "serialNumber": null,
+          "product": "",
+          "pack": 1,
+          "opening": 2,
+          "purchase": 292.83,
+          "sales": null,
+          "closing": null,
+          "closingValue": null
+        },
+        "source": {
+          "No": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "NO",
+            "commonField": "serialNumber",
+            "status": "MAPPED"
+          },
+          "Product Name": {
+            "value": "",
+            "rawValue": "",
+            "position": 5,
+            "normalizedHeader": "PRODUCTNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "Pack": {
+            "value": 1,
+            "rawValue": "1",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "Opstk": {
+            "value": 2,
+            "rawValue": "2",
+            "position": 43,
+            "normalizedHeader": "OPSTK",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "Pur": {
+            "value": 292.83,
+            "rawValue": "292.83",
+            "position": 59,
+            "normalizedHeader": "PUR",
+            "commonField": "purchase",
+            "status": "MAPPED"
+          },
+          "Sale": {
+            "value": null,
+            "rawValue": null,
+            "position": 68,
+            "normalizedHeader": "SALE",
+            "commonField": "sales",
+            "status": "MAPPED"
+          },
+          "CurStk": {
+            "value": null,
+            "rawValue": null,
+            "position": 80,
+            "normalizedHeader": "CURSTK",
+            "commonField": "closing",
+            "status": "MAPPED"
+          },
+          "StkVal": {
+            "value": null,
+            "rawValue": null,
+            "position": 90,
+            "normalizedHeader": "STKVAL",
+            "commonField": "closingValue",
+            "status": "MAPPED"
+          }
+        },
+        "unidentified": {}
+      },
+      {
+        "rowNumber": 11,
+        "rawLine": "5   ACTIVE MF SOAP            75GM          9+0           186     62+12         121+0  13706.94 ",
+        "common": {
+          "serialNumber": null,
+          "product": "",
+          "pack": 5,
+          "opening": 186,
+          "purchase": 13706.94,
+          "sales": null,
+          "closing": null,
+          "closingValue": null
+        },
+        "source": {
+          "No": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "NO",
+            "commonField": "serialNumber",
+            "status": "MAPPED"
+          },
+          "Product Name": {
+            "value": "",
+            "rawValue": "",
+            "position": 5,
+            "normalizedHeader": "PRODUCTNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "Pack": {
+            "value": 5,
+            "rawValue": "5",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "Opstk": {
+            "value": 186,
+            "rawValue": "186",
+            "position": 43,
+            "normalizedHeader": "OPSTK",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "Pur": {
+            "value": 13706.94,
+            "rawValue": "13706.94",
+            "position": 59,
+            "normalizedHeader": "PUR",
+            "commonField": "purchase",
+            "status": "MAPPED"
+          },
+          "Sale": {
+            "value": null,
+            "rawValue": null,
+            "position": 68,
+            "normalizedHeader": "SALE",
+            "commonField": "sales",
+            "status": "MAPPED"
+          },
+          "CurStk": {
+            "value": null,
+            "rawValue": null,
+            "position": 80,
+            "normalizedHeader": "CURSTK",
+            "commonField": "closing",
+            "status": "MAPPED"
+          },
+          "StkVal": {
+            "value": null,
+            "rawValue": null,
+            "position": 90,
+            "normalizedHeader": "STKVAL",
+            "commonField": "closingValue",
+            "status": "MAPPED"
+          }
+        },
+        "unidentified": {}
+      },
+      {
+        "rowNumber": 12,
+        "rawLine": "6   BIOSKIN SOAP              75GMS        25+0           141      51+8         107+0   9884.44 ",
+        "common": {
+          "serialNumber": null,
+          "product": "",
+          "pack": 6,
+          "opening": 141,
+          "purchase": 9884.44,
+          "sales": null,
+          "closing": null,
+          "closingValue": null
+        },
+        "source": {
+          "No": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "NO",
+            "commonField": "serialNumber",
+            "status": "MAPPED"
+          },
+          "Product Name": {
+            "value": "",
+            "rawValue": "",
+            "position": 5,
+            "normalizedHeader": "PRODUCTNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "Pack": {
+            "value": 6,
+            "rawValue": "6",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "Opstk": {
+            "value": 141,
+            "rawValue": "141",
+            "position": 43,
+            "normalizedHeader": "OPSTK",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "Pur": {
+            "value": 9884.44,
+            "rawValue": "9884.44",
+            "position": 59,
+            "normalizedHeader": "PUR",
+            "commonField": "purchase",
+            "status": "MAPPED"
+          },
+          "Sale": {
+            "value": null,
+            "rawValue": null,
+            "position": 68,
+            "normalizedHeader": "SALE",
+            "commonField": "sales",
+            "status": "MAPPED"
+          },
+          "CurStk": {
+            "value": null,
+            "rawValue": null,
+            "position": 80,
+            "normalizedHeader": "CURSTK",
+            "commonField": "closing",
+            "status": "MAPPED"
+          },
+          "StkVal": {
+            "value": null,
+            "rawValue": null,
+            "position": 90,
+            "normalizedHeader": "STKVAL",
+            "commonField": "closingValue",
+            "status": "MAPPED"
+          }
+        },
+        "unidentified": {}
+      }
+    ]
+  },
+  {
+    "file": "IMPERIA_SENTHIL_PHARMA_TN845_SSS_1.txt",
+    "success": true,
+    "header": {
+      "lineNumber": 5,
+      "text": "No   Product Name              Pack    Opstk       Pur      Sale CurStk    StkVal ",
+      "columns": [
+        {
+          "index": 0,
+          "header": "No",
+          "normalized": "NO",
+          "position": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "header": "Product Name",
+          "normalized": "PRODUCTNAME",
+          "position": 5,
+          "end": 17
+        },
+        {
+          "index": 2,
+          "header": "Pack",
+          "normalized": "PACK",
+          "position": 31,
+          "end": 35
+        },
+        {
+          "index": 3,
+          "header": "Opstk",
+          "normalized": "OPSTK",
+          "position": 39,
+          "end": 44
+        },
+        {
+          "index": 4,
+          "header": "Pur",
+          "normalized": "PUR",
+          "position": 51,
+          "end": 54
+        },
+        {
+          "index": 5,
+          "header": "Sale CurStk",
+          "normalized": "SALECURSTK",
+          "position": 60,
+          "end": 71
+        },
+        {
+          "index": 6,
+          "header": "StkVal",
+          "normalized": "STKVAL",
+          "position": 75,
+          "end": 81
+        }
+      ]
+    },
+    "extracted": 75,
+    "firstRecords": [
+      {
+        "rowNumber": 7,
+        "rawLine": "1   BRITAM 100MG SR TAB       10          0         -         -      0         - ",
+        "common": {
+          "serialNumber": null,
+          "product": "",
+          "pack": 1,
+          "opening": 10,
+          "purchase": 0,
+          "closingValue": null
+        },
+        "source": {
+          "No": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "NO",
+            "commonField": "serialNumber",
+            "status": "MAPPED"
+          },
+          "Product Name": {
+            "value": "",
+            "rawValue": "",
+            "position": 5,
+            "normalizedHeader": "PRODUCTNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "Pack": {
+            "value": 1,
+            "rawValue": "1",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "Opstk": {
+            "value": 10,
+            "rawValue": "10",
+            "position": 39,
+            "normalizedHeader": "OPSTK",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "Pur": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 51,
+            "normalizedHeader": "PUR",
+            "commonField": "purchase",
+            "status": "MAPPED"
+          },
+          "Sale CurStk": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 60,
+            "normalizedHeader": "SALECURSTK",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "StkVal": {
+            "value": null,
+            "rawValue": null,
+            "position": 75,
+            "normalizedHeader": "STKVAL",
+            "commonField": "closingValue",
+            "status": "MAPPED"
+          }
+        },
+        "unidentified": {
+          "Sale CurStk": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 60
+          }
+        }
+      },
+      {
+        "rowNumber": 8,
+        "rawLine": "2   BRITAM 100MG TAB          10         22        10        12     19   5035.00 ",
+        "common": {
+          "serialNumber": null,
+          "product": "",
+          "pack": 2,
+          "opening": 10,
+          "purchase": 22,
+          "closingValue": 12
+        },
+        "source": {
+          "No": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "NO",
+            "commonField": "serialNumber",
+            "status": "MAPPED"
+          },
+          "Product Name": {
+            "value": "",
+            "rawValue": "",
+            "position": 5,
+            "normalizedHeader": "PRODUCTNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "Pack": {
+            "value": 2,
+            "rawValue": "2",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "Opstk": {
+            "value": 10,
+            "rawValue": "10",
+            "position": 39,
+            "normalizedHeader": "OPSTK",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "Pur": {
+            "value": 22,
+            "rawValue": "22",
+            "position": 51,
+            "normalizedHeader": "PUR",
+            "commonField": "purchase",
+            "status": "MAPPED"
+          },
+          "Sale CurStk": {
+            "value": 10,
+            "rawValue": "10",
+            "position": 60,
+            "normalizedHeader": "SALECURSTK",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "StkVal": {
+            "value": 12,
+            "rawValue": "12",
+            "position": 75,
+            "normalizedHeader": "STKVAL",
+            "commonField": "closingValue",
+            "status": "MAPPED"
+          }
+        },
+        "unidentified": {
+          "Sale CurStk": {
+            "value": 10,
+            "rawValue": "10",
+            "position": 60
+          }
+        }
+      },
+      {
+        "rowNumber": 9,
+        "rawLine": "3   BRITAM 10MG TAB           10          0         -         -      0         - ",
+        "common": {
+          "serialNumber": null,
+          "product": "",
+          "pack": 3,
+          "opening": 10,
+          "purchase": 0,
+          "closingValue": null
+        },
+        "source": {
+          "No": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "NO",
+            "commonField": "serialNumber",
+            "status": "MAPPED"
+          },
+          "Product Name": {
+            "value": "",
+            "rawValue": "",
+            "position": 5,
+            "normalizedHeader": "PRODUCTNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "Pack": {
+            "value": 3,
+            "rawValue": "3",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "Opstk": {
+            "value": 10,
+            "rawValue": "10",
+            "position": 39,
+            "normalizedHeader": "OPSTK",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "Pur": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 51,
+            "normalizedHeader": "PUR",
+            "commonField": "purchase",
+            "status": "MAPPED"
+          },
+          "Sale CurStk": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 60,
+            "normalizedHeader": "SALECURSTK",
+            "commonField": null,
+            "status": "UNIDENTIFIED"
+          },
+          "StkVal": {
+            "value": null,
+            "rawValue": null,
+            "position": 75,
+            "normalizedHeader": "STKVAL",
+            "commonField": "closingValue",
+            "status": "MAPPED"
+          }
+        },
+        "unidentified": {
+          "Sale CurStk": {
+            "value": 0,
+            "rawValue": "0",
+            "position": 60
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "INTEGRA_SENTHIL_PHARMA_TN845_SSS_1.txt",
+    "success": true,
+    "header": {
+      "lineNumber": 5,
+      "text": "No   Product Name              Pack        Opstk           Pur      Sale        CurStk    StkVal ",
+      "columns": [
+        {
+          "index": 0,
+          "header": "No",
+          "normalized": "NO",
+          "position": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "header": "Product Name",
+          "normalized": "PRODUCTNAME",
+          "position": 5,
+          "end": 17
+        },
+        {
+          "index": 2,
+          "header": "Pack",
+          "normalized": "PACK",
+          "position": 31,
+          "end": 35
+        },
+        {
+          "index": 3,
+          "header": "Opstk",
+          "normalized": "OPSTK",
+          "position": 43,
+          "end": 48
+        },
+        {
+          "index": 4,
+          "header": "Pur",
+          "normalized": "PUR",
+          "position": 59,
+          "end": 62
+        },
+        {
+          "index": 5,
+          "header": "Sale",
+          "normalized": "SALE",
+          "position": 68,
+          "end": 72
+        },
+        {
+          "index": 6,
+          "header": "CurStk",
+          "normalized": "CURSTK",
+          "position": 80,
+          "end": 86
+        },
+        {
+          "index": 7,
+          "header": "StkVal",
+          "normalized": "STKVAL",
+          "position": 90,
+          "end": 96
+        }
+      ]
+    },
+    "extracted": 32,
+    "firstRecords": [
+      {
+        "rowNumber": 7,
+        "rawLine": "1   CARBANERVE 150MG TAB      10           18+0             -         -          18+0    897.30 ",
+        "common": {
+          "serialNumber": null,
+          "product": "",
+          "pack": 1,
+          "opening": 10,
+          "purchase": 897.3,
+          "sales": null,
+          "closing": null,
+          "closingValue": null
+        },
+        "source": {
+          "No": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "NO",
+            "commonField": "serialNumber",
+            "status": "MAPPED"
+          },
+          "Product Name": {
+            "value": "",
+            "rawValue": "",
+            "position": 5,
+            "normalizedHeader": "PRODUCTNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "Pack": {
+            "value": 1,
+            "rawValue": "1",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "Opstk": {
+            "value": 10,
+            "rawValue": "10",
+            "position": 43,
+            "normalizedHeader": "OPSTK",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "Pur": {
+            "value": 897.3,
+            "rawValue": "897.30",
+            "position": 59,
+            "normalizedHeader": "PUR",
+            "commonField": "purchase",
+            "status": "MAPPED"
+          },
+          "Sale": {
+            "value": null,
+            "rawValue": null,
+            "position": 68,
+            "normalizedHeader": "SALE",
+            "commonField": "sales",
+            "status": "MAPPED"
+          },
+          "CurStk": {
+            "value": null,
+            "rawValue": null,
+            "position": 80,
+            "normalizedHeader": "CURSTK",
+            "commonField": "closing",
+            "status": "MAPPED"
+          },
+          "StkVal": {
+            "value": null,
+            "rawValue": null,
+            "position": 90,
+            "normalizedHeader": "STKVAL",
+            "commonField": "closingValue",
+            "status": "MAPPED"
+          }
+        },
+        "unidentified": {}
+      },
+      {
+        "rowNumber": 8,
+        "rawLine": "2   CARBANERVE 300MG [15`S]   15          120+0           210     149+4         177+0  24459.63 ",
+        "common": {
+          "serialNumber": null,
+          "product": "",
+          "pack": 2,
+          "opening": 15,
+          "purchase": 210,
+          "sales": 24459.63,
+          "closing": null,
+          "closingValue": null
+        },
+        "source": {
+          "No": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "NO",
+            "commonField": "serialNumber",
+            "status": "MAPPED"
+          },
+          "Product Name": {
+            "value": "",
+            "rawValue": "",
+            "position": 5,
+            "normalizedHeader": "PRODUCTNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "Pack": {
+            "value": 2,
+            "rawValue": "2",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "Opstk": {
+            "value": 15,
+            "rawValue": "15",
+            "position": 43,
+            "normalizedHeader": "OPSTK",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "Pur": {
+            "value": 210,
+            "rawValue": "210",
+            "position": 59,
+            "normalizedHeader": "PUR",
+            "commonField": "purchase",
+            "status": "MAPPED"
+          },
+          "Sale": {
+            "value": 24459.63,
+            "rawValue": "24459.63",
+            "position": 68,
+            "normalizedHeader": "SALE",
+            "commonField": "sales",
+            "status": "MAPPED"
+          },
+          "CurStk": {
+            "value": null,
+            "rawValue": null,
+            "position": 80,
+            "normalizedHeader": "CURSTK",
+            "commonField": "closing",
+            "status": "MAPPED"
+          },
+          "StkVal": {
+            "value": null,
+            "rawValue": null,
+            "position": 90,
+            "normalizedHeader": "STKVAL",
+            "commonField": "closingValue",
+            "status": "MAPPED"
+          }
+        },
+        "unidentified": {}
+      },
+      {
+        "rowNumber": 9,
+        "rawLine": "3   CARBANERVE 300MG TAB      10           25+0             -        25           0+0         - ",
+        "common": {
+          "serialNumber": null,
+          "product": "",
+          "pack": 3,
+          "opening": 10,
+          "purchase": 25,
+          "sales": null,
+          "closing": null,
+          "closingValue": null
+        },
+        "source": {
+          "No": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "NO",
+            "commonField": "serialNumber",
+            "status": "MAPPED"
+          },
+          "Product Name": {
+            "value": "",
+            "rawValue": "",
+            "position": 5,
+            "normalizedHeader": "PRODUCTNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "Pack": {
+            "value": 3,
+            "rawValue": "3",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "Opstk": {
+            "value": 10,
+            "rawValue": "10",
+            "position": 43,
+            "normalizedHeader": "OPSTK",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "Pur": {
+            "value": 25,
+            "rawValue": "25",
+            "position": 59,
+            "normalizedHeader": "PUR",
+            "commonField": "purchase",
+            "status": "MAPPED"
+          },
+          "Sale": {
+            "value": null,
+            "rawValue": null,
+            "position": 68,
+            "normalizedHeader": "SALE",
+            "commonField": "sales",
+            "status": "MAPPED"
+          },
+          "CurStk": {
+            "value": null,
+            "rawValue": null,
+            "position": 80,
+            "normalizedHeader": "CURSTK",
+            "commonField": "closing",
+            "status": "MAPPED"
+          },
+          "StkVal": {
+            "value": null,
+            "rawValue": null,
+            "position": 90,
+            "normalizedHeader": "STKVAL",
+            "commonField": "closingValue",
+            "status": "MAPPED"
+          }
+        },
+        "unidentified": {}
+      }
+    ]
+  },
+  {
+    "file": "NUTRIMAX_SENTHIL_PHARMA_TN845_SSS_1.txt",
+    "success": true,
+    "header": {
+      "lineNumber": 5,
+      "text": "No   Product Name              Pack        Opstk           Pur      Sale        CurStk    StkVal ",
+      "columns": [
+        {
+          "index": 0,
+          "header": "No",
+          "normalized": "NO",
+          "position": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "header": "Product Name",
+          "normalized": "PRODUCTNAME",
+          "position": 5,
+          "end": 17
+        },
+        {
+          "index": 2,
+          "header": "Pack",
+          "normalized": "PACK",
+          "position": 31,
+          "end": 35
+        },
+        {
+          "index": 3,
+          "header": "Opstk",
+          "normalized": "OPSTK",
+          "position": 43,
+          "end": 48
+        },
+        {
+          "index": 4,
+          "header": "Pur",
+          "normalized": "PUR",
+          "position": 59,
+          "end": 62
+        },
+        {
+          "index": 5,
+          "header": "Sale",
+          "normalized": "SALE",
+          "position": 68,
+          "end": 72
+        },
+        {
+          "index": 6,
+          "header": "CurStk",
+          "normalized": "CURSTK",
+          "position": 80,
+          "end": 86
+        },
+        {
+          "index": 7,
+          "header": "StkVal",
+          "normalized": "STKVAL",
+          "position": 90,
+          "end": 96
+        }
+      ]
+    },
+    "extracted": 10,
+    "firstRecords": [
+      {
+        "rowNumber": 11,
+        "rawLine": "5   BECOSTAR G CAP            10`s         78+0            43      48+9          64+0   9560.32 ",
+        "common": {
+          "serialNumber": null,
+          "product": "",
+          "pack": 5,
+          "opening": 43,
+          "purchase": 9560.32,
+          "sales": null,
+          "closing": null,
+          "closingValue": null
+        },
+        "source": {
+          "No": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "NO",
+            "commonField": "serialNumber",
+            "status": "MAPPED"
+          },
+          "Product Name": {
+            "value": "",
+            "rawValue": "",
+            "position": 5,
+            "normalizedHeader": "PRODUCTNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "Pack": {
+            "value": 5,
+            "rawValue": "5",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "Opstk": {
+            "value": 43,
+            "rawValue": "43",
+            "position": 43,
+            "normalizedHeader": "OPSTK",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "Pur": {
+            "value": 9560.32,
+            "rawValue": "9560.32",
+            "position": 59,
+            "normalizedHeader": "PUR",
+            "commonField": "purchase",
+            "status": "MAPPED"
+          },
+          "Sale": {
+            "value": null,
+            "rawValue": null,
+            "position": 68,
+            "normalizedHeader": "SALE",
+            "commonField": "sales",
+            "status": "MAPPED"
+          },
+          "CurStk": {
+            "value": null,
+            "rawValue": null,
+            "position": 80,
+            "normalizedHeader": "CURSTK",
+            "commonField": "closing",
+            "status": "MAPPED"
+          },
+          "StkVal": {
+            "value": null,
+            "rawValue": null,
+            "position": 90,
+            "normalizedHeader": "STKVAL",
+            "commonField": "closingValue",
+            "status": "MAPPED"
+          }
+        },
+        "unidentified": {}
+      },
+      {
+        "rowNumber": 13,
+        "rawLine": "7   BECOSTAR TAB              15`S         29+0            20      10+2          37+0   2884.89 ",
+        "common": {
+          "serialNumber": null,
+          "product": "",
+          "pack": 7,
+          "opening": 20,
+          "purchase": 2884.89,
+          "sales": null,
+          "closing": null,
+          "closingValue": null
+        },
+        "source": {
+          "No": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "NO",
+            "commonField": "serialNumber",
+            "status": "MAPPED"
+          },
+          "Product Name": {
+            "value": "",
+            "rawValue": "",
+            "position": 5,
+            "normalizedHeader": "PRODUCTNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "Pack": {
+            "value": 7,
+            "rawValue": "7",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "Opstk": {
+            "value": 20,
+            "rawValue": "20",
+            "position": 43,
+            "normalizedHeader": "OPSTK",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "Pur": {
+            "value": 2884.89,
+            "rawValue": "2884.89",
+            "position": 59,
+            "normalizedHeader": "PUR",
+            "commonField": "purchase",
+            "status": "MAPPED"
+          },
+          "Sale": {
+            "value": null,
+            "rawValue": null,
+            "position": 68,
+            "normalizedHeader": "SALE",
+            "commonField": "sales",
+            "status": "MAPPED"
+          },
+          "CurStk": {
+            "value": null,
+            "rawValue": null,
+            "position": 80,
+            "normalizedHeader": "CURSTK",
+            "commonField": "closing",
+            "status": "MAPPED"
+          },
+          "StkVal": {
+            "value": null,
+            "rawValue": null,
+            "position": 90,
+            "normalizedHeader": "STKVAL",
+            "commonField": "closingValue",
+            "status": "MAPPED"
+          }
+        },
+        "unidentified": {}
+      },
+      {
+        "rowNumber": 15,
+        "rawLine": "9   CELONG TAB                10           48+0            98      75+4          67+0   3684.33 ",
+        "common": {
+          "serialNumber": null,
+          "product": "",
+          "pack": 9,
+          "opening": 10,
+          "purchase": 98,
+          "sales": 3684.33,
+          "closing": null,
+          "closingValue": null
+        },
+        "source": {
+          "No": {
+            "value": null,
+            "rawValue": null,
+            "position": 0,
+            "normalizedHeader": "NO",
+            "commonField": "serialNumber",
+            "status": "MAPPED"
+          },
+          "Product Name": {
+            "value": "",
+            "rawValue": "",
+            "position": 5,
+            "normalizedHeader": "PRODUCTNAME",
+            "commonField": "product",
+            "status": "MAPPED"
+          },
+          "Pack": {
+            "value": 9,
+            "rawValue": "9",
+            "position": 31,
+            "normalizedHeader": "PACK",
+            "commonField": "pack",
+            "status": "MAPPED"
+          },
+          "Opstk": {
+            "value": 10,
+            "rawValue": "10",
+            "position": 43,
+            "normalizedHeader": "OPSTK",
+            "commonField": "opening",
+            "status": "MAPPED"
+          },
+          "Pur": {
+            "value": 98,
+            "rawValue": "98",
+            "position": 59,
+            "normalizedHeader": "PUR",
+            "commonField": "purchase",
+            "status": "MAPPED"
+          },
+          "Sale": {
+            "value": 3684.33,
+            "rawValue": "3684.33",
+            "position": 68,
+            "normalizedHeader": "SALE",
+            "commonField": "sales",
+            "status": "MAPPED"
+          },
+          "CurStk": {
+            "value": null,
+            "rawValue": null,
+            "position": 80,
+            "normalizedHeader": "CURSTK",
+            "commonField": "closing",
+            "status": "MAPPED"
+          },
+          "StkVal": {
+            "value": null,
+            "rawValue": null,
+            "position": 90,
+            "normalizedHeader": "STKVAL",
+            "commonField": "closingValue",
+            "status": "MAPPED"
+          }
+        },
+        "unidentified": {}
+      }
+    ]
+  }
+]

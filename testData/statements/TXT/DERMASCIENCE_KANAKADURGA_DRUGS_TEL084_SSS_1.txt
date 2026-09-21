@@ -1,0 +1,27 @@
+CHM
+              KANAKADURGA DRUGS
+
+E                                    Stock & Sales StatementF
+From 01/07/2026 To 31/07/2026                                                        Page : 1
+------------------------------------------------------------------------------------------------
+Product Name                 Packing  O.Stk    Purc      Tot    Sale     Qoh        Value  Age
+------------------------------------------------------------------------------------------------
+Company :LINUX                
+--------------
+ACNESTAL FASH WASH           100ML        0      10       10       0      10      3088.89   33 
+ACTIVE MF CREAM              100GM        0      10       10       7       3       933.11    5 
+ACTIVE MF LOTION             200ML        0      10       10       2       8      3767.03   33 
+EBERNET + CREAM              30GM         1      20       21      19       2       840.50    5 
+EBERNET CREAM(30GM)          30gm        -4      30       26      26       0         0.00    5 
+EBERNET CREAM(60GM)          60gm         0      10       10       9       1       678.21    5 
+EBERNET LOTION               40GM        -3      20       17       8       9      4569.93   33 
+EBERNET-M CREAM              15GM         0      20       20      20       0         0.00    5 
+KC LITE CREAM                20GM         1       5        6       2       4       947.12   33 
+KEROFA COMBIKIT              4X1         -1      15       14      14       0         0.00    5 
+LINTAR SOLUTIION             100ML        0       5        5       2       3      1087.35   33 
+MOIMAX OC                    75GM         0      10       10       2       8      3283.23   33 
+------------------------------------------------------------------------------------------------
+Opening Value  :        0.00 Sale Value    :    49661.17 
+Purchase Value :    68770.55 Closing Value :    19195.36 
+------------------------------------------------------------------------------------------------
+P

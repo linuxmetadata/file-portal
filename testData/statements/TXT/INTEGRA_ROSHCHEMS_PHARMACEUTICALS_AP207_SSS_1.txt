@@ -1,0 +1,177 @@
+CHM
+            ROSHCHEM PHARMACEUTICALS
+E                                    Stock & Sales StatementF
+From 01/07/2026 To 31/07/2026                                                        Page : 1
+------------------------------------------------------------------------------------------------
+Product Name                 Packing  O.Stk    Purc      Tot    Sale     Qoh        Value  Age
+------------------------------------------------------------------------------------------------
+Company :LINUX LABORATORIES P 
+------------------------------------
+ARIDAY 10MG TAB              10TAB        0       0        0       0       0         0.00 2044 
+ARIDAY 2.5MG TAB             10TAB        0       0        0       0       0         0.00 1130 
+ARIDAY 20MG TAB              10TAB        0       0        0       0       0         0.00 2044 
+ARIDAY 5MG TAB               10TAB        0       0        0       0       0         0.00  549 
+BENFICA CAP                  10CAP       16       0       16       6      10      1027.11   86 
+BENFICA FORTE CAP            15CAP        0      30       30       8      22      5577.26   28 
+CARBANERVE 150MG TAB         10TAB        0       0        0       0       0         0.00 2209 
+CARBANERVE 300MG TAB         10TAB        0       0        0       0       0         0.00 2124 
+CARBANERVE 600MG TAB         10TAB        0       0        0       0       0         0.00 2139 
+CARNIGLO M TAB               15TAB.       7      60       67      41      26      6948.94    3 
+CARNIGLO TAB                 10TAB        7      10       17       3      14      2384.59   28 
+COGNIZA 60MG INJECTION       1AMP         0       0        0       0       0         0.00 2148 
+COGNIZA TAB                  10TAB       18       0       18       6      12      2230.83   72 
+EPITRA 500MG TAB             10TAB        0       0        0       0       0         0.00  549 
+EPITRA 750MG TAB             10TAB        6      20       26      13      13      1899.81    3 
+GABAGESIC 100MG TAB          10TAB        3       0        3       0       3       252.28  280 
+GABAGESIC 300MG TAB          15TAB.      14       0       14       6       8      1541.40  108 
+GABAGESIC GEL                30GMS        0       0        0       0       0         0.00  118 
+GABAGESIC GEL(BIG)           50GMS       11      30       41      29      12      3910.54    3 
+GABAGESIC M TAB              15TAB       11      10       21       6      15      3431.14   28 
+GABAGESIC NT 100MG TAB       15TABS       3      10       13       2      11      1294.87    3 
+GABAGESIC NT 200MG TAB       10TAB       11      10       21       2      19      2463.03   28 
+GABAGESIC NT 400MG TAB       15TAB        9       0        9       3       6      1912.87   72 
+GABAGESIC PLUS TAB           10TAB        0       0        0       0       0         0.00  775 
+GABAGESIC-ER 300MG           10TABL       0      50       50       0      50      9467.85   27 
+IDEBEST TAB                  10TABS       0       0        0       0       0         0.00    0 
+LACOVE 100MG(LINUX)          10TAB.       0       0        0       0       0         0.00 2376 
+LACOVE 50MG(LINUX)           10TAB.       0       0        0       0       0         0.00 2197 
+LIVIZ TAB                    10TAB        0       0        0       0       0         0.00 3187 
+METHONAC EVT TAB             10TAB        0       0        0       0       0         0.00 1465 
+METHONAC TAB                 10TAB        0       0        0       0       0         0.00 1512 
+METIS G1 TABLETS             10TAB.       0       0        0       0       0         0.00  301 
+METIS G2 TABLETS             10TABS       0       0        0       0       0         0.00  301 
+MITRAZAC 7.5MG TAB           10TAB        0       0        0       0       0         0.00 2124 
+OLINSTAB 10MG TAB            10 TAB       0       0        0       0       0         0.00 1869 
+OLINSTAB-2.5MG TAB.          10TAB.       0       0        0       0       0         0.00 2014 
+OLINSTAB-5MG TAB.            10TAB.       0       0        0       0       0         0.00 2209 
+PALMIDA TABLET               15TAB.       2      40       42      19      23      9209.12   13 
+PATINEX LS TAB               10 TAB       0       0        0       0       0         0.00 1358 
+PATINEX PLUS TAB.            10TAB.       0       0        0       0       0         0.00 1311 
+PATINEX-25MG                 10tab.       0       0        0       0       0         0.00 2363 
+PRONATE 10MG TAB             10TAB        0       0        0       0       0         0.00 1956 
+PRONATE EZ TAB               10TAB        0       0        0       0       0         0.00  401 
+QLINO CAP                    10CAP        0      20       20       3      17      7942.54   13 
+RDL 10MG TABS.               10TAB.       0       0        0       0       0         0.00  360 
+RDL 20MG TABS.               10TAB.       0       0        0       0       0         0.00  360 
+RDL 40MG TABS.               10TABS       0       0        0       0       0         0.00  360 
+RDL 5MG TABS.                10TABS       0       0        0       0       0         0.00  360 
+RDL F TABLETS                10TABS       0       0        0       0       0         0.00  301 
+RDL GOLD 10MG CAPSULES       10CAP.       0       0        0       0       0         0.00  301 
+RDL GOLD 20MG CAPSULES       10CAPS       0       0        0       0       0         0.00  301 
+RDL-EZ TABS.                 10TABS       0       0        0       0       0         0.00  360 
+SERMIND-25MG TAB.            10TAB.       0       0        0       0       0         0.00 2209 
+SERMIND-50MG TAB.            10TAB.       0       0        0       0       0         0.00 2209 
+TOPITAB 100MG TAB            10TAB        0       0        0       0       0         0.00 2673 
+TOPITAB-25MG TAB.            10TAB.       0       0        0       0       0         0.00 2744 
+TOPITAB-50MG TAB.            10TAB.       0       0        0       0       0         0.00 2673 
+VALEPTOL CR 200MG TAB        10TAB        0       0        0       0       0         0.00 2673 
+VALEPTOL-CR  300MG           10tab.       0       0        0       0       0         0.00 2781 
+VALEPTOL-CR  500MG           10tab.       0       0        0       0       0         0.00 2781 
+
+                                                                                     Page : 2
+------------------------------------------------------------------------------------------------
+Product Name                 Packing  O.Stk    Purc      Tot    Sale     Qoh        Value  Age
+------------------------------------------------------------------------------------------------
+VENLITE CZ 100MG TAB         10TAB        0     100      100      54      46     11068.91    3 
+VENLITE CZ 50MG TAB          10TAB        2      60       62      25      37      5349.26   13 
+VENLITE OD 100MG TAB         10TAB       22      10       32      15      17      3651.22    3 
+VENLITE OD 50MG TAB          10TAB        4      20       24       5      19      2253.15   28 
+------------------------------------------------------------------------------------------------
+Opening Value  :        0.00 Sale Value    :    57260.53 
+Purchase Value :   109460.90 Closing Value :    83816.71 
+------------------------------------------------------------------------------------------------
+Company :LINUX MAIN DIVISION  
+----------------------------
+BRITAM 100MG TAB             10TAB       11       0       11       0      11      3035.94   45 
+BRITAM 50MG TAB              15TAB.      12      40       52      30      22      4325.94    3 
+BRITAM 75MG                  10TAB.       6       0        6       0       6      1137.02  261 
+CALMTRA 10MG TAB             10TAB        0       0        0       0       0         0.00 3240 
+CITALIN 10MG TAB             15TAB       14      10       24       3      21      2275.12   28 
+CITALIN 20MG TAB             10TAB       25      30       55      13      42      4829.39   13 
+CITALIN 5MG TAB              15TAB.      27       0       27       6      21      1270.08   45 
+CITALIN FORTE TAB            15TAB       15      40       55      28      27      4803.62   13 
+CITALIN LITE TAB             10 TAB      17      10       27       9      18      1557.17    3 
+COGNITAM 400MG               10TAB        0       0        0       0       0         0.00  954 
+COGNITAM 800MG               10TAB        0       0        0       0       0         0.00  954 
+COGNITAM PLUS                10TAB.       6      10       16       6      10      5017.64   28 
+COGNIVEL TAB                 10TAB        8       0        8       4       4       847.14   86 
+DIVALID ER 1GM TAB           10TAB        0       0        0       0       0         0.00 2124 
+DIVALID ER 250MG TAB         10 TAB       0       0        0       0       0         0.00 1738 
+DIVALID ER 500MG TAB         10 TAB       0       0        0       0       0         0.00 1577 
+IGNICAR 400MG TAB.           10TAB.      32      20       52      13      39     20737.08   13 
+IGNICAR SYP                  200 ML       4       0        4       1       3      2068.01  159 
+IGNICAR TAB                  10TAB       11       0       11       3       8      2785.52  108 
+IGNICAR-DS PLUS SYRUP        150ML        1      20       21       8      13     13159.15    3 
+JOYPRIDE 100MG               10TAB        7      10       17       5      12      1454.54   28 
+JOYPRIDE 200MG               10TAB       16      10       26       9      17      3206.93    3 
+JOYPRIDE 300MG               10TAB.       0       0        0       0       0         0.00  954 
+JOYPRIDE 400MG               10TAB        6      10       16       6      10      2948.40   13 
+LURASTAR 40MG                10TAB.       3      20       23       3      20      2358.72   13 
+LURASTAR 80MG                10TAB.       0       0        0       0       0         0.00  616 
+PREGALIFT D-50/20MG          10CAP.       0       0        0       0       0         0.00  616 
+PREGALIFT D-75/20MG          10CAP        0       0        0       0       0         0.00  502 
+PREGALIFT D-75/30MG          10CAP.       0       0        0       0       0         0.00  616 
+PREGALIFT NT TAB             15TAB       15       0       15       6       9      1984.50  159 
+PREGALIFT PLUS TAB           10TAB        4      10       14       4      10      2548.77   13 
+QUTIWEL 100MG                10TAB.       0       0        0       0       0         0.00  317 
+QUTIWEL 25MG                 10TAB       12      10       22      12      10       300.20   13 
+QUTIWEL 50MG                 10TAB.       0       0        0       0       0         0.00  616 
+QUTIWEL SR 100MG TAB         10TAB        0       0        0       0       0         0.00 3240 
+QUTIWEL SR 200MG TAB         10TAB        0       0        0       0       0         0.00 3240 
+REXITE BT TABLETS            10TAB        0       0        0       0       0         0.00    0 
+REXITE D3 TAB                15 TAB      12      30       42      20      22      4212.75   13 
+REXITE FORTE CAPS.           10CAPS      17       0       17       3      14      1764.00  301 
+REXITE PLUS CAP              15CAP       29       0       29      15      14      3301.18   45 
+REXITE PLUS INJ.             2ML          6      25       31      18      13      1107.29    3 
+RISCURE -LS                  10TAB.      12       0       12       1      11       500.92   45 
+RISCURE 0.5MG                10TAB.       9       0        9       0       9       176.15  616 
+RISCURE 1MG                  10TAB.       2       0        2       0       2        46.91  502 
+RISCURE 2MG                  10TAB.      10       0       10       0      10       353.64  616 
+RISCURE FORTE                10TAB.       9      10       19      11       8       536.00   13 
+RISCURE FORTE                10TAB.       0       0        0       0       0         0.00    0 
+RISCURE PLUS                 10TAB.      12       0       12       0      12       619.54   45 
+VORTICA 10MG TAB             10TAB       25      20       45      21      24      3337.49    3 
+VORTICA 20MG TAB             10TAB        6      20       26       5      21      5523.30   28 
+VORTICA 5MG TAB              10TAB       13       0       13       5       8       570.28   45 
+ZOLCALM 10MG TAB             15TAB        0       0        0       0       0         0.00  114 
+ZOLCALM 5MG                  15TAB       11      70       81      40      41      3840.49   13 
+ZOLCALM 5MG TAB              15TAB        0       0        0       0       0         0.00  374 
+
+                                                                                     Page : 3
+------------------------------------------------------------------------------------------------
+Product Name                 Packing  O.Stk    Purc      Tot    Sale     Qoh        Value  Age
+------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+Opening Value  :        0.00 Sale Value    :    57093.60 
+Purchase Value :    86356.10 Closing Value :   108540.83 
+------------------------------------------------------------------------------------------------
+Company :LINUX META           
+-------------------
+ACNESTAL 5.5                 75GMS        0       0        0       0       0         0.00 1932 
+ACTIVE MF                    50GMS        0       0        0       0       0         0.00 1932 
+BIOWRIGHT CREAM              50GMS        0       0        0       0       0         0.00 1932 
+BIOWRIGHT OIL                80ML         0       0        0       0       0         0.00 1932 
+CASIL SOAP                   75GMS        0       0        0       0       0         0.00 1932 
+HIKIDZ                       75GMS        0       0        0       0       0         0.00 1932 
+OXYTAN CREAM                 50GMS        0       0        0       0       0         0.00 1932 
+PPOTEK                       50GMS        0       0        0       0       0         0.00 1932 
+TRIEXER 1MG (LINUX)          10TAB.       0       0        0       0       0         0.00  345 
+TRIEXER 1MG TAB              10'STA      10      10       20       6      14      1598.18   13 
+TRIEXER 2MG TAB              10TAB       10      10       20       8      12      2307.69   13 
+TRIEXER 3MG TAB              10TAB        0       0        0       0       0         0.00 3929 
+TRIEXER LS 1 MG TAB          10tab        0       0        0       0       0         0.00 3832 
+TRIEXER LS 2 MG TAB          10TAB        0       0        0       0       0         0.00 3808 
+VYSOV 50MG TAB               15TAB       25       0       25      15      10      1467.38   72 
+VYSOV D 100/10MG  TAB        10TAB       13      10       23      13      10      1622.15   28 
+VYSOV D5 TAB                 10TAB        0       0        0       0       0         0.00    0 
+VYSOV DM 10/1000MG TAB       10TAB        0       0        0       0       0         0.00    0 
+VYSOV DM 100MG/10MG/500MG TA 10TAB       12       0       12       0      12      1631.20   45 
+VYSOV M 50/500MG TAB         15TAB        3      24       27      15      12      1854.97    3 
+VYSOV MXR 1000MG TAB         15TAB        0       0        0       0       0         0.00    0 
+VYSOV MXR 500MG TAB          15TAB        0       0        0       0       0         0.00    0 
+VYSOV XR 100 TAB             15TAB        0       0        0       0       0         0.00  612 
+------------------------------------------------------------------------------------------------
+Opening Value  :        0.00 Sale Value    :     8430.44 
+Purchase Value :     7996.88 Closing Value :    10481.56 
+------------------------------------------------------------------------------------------------
+P

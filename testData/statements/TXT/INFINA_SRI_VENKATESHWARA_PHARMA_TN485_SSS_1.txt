@@ -1,0 +1,144 @@
+
+
+
+SRI VENKATESWARA PHARMA
+No.4,Bharathidhasan Street,Manjakuppam,Cuddalore-607001
+Stock And Sales Report(Month)
+of Jul2026 for LINUX INFINA
+-------------------------------------------------------------------------------------------
+ProductName                   Pack  OpStk   Rcpt PrvSa Sale Cl.St StockVal  SaleValue Orde 
+-------------------------------------------------------------------------------------------
+AMINTOZ  INJ                   1ML           110    37   55    55   993.88    1007.62      
+AMINTOZ INJ 2ML               2 ML     18    200   119  100   104  3759.76    3678.70      
+AMINTOZ TAB                   10'S           100    70   52    43  1404.17    1710.72      
+ARIDAY 10 MG TAB              10`S      7            3    5     1   111.46     566.11      
+ARIDAY 15MG TAB               10`S     30                      30  3756.38                 
+ARIDAY 2.5MG TAB              10`S                                                         
+ARIDAY 20 MG TAB              10`S     14                      14  2001.55                 
+BENFICA CAP                   10`S            60    33   13    44  4970.66    1485.01      
+BENFICA FORTE CAPS            15'S            40    22   19    20  5070.24    4810.08      
+CARNIGLO M TAB                15`S      8            6    4     4  1069.07    1054.92      
+CARNIGLO TAB                  10`S                                                         
+COGNIZA 60MG INJ               1`S                                                         
+COGNIZA TAB                   10`S     13            6    9     4   743.61    1687.86      
+DIVALID ER 1GM TAB            10`S     11     40    12   25    21  3132.20    3764.25      
+DIVALID ER 250MG TAB          10'S      2    110    69   27    84  5902.86    1961.53      
+DIVALID ER 500MG TAB          10'S    176    100    88   59   213 27911.52    7758.59      
+EPITRA 250MG TAB              10`S     25     60    53   77     5   250.43    3875.36      
+EPITRA 500MG TAB              15`S           150    72  111    25  3676.58   17276.18      
+EPITRA 750 MG TAB             10`S     31           27    4    27  4142.79     623.50      
+EPITRA ER 1GM TAB             15`S            76    46   21    49 24608.02   11133.45      
+EPITRA INJ                     5ML     50           65         50  4614.23                 
+EPITRA RTU 1000MG 100ML I    100ML      9     20    13         29  4063.25                 
+EPITRA RTU 500 INFU          100ML      1     50    49   10    39  3737.51     973.54      
+EPITRA SYP                   100ML      5                 2     3   944.84     633.23      
+GABAGESIC 100MG TAB           15`S     43    220   192  133   114  9586.77   11265.69      
+GABAGESIC 300MG TAB           15`S     44           14   21    22  4238.85    4092.07      
+GABAGESIC ER 300 MG TAB       10`S           140    20   66    56 10603.99   12443.60      
+GABAGESIC ER 600 MG TAB       10`S     27                      27  8262.04                 
+GABAGESIC GEL                50 GM      5     40    35   34    13  4236.41   11040.29      
+GABAGESIC M TAB               15'S      1    170    56   71    90 20586.83   16581.11      
+GABAGESIC NT 100MG TAB        15`S     13     50    42   33    29  3413.75    3881.60      
+GABAGESIC NT 200 MG TAB       10`S     25     20    14   16    26  3370.46    2094.74      
+GABAGESIC NT 400MG TAB        15'S     42            5   17    22  7013.85    5485.64      
+GABAGESIC PLUS TAB            10'S     15     30    20   17    28  3419.22    2046.84      
+LIVIZ TAB                     10`S                                                         
+METHONAC TAB                  10'S     12                      12  1898.11                 
+MITRAZAC 15MG TAB             10'S                                                         
+MITRAZAC 7.5MG TAB            10'S                                                         
+NEULORA 1TAB                  10'S           600   384  275   278  5137.44    5223.89      
+NEULORA 2 TAB                 10'S           706   539  354   291  6557.10    8187.85      
+NEULORA INJ                    2ML                                                         
+OLINSTAB  10MG TAB            10`S      7    100    87   38    63  3941.88    2416.67      
+OLINSTAB  2.5MG TAB           10`S           100    95   40    56  1546.44    1119.13      
+OLINSTAB  5MG TAB             10`S      9    200   114   39   165  5725.91    1368.35      
+OLINSTAB 7.5MG TAB            10`S     53     60    30   67    36  2428.65    4492.34      
+OLINSTAB F TAB                10`S      3    115    95   20    94  7833.82    1666.79      
+PALMIDA MYO TAB               10`S     30                      30  8639.82                 
+PALMIDA TAB                   15`S      4     50    41   35    18  7207.14   14164.83      
+PERCOMPA 2MG TAB              10'S                                                         
+PERCOMPA 4MG TAB              10'S      9           12          9  1180.31                 
+PERCOMPA 6MG TAB              10'S                                                         
+PRONATE  10MG TAB             10'S    112    100    87  112    91   952.63    1205.39      
+PRONATE 20MG TAB              10'S           150    61   83    55  1302.84    2005.60      
+PRONATE 40MG TAB              10'S     12            3         12   309.33                 
+PRONATE EZ TAB                10`S     17     50    44   40    23  1356.26    2375.88      
+PRONATE F TAB                 10'S      7            1    3     4   383.75     292.38      
+PRONATE TR 40MG TAB           10`S           101    89   40    59  1520.87    1035.28      
+QLINO CAP                     10'S     15     10     8   13    12  5606.50    6051.46      
+RE XITE CD3 TAB               15`S      6     50    26   17    36  9840.47    4819.07      
+
+
+
+
+
+
+TYPIDOL  5MG  TAB             10'S                                                         
+TYPIDOL 1.5MG  TAB            10'S                                                         
+VALEPTOL CR 200 MG TAB        10`S           160    66   48    96  4969.44    2622.87      
+VALEPTOL CR 300 MG TAB        10'S     20     70    22   29    57  2781.33    1441.53      
+VALEPTOL CR 500 MG TAB        10'S      5    151    58   85    48  3582.43    6660.46      
+VALEPTOL SYP                200 ML      6     10     9    6    10  1038.03     626.09      
+VENLITE CZ 100MG TAB          10`S      6     20     9    5    21  5031.38    1088.24      
+VENLITE CZ 50MG TAB           10'S      6     50    16   24    33  4770.96    3461.57      
+VENLITE OD 100MG TAB          10`S     34    240   123  114   140 30068.85   24871.25      
+VENLITE OD 50MG TAB           10'S      5    160   112   82    73  8656.85    9814.57      
+-------------------------------------------------------------------------------------------
+                                                             3113 315865.6  239943.71      
+-------------------------------------------------------------------------------------------
+
+Op.Stk.Val:133915.91     Sales Val - Prv.Mth: 252380.55  Cur.Mth.Sal:  251940.89  Stk.Val:300824.47     Pur.Val:399461.6     
+Stock Value is Calculated Using Purchase Price                                                                      
+Grand Total Of Currnt Month Sales Value:  251940.89      Stock Value:315865.69                                      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

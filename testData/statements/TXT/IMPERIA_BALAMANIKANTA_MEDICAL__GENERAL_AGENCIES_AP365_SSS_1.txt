@@ -1,0 +1,31 @@
+CHM
+    BALA MANIKANTA MEDICAL & GENERAL AGENCIES
+E                                    Stock & Sales StatementF
+From 01/07/2026 To 31/07/2026                                                        Page : 1
+------------------------------------------------------------------------------------------------
+Product Name                 Packing  O.Stk    Purc      Tot    Sale     Qoh        Value  Age
+------------------------------------------------------------------------------------------------
+Company :LINUX LOBORATORIES   
+---------------------------
+BRITAM 50MG SR TAB           10s          0      30       30      30       0         0.00    8 
+BRITAM INJ                   5ml         30       0       30       0      30      3399.80   66 
+BRITAM-100MG TAB             10S          7       0        7       0       7      1947.75   66 
+CITALIN FORTE TAB            15s          0      30       30      24       6      1067.47    8 
+CITALIN-10MG TAB             15s          7       0        7       0       7       758.37   66 
+COGINIVEL TAB                10s         10       0       10       0      10      2117.85   44 
+IGNICAR 400MG TAB            10s          0      30       30      30       0         0.00    8 
+IGNICAR DS PLUS SYRUP        200ml        0      30       30      26       4      4048.97   23 
+IGNICAR SYP                  200ml        5       5       10       5       5      3446.68    8 
+IGNICAR TAB                  10s         17       0       17       0      17      5919.24   44 
+LINSOL IV INJ                1s           4       0        4       0       4       603.08   44 
+PREGALIFT NT TAB             15s          4      40       44      39       5      1210.28   23 
+PREGALIFT PLUS TAB           15s          1       0        1       0       1       254.88   66 
+PREGLIFT ER 75MG TAB         15s         54      50      104      75      29      4934.12    8 
+REXITE PFS AMP               1ml          0     130      130     130       0         0.00   23 
+RISCRE 2MG TAB               10s          7       0        7       0       7       251.37   66 
+ZOLCALM-10MG TAB             15s         39      50       89      48      41      5331.31    8 
+------------------------------------------------------------------------------------------------
+Opening Value  :        0.00 Sale Value    :    86883.37 
+Purchase Value :    98405.95 Closing Value :    35291.16 
+------------------------------------------------------------------------------------------------
+P

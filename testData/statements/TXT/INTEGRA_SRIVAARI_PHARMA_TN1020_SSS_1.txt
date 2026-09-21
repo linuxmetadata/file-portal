@@ -1,0 +1,40 @@
+
+SRIVAARI PARMA,POLLACHI.                          COMPANY: LINUX INTEGRA                 
+STOCK & SALES STATEMENT AS ON 31/07/2026                                   Page No.    1
+-------------------------------------------------------------------------------------------
+PRODUCT NAME       PACKG OPENING  RECEIPT   <-----SALES---->  ADJMT   CLOSING   CLOSING AGE
+                           QTY   QTY  FREE  LAST   QTY  FREE  STOCK  QTY  FREE   VALUE DAYS
+-------------------------------------------------------------------------------------------
+BENFICA FORTE CAPS 1'S       -    50     -     -    20     8          22     -    5577    9
+CITIZAC INJ        2ML      30     -     -     -     -     -          30     -    3560   55
+CITIZAC TAB        10'S      -     -     -     -     -     -           -     -       -     
+ECITANE TAB        10'S      -     -     -     -     -     -           -     -       -     
+LINOTRIL 0.25MG TA 10'S    157   150     1    56   105    40         163     -    2619    9
+LINOTRIL 0.5MG TAB 10'S     47   350     1   307   219    84          95     -    3930    2
+LINOTRIL 1MG TAB   10'S      -     -     -     -     -     -           -     -       -     
+LINOTRIL 2MG TAB   10'S      -     -     -     -     -     -           -     -       -     
+LIPOSERIN CAPS     10'S      -     -     -     -     -     -           -     -       -     
+PREGALIFT D-75/20  10'S      -     -     -     -     -     -           -     -       -     
+QUTIWEL 100MG TAB  10'S      -     -     -     -     -     -           -     -       -     
+QUTIWEL 25MG TAB   10'S     56     -     -     4     -     -          56     -    1681   44
+QUTIWEL 50MG TAB   10'S      -     -     -     -     -     -           -     -       -     
+QUTIWEL SR 100MG T 10'S      -     -     -     -     -     -           -     -       -     
+QUTIWEL SR 200MG T 10'S      -     -     -     -     -     -           -     -       -     
+QUTIWEL SR 300MG T 10'S      -     -     -     -     -     -           -     -       -     
+QUTIWEL SR 400MG T 10'S      -     -     -     -     -     -           -     -       -     
+QUTIWEL SR 50MG TA 10'S      -     -     -     -     -     -           -     -       -     
+REXITE INJ         1ML       -   113    37     -     -     -         150     -   11220   13
+REXITE SYP         200ML     -     -     -     -     -     -           -     -       -     
+REXITE TAB         10'S      -     -     -     -     -     -           -     -       -     
+TRIPTAZ 10MG TAB   10'S      -     -     -     -     -     -           -     -       -     
+TRIPTAZ 25MG TAB   10'S      -     -     -     -     -     -           -     -       -     
+VERTIREST 16MG TAB 10'S      -     -     -     -     -     -           -     -       -     
+VERTIREST 16MG TAB 15'S      -     -     -     -     -     -           -     -       -     
+VERTIREST 8MG TAB  10'S      -     -     -     -     -     -           -     -       -     
+VERTIREST OD 24MG  10'S      -     -     -     -     -     -           -     -       -     
+* ---> Non Moving Products Above 30 Days
+-------------------------------------------------------------------------------------------
+OPENING VALUE      :        9,050.84  PURCHASE VALUE   :       35,258.08
+SALES VALUE        :       14,104.82  CLOSING VALUE    :       28,586.90
+LAST MONTH SALES   :        7,621.95  TRANSIT VALUE    :            0.00
+-------------------------------------------------------------------------------------------

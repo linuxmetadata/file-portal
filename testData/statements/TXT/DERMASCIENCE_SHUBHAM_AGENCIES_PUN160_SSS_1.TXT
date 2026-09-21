@@ -1,26 +1,0 @@
-@
-MSHUBHAM AGENCIES                        
-Stock & Sales Report for the month JULY-2026 for : LINUX LABORATORIES PVT LTD (DIV.: DERMASCIENCE 2 DIV OF IND)    Page :   1
-----------------------------------------------------------------------------------------
-Product Name              Pack   LstSL  Open Recd. Sales Close  Order  Pend Stk.Value   
-----------------------------------------------------------------------------------------
-ACTIVE MF                 100 GM     7     3    75    30    48    -28     -  14008.08  
-ACTIVE MF LOTION          200 ML     3    13    60    66     7     39     -   3103.73  
-APRENEXT 30 TAB           10'S       -    30     -     2    28    -26     -   6784.12  
-BILAZO 20MG TAB           10'S       2    69     -     6    63    -57     -   6839.91  
-CYCLONOX 100 MG           5'S        5    34     -     2    32    -30     -  13176.00  
-CYCLONOX 50 MG            5'S        -    25     -     -    25    -25     -   5315.75  
-IBITRA 100 CAPS           10'S       -     -   100    75    25     25     -   3390.50  
-KC LITE GOLD CREAM        20 GM      -     8     -     3     5     -2     -   1861.00  
-KERAGRIS                  60 ML      1    29     -     -    29    -29     -  28076.06  
-KERAGRIS MFR              60ML       1     7     -     -     7     -7     -   7766.20  
-KEROFA COMBIKIT           7          5     -    71    68     3     45     -   2227.05  
-LINTAR SOLUTION           100 ML     2     8    80    62    26     16     -   9972.04  
-PROTEK ANTI DANDRUFF SHAM 100 ML     -     -    30    15    15     -5     -   2988.60  
-VMELA                     30 GM      8     2    78    68    12     44     -   3294.96  
-----------------------------------------------------------------------------------------
-Last Month Sales      13,147.25  Open. Value       83,105.17
-Receipt Value       1,68,878.58  Sales Value     1,05,220.97
-Closing Value       1,08,804.00  [Order Value +72306.59 -75889.62 ]
-----------------------------------------------------------------------------------------
- * - Near Expiry Product, # - Scheme On Product 

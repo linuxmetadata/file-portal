@@ -10,13 +10,19 @@ const {
   deleteFromDrive
 } = require("../services/drive");
 
+
 const {
   updateRow,
   getSheetData,
   deleteFileFromSheet
 } = require("../googleSheet");
 
+const {
+  runStatementExtraction
+} = require("../services/statementExtractionRouter");
+
 const router = express.Router();
+
 
 const upload = multer({
   dest: "uploads/"
@@ -435,10 +441,12 @@ if (type.toUpperCase() === "SSS") {
         console.log("STARTING SSS EXTRACTION");
         console.log("================================");
 
-        const extraction = await processStatement(
-            req.file.path,
-            division
-        );
+        
+const extraction = await runStatementExtraction(
+    req.file.path,
+    req.file.originalname
+);
+
 
         if (!extraction.success) {
 

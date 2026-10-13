@@ -52,9 +52,30 @@ async function runStatementExtraction(filePath, originalName) {
     let processor;
 
     if (extension === ".xlsx" || extension === ".xls") {
-        outputFile = EXCEL_OUTPUT_FILE;
-        processor = () => processExcelFile(filePath);
-    } else if (extension === ".txt") {
+    outputFile = EXCEL_OUTPUT_FILE;
+
+    processor = () => {
+        const inputExtension = path.extname(
+            originalName || filePath
+        ).toLowerCase();
+
+        if (!inputExtension) {
+            throw new Error(
+                `Cannot determine Excel extension. Original name: ${originalName || "(missing)"}, file path: ${filePath || "(missing)"}`
+            );
+        }
+
+        const extractionInput = path.extname(filePath)
+            ? filePath
+            : `${filePath}${inputExtension}`;
+
+        if (extractionInput !== filePath) {
+            fs.copyFileSync(filePath, extractionInput);
+        }
+
+        return processExcelFile(extractionInput);
+    };
+} else if (extension === ".txt") {
         outputFile = TXT_OUTPUT_FILE;
         processor = () => processFile(filePath);
     } else {

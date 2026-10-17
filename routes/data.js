@@ -1,4 +1,5 @@
 const express = require("express");
+const verifyToken = require("../middleware/authMiddleware");
 const multer = require("multer");
 const XLSX = require("xlsx");
 const path = require("path");
@@ -21,7 +22,33 @@ const {
   runStatementExtraction
 } = require("../services/statementExtractionRouter");
 
+const {
+  processStatement: processNormalizedStatement
+} = require("../validation/processEngine");
+
+const { bulkMatch } = require("../matcher/bulkMatcher");
+
+const { loadPriceList } = require("../services/priceListLoader");
+
+const {
+  updateMasterExtraction
+} = require("../services/masterExtractionService");
+
 const router = express.Router();
+
+
+const {
+  listPortalStockists,
+  getStockist,
+  updateStockistSales
+} = require("../services/postgresPortalRepository");
+
+const {
+  storeUploadedFile,
+  getUploadedFile,
+  deleteUploadedFile
+} = require("../services/portalFileStorage");
+
 
 
 const upload = multer({
@@ -110,61 +137,6 @@ async function validateFile(file) {
   }
 }
 
-/* =========================
-   VALIDATE BEFORE PREVIEW
-========================= */
-router.post(
-  "/validate",
-  upload.single("file"),
-
-  async (req, res) => {
-
-    try {
-
-      if (!req.file) {
-
-        return res.status(400).json({
-          error: "NO FILE"
-        });
-      }
-
-      await validateFile(req.file);
-
-      if (
-        req.file &&
-        fs.existsSync(req.file.path)
-      ) {
-
-        fs.unlinkSync(req.file.path);
-      }
-
-      return res.json({
-        success: true
-      });
-
-    } catch (err) {
-
-      console.error(
-        "VALIDATE ERROR:",
-        err
-      );
-
-      if (
-        req.file &&
-        fs.existsSync(req.file.path)
-      ) {
-
-        fs.unlinkSync(req.file.path);
-      }
-
-      return res.status(400).json({
-        error:
-          err.message ||
-          "VALIDATION FAILED"
-      });
-    }
-  }
-);
 
 /* =========================
    MATCH ROW
@@ -193,155 +165,40 @@ function matchRow(sheetRows, division, code) {
   }) || [];
 }
 
-/* =========================
-   LIST DATA
-========================= */
-router.get("/list", async (req, res) => {
 
-  try {
-
-    const excelData = loadExcel();
-
-    let sheetRows = [];
-
+router.get("/list", verifyToken, async (req, res) => {
     try {
+        const user = String(req.user.sub || "")
+            .trim()
+            .toLowerCase();
 
-      sheetRows =
-        await getSheetData();
+        const role = String(req.user.role || "")
+            .trim()
+            .toLowerCase();
 
-    } catch {
-
-      console.log("Sheet fallback mode");
-    }
-
-    const user =
-      (req.query.user || "")
-        .toLowerCase()
-        .trim();
-
-    const role =
-      req.query.role;
-
-    const finalData =
-      excelData.map((row, index) => {
-
-        const code =
-          row.Code ||
-          row.CODE ||
-          "";
-
-        const match =
-          matchRow(
-            sheetRows,
-            row.Division,
-            code
-          );
-
-        return {
-
-          id: index,
-
-          division:
-            row.Division || "",
-
-          state:
-            row.STATE || "",
-
-          bmhq:
-            row["BM HQ"] ||
-            row.BM_HQ ||
-            "",
-
-          code: code,
-
-          name:
-            row["Stockist Name"] ||
-            row.Name ||
-            "",
-
-          bh_id:
-            (
-              row["BH_ID"] ||
-              row["BH ID"] ||
-              ""
-            ).toString(),
-
-          sm_id:
-            (
-              row["SM_ID"] ||
-              row["SM ID"] ||
-              ""
-            ).toString(),
-
-          zbm_id:
-            (
-              row["ZBM_ID"] ||
-              row["ZBM ID"] ||
-              ""
-            ).toString(),
-
-          rbm_id:
-            (
-              row["RBM_ID"] ||
-              row["RBM ID"] ||
-              ""
-            ).toString(),
-
-          abm_id:
-            (
-              row["ABM_ID"] ||
-              row["ABM ID"] ||
-              ""
-            ).toString(),
-
-          sales: match[5] || "",
-
-          awsFile: match[3] || "",
-
-          sssFile: match[4] || ""
-        }
+        const finalData = await listPortalStockists({
+            user,
+            role
         });
 
-    let filteredData =
-      finalData;
+        return res.json(finalData);
 
-    if (role !== "admin" && user) {
+    } catch (err) {
+        console.error("POSTGRES LIST ERROR:", err.message);
 
-    const userId = String(user)
-        .trim()
-        .toLowerCase();
-
-    filteredData = finalData.filter(row => {
-
-        return (
-            String(row.bh_id || "").trim().toLowerCase() === userId ||
-            String(row.sm_id || "").trim().toLowerCase() === userId ||
-            String(row.zbm_id || "").trim().toLowerCase() === userId ||
-            String(row.rbm_id || "").trim().toLowerCase() === userId ||
-            String(row.abm_id || "").trim().toLowerCase() === userId
-        );
-
-    });
-
-}
-
-    res.json(filteredData);
-
-  } catch (err) {
-
-    console.error(err);
-
-    res.status(500).json({
-      error: "FAILED TO LOAD DATA"
-    });
-  }
+        return res.status(500).json({
+            error: "FAILED TO LOAD DATA"
+        });
+    }
 });
+
 
 /* =========================
    UPLOAD
 ========================= */
 router.post(
   "/upload",
+  verifyToken,
   upload.single("file"),
 
   async (req, res) => {
@@ -362,15 +219,15 @@ router.post(
 
       /* INVALID */
       if (
-        !code ||
-        !type ||
-        !req.file
-      ) {
-
-        return res.status(400).json({
-          error: "UPLOAD FAILED"
-        });
-      }
+    !division ||
+    !code ||
+    !type ||
+    !req.file
+) {
+    return res.status(400).json({
+        error: "UPLOAD FAILED"
+    });
+}
 
       const lockKey =
         `${division}_${code}_${type}`;
@@ -385,49 +242,35 @@ router.post(
       }
 
       uploadLocks[lockKey] = true;
+      await validateFile(req.file);
 
-      const excelData =
-        loadExcel();
 
-      const rowData =
-      excelData.find(r =>
+const rowData = await getStockist(division, code);
 
-        String(r.Division || "")
-            .trim()
-            .toUpperCase() ===
-        String(division || "")
-            .trim()
-            .toUpperCase()
-
-        &&
-
-        String(r.Code || r.CODE)
-            .trim()
-            .toUpperCase() ===
-        String(code)
-            .trim()
-            .toUpperCase()
-
+if (!rowData) {
+    throw new Error(
+        "Stockist not found in PostgreSQL roster."
     );
+}
 
-        const state =
-        rowData?.STATE ||
-        "General";
+const state = rowData.state || "General";
 
-      const name =
-        rowData?.["Stockist Name"] ||
-        rowData?.Name ||
-        "";
+storedFile = await storeUploadedFile({
+    filePath: req.file.path,
+    originalFilename: req.file.originalname,
+    division,
+    code,
+    type,
+    state,
+    uploadedBy: req.body.uploadedBy || "",
+    mimeType: req.file.mimetype || "application/octet-stream"
+});
 
-      /* DRIVE */
-      const driveFile =
-        await uploadToDrive(
-          req.file.path,
-          req.file.originalname,
-          division,
-          state,
-          type
-        );
+console.log(
+    "FILE STORED IN POSTGRESQL:",
+    storedFile.file_id
+);
+
 
 /* =====================================
    EXTRACTION (ONLY FOR SSS)
@@ -457,34 +300,113 @@ const extraction = await runStatementExtraction(
 
             console.log("Extraction Successful");
             console.log(
-                "Rows Extracted :",
-                extraction.data.rows.length
+    "Rows Extracted :",
+    extraction.extractedRecords
+);
+
+                        // ==========================================
+            // NORMALIZED SSS PROCESSING
+            // ==========================================
+
+            const priceListDirectory = path.join(
+                __dirname,
+                "..",
+                "priceLists"
             );
 
-            const priceList = loadPriceList();
+            const priceListFiles = fs.readdirSync(
+                priceListDirectory
+            ).filter(file => /\.(xlsx|xls)$/i.test(file));
 
-            console.log(
-                "Price List Loaded :",
-                priceList.length
+            if (priceListFiles.length !== 1) {
+                throw new Error(
+                    `Expected exactly one price list; found ${priceListFiles.length}.`
+                );
+            }
+
+            const priceFile = path.join(
+                priceListDirectory,
+                priceListFiles[0]
             );
 
-            const matchedRows = bulkMatch(
-                extraction.data.rows,
-                priceList
+            // Preserve the original filename for the output STOCKIST field.
+            const normalizedTempDir = fs.mkdtempSync(
+                path.join(
+                    path.dirname(req.file.path),
+                    "normalized-"
+                )
             );
 
-            console.log(
-                "Matched Products :",
-                matchedRows.length
-            );
+            try {
+                const normalizedFilename = path.basename(
+                    req.file.originalname || req.file.path
+                );
 
-            await updateMasterExtraction(
-                matchedRows,
-                extraction.data,
-                "SSS"
-            );
+                const normalizedInputPath = path.join(
+                    normalizedTempDir,
+                    normalizedFilename
+                );
 
-            console.log("Master Extraction Updated");
+                fs.copyFileSync(
+                    req.file.path,
+                    normalizedInputPath
+                );
+
+                const normalizedResult =
+                    await processNormalizedStatement({
+                        statementFile: normalizedInputPath,
+                        priceFile,
+                        statementType: "SSS",
+
+                        portalData: {
+                            MONTH: "",
+                            ZONE: "",
+                            STATE: rowData.state || state || "",
+                            HQ: rowData.bm_hq || "",
+                            ABMHQ: rowData.abm_hq || "",
+                            RBMHQ: rowData.rbm_hq || "",
+                            STKCODE: rowData.code || code,
+                            STOCKIST:
+                                rowData.stockist_name ||
+                                stockistName ||
+                                ""
+                        }
+                    });
+
+                if (!normalizedResult.success) {
+                    console.error(
+                        "NORMALIZED SSS PROCESSING FAILED:",
+                        normalizedResult.message ||
+                        normalizedResult.reason ||
+                        normalizedResult
+                    );
+                } else {
+                    console.log(
+                        "NORMALIZED SSS MASTER UPDATED:",
+                        normalizedResult.outputFile
+                    );
+
+                    console.log(
+                        "Normalized Products:",
+                        normalizedResult.totalProducts
+                    );
+
+                    console.log(
+                        "Matched Products:",
+                        normalizedResult.matchedProducts
+                    );
+
+                    console.log(
+                        "Unmatched Products:",
+                        normalizedResult.unmatchedProducts
+                    );
+                }
+            } finally {
+                fs.rmSync(normalizedTempDir, {
+                    recursive: true,
+                    force: true
+                });
+            }
 
         }
 
@@ -502,39 +424,20 @@ const extraction = await runStatementExtraction(
 
 }
 
-      const sheetRows =
-        await getSheetData();
-
-      const existing =
-        matchRow(
-          sheetRows,
-          division,
-          code
-        );
-
-      let existingFiles = "";
-
-      if (existing.length) {
-
-        existingFiles =
-        type === "aws"
-          ? existing[3] || ""
-          : existing[4] || "";
-      }
-
-      const updatedFiles =
-        existingFiles
-          ? `${existingFiles},${driveFile.fileId}`
-          : driveFile.fileId;
-
-      await updateRow(
+      if (String(sales ?? "").trim() !== "") {
+    const updatedStockist = await updateStockistSales(
         division,
         code,
-        name,
-        type,
-        updatedFiles,
         sales
-      );
+    );
+
+    if (!updatedStockist) {
+        throw new Error(
+            "Unable to update stockist Sales in PostgreSQL."
+        );
+    }
+}
+
 
       delete uploadLocks[lockKey];
       /* TEMP FILE CLEANUP */
@@ -546,8 +449,10 @@ const extraction = await runStatementExtraction(
     }
 
       return res.json({
-        success: true
-      });
+    success: true,
+    fileId: String(storedFile.file_id),
+    fileName: storedFile.original_filename
+});
 
     } catch (err) {
 
@@ -563,6 +468,28 @@ const extraction = await runStatementExtraction(
 
         fs.unlinkSync(req.file.path);
       }
+
+      if (storedFile) {
+    try {
+        await deleteUploadedFile({
+            fileId: storedFile.file_id,
+            division: req.body.division,
+            code: req.body.code,
+            type: req.body.type
+        });
+
+        console.log(
+            "POSTGRES UPLOAD ROLLBACK:",
+            storedFile.file_id
+        );
+
+    } catch (cleanupError) {
+        console.error(
+            "POSTGRES FILE CLEANUP ERROR:",
+            cleanupError.message
+        );
+    }
+}
 
       if (req.body) {
 
@@ -582,76 +509,155 @@ const extraction = await runStatementExtraction(
 );
 
 /* =========================
-   DELETE
+   DOWNLOAD / VIEW — POSTGRESQL
 ========================= */
-router.delete(
-"/delete/:division/:code/:type/:fileId", async (req, res) => {
+router.get("/file/:fileId", verifyToken, async (req, res) => {
+    try {
+        const file = await getUploadedFile(req.params.fileId);
 
-  try {
+        if (!file) {
+            return res.status(404).json({
+                error: "FILE NOT FOUND"
+            });
+        }
 
-    const {
-    division,
-    code,
-    type,
-    fileId
-} = req.params;
+        // Admins may access all files.
+        const role = String(req.user.role || "")
+            .trim()
+            .toLowerCase();
 
-    const sheetRows = await getSheetData();
+        // Regular users must belong to the stockist's hierarchy.
+        if (role !== "admin") {
+            const userId = String(req.user.sub || "")
+                .trim()
+                .toLowerCase();
 
-    const row = matchRow(sheetRows, division, code);
+            const stockist = await getStockist(
+                file.division,
+                file.code
+            );
 
-    if (!row.length) {
-      return res.status(404).json({
-        error: "Record not found"
-      });
+            if (!stockist) {
+                return res.status(404).json({
+                    error: "STOCKIST NOT FOUND"
+                });
+            }
+
+            const hierarchyIds = [
+                stockist.bh_id,
+                stockist.sm_id,
+                stockist.zbm_id,
+                stockist.rbm_id,
+                stockist.abm_id
+            ].map(value =>
+                String(value || "").trim().toLowerCase()
+            );
+
+            if (!userId || !hierarchyIds.includes(userId)) {
+                return res.status(403).json({
+                    error: "FILE ACCESS DENIED"
+                });
+            }
+        }
+
+        const filename = String(
+            file.original_filename || "statement"
+        );
+
+        const safeFilename = filename
+            .replace(/[\r\n"]/g, "_")
+            .replace(/[^\x20-\x7E]/g, "_");
+
+        res.setHeader(
+            "Content-Type",
+            file.mime_type || "application/octet-stream"
+        );
+
+        res.setHeader(
+            "Content-Disposition",
+            `inline; filename="${safeFilename}"; filename*=UTF-8''${encodeURIComponent(filename)}`
+        );
+
+        res.setHeader("X-Content-Type-Options", "nosniff");
+
+        return res.send(file.file_data);
+
+    } catch (err) {
+        console.error("POSTGRES FILE DOWNLOAD ERROR:", err.message);
+
+        if (
+            err.message &&
+            /invalid.*file.*id/i.test(err.message)
+        ) {
+            return res.status(400).json({
+                error: "INVALID FILE ID"
+            });
+        }
+
+        return res.status(500).json({
+            error: "FAILED TO RETRIEVE FILE"
+        });
     }
-
-    const currentFiles = (
-      type === "aws"
-        ? row[3] || ""
-        : row[4] || ""
-)
-    .split(",")
-    .map(x => x.trim())
-    .filter(Boolean);
-
-    const updatedFiles =
-      currentFiles.filter(
-        id => id !== fileId
-      );
-
-    // Delete files from Google Drive
-    await deleteFromDrive(fileId); {
-      try {
-        await deleteFromDrive(fileId);
-      } catch (e) {
-        console.error("Drive delete failed:", e);
-      }
-    }
-
-    // Remove file IDs from Google Sheet
-    await deleteFileFromSheet(
-    division,
-    code,
-    type,
-    updatedFiles.join(",")
-);
-
-
-
-    return res.json({
-      success: true
-    });
-
-  } catch (err) {
-
-    console.error("DELETE ERROR:", err);
-
-    return res.status(500).json({
-      error: "Delete failed"
-    });
-
-  }
 });
 
+/* =========================
+   DELETE — POSTGRESQL
+========================= */
+router.delete(
+    "/delete/:division/:code/:type/:fileId",
+    verifyToken,
+    (req, res, next) => {
+        if (req.user.role !== "admin") {
+            return res.status(403).json({
+                error: "ADMIN ACCESS REQUIRED"
+            });
+        }
+
+        next();
+    },
+    async (req, res) => {
+        try {
+            const {
+                division,
+                code,
+                type,
+                fileId
+            } = req.params;
+
+            if (!division || !code || !type || !fileId) {
+                return res.status(400).json({
+                    error: "Division, Code, Type, and File ID are required."
+                });
+            }
+
+            const deletedFile = await deleteUploadedFile({
+                fileId,
+                division,
+                code,
+                type
+            });
+
+            if (!deletedFile) {
+                return res.status(404).json({
+                    error: "File not found for this stockist and statement type."
+                });
+            }
+
+            return res.json({
+                success: true,
+                fileId: String(deletedFile.file_id)
+            });
+
+        } catch (err) {
+            console.error(
+                "POSTGRES DELETE ERROR:",
+                err.message
+            );
+
+            return res.status(400).json({
+                error: err.message || "Delete failed."
+            });
+        }
+    }
+);
 module.exports = router;

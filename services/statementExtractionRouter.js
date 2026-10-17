@@ -135,11 +135,16 @@ async function runStatementExtraction(filePath, originalName) {
                 outputFile
             );
 
+
             return {
                 ...result,
                 success: true,
-                outputMaster: outputFile
+                outputMaster: outputFile,
+                sourceFileName: path.basename(
+                    result.file || filePath
+                )
             };
+
         } finally {
             // Restore the shared working file to its previous state.
             if (sharedMasterExisted) {

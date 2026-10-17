@@ -9,6 +9,27 @@
  * Every quantity is multiplied by PRICE (PTS)
  * to derive the corresponding value.
  */
+function getProductField(product, fieldName) {
+
+    if (!product || typeof product !== "object") {
+        return "";
+    }
+
+    const normalize = value =>
+        String(value ?? "")
+            .replace(/\s+/g, " ")
+            .trim()
+            .toUpperCase();
+
+    const target = normalize(fieldName);
+
+    const key = Object.keys(product).find(
+        key => normalize(key) === target
+    );
+
+    return key !== undefined ? product[key] : "";
+}
+
 
 function n(value) {
 
@@ -20,7 +41,9 @@ function n(value) {
 
 function calculate(record, product) {
 
-    const price = n(product?.PTS);
+    const price = n(
+    getProductField(product, "PTS (Excl.Tax)")
+);
 
     const result = {
 
@@ -28,14 +51,11 @@ function calculate(record, product) {
         // MASTER INFORMATION
         //--------------------------------------------------
 
-        DIVISION: product?.DIVISION || "",
+        DIVISION: getProductField(product, "Linux Division") || "",
 
-        BRAND_GRP: product?.BRAND_GRP || "",
+        BRAND_GRP: "",
 
-        PRDCODE:
-            product?.PRODUCT_CODE ||
-            product?.PRDCODE ||
-            "",
+        PRDCODE: getProductField(product, "Product Code") || "",
 
         PRICE: price,
 
@@ -95,8 +115,8 @@ function calculate(record, product) {
         result[field] = qty;
 
         const valueField = field
-            .replace("_Q", "_V")
-            .replace("_QTY", "_VAL");
+    .replace("_QTY", "_VAL")
+    .replace("_Q", "_V");
 
         result[valueField] = qty * price;
 

@@ -121,12 +121,24 @@ function toNumber(value) {
         return 0;
     }
 
-    const num =
-        Number(text);
+
+    // Handle quantity format such as "10:0".
+    // Use the first number only when the entire value
+    // matches the number:number pattern.
+    const colonMatch = text.match(
+        /^([-+]?\d+(?:\.\d+)?)\s*:\s*([-+]?\d+(?:\.\d+)?)$/
+    );
+
+    if (colonMatch) {
+        return Number(colonMatch[1]);
+    }
+
+    const num = Number(text);
 
     return Number.isNaN(num)
         ? 0
         : num;
+
 
 }
 
@@ -150,8 +162,11 @@ function getValue(
 
     }
 
+    const rawValue =
+        row[index];
+
     return toNumber(
-        row[index]
+        rawValue
     );
 
 }
@@ -205,6 +220,20 @@ function shouldStop(product) {
         .toUpperCase();
 
     if (!text) {
+        return true;
+    }
+
+        //--------------------------------------------------
+    // TARGETED NON-PRODUCT ROW FILTER
+    // Based on confirmed rows from the latest statement.
+    //--------------------------------------------------
+
+    if (
+        text.startsWith("PURCHASE DETAIL") ||
+        text.startsWith("SUPPLIER NAME") ||
+        /^MARG ERP NANO\s+FOR\s+CHEMIST\b/.test(text) ||
+        /^\d+\s+LINUX\s+LABORATOR/i.test(text)
+    ) {
         return true;
     }
 
@@ -308,6 +337,7 @@ function hasMappedMovementColumns(
     const fields = [
 
         "opening",
+        "pack",
         "purchase",
         "purchaseFree",
         "purchaseReturn",
@@ -322,6 +352,7 @@ function hasMappedMovementColumns(
         "credit",
         "debit",
         "adjustment",
+        "brkexp",
         "closing",
         "rate",
 
@@ -809,7 +840,7 @@ function parseBajrangFixedWidthStockSalesRow(
     }
 
     // -----------------------------------------------
-    // BAJRANG structure:
+    // BAJRANG structure
     //
     // PRODUCT / PACK
     // OPENING QTY
@@ -822,22 +853,41 @@ function parseBajrangFixedWidthStockSalesRow(
     // CLOSING VALUE
     // DUMP
     //
-    // The final 9 tokens are numeric or "-".
+    // Some rows contain fewer trailing values.
+    // Therefore DO NOT require exactly 9 values.
     // -----------------------------------------------
 
     const tokens =
         text.split(/\s+/)
             .filter(Boolean);
 
-    if (tokens.length < 10) {
+    if (tokens.length < 3) {
         return null;
     }
 
     let numericStart = -1;
 
+    /*
+     * Find the first position where the remaining
+     * tokens are all numeric or "-".
+     *
+     * Minimum expected movement structure:
+     *
+     * Opening Qty
+     * Opening Value
+     * Receipt Qty
+     * Receipt Value
+     * Issue Qty
+     * Issue Value
+     * Closing Qty
+     *
+     * Therefore at least 7 trailing values
+     * are required.
+     */
+
     for (
         let i = 1;
-        i <= tokens.length - 9;
+        i <= tokens.length - 7;
         i++
     ) {
 
@@ -845,7 +895,7 @@ function parseBajrangFixedWidthStockSalesRow(
             tokens.slice(i);
 
         if (
-            tail.length !== 9
+            tail.length < 7
         ) {
             continue;
         }
@@ -864,7 +914,9 @@ function parseBajrangFixedWidthStockSalesRow(
 
     }
 
-    if (numericStart < 1) {
+    if (
+        numericStart < 1
+    ) {
         return null;
     }
 
@@ -877,12 +929,13 @@ function parseBajrangFixedWidthStockSalesRow(
     const values =
         tokens.slice(numericStart);
 
-    if (
-        !product ||
-        values.length !== 9
-    ) {
+    if (!product) {
         return null;
     }
+
+    // -----------------------------------------------
+    // Fixed positions
+    // -----------------------------------------------
 
     return {
 
@@ -908,6 +961,9 @@ function parseBajrangFixedWidthStockSalesRow(
 
         closing:
             toNumber(values[6]),
+
+        // These columns may not exist in every row.
+        // toNumber(undefined) safely returns 0.
 
         closingValue:
             toNumber(values[7]),
@@ -1385,6 +1441,450 @@ function parseInfinaStockSalesRow(
 
 }
 
+// ============================================================
+// KABSON PHARMA - STOCK & SALES ANALYSIS
+// ============================================================
+
+function isKabsonStockSalesFormat(rows, analysis) {
+
+    try {
+
+        const headerRowIndex = Number(analysis?.headerRow || 1) - 1;
+
+        const headerRow = rows[headerRowIndex] || [];
+
+        const headers = headerRow.map(value =>
+            String(value ?? "")
+                .replace(/\s+/g, " ")
+                .trim()
+                .toUpperCase()
+        );
+
+        const requiredHeaders = [
+            "ITEM DESCRIPTION",
+            "OPENING",
+            "RECEIPT",
+            "ISSUE",
+            "CLOSING M.EXP"
+        ];
+
+        const headersMatch =
+            headers.length >= requiredHeaders.length &&
+            requiredHeaders.every(
+                (header, index) => headers[index] === header
+            );
+
+        if (!headersMatch) {
+            return false;
+        }
+
+        // Make this detector specific to KABSON PHARMA.
+        // This prevents this logic from affecting other statements
+        // having a similar five-column structure.
+
+        const previousRows = rows
+            .slice(0, headerRowIndex)
+            .flat()
+            .map(value => String(value ?? "").trim().toUpperCase())
+            .join(" ");
+
+        return previousRows.includes("KABSON PHARMA");
+
+    } catch (error) {
+
+        console.error(
+            "KABSON FORMAT DETECTION ERROR:",
+            error.message
+        );
+
+        return false;
+    }
+}
+
+
+// ------------------------------------------------------------
+// Split Kabson product description into Product + Pack
+// ------------------------------------------------------------
+
+function splitKabsonProductAndPack(rawProduct) {
+
+    const text = String(rawProduct ?? "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    if (!text) {
+        return {
+            product: "",
+            pack: ""
+        };
+    }
+
+    // First preference:
+    // Original Kabson files normally have multiple spaces
+    // between Product and Pack.
+    const multiSpaceMatch = String(rawProduct)
+        .match(/^(.+?)\s{2,}(.+?)\s*$/);
+
+    if (multiSpaceMatch) {
+
+        return {
+            product: multiSpaceMatch[1].trim(),
+            pack: multiSpaceMatch[2].trim()
+        };
+    }
+
+    // Fallback:
+    // Handles cases such as:
+    //
+    // HYDRAVO SKIN MOISTURIZ 50GRM
+    // PRODUCT NAME 1X150
+    // PRODUCT NAME 1X30 G
+    // PRODUCT NAME 1X15GR
+
+    const packMatch = text.match(
+        /^(.*?)\s+((?:\d+\s*[xX]\s*\d+|\d+(?:\.\d+)?)[A-Za-z]*(?:\s+[A-Za-z]+)?)$/i
+    );
+
+    if (packMatch) {
+
+        return {
+            product: packMatch[1].trim(),
+            pack: packMatch[2].trim()
+        };
+    }
+
+    // If no pack pattern can be identified,
+    // keep the complete text as Product.
+    return {
+        product: text,
+        pack: ""
+    };
+}
+
+
+// ------------------------------------------------------------
+// Kabson Closing M.EXP parser
+// ------------------------------------------------------------
+
+function getKabsonClosingValue(value) {
+
+    const text = String(value ?? "").trim();
+
+    if (!text) {
+        return 0;
+    }
+
+    // Dash means zero.
+    if (/^-+$/.test(text)) {
+        return 0;
+    }
+
+    // Examples:
+    //
+    // 16 1/27  -> 16
+    // 5 4/26   -> 5
+    // 2        -> 2
+    //
+    // We only need the quantity before the M.EXP value.
+
+    const quantityMatch = text.match(
+        /^[-+]?\d+(?:\.\d+)?/
+    );
+
+    if (!quantityMatch) {
+        return 0;
+    }
+
+    return toNumber(quantityMatch[0]);
+}
+
+
+// ------------------------------------------------------------
+// Kabson row parser
+// ------------------------------------------------------------
+
+function parseKabsonStockSalesRow(row, productColumn = 0) {
+
+    if (!Array.isArray(row)) {
+        return null;
+    }
+
+    const rawProduct = getStringValue(
+        row,
+        productColumn
+    );
+
+    if (!rawProduct) {
+        return null;
+    }
+
+    const normalizedProduct = rawProduct
+        .replace(/\s+/g, " ")
+        .trim()
+        .toUpperCase();
+
+    // --------------------------------------------------------
+    // Kabson section headings - NOT products
+    // --------------------------------------------------------
+
+    if (
+        normalizedProduct === "LINUX DERMA DIV" ||
+        normalizedProduct === "LINUX LABORATORIES PVT LTD"
+    ) {
+        return null;
+    }
+
+    // Existing footer / stop-row protection.
+    if (shouldStop(rawProduct)) {
+        return null;
+    }
+
+    const productPack = splitKabsonProductAndPack(
+        rawProduct
+    );
+
+    if (!productPack.product) {
+        return null;
+    }
+
+    // Kabson mapping:
+    //
+    // ITEM DESCRIPTION -> Product
+    // OPENING          -> Opening
+    // RECEIPT          -> Purchase
+    // ISSUE            -> Sales
+    // CLOSING M.EXP    -> Closing
+
+    const opening = getValue(row, 1);
+
+    const purchase = getValue(row, 2);
+
+    const sales = getValue(row, 3);
+
+    const closing = getKabsonClosingValue(
+        row[4]
+    );
+
+    return {
+
+        product: productPack.product,
+
+        productDescription: productPack.product,
+
+        pack: productPack.pack,
+
+        opening: opening,
+
+        purchase: purchase,
+
+        sales: sales,
+
+        closing: closing
+    };
+}
+
+//======================================================
+// UTKARSH TWO-ROW STOCK & SALES
+//======================================================
+
+function isUtkarshTwoRowStockSalesFormat(
+    sourceHeaders
+) {
+
+    if (
+        !Array.isArray(sourceHeaders) ||
+        sourceHeaders.length < 12
+    ) {
+
+        return false;
+
+    }
+
+    const headers =
+        sourceHeaders.map(
+            value =>
+                String(value ?? "")
+                    .trim()
+                    .toUpperCase()
+        );
+
+    return (
+
+        headers[0] ===
+            "ITEM DESCRIPTION"
+
+        &&
+
+        headers[1] ===
+            "OPENING STOCK"
+
+        &&
+
+        headers[3] ===
+            "PURCHASE FREE"
+
+        &&
+
+        headers[6] ===
+            "=B+C+D STOCK"
+
+        &&
+
+        headers[8] ===
+            "SALES FREE SAMPLE"
+
+        &&
+
+        headers[11] ===
+            "=G H I STOCK"
+
+    );
+
+}
+
+//======================================================
+// UTKARSH NUMERIC BOUNDARY PARSER
+//======================================================
+
+function parseUtkarshNumericBoundaries(value) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        String(value).trim() === ""
+    ) {
+        return [];
+    }
+
+    const text = String(value);
+
+    const matches =
+        text.match(
+            /[-+]?(?:\d+(?:\.\d+)?|\.\d+)/
+        );
+
+    if (!matches) {
+        return [];
+    }
+
+    return text
+        .match(
+            /[-+]?(?:\d+(?:\.\d+)?|\.\d+)/g
+        )
+        .map(
+            value =>
+                Number(value)
+        );
+}
+//======================================================
+// UTKARSH ROW PARSER
+//======================================================
+
+function parseUtkarshTwoRowStockSalesRow(
+    row,
+    productColumn = 0
+) {
+
+    if (!Array.isArray(row)) {
+        return null;
+    }
+
+    const product =
+        getStringValue(
+            row,
+            productColumn
+        );
+
+    if (!product) {
+        return null;
+    }
+
+    if (shouldStop(product)) {
+        return null;
+    }
+
+    //--------------------------------------------------
+    // Physical source columns
+    //--------------------------------------------------
+
+    const opening = getValue(row, 1);
+const purchase = getValue(row, 2);
+const purchaseFree = getValue(row, 3);
+
+// E = SALES RETURN + SALES RETURN FREE
+const salesReturnValues =
+    parseUtkarshNumericBoundaries(row[4]);
+
+const salesReturn =
+    salesReturnValues[0] ?? 0;
+
+const salesReturnFree =
+    salesReturnValues[1] ?? 0;
+
+// F = REPLACEMENT
+const replacement =
+    getValue(row, 5);
+
+// G = TOTAL
+const total =
+    getValue(row, 6);
+
+// H = SALES
+const sales =
+    getValue(row, 7);
+
+// I = SALES FREE + SALES SAMPLE
+const salesValues =
+    parseUtkarshNumericBoundaries(row[8]);
+
+const salesFree =
+    salesValues[0] ?? 0;
+
+const salesSample =
+    salesValues[1] ?? 0;
+
+// J = PURCHASE RETURN + TRN OUT
+const purchaseReturnValues =
+    parseUtkarshNumericBoundaries(row[9]);
+
+const purchaseReturn =
+    purchaseReturnValues[0] ?? 0;
+
+const trnOut =
+    purchaseReturnValues[1] ?? 0;
+
+// K = SALES REPLACEMENT
+const salesReplacement =
+    getValue(row, 10);
+
+// L = CLOSING
+const closing =
+    getValue(row, 11);
+
+    //--------------------------------------------------
+    // Return physical values exactly as supplied
+    //--------------------------------------------------
+
+    return {
+    product,
+    productDescription: product,
+    opening,
+    purchase,
+    purchaseFree,
+    salesReturn,
+    salesReturnFree,
+    replacement,
+    total,
+    sales,
+    salesFree,
+    salesSample,
+    purchaseReturn,
+    trnOut,
+    salesReplacement,
+    closing
+};
+
+}
 
 //======================================================
 // BUILD NORMAL RECORD
@@ -1399,7 +1899,6 @@ function buildNormalRecord(
     fixedWidthRecord
 ) {
 
-
     const record = {
 
     rowNumber,
@@ -1411,15 +1910,13 @@ function buildNormalRecord(
 
     pack:
         fixedWidthRecord
-            ? (
-                fixedWidthRecord.pack !== undefined
-                    ? fixedWidthRecord.pack
-                    : ""
-            )
+            ? fixedWidthRecord.pack
             : getStringValue(
                 row,
                 map.pack
             ),
+
+
 
     opening:
             fixedWidthRecord
@@ -1587,6 +2084,19 @@ function buildNormalRecord(
                     map.adjustment
                 ),
 
+        brkexp:
+
+            fixedWidthRecord &&
+            fixedWidthRecord.brkexp !==
+                undefined
+
+                ? fixedWidthRecord.brkexp
+
+                : getValue(
+                    row,
+                    map.brkexp
+                ),
+
         closing:
             fixedWidthRecord
                 ? fixedWidthRecord.closing
@@ -1609,6 +2119,7 @@ function buildNormalRecord(
                 )
 
     };
+
 
 
     //--------------------------------------------------
@@ -1766,6 +2277,14 @@ function getSourceHeaders(
                     header &&
                     typeof header === "object"
                 ) {
+
+                if (
+                    header.original !== undefined
+                ) {
+                return String(
+                    header.original
+                );
+                }
 
                     if (
                         header.name !== undefined
@@ -1969,6 +2488,587 @@ function extractRows(
             analysis
         );
 
+
+
+    //==================================================
+    // NUTRIMAX / R.A. ENTERPRISES
+    // STOCK GROUP SUMMARY EXTRACTION
+    //==================================================
+
+    const nutrimaxHeaderIndex =
+        Number(analysis.headerRow || 1) - 1;
+
+    const nutrimaxHeaderRow =
+        rows[nutrimaxHeaderIndex] || [];
+
+    const nutrimaxGroupRow =
+        rows[nutrimaxHeaderIndex + 1] || [];
+
+    const nutrimaxSubHeaderRow =
+        rows[nutrimaxHeaderIndex + 2] || [];
+
+    const nutrimaxTitleText =
+        rows
+            .slice(0, nutrimaxHeaderIndex)
+            .flat()
+            .map(value => String(value ?? ""))
+            .join(" ")
+            .toUpperCase();
+
+    const nutrimaxNormalize = value =>
+        String(value ?? "")
+            .trim()
+            .toUpperCase()
+            .replace(/[^A-Z0-9]/g, "");
+
+    const isNutrimaxStockGroupSummary =
+        nutrimaxTitleText.includes("STOCK GROUP SUMMARY") &&
+        nutrimaxTitleText.includes("R.A.ENTERPRISES") &&
+        nutrimaxNormalize(nutrimaxHeaderRow[0]) === "PARTICULARS" &&
+        nutrimaxNormalize(nutrimaxGroupRow[1]) === "OPENINGBALANCE" &&
+        nutrimaxNormalize(nutrimaxGroupRow[4]) === "INWARDS" &&
+        nutrimaxNormalize(nutrimaxGroupRow[7]) === "OUTWARDS" &&
+        nutrimaxNormalize(nutrimaxGroupRow[10]) === "CLOSINGBALANCE" &&
+        nutrimaxNormalize(nutrimaxSubHeaderRow[1]) === "QUANTITY" &&
+        nutrimaxNormalize(nutrimaxSubHeaderRow[2]) === "RATE" &&
+        nutrimaxNormalize(nutrimaxSubHeaderRow[3]) === "VALUE" &&
+        nutrimaxNormalize(nutrimaxSubHeaderRow[4]) === "QUANTITY" &&
+        nutrimaxNormalize(nutrimaxSubHeaderRow[7]) === "QUANTITY" &&
+        nutrimaxNormalize(nutrimaxSubHeaderRow[10]) === "QUANTITY";
+
+    if (isNutrimaxStockGroupSummary) {
+
+        console.log(
+            "NUTRIMAX STOCK GROUP SUMMARY FORMAT:",
+            true
+        );
+
+        const nutrimaxHeaders = [
+            "Product",
+            "Opening Balance Quantity",
+            "Opening Balance Rate",
+            "Opening Balance Value",
+            "Inwards Quantity",
+            "Inwards Rate",
+            "Inwards Value",
+            "Outwards Quantity",
+            "Outwards Rate",
+            "Outwards Value",
+            "Closing Balance Quantity",
+            "Closing Balance Rate",
+            "Closing Balance Value"
+        ];
+
+        const nutrimaxRecords = [];
+
+        const firstProductRow =
+            nutrimaxHeaderIndex + 3;
+
+        for (
+            let i = firstProductRow;
+            i < rows.length;
+            i++
+        ) {
+
+            const row = rows[i] || [];
+
+            const product =
+                getStringValue(row, 0);
+
+            if (!product || shouldStop(product)) {
+                continue;
+            }
+
+            const record = {
+                rowNumber: i + 1,
+
+                product,
+                productDescription: product,
+                productCode: "",
+                pack: "",
+
+                // Opening Balance
+                opening: getValue(row, 1),
+                openingRate: getValue(row, 2),
+                openingValue: getValue(row, 3),
+
+                // Inwards = Purchase
+                purchase: getValue(row, 4),
+                purchaseRate: getValue(row, 5),
+                purchaseValue: getValue(row, 6),
+
+                // Outwards = Sales
+                sales: getValue(row, 7),
+                salesRate: getValue(row, 8),
+                salesValue: getValue(row, 9),
+
+                // Closing Balance
+                closing: getValue(row, 10),
+                closingRate: getValue(row, 11),
+                closingValue: getValue(row, 12),
+
+                // Preserve source information
+                sourceHeaders: nutrimaxHeaders.slice(),
+                sourceRow: row.slice(),
+                sourceColumns: createSourceColumns(
+                    row,
+                    nutrimaxHeaders
+                )
+            };
+
+            // Use the closing rate as the standard rate.
+            record.rate = record.closingRate;
+
+            nutrimaxRecords.push(record);
+        }
+
+        console.log(
+            "NUTRIMAX RECORDS EXTRACTED:",
+            nutrimaxRecords.length
+        );
+
+        return {
+            success: true,
+            totalRecords: nutrimaxRecords.length,
+            records: nutrimaxRecords
+        };
+    }
+
+
+    //==================================================
+    // STOCK AND SALE MANUFACTURE WISE - MULTI-ROW FIX
+    //==================================================
+
+    const swathiHeaderIndex =
+        Number(analysis.headerRow || 1) - 1;
+
+    const swathiHeader =
+        rows[swathiHeaderIndex] || [];
+
+    const swathiTitle =
+        rows.slice(0, swathiHeaderIndex)
+            .flat()
+            .map(value => String(value ?? ""))
+            .join(" ")
+            .toUpperCase();
+
+    const swathiHeaderValue = index =>
+        String(swathiHeader[index] ?? "")
+            .trim()
+            .toUpperCase()
+            .replace(/[.]/g, "");
+
+    const isSwathiMultiRowFormat =
+        swathiTitle.includes("STOCK AND SALE MANUFACTURE WISE") &&
+        swathiHeaderValue(3) === "CODE" &&
+        swathiHeaderValue(6) === "ITEM" &&
+        swathiHeaderValue(13) === "PACK" &&
+        swathiHeaderValue(16) === "OP" &&
+        swathiHeaderValue(18) === "PUR QTY" &&
+        swathiHeaderValue(22) === "SALE QTY" &&
+        swathiHeaderValue(24) === "BAL";
+
+    if (isSwathiMultiRowFormat) {
+
+        console.log(
+            "SWATHI MULTI-ROW EXTRACTION:",
+            true
+        );
+
+        const swathiRecords = [];
+        let current = null;
+
+        const hasCellValue = value =>
+            value !== "" &&
+            value !== null &&
+            value !== undefined;
+
+        function saveSwathiRecord() {
+
+            if (!current) return;
+
+            const sourceRow = current.productRow;
+
+            const record = buildNormalRecord(
+                sourceRow,
+                current.rowNumber,
+                current.product,
+                current.product,
+                map,
+                null
+            );
+
+            record.product = current.product;
+            record.productDescription = current.product;
+            record.productCode = current.code;
+            record.pack = current.pack;
+
+            record.opening = current.opening;
+            record.purchase = current.purchase;
+            record.sales = current.sales;
+            record.closing = current.closing;
+
+            // Preserve the original product row and headers.
+            record.sourceHeaders = sourceHeaders.slice();
+            record.sourceRow = sourceRow.slice();
+            record.sourceColumns =
+                createSourceColumns(sourceRow, sourceHeaders);
+
+            // Keep all physical rows that contributed to this record.
+            record.sourceRows = current.sourceRows.map(
+                row => row.slice()
+            );
+
+            swathiRecords.push(record);
+            current = null;
+        }
+
+        for (
+            let i = swathiHeaderIndex + 1;
+            i < rows.length;
+            i++
+        ) {
+
+            const row = rows[i] || [];
+
+            const product = getStringValue(row, map.product);
+            const pack = getStringValue(row, map.pack);
+
+            // A product starts when both Item and Pack are populated.
+            if (product && pack) {
+
+                if (shouldStop(product)) {
+                    saveSwathiRecord();
+                    continue;
+                }
+
+                saveSwathiRecord();
+
+                current = {
+                    rowNumber: i + 1,
+                    product,
+                    pack,
+                    code: "",
+                    opening: 0,
+                    purchase: 0,
+                    sales: 0,
+                    closing: 0,
+                    productRow: row.slice(),
+                    sourceRows: [row.slice()]
+                };
+
+                continue;
+            }
+
+            if (!current) continue;
+
+            // Keep the original rows associated with this product.
+            current.sourceRows.push(row.slice());
+
+            const code = getStringValue(row, map.code);
+            if (code) current.code = code;
+
+            // Read from the EXISTING mapped columns.
+            if (hasCellValue(row[map.opening])) {
+                current.opening = getValue(row, map.opening);
+            }
+
+            if (hasCellValue(row[map.purchase])) {
+                current.purchase = getValue(row, map.purchase);
+            }
+
+            if (hasCellValue(row[map.sales])) {
+                current.sales = getValue(row, map.sales);
+            }
+
+            if (hasCellValue(row[map.closing])) {
+                current.closing = getValue(row, map.closing);
+            }
+        }
+
+        saveSwathiRecord();
+
+        console.log(
+            "SWATHI RECORDS EXTRACTED:",
+            swathiRecords.length
+        );
+
+        return {
+            success: true,
+            totalRecords: swathiRecords.length,
+            records: swathiRecords
+        };
+    }
+
+
+    //==================================================
+    // META PATWARI PHARMA - MULTI-ROW PRODUCT EXTRACTION
+    //==================================================
+
+    const metaPatwariHeaderRowIndex =
+        Number(analysis.headerRow || 1) - 1;
+
+    const metaPatwariHeaderText =
+        rows
+            .slice(
+                Math.max(0, metaPatwariHeaderRowIndex - 2),
+                Math.min(rows.length, metaPatwariHeaderRowIndex + 3)
+            )
+            .map(row =>
+                (row || [])
+                    .map(value =>
+                        String(value ?? "")
+                            .trim()
+                            .toUpperCase()
+                    )
+                    .join(" ")
+            )
+            .join(" ");
+
+    const metaPatwariHeader =
+        rows[metaPatwariHeaderRowIndex] || [];
+
+    const isMetaPatwariFormat =
+        metaPatwariHeader.length >= 24 &&
+        /\bCODE\b/.test(metaPatwariHeaderText) &&
+        /\bITEM\b/.test(metaPatwariHeaderText) &&
+        /\bPACK\b/.test(metaPatwariHeaderText) &&
+        /\bPUR\s*QTY\b/.test(metaPatwariHeaderText) &&
+        /\bSALE\s*QTY\b/.test(metaPatwariHeaderText) &&
+        /\bBAL\b/.test(metaPatwariHeaderText) &&
+        rows.some((row, index) =>
+            index > metaPatwariHeaderRowIndex &&
+            String((row || [])[6] ?? "").trim() !== "" &&
+            String((row || [])[12] ?? "").trim() !== ""
+        );
+
+    if (isMetaPatwariFormat) {
+
+        console.log(
+            "META PATWARI MULTI-ROW FORMAT:",
+            true
+        );
+
+        const metaPatwariRecords = [];
+
+        const firstProductSearchRow =
+            metaPatwariHeaderRowIndex + 1;
+
+        let currentProduct = null;
+
+        function saveMetaPatwariProduct() {
+
+            if (!currentProduct) {
+                return;
+            }
+
+            metaPatwariRecords.push({
+                rowNumber: currentProduct.rowNumber,
+
+                product: currentProduct.product,
+                productDescription: currentProduct.product,
+                productCode: currentProduct.productCode,
+                pack: currentProduct.pack,
+
+                opening: currentProduct.opening,
+                purchase: currentProduct.purchase,
+                sales: currentProduct.sales,
+                closing: currentProduct.closing,
+
+                openingValue: 0,
+                purchaseValue: 0,
+                salesValue: 0,
+                closingValue: 0,
+
+                sourceHeaders: sourceHeaders.slice(),
+
+                sourceRow: currentProduct.sourceRow.slice(),
+
+                sourceRows: currentProduct.sourceRows.map(
+                    row => row.slice()
+                ),
+
+                sourceColumns: createSourceColumns(
+                    currentProduct.sourceRow,
+                    sourceHeaders
+                )
+            });
+
+        }
+
+        for (
+            let i = firstProductSearchRow;
+            i < rows.length;
+            i++
+        ) {
+
+            const row = rows[i] || [];
+
+            const productName =
+                getStringValue(row, 6);
+
+            const pack =
+                getStringValue(row, 12);
+
+            // A new product begins when both the product
+            // name and pack are present.
+            if (productName && pack) {
+
+                if (shouldStop(productName)) {
+                    saveMetaPatwariProduct();
+                    currentProduct = null;
+                    continue;
+                }
+
+                saveMetaPatwariProduct();
+
+                currentProduct = {
+                    rowNumber: i + 1,
+
+                    product: productName,
+                    productCode: "",
+                    pack,
+
+                    opening: 0,
+                    purchase: 0,
+                    sales: 0,
+                    closing: 0,
+
+                    sourceRow: row.slice(),
+                    sourceRows: [row.slice()]
+                };
+
+                continue;
+            }
+
+            if (!currentProduct) {
+                continue;
+            }
+
+            currentProduct.sourceRows.push(row.slice());
+
+            // Column D: Product code
+            const code =
+                getStringValue(row, 3);
+
+            if (code) {
+                currentProduct.productCode = code;
+            }
+
+            // Only replace a movement value when its
+            // physical source cell actually contains data.
+            if (
+                row[15] !== "" &&
+                row[15] !== null &&
+                row[15] !== undefined
+            ) {
+                currentProduct.opening =
+                    getValue(row, 15);
+            }
+
+            if (
+                row[17] !== "" &&
+                row[17] !== null &&
+                row[17] !== undefined
+            ) {
+                currentProduct.purchase =
+                    getValue(row, 17);
+            }
+
+            if (
+                row[21] !== "" &&
+                row[21] !== null &&
+                row[21] !== undefined
+            ) {
+                currentProduct.sales =
+                    getValue(row, 21);
+            }
+
+            if (
+                row[23] !== "" &&
+                row[23] !== null &&
+                row[23] !== undefined
+            ) {
+                currentProduct.closing =
+                    getValue(row, 23);
+            }
+        }
+
+        saveMetaPatwariProduct();
+
+        console.log(
+            "META PATWARI RECORDS:",
+            metaPatwariRecords.length
+        );
+
+        return {
+            success: true,
+            totalRecords: metaPatwariRecords.length,
+            records: metaPatwariRecords
+        };
+    }
+
+
+ //==================================================
+ // MAMATA CLOSING STOCK FORMAT DETECTION
+ //==================================================
+
+const mamataHeaderRowIndex =
+    Number(analysis.headerRow || 1) - 1;
+
+const mamataHeaderRow =
+    rows[mamataHeaderRowIndex] || [];
+
+const mamataStatementTitle =
+    rows
+        .slice(0, mamataHeaderRowIndex)
+        .flat()
+        .map(value => String(value ?? ""))
+        .join(" ")
+        .toUpperCase();
+
+
+const isMamataClosingStockFormat =
+    String(mamataHeaderRow[0] ?? "").trim().toUpperCase() === "ITEM DESCRIPTION" &&
+    String(mamataHeaderRow[1] ?? "").trim().toUpperCase() === "OPENING" &&
+    String(mamataHeaderRow[2] ?? "").trim().toUpperCase() === "RECEIPT" &&
+    String(mamataHeaderRow[3] ?? "").trim().toUpperCase() === "ISSUE" &&
+    String(mamataHeaderRow[4] ?? "").trim().toUpperCase() === "CLOSING";
+
+
+console.log(
+    "MAMATA CLOSING FORMAT:",
+    isMamataClosingStockFormat
+);
+
+
+    //--------------------------------------------------
+// UTKARSH TWO-ROW FORMAT
+//--------------------------------------------------
+
+const isUtkarshFormat =
+    analysis.specialFormat ===
+        "UTKARSH_TWO_ROW_EXCEL_STOCK_SALES" ||
+    isUtkarshTwoRowStockSalesFormat(
+        sourceHeaders
+    );
+
+const isImperiaFormat =
+    analysis.specialFormat ===
+        "IMPERIA_TWO_ROW_EXCEL_STOCK_SALES" ||
+    analysis.detection ===
+        "IMPERIA_TWO_ROW_EXCEL_STOCK_SALES";
+
+console.log(
+    "UTKARSH FORMAT:",
+    isUtkarshFormat
+);
+
+console.log(
+    "IMPERIA FORMAT:",
+    isImperiaFormat
+);
+
     //--------------------------------------------------
     // PRODUCT COLUMN
     //--------------------------------------------------
@@ -1999,6 +3099,20 @@ function extractRows(
             analysis,
             map
         );
+
+    // ============================================================
+// KABSON FORMAT DETECTION
+// ============================================================
+
+const isKabsonFormat = isKabsonStockSalesFormat(
+    rows,
+    analysis
+);
+
+console.log(
+    "KABSON FORMAT:",
+    isKabsonFormat
+);
 
     //--------------------------------------------------
     // FIXED WIDTH
@@ -2185,10 +3299,7 @@ function extractRows(
                 analysis.firstDataRow
             ) - 1;
 
-        extractionEnd =
-            Number(
-                analysis.lastDataRow
-            ) - 1;
+        extractionEnd = rows.length - 1;
 
     }
 
@@ -2337,26 +3448,35 @@ function extractRows(
 
         const row =
             rows[i] || [];
-        //==================================================
-// RETURN SOURCE ROW DEBUG
-//==================================================
 
-if (extracted.length < 5) {
+    // ============================================================
+// KABSON ROW PARSING
+// ============================================================
 
-    console.log("");
-    console.log("===== RETURN SOURCE DEBUG =====");
+let kabsonRecord = null;
 
-    console.log("Source Row :", i + 1);
-    console.log("row.length :", row?.length);
+if (isKabsonFormat) {
 
-    console.log("row[4] :", row?.[4]);
-    console.log("row[7] :", row?.[7]);
+    kabsonRecord = parseKabsonStockSalesRow(
+        row,
+        productColumn
+    );
 
-    console.log("map.purchaseReturn :", map?.purchaseReturn);
-    console.log("map.salesReturn    :", map?.salesReturn);
+    // In Kabson format, every row that is not a valid
+    // product row is ignored.
+    //
+    // This is important because rows such as:
+    //
+    // LINUX DERMA DIV
+    // LINUX LABORATORIES PVT LTD
+    //
+    // must NEVER enter the normal product extraction logic.
 
-    console.log("================================");
+    if (!kabsonRecord) {
+        continue;
+    }
 }
+
 
         //------------------------------------------------
         // FIXED WIDTH
@@ -2377,14 +3497,6 @@ if (extracted.length < 5) {
                     )
                 );
 
-            if (
-                !fixedWidthRecord &&
-                extracted.length > 0
-            ) {
-
-                break;
-
-            }
 
             if (
                 !fixedWidthRecord
@@ -2452,14 +3564,12 @@ if (extracted.length < 5) {
         //------------------------------------------------
 
         const product =
-            fixedWidthRecord
-
-                ? fixedWidthRecord.product
-
-                : getStringValue(
-                    row,
-                    productColumn
-                );
+            isKabsonFormat
+                ? kabsonRecord.product
+                : (
+            fixedWidthRecord?.product ||
+            getStringValue(row, productColumn)
+        );
 
         //------------------------------------------------
         // Blank
@@ -2654,12 +3764,15 @@ if (extracted.length < 5) {
 
         }
 
+
+
         //------------------------------------------------
         // PRODUCT CODE
         //------------------------------------------------
 
         let productCode =
             null;
+
 
         if (
 
@@ -2722,6 +3835,8 @@ if (extracted.length < 5) {
         let finalProduct =
     productDescription;
 
+
+
 if (
     map.specialFormat ===
         "CODE_ITEM_DESCRIPTION_SALES_CLOSING"
@@ -2729,6 +3844,8 @@ if (
     map.specialFormat !==
         "VASU_AGENCIES_DRUGS_STRUCTURED_XLS"
 ) {
+
+
 
     if (
         productCode &&
@@ -2744,62 +3861,327 @@ if (
 
 
 
-        //------------------------------------------------
-        // BUILD
-        //------------------------------------------------
+const isDafMedicineAgencies =
+    Array.isArray(sourceHeaders) &&
+    sourceHeaders.length >= 16 &&
+    String(sourceHeaders[0] ?? "")
+        .trim()
+        .toUpperCase() === "CODE" &&
+    String(sourceHeaders[1] ?? "")
+        .trim()
+        .toUpperCase() === "PRODUCT NAME" &&
+    String(sourceHeaders[2] ?? "")
+        .trim()
+        .toUpperCase() === "UNIT" &&
+    String(sourceHeaders[3] ?? "")
+        .trim()
+        .toUpperCase() === "CURRENT STOCK" &&
+    String(sourceHeaders[4] ?? "")
+        .trim()
+        .toUpperCase() === "SALES SCHEME" &&
+    String(sourceHeaders[6] ?? "")
+        .trim()
+        .toUpperCase() === "PURC.SCHEME" &&
+    String(sourceHeaders[8] ?? "")
+        .trim()
+        .toUpperCase() === "COST PRICE" &&
+    String(sourceHeaders[9] ?? "")
+        .trim()
+        .toUpperCase() === "VALUE" &&
+    String(sourceHeaders[10] ?? "")
+        .trim()
+        .toUpperCase() === "M.R.P." &&
+    String(sourceHeaders[11] ?? "")
+        .trim()
+        .toUpperCase() === "PURCHASE PRICE" &&
+    String(sourceHeaders[12] ?? "")
+        .trim()
+        .toUpperCase() === "SALES PRICE";
 
-        const record =
-            buildNormalRecord(
+let record;
 
-                row,
+if (isDafMedicineAgencies) {
 
-                i + 1,
+    console.log("");
+    console.log("===== DAF PHYSICAL COLUMN EXTRACTION =====");
 
-                product,
+    // --------------------------------------------------------
+    // First build the normal record so the existing
+    // extractor structure remains intact.
+    // --------------------------------------------------------
 
-                finalProduct,
+    record =
+        buildNormalRecord(
+            row,
+            i + 1,
+            product,
+            finalProduct,
+            map,
+            fixedWidthRecord
+        );
 
-                map,
 
-                fixedWidthRecord
 
-            );
+    // --------------------------------------------------------
+    // DAF PHYSICAL COLUMNS
+    //
+    // These are taken STRICTLY by physical column number.
+    // No header matching or business interpretation.
+    // --------------------------------------------------------
 
-            console.log("");
-console.log("===== DERMASCIENCE RECORD VALUE CHECK =====");
-console.log("Product       :", product);
-console.log("Source Br I   :", row?.[17]);
-console.log("Source Br R   :", row?.[18]);
-console.log("Map Br I      :", map?.trnInQty);
-console.log("Map Br R      :", map?.trnOutQty);
-console.log("Record TRN IN :", record?.trnInQty);
-console.log("Record TRN OUT:", record?.trnOutQty);
-console.log("===========================================");
+    record.dafColumns = {};
 
-        //==================================================
+    for (
+        let columnIndex = 0;
+        columnIndex < 16;
+        columnIndex++
+    ) {
+
+        record.dafColumns[columnIndex] =
+            row[columnIndex];
+
+    }
+
+    // --------------------------------------------------------
+    // DAF PHYSICAL HEADERS
+    // --------------------------------------------------------
+
+    record.dafHeaders =
+        sourceHeaders.slice(
+            0,
+            16
+        );
+
+    // --------------------------------------------------------
+    // DAF COMPLETE PHYSICAL SOURCE ROW
+    // --------------------------------------------------------
+
+    record.sourceRow =
+        Array.isArray(row)
+            ? row.slice()
+            : [];
+
+    // --------------------------------------------------------
+    // DAF COMPLETE SOURCE COLUMNS
+    // --------------------------------------------------------
+
+    record.sourceColumns =
+        createSourceColumns(
+            row,
+            sourceHeaders
+        );
+
+} else if (
+    isUtkarshFormat ||
+    isImperiaFormat
+) {
+
+    // ========================================================
+    // UTKARSH TWO-ROW STOCK & SALES
+    // ========================================================
+
+    console.log("");
+
+    console.log(
+        "===== UTKARSH PHYSICAL COLUMN EXTRACTION ====="
+    );
+
+    const utkarshRecord =
+        parseUtkarshTwoRowStockSalesRow(
+            row,
+            productColumn
+        );
+
+    if (!utkarshRecord) {
+        continue;
+    }
+
+    // --------------------------------------------------------
+    // Keep normal record structure
+    // --------------------------------------------------------
+
+    record =
+        buildNormalRecord(
+            row,
+            i + 1,
+            product,
+            finalProduct,
+            map,
+            fixedWidthRecord
+        );
+
+    // --------------------------------------------------------
+    // UTKARSH PHYSICAL VALUES
+    // --------------------------------------------------------
+
+    record.utkarshColumns = {};
+
+    for (
+        let columnIndex = 0;
+        columnIndex < 12;
+        columnIndex++
+    ) {
+
+        record.utkarshColumns[columnIndex] =
+            row[columnIndex];
+
+    }
+
+// --------------------------------------------------------
+// UTKARSH PARSED VALUES
+// --------------------------------------------------------
+
+record.opening =
+    utkarshRecord.opening;
+
+record.purchase =
+    utkarshRecord.purchase;
+
+record.purchaseFree =
+    utkarshRecord.purchaseFree;
+
+record.salesReturn =
+    utkarshRecord.salesReturn;
+
+record.salesReturnFree =
+    utkarshRecord.salesReturnFree;
+
+record.replacement =
+    utkarshRecord.salesReplacement;
+
+record.total =
+    utkarshRecord.total;
+
+record.sales =
+    utkarshRecord.sales;
+
+record.salesFree =
+    utkarshRecord.salesFree;
+
+record.salesSample =
+    utkarshRecord.salesSample;
+
+record.purchaseReturn =
+    utkarshRecord.purchaseReturn;
+
+record.trnOutQty =
+    utkarshRecord.trnOut;
+
+record.salesReplacement =
+    utkarshRecord.replacement;
+
+record.closing =
+    utkarshRecord.closing;
+
+record.product =
+    utkarshRecord.product;
+
+record.productDescription =
+    utkarshRecord.productDescription;
+
+    // --------------------------------------------------------
+    // UTKARSH SOURCE HEADERS
+    // --------------------------------------------------------
+
+    record.utkarshHeaders =
+        sourceHeaders.slice(
+            0,
+            12
+        );
+
+    // --------------------------------------------------------
+    // COMPLETE SOURCE ROW
+    // --------------------------------------------------------
+
+    record.sourceRow =
+        Array.isArray(row)
+            ? row.slice()
+            : [];
+
+    // --------------------------------------------------------
+    // COMPLETE SOURCE COLUMNS
+    // --------------------------------------------------------
+
+    record.sourceColumns =
+        createSourceColumns(
+            row,
+            sourceHeaders
+        );
+
+} else {
+
+    // --------------------------------------------------------
+    // EXISTING EXTRACTION
+    // --------------------------------------------------------
+
+    record =
+        buildNormalRecord(
+            row,
+            i + 1,
+            product,
+            finalProduct,
+            map,
+            fixedWidthRecord
+        );
+
+}
+
+
+
+//==================================================
+// MAMATA CLOSING STOCK OVERRIDE
+//==================================================
+
+if (isMamataClosingStockFormat) {
+    const closingParts = String(row[4] ?? "")
+        .replace(/,/g, "")
+        .match(/[-+]?\d*\.?\d+/g);
+
+    if (closingParts && closingParts.length >= 2) {
+        record.closing = Number(closingParts[0]);
+    }
+}
+
+
+
+// ============================================================
+// KABSON FINAL FIELD OVERRIDE
+// ============================================================
+
+if (isKabsonFormat && kabsonRecord) {
+
+    record.product =
+        kabsonRecord.product;
+
+    record.productDescription =
+        kabsonRecord.productDescription;
+
+    record.pack =
+        kabsonRecord.pack;
+
+    record.opening =
+        kabsonRecord.opening;
+
+    record.purchase =
+        kabsonRecord.purchase;
+
+    record.sales =
+        kabsonRecord.sales;
+
+    record.closing =
+        kabsonRecord.closing;
+}
+
+
+
+//==================================================
 // BASANTI RECORD DEBUG
 //==================================================
 
 if (
     Number(row?.[4]) !== 0 ||
     Number(row?.[7]) !== 0
-) {
-
-    console.log("");
-    console.log("===== RECORD RETURN DEBUG =====");
-
-    console.log(
-        "record.purchaseReturn :",
-        record.purchaseReturn
-    );
-
-    console.log(
-        "record.salesReturn    :",
-        record.salesReturn
-    );
-
-    console.log("================================");
-}
+)
 
         //------------------------------------------------
         // COMPLETE SOURCE ROW

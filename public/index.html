@@ -123,13 +123,14 @@
 
     const data = await res.json();
 
-    if (data.success) {
-  localStorage.setItem("user", id.trim());
-  localStorage.setItem("role", "user");
+   if (data.success) {
+  localStorage.setItem("token", data.token);
+  localStorage.removeItem("user");
+  localStorage.setItem("role", "admin");
   window.location.href = "/dashboard.html";
 } else {
-      alert(data.message || "Invalid ID");
-    }
+  alert("Invalid admin login");
+}
   }
 
   /* =========================
@@ -148,6 +149,7 @@
     const data = await res.json();
 
     if (data.success) {
+  localStorage.setItem("token", data.token);
   localStorage.removeItem("user");
   localStorage.setItem("role", "admin");
   window.location.href = "/dashboard.html";

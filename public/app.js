@@ -32,7 +32,11 @@ async function loadData() {
     const user = localStorage.getItem("user") || "";
     const role = localStorage.getItem("role") || "";
 
-    const res = await fetch(`/data/list?user=${user}&role=${role}`);
+    const res = await fetch("/data/list", {
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token") || ""}`
+  }
+});
 
     if (!res.ok) {
       console.error("API failed");
@@ -243,18 +247,12 @@ function getUploadUI(row, code, type) {
 
   const fileId = id.trim();
 
-  let url = fileId;
-
-  if (!url.startsWith("http")) {
-    url = `https://drive.google.com/file/d/${fileId}/view`;
-  }
-
   return `
     <div style="margin-bottom:6px;display:flex;gap:5px;justify-content:center;">
 
-      <button onclick="viewFile('${url}')">
-        View
-      </button>
+      <button onclick="viewFile('${fileId}')">
+  View
+</button>
 
       ${
         isAdmin()
@@ -704,9 +702,12 @@ async function submitFile(btn) {
         form.append("stockistName", row ? row.name : "");
 
       const res = await fetch("/data/upload", {
-        method: "POST",
-        body: form
-      });
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token") || ""}`
+  },
+  body: form
+});
 
       const data = await res.json();
 
@@ -765,8 +766,11 @@ async function deleteSingleFile(
         `/data/delete/${encodeURIComponent(division)}/${encodeURIComponent(code)}/${type}/${fileId}`,
 
         {
-            method: "DELETE"
-        }
+    method: "DELETE",
+    headers: {
+        Authorization: `Bearer ${localStorage.getItem("token") || ""}`
+    }
+}
 
     );
 
@@ -791,8 +795,54 @@ async function deleteSingleFile(
 /* =========================
    VIEW
 ========================= */
-function viewFile(url) {
-  window.open(url);
+async function viewFile(fileId) {
+  const token = localStorage.getItem("token") || "";
+
+  if (!token) {
+    alert("Your session has expired. Please log in again.");
+    window.location.href = "/index.html";
+    return;
+  }
+
+  // Open the tab immediately to avoid popup blockers.
+  const previewWindow = window.open("about:blank", "_blank");
+
+  if (!previewWindow) {
+    alert("Please allow pop-ups to preview files.");
+    return;
+  }
+
+  try {
+    const res = await fetch(
+      `/data/file/${encodeURIComponent(fileId)}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      previewWindow.close();
+
+      alert(data.error || "Unable to open the file.");
+      return;
+    }
+
+    const blob = await res.blob();
+    const objectUrl = URL.createObjectURL(blob);
+
+    previewWindow.location.href = objectUrl;
+
+    // Release the temporary browser URL after the preview has had time to load.
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+
+  } catch (err) {
+    console.error("FILE PREVIEW ERROR:", err);
+    previewWindow.close();
+    alert("Unable to retrieve the file. Please try again.");
+  }
 }
 
 /* =========================

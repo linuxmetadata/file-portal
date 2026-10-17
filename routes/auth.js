@@ -1,4 +1,5 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
 const router = express.Router();
 
 const fs = require("fs");
@@ -45,10 +46,21 @@ router.post("/user-login", (req, res) => {
     );
 
     if (found) {
-      return res.json({
-        success: true
-      });
-    }
+  const token = jwt.sign(
+    {
+      sub: loginId,
+      role: "user"
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "8h" }
+  );
+
+  return res.json({
+    success: true,
+    token,
+    role: "user"
+  });
+}
 
     return res.json({
       success: false,
@@ -73,10 +85,21 @@ router.post("/admin-login", (req, res) => {
 
   // 👉 Change credentials here
   if (email === "admin@gmail.com" && password === "admin123") {
-    return res.json({
-      success: true
-    });
-  }
+  const token = jwt.sign(
+    {
+      sub: email.toLowerCase(),
+      role: "admin"
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "8h" }
+  );
+
+  return res.json({
+    success: true,
+    token,
+    role: "admin"
+  });
+}
 
   return res.json({
     success: false

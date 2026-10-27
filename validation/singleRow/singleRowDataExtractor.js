@@ -4263,6 +4263,7 @@ function isDataRow(line, header) {
         return true;
     }
 
+        
     // --------------------------------------------------------
     // H005 - FIXED-WIDTH PRODUCT ROW VALIDATION
     // --------------------------------------------------------
@@ -6147,6 +6148,80 @@ function extractRow(
     rowNumber
 ) {
 
+        // --------------------------------------------------------
+    // H034 - ARHAM PHYSICAL STOCK COLUMNS
+    // --------------------------------------------------------
+    if (structureId === "H034") {
+        const columns = Array.isArray(header?.columns)
+            ? header.columns
+            : [];
+
+        if (columns.length !== 7) {
+            return null;
+        }
+
+        const text = String(line ?? "");
+        const rawValues = {};
+        const values = {};
+
+        for (let i = 0; i < columns.length; i++) {
+            const column = columns[i];
+            const start = Number(column.position);
+            const end = columns[i + 1]
+                ? Number(columns[i + 1].position)
+                : text.length;
+
+            const raw = text
+                .slice(start, end)
+                .trim();
+
+            rawValues[column.header] = raw;
+
+            if (i < 2) {
+                // Product Name and Unit are text fields.
+                values[column.header] = raw;
+                continue;
+            }
+
+            // Preserve empty cells; do not convert them to zero.
+            if (raw === "") {
+                values[column.header] = null;
+                continue;
+            }
+
+            const numericValue = Number(
+                raw.replace(/,/g, "")
+            );
+
+            values[column.header] =
+                Number.isFinite(numericValue)
+                    ? numericValue
+                    : raw;
+        }
+
+        const numericFields = columns
+            .slice(2)
+            .map(column => rawValues[column.header]);
+
+        return {
+            rowNumber,
+            rawLine: text,
+            numericTokenCount: 5,
+            expectedNumericCount: 5,
+            numericCountMatches:
+                numericFields.length === 5 &&
+                numericFields.every(
+                    value =>
+                        value !== "" &&
+                        Number.isFinite(
+                            Number(value.replace(/,/g, ""))
+                        )
+                ),
+            rawValues,
+            values
+        };
+    }
+
     // --------------------------------------------------------
     // PALANIAPPA
     // --------------------------------------------------------
@@ -6156,6 +6231,7 @@ function extractRow(
             header?.structure || ""
         );
 
+    
     // --------------------------------------------------------
     // H015 - AMAR DRUGS DISTRIBUTORS / TAB-SEPARATED
     // --------------------------------------------------------

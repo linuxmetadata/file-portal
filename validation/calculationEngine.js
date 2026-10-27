@@ -122,7 +122,10 @@ function calculate(record, product) {
 
     });
 
-    return result;
+    return {
+    ...record,
+    ...result
+};
 
 }
 

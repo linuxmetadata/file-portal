@@ -401,68 +401,126 @@ return (
 
 console.log("CHECKING LINUX STOCK STATEMENT");
 
-// Check only Linux Stock Statement reports
-if (/Stock\s*Statment/i.test(text) &&
-    /LINUX\s+LAB/i.test(text)) {
 
-    // Extract only MMM, YYYY
-    const match = text.match(
-        /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*,\s*(20\d{2})/i
-    );
+    // Check only Linux Stock Statement reports
+    if (/Stock\s*Statment/i.test(text) &&
+        /LINUX\s+LAB/i.test(text)) {
 
-    console.log("MONTH MATCH :", match);
+        // Supported formats:
+        // 1. Sep, 2026
+        // 2. FROM 01/09/2026 TO 30/09/2026
 
-    if (!match) {
-        console.log("MONTH NOT FOUND");
+        const monthNameMatch = text.match(
+            /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*,\s*(20\d{2})/i
+        );
+
+        const numericDateRangeMatch = text.match(
+            /from\s+(\d{1,2})\s*[\/-]\s*(\d{1,2})\s*[\/-]\s*(20\d{2})\s+to\s+(\d{1,2})\s*[\/-]\s*(\d{1,2})\s*[\/-]\s*(20\d{2})/i
+        );
+
+        console.log("MONTH NAME MATCH:", monthNameMatch);
+        console.log(
+            "NUMERIC DATE RANGE MATCH:",
+            numericDateRangeMatch
+        );
+
+        const monthMap = {
+            Jan: 0, Feb: 1, Mar: 2, Apr: 3,
+            May: 4, Jun: 5, Jul: 6, Aug: 7,
+            Sep: 8, Oct: 9, Nov: 10, Dec: 11
+        };
+
+        let pdfMonth;
+        let pdfYear;
+
+        // FORMAT 1: Numeric start and end dates
+        if (numericDateRangeMatch) {
+
+            const startDay = Number(numericDateRangeMatch[1]);
+            const startMonth = Number(numericDateRangeMatch[2]);
+            const startYear = Number(numericDateRangeMatch[3]);
+
+            const endDay = Number(numericDateRangeMatch[4]);
+            const endMonth = Number(numericDateRangeMatch[5]);
+            const endYear = Number(numericDateRangeMatch[6]);
+
+            const isValidDate = (day, month, year) => {
+                const date = new Date(
+                    Date.UTC(year, month - 1, day)
+                );
+
+                return (
+                    date.getUTCFullYear() === year &&
+                    date.getUTCMonth() === month - 1 &&
+                    date.getUTCDate() === day
+                );
+            };
+
+            if (
+                !isValidDate(startDay, startMonth, startYear) ||
+                !isValidDate(endDay, endMonth, endYear) ||
+                startYear !== endYear ||
+                startMonth !== endMonth ||
+                startDay > endDay
+            ) {
+                console.log("INVALID NUMERIC DATE RANGE");
+                return false;
+            }
+
+            pdfMonth = startMonth - 1;
+            pdfYear = startYear;
+
+        // FORMAT 2: Existing month-name format
+        } else if (monthNameMatch) {
+
+            pdfMonth = monthMap[
+                monthNameMatch[1].charAt(0).toUpperCase() +
+                monthNameMatch[1].slice(1).toLowerCase()
+            ];
+
+            pdfYear = Number(monthNameMatch[2]);
+
+        } else {
+
+            console.log("MONTH NOT FOUND");
+            return false;
+        }
+
+        // Existing previous-month validation
+        const today = new Date();
+
+        const previousMonth = new Date(
+            today.getFullYear(),
+            today.getMonth() - 1,
+            1
+        );
+
+        console.log(
+            "PDF MONTH:",
+            pdfMonth + 1,
+            "PDF YEAR:",
+            pdfYear
+        );
+
+        console.log(
+            "EXPECTED MONTH:",
+            previousMonth.getMonth() + 1,
+            "EXPECTED YEAR:",
+            previousMonth.getFullYear()
+        );
+
+        if (
+            pdfMonth === previousMonth.getMonth() &&
+            pdfYear === previousMonth.getFullYear()
+        ) {
+            console.log("VALID LINUX STOCK REPORT");
+            return true;
+        }
+
+        console.log("INVALID LINUX STOCK REPORT");
         return false;
     }
 
-    const monthMap = {
-        Jan: 0, Feb: 1, Mar: 2, Apr: 3,
-        May: 4, Jun: 5, Jul: 6, Aug: 7,
-        Sep: 8, Oct: 9, Nov: 10, Dec: 11
-    };
-
-    const pdfMonth = monthMap[
-        match[1].charAt(0).toUpperCase() +
-        match[1].slice(1).toLowerCase()
-    ];
-
-    const pdfYear = Number(match[2]);
-
-    // Previous month
-    const today = new Date();
-    const previousMonth = new Date(
-        today.getFullYear(),
-        today.getMonth() - 1,
-        1
-    );
-
-    console.log(
-        "PDF MONTH:",
-        pdfMonth + 1,
-        "PDF YEAR:",
-        pdfYear
-    );
-
-    console.log(
-        "EXPECTED MONTH:",
-        previousMonth.getMonth() + 1,
-        "EXPECTED YEAR:",
-        previousMonth.getFullYear()
-    );
-
-    if (
-        pdfMonth === previousMonth.getMonth() &&
-        pdfYear === previousMonth.getFullYear()
-    ) {
-        console.log("VALID LINUX STOCK REPORT");
-        return true;
-    }
-
-    console.log("INVALID LINUX STOCK REPORT");
-    return false;
-}
 
   /* =========================
      EXCEL MONTH + STOCK END DATE
@@ -2956,8 +3014,14 @@ if (!stockistResult || !stockistResult.valid) {
         fs.unlinkSync(file.path);
     }
 
-    return res.status(400).json({
-        error: stockistResult?.reason || "INVALID STOCKIST NAME"
+    return res.json({
+        success: true,
+        stockistWarning: true,
+        stockistMessage: "Stockist name not matched. Please confirm.",
+        stockistReason:
+            stockistResult?.reason || "INVALID STOCKIST NAME",
+        extractedStockistName:
+            stockistResult?.extractedName || ""
     });
 }
       /* CLEAN TEMP FILE */

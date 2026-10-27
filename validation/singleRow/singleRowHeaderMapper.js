@@ -559,6 +559,15 @@ const STRUCTURE_FIELD_MAP = Object.freeze({
         FREE: "free",
         OPENING_STOCK: "opening",
         PURCHASE: "purchase"
+    },
+        H034: {
+        PRODUCT_NAME: "product",
+        UNIT: "pack",
+        OP_ST: "opening",
+        ST_IN: "purchase",
+        ST_OUT: "sales",
+        BAL: "closing",
+        VALUE: "closingValue"
     }
 });
 
@@ -1099,6 +1108,15 @@ const STRUCTURE_SIGNATURES = Object.freeze({
         "FREE",
         "OPENINGSTOCK",
         "PURCHASE"
+    ],
+        H034: [
+        "PRODUCT_NAME",
+        "UNIT",
+        "OP_ST",
+        "ST_IN",
+        "ST_OUT",
+        "BAL",
+        "VALUE"
     ]
     
 });

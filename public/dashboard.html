@@ -65,11 +65,27 @@
   <input id="globalSearch" placeholder="Search..." onkeyup="applyFilters()" 
     style="padding:8px;width:220px;border-radius:5px;border:1px solid #ccc">
 
-  <div class="top-actions" style="display:flex;gap:10px">
-    <button onclick="clearFilters()">Clear Filters</button>
-    <button onclick="downloadExcel()">Download</button>
-    <button onclick="logout()">Logout</button>
+
+  <div class="top-actions" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <button type="button" onclick="window.location.href='/overview.html'">
+      Overview
+    </button>
+
+    <button type="button" onclick="window.location.href='/reports.html'">
+      Reports
+    </button>
+
+    <button
+  type="button"
+  onclick="window.location.href='/invalid-statements-upload.html'">
+  Invalid Statements Upload
+</button>
+
+    <button type="button" onclick="clearFilters()">Clear Filters</button>
+    <button type="button" onclick="downloadExcel()">Download</button>
+    <button type="button" onclick="logout()">Logout</button>
   </div>
+
 
 </div>
 
@@ -200,6 +216,129 @@
 
   </div>
 
+</div>
+
+<!-- STOCKIST NAME MISMATCH CONFIRMATION -->
+<div
+  id="stockistConfirmModal"
+  style="
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:1000000;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    box-sizing:border-box;
+    background:rgba(0,0,0,0.50);
+  "
+>
+  <div
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="stockistConfirmTitle"
+    style="
+      width:100%;
+      max-width:430px;
+      box-sizing:border-box;
+      padding:26px;
+      background:#fff;
+      border-radius:12px;
+      box-shadow:0 12px 40px rgba(0,0,0,0.25);
+      text-align:center;
+    "
+  >
+    <!-- EXPECTED STOCKIST NAME -->
+<div style="
+  margin-bottom:18px;
+  text-align:center;
+  color:#1e293b;
+">
+  <div style="
+    font-size:12px;
+    font-weight:600;
+    color:#64748b;
+    margin-bottom:6px;
+  ">
+    EXPECTED STOCKIST NAME
+  </div>
+
+  <div
+    id="expectedStockistName"
+    style="
+      font-size:19px;
+      font-weight:800;
+      overflow-wrap:anywhere;
+      margin-bottom:10px;
+    "
+  ></div>
+</div>
+
+<!-- WARNING ICON -->
+<!-- WARNING ICON -->
+<div style="font-size:32px;margin-bottom:10px;">&#9888;</div>
+
+    <h3
+      id="stockistConfirmTitle"
+      style="margin:0 0 12px;color:#b45309;font-size:20px;"
+    >
+      Stockist Name Not Matched
+    </h3>
+
+    <p
+      id="stockistConfirmMessage"
+      style="
+        margin:0 0 22px;
+        color:#374151;
+        font-size:15px;
+        line-height:1.6;
+      "
+    >
+      Stockist name not matched. Please confirm.
+    </p>
+
+    <div
+      style="
+        display:flex;
+        justify-content:center;
+        gap:12px;
+        flex-wrap:wrap;
+      "
+    >
+      <button
+        type="button"
+        onclick="cancelStockistMismatch()"
+        style="
+          padding:10px 24px;
+          border:1px solid #d1d5db;
+          border-radius:7px;
+          background:#fff;
+          color:#374151;
+          font-weight:600;
+          cursor:pointer;
+        "
+      >
+        Cancel
+      </button>
+
+      <button
+        id="confirmStockistBtn"
+        type="button"
+        onclick="confirmStockistMismatch()"
+        style="
+          padding:10px 24px;
+          border:none;
+          border-radius:7px;
+          background:#2563eb;
+          color:#fff;
+          font-weight:600;
+          cursor:pointer;
+        "
+      >
+        Confirm &amp; Continue
+      </button>
+    </div>
+  </div>
 </div>
 
 <script src="app.js"></script>

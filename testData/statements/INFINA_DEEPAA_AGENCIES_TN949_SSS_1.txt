@@ -1,0 +1,98 @@
+CH     M
+                    DEEPAA  AGENCIES - ERODE
+                    ================================================                        Page: 1
+ STOCK AND SALES STATEMENT FOR THE MONTH OF SEPTEMBER '2026           Run Date:30/09/2026   22:39:21
+ ====================================================================================================
+  PRODUCT NAME               OPEN  REC-  ADJ   ADJ TOTAL SALES CLOSE   ORD.QTY  EXCES    AUG      JUL
+                            STOCK  EIPT  (-)   (+) STOCK   QTY STOCK  (  1.00)  VALUE  SALES    SALES
+ ====================================================================================================
+SUP:LINUX LABORATORIES PVT LTD., MFR:4H LINUX - (INFINA)
+ ==================================================================================================================
+ ARIDAY 20MG TABS.    10'S     20    60    0   3      83    37    46       -9   1496     35        9
+ ARIDAY 15MG TABS.    10'S     27    60    0   0      87    44    43        1            47       21
+ AMINTOZ 100MG INJ.    1ML      9    10    4   4      19    15     4       11            11        2
+ AMINTOZ 100MG INJ.  5x2ML      3     0    0   0       3     0     3       -3    573      2        0
+ ARIDAY 5MG TABS.     10'S     41    50    0   0      91    34    57      -23   1508     57       46
+ ARIDAY 10MG TABS.    10'S     31    30    0   0      61    34    27        7            40       19
+ ARIDAY 2.5MG TABS.   10'S     24    30    0   0      54    30    24        6            29       29
+ ARIDAY 30MG TABS.    10'S      0     0    0   0       0     0     0        0             0        0
+ AMINTOZ TABS.        15'S    129   100    1   2     230   117   113        4           135      131
+ BENFICA CAPS.        10'S     35    50    0   0      85    21    64      -43   5140     45       45
+ BENFICA FORTE CAPS.  15'S     65    50    0   1     116    61    55        6            66       75
+ CARNIGLO TABS.       10'S     44     0    0   0      44    10    34      -24   4438      8       21
+ CARNIGLO M TABS.     15'S     43    10    0   0      53    31    22        9            19       36
+ COGNIZA 60MG INJ.     1'S      0     0    0   0       0     0     0        0             0        0
+ COGNIZA TABS.        10'S     65     0    1   1      65    29    36       -7   1377     18       45
+ DIVALID ER 250MG TAB.10'S     61    10    0   0      71    47    24       23            38       54
+ DIVALID ER 1GM TABS. 10'S     18     0    0   0      18    14     4       10             7       10
+ DIVALID ER 500MG TABS.10'     49    80    0   0     129    86    43       43            82       46
+ EPITRA ER 1GM TABS.  15'S     28    30    0   0      58    18    40      -22  11691     30       16
+ EPITRA INJ.           5ML      0     0    0   0       0     0     0        0             0        0
+ EPITRA 250MG TABS.   10'S     72    50    0   0     122    99    23       76            64       86
+ EPITRA 500MG TABS.   15'S     95   200    0   0     295   119   176      -57   8870    182      135
+ EPITRA 750MG TABS.   10'S    125     0    0   0     125    48    77      -29   4484     48       97
+ EPITRA RTU 500MG I.V.100M     16     0    0   0 #    16     2    14      -12   1109      0        0
+ GABAGESIC 300MG TABS.15'S     12    50    0   0      62    41    21       20            31       17
+ GABAGESIC GEL.       30GM      0     0    0   0       0     0     0        0             0        0
+ GABAGESIC GEL.       50GM    105     0    0   0     105    47    58      -11   3793     48       91
+ GABAGESIC M TABS.    15'S     50   110    0   0     160    92    68       24            68       78
+ GABAGESIC NT 100 TABS.15'     63    80    0   0     143    84    59       25            74       68
+ GABAGESIC NT 200MG TAB.10     23    50    0   0      73    41    32        9            20       21
+ GABAGESIC NT 400MG TAB.15     46    30    0   0      76    36    40       -4   1349     48       33
+ GABAGESIC PLUS TABS. 10'S    120   180    0   0     300   180   120       60           116      131
+ GABAGESIC 100MG TABS.15'S    148   100    0   0     248   128   120        8           148       82
+ LIVIZ TABS.          10'S      0     0    0   0       0     0     0        0             0        0
+ MITRAZAC 15MG TABS.  10'S      0     0    0   0       0     0     0        0             0        0
+ METHONAC 600MG TABS. 10'S     60     0    0   0      60    13    47      -34   5776     20       13
+ MITRAZAC 7.5MG TABS. 10'S      0     0    0   0       0     0     0        0             0        0
+ NEULORA 1MG TABS.    10'S    108   150    0   0     258   149   109       40           167       92
+ NEULORA 2MG TABS.    10'S    165   250    0   0     415   290   135      155           255      267
+ OLINSTAB 10MG TABS.  10'S      5    40    0   0      45    23    22        1            24       13
+ OLINSTAB F TABS.     10'S     36    30    0   0      66    37    29        8            18       28
+ OLINSTAB 5MG TABS.   10'S     31    30    0   0      61    40    21       19            37       42
+ OLINSTAB 2.5MG TABS. 10'S     65    40    0   0     105    55    50        5            25       47
+ OLINSTAB 7.5MG TABS. 10'S     30     0    0   0 #    30    10    20      -10    713      3        0
+ PALMIDA TABS.        15'S     60    80    2   7     145    94    51       43            74       85
+ PRONATE EZ TABS.     10'S     39    50    0   0      89    54    35       19            50       41
+ PRONATE F TABS.      10'S     39     0    0   0 #    39    22    17        5             3       14
+ PRONATE 10MG TABS.   10'S     46    20    0   0      66    22    44      -22    245     34       40
+ PRONATE 20MG TABS.   10'S     20   150    0   0     170    63   107      -44   1103    103       50
+ PRONATE 40MG TABS.   10'S     14    10    0   0      24    11    13       -2     54     11        6
+ PERCOMPA 2MG TABS.   10'S      0     0    0   0       0     0     0        0             0        0
+ PERCOMPA 4MG TABS.   10'S     33    30    0   0      63    21    42      -21   2914     30       28
+ PRONATE TR 40MG TABS.10'S     60     0    0   0      60    15    45      -30    818     16       47
+ PERCOMPA 6MG TABS.   10'S      0     0    0   0       0     0     0        0             0        0
+ QLINO CAPS.          10'S     26    40    0   0      66    22    44      -22  10876     40       30
+ VENLITE CZ 100MG TABS.10'     26     0    0   0      26    11    15       -4    926     13        6
+                    DEEPAA  AGENCIES - ERODE
+                    ================================================                        Page: 2
+ STOCK AND SALES STATEMENT FOR THE MONTH OF SEPTEMBER '2026           Run Date:30/09/2026   22:39:21
+ ====================================================================================================
+  PRODUCT NAME               OPEN  REC-  ADJ   ADJ TOTAL SALES CLOSE   ORD.QTY  EXCES    AUG      JUL
+                            STOCK  EIPT  (-)   (+) STOCK   QTY STOCK  (  1.00)  VALUE  SALES    SALES
+ ====================================================================================================
+SUP:LINUX LABORATORIES PVT LTD., MFR:4H LINUX - (INFINA)
+ ==================================================================================================================
+ VALEPTOL CR 200MG TAB.10'     53    60    0   0     113    62    51       11            62       58
+ VALEPTOL CR 300MG TAB.10'     72   200    0   0     272   154   118       36           181      115
+ VALEPTOL CR 500MG TAB.10'     28    30    0   0      58    31    27        4            30       29
+ VENLITE OD 100MG TABS.10'     31    10    0   0      41    23    18        5            13       21
+ VENLITE OD 50MG TABS.10'S     32    90    0   0     122    70    52       18            74       57
+ VALEPTOL ORAL SOLUT.100ML      0     0    0   0       0     0     0        0             0        0
+ VALEPTOL SOLUTION.  200ML     31    30    0   0      61    21    40      -19   2086     34       19
+ VENLITE CZ 50MG TABS.10'S     23    70    0   0      93    49    44        5            57       23
+ ----------------------------------------------------------------------------------------------------
+  Cl.Stk Value   Ex.Stk.Value    SEP-SALES      AUG-SALES      JUL-SALES
+     355031.24       71350.04    362700.52      364484.44      344589.57
+ PERUM-----------------------------------------------------------------------------------------------
+ - Excess Stock     ORDER DATE:02/10/2026  TIME:3.30PM  
+  
+     ----- SALES NOT ACCOUNTED FOR ORDER QTY ----
+  
+ LONG PENDING CLAIMS AS ON 30/09/26                                                Page: 2 
+------------------------------------------------------------------------------------------------
+   Referance No. / Date   Claim Type Amount Sent Throu /Referance & Date    C/R Ref.No.Dt Amount
+ ---------------------------------------Rs.------------------------------------------------------
+ 69403           15/07/26 Exp/Br/Sp   13596 COURIER    18939876  02.09.2026CN 1718,1719/05.09.2026  24890
+ 69887           31/08/26 Exp/Br/Sp   30330 COURIER    18946117  18.09.2026                       
+                         TOTAL   Rs.  43927                                                24890

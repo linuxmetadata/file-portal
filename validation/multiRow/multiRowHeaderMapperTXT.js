@@ -1137,11 +1137,87 @@ function buildJyotiMedicalHallPhysicalColumns(headerLines) {
  *   Jun Sales
  *   May Sales
  */
+/* ============================================================
+ * INFINA 2-ROW FIXED-WIDTH STOCK & SALES STRUCTURE
+ * ============================================================ */
+
+function isInfinaStockSalesHeader(headerLines) {
+    if (!Array.isArray(headerLines) || headerLines.length < 2) {
+        return false;
+    }
+
+    const combined = headerLines
+        .map(line => normalizeHeader(line))
+        .join(" ");
+
+    return (
+        combined.includes("PRODUCT NAME") &&
+        combined.includes("OPEN") &&
+        combined.includes("STOCK") &&
+        combined.includes("REC") &&
+        combined.includes("EIPT") &&
+        combined.includes("ADJ") &&
+        combined.includes("TOTAL") &&
+        combined.includes("SALES") &&
+        combined.includes("CLOSE") &&
+        combined.includes("ORD QTY") &&
+        combined.includes("EXCES") &&
+        combined.includes("AUG") &&
+        combined.includes("JUL")
+    );
+}
+
+function buildInfinaStockSalesPhysicalColumns(headerLines) {
+    const starts = [
+        0, 29, 35, 41, 47, 51,
+        59, 63, 71, 80, 87, 96
+    ];
+
+    const definitions = [
+        { header: "Product Name", commonField: "product" },
+        { header: "Opening Stock", commonField: "opening" },
+        { header: "Receipt", commonField: "purchase" },
+        { header: "Adj (-)", commonField: "adjustment" },
+        { header: "Adj (+)", commonField: "adjustment1" },
+        { header: "Total Stock", commonField: "totalStock" },
+        { header: "Sales Qty", commonField: "sales" },
+        { header: "Close Stock", commonField: "closing" },
+        { header: "Ord.Qty", commonField: null },
+        { header: "Exces Value", commonField: null },
+        { header: "Aug Sales", commonField: null },
+        { header: "Jul Sales", commonField: null }
+    ];
+
+    const columns = definitions.map((definition, index) => ({
+        header: definition.header,
+        normalizedHeader: normalizeHeader(definition.header),
+        commonField: definition.commonField,
+        parentHeader: null,
+        childHeader: definition.header,
+        headerRow: index === 0 ? 0 : 1,
+        position: starts[index],
+        physicalStart: starts[index],
+        physicalEnd: starts[index + 1] ?? null,
+        end: starts[index + 1] ?? null,
+        source: definition.commonField
+            ? "LOGICAL_POSITION"
+            : "CHILD_UNIDENTIFIED"
+    }));
+
+    return {
+        success: true,
+        columns,
+        unidentified: columns.filter(column => !column.commonField),
+        diagnostics: {
+            headerRows: headerLines.length,
+            structure: "INFINA_12_COLUMN_FIXED_WIDTH",
+            columnCount: columns.length
+        }
+    };
+}
+
 function isDermascienceHeader(headerLines) {
-    if (
-        !Array.isArray(headerLines) ||
-        headerLines.length < 2
-    ) {
+    if (!Array.isArray(headerLines) || headerLines.length < 2) {
         return false;
     }
 
@@ -1169,8 +1245,6 @@ function isDermascienceHeader(headerLines) {
 function buildDermasciencePhysicalColumns(headerLines) {
     /*
      * Boundaries are taken from the actual two-row header geometry.
-     * Do not infer boundaries from individual words such as
-     * PRODUCT / NAME or REC- / EIPT.
      */
     const row0 = String(headerLines[0] || "");
     const row1 = String(headerLines[1] || "");
@@ -1240,8 +1314,8 @@ function buildDermasciencePhysicalColumns(headerLines) {
         { header: "Product Name", commonField: "product" },
         { header: "Opening Stock", commonField: "opening" },
         { header: "Receipt", commonField: "purchase" },
-        { header: "Adj (-)", commonField: null },
-        { header: "Adj (+)", commonField: null },
+        { header: "Adj (-)", commonField: "adjustment" },
+        { header: "Adj (+)", commonField: "adjustment1" },
         { header: "Total Stock", commonField: null },
         { header: "Sales Qty", commonField: "sales" },
         { header: "Close Stock", commonField: "closing" },
@@ -2473,11 +2547,17 @@ function buildPhysicalColumns(headerLines) {
      * fragments such as OPEN/STOCK and REC-/EIPT remain one
      * logical column.
      */
-    if (isDermascienceHeader(headerLines)) {
-        return buildDermasciencePhysicalColumns(
-            headerLines
-        );
-    }
+    if (isInfinaStockSalesHeader(headerLines)) {
+    return buildInfinaStockSalesPhysicalColumns(
+        headerLines
+    );
+}
+
+if (isDermascienceHeader(headerLines)) {
+    return buildDermasciencePhysicalColumns(
+        headerLines
+    );
+}
 
     /*
      * CHELLAS is a known two-row fixed-width structure with logical

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Statement Automation Portal — Overview</title>
+<link rel="stylesheet" href="overview.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="brand"><span class="brand-mark"><i data-lucide="file-text"></i></span><span><b>Statement</b><small>AUTOMATION PORTAL</small></span></div>
+  <div class="nav-label">WORKSPACE</div>
+  <nav>
+    <a class="nav-item active" href="/overview.html"><i data-lucide="layout-dashboard"></i><span>Overview</span></a>
+    <a class="nav-item" href="/dashboard.html"><i data-lucide="cloud-upload"></i><span>Upload Statements</span></a>
+  </nav>
+  <div class="signed-in"><span class="avatar" id="userInitial">U</span><span class="user-copy"><small>Signed in as</small><b id="signedInUser">Portal User</b></span><button id="logoutButton" title="Log out" aria-label="Log out"><i data-lucide="log-out"></i></button></div>
+</aside>
+<main class="main">
+  <header class="page-heading"><div><h1>Today's Overview</h1><p>Your current statement summary</p></div><span class="role-chip" id="roleChip">Portal</span></header>
+  <section class="overview-grid" aria-label="Statement summary">
+    <button class="summary-card red" data-filter="awsPending"><span class="icon"><i data-lucide="cloud-upload"></i></span><i class="arrow" data-lucide="arrow-up-right"></i><strong id="awsPendingCount">—</strong><b>AWS Pending</b><small>Awaiting submission</small></button>
+    <button class="summary-card blue" data-filter="awsSubmitted"><span class="icon"><i data-lucide="cloud-check"></i></span><i class="arrow" data-lucide="arrow-up-right"></i><strong id="awsSubmittedCount">—</strong><b>AWS Submitted</b><small>Statements received</small></button>
+    <button class="summary-card orange" data-filter="sssPending"><span class="icon"><i data-lucide="files"></i></span><i class="arrow" data-lucide="arrow-up-right"></i><strong id="sssPendingCount">—</strong><b>SSS Pending</b><small>Awaiting submission</small></button>
+    <button class="summary-card green" data-filter="sssSubmitted"><span class="icon"><i data-lucide="check-circle"></i></span><i class="arrow" data-lucide="arrow-up-right"></i><strong id="sssSubmittedCount">—</strong><b>SSS Submitted</b><small>Statements received</small></button>
+    <button class="summary-card purple" data-filter="zeroSale"><span class="icon"><i data-lucide="banknote"></i></span><i class="arrow" data-lucide="arrow-up-right"></i><strong id="zeroSaleCount">—</strong><b>Zero Sale</b><small>Zero-sale stockists</small></button>
+    <button class="summary-card amber" data-filter="noAws"><span class="icon"><i data-lucide="cloud-off"></i></span><i class="arrow" data-lucide="arrow-up-right"></i><strong id="noAwsCount">—</strong><b>No AWS</b><small>Stockists without an AWS file</small></button>
+  </section>
+  <section class="quick-actions">
+    <div class="section-heading"><h2>Quick Actions</h2><p>Shortcuts to common tasks</p></div>
+    <div class="action-grid">
+      <div class="action-card"><span class="action-icon purple"><i data-lucide="network"></i></span><span><b>Hierarchy</b><small>View team hierarchy</small></span><i class="chevron" data-lucide="chevron-right"></i></div>
+      <a class="action-card" href="/dashboard.html"><span class="action-icon blue"><i data-lucide="cloud-upload"></i></span><span><b>Upload Statements</b><small>Upload AWS &amp; SSS statements</small></span><i class="chevron" data-lucide="chevron-right"></i></a>
+      <a class="action-card" href="/reports.html">
+  <span class="action-icon amber">
+    <i data-lucide="chart-no-axes-column"></i>
+  </span>
+  <span>
+    <b>Reports</b>
+    <small>Download statements and extracted masters</small>
+  </span>
+  <i class="chevron" data-lucide="chevron-right"></i>
+</a>
+      <div class="action-card"><span class="action-icon coral"><i data-lucide="store"></i></span><span><b>Stockists</b><small>View stockist details</small></span><i class="chevron" data-lucide="chevron-right"></i></div>
+    </div>
+  </section>
+  <div id="statusMessage" role="status"></div>
+</main>
+<script src="overview.js"></script>
+</body></html>

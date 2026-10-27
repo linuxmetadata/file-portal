@@ -72,7 +72,7 @@ const {
 const MASTER_DIR =
     path.resolve(
         __dirname,
-        "../../storage/extraction/SSS"
+        "../../storage/extraction/WORKING"
     );
 
 const MASTER_FILE =
@@ -1519,14 +1519,13 @@ async function processExcelFile(
 
 
         if (
-            ![
-                ".xlsx",
-                ".xls",
-                ".xlsm"
-            ].includes(
-                extension
-            )
-        ) {
+    ![
+        ".xlsx",
+        ".xls",
+        ".xlsm",
+        ".csv"
+    ].includes(extension)
+) {
 
             return {
                 success: false,

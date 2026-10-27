@@ -1,0 +1,38 @@
+
+                   ARHAM PHARMACEUTICALS
+                        SHOP NO 1, LAXMI NIWAS SOCIETY,
+                    893, SADASHIV PETH, PUNE. PH - 29985373
+                    24447373/9890737373 FSSAI-21519168000860
+                           Stock and Sales Statement
+                      Company : LINUX LABORATORIES PVT LTD
+                            01/09/2026 to 30/09/2026
+                                                                      Page No. 1
+                             From :01/09/2026 To :30/09/2026
+-----------------------------------------------------------------------------------------
+Product Name                  |Unit        |  Op.St|  St-In| St-Out|    Bal|       Value|
+-----------------------------------------------------------------------------------------
+METIS - G1                     10 TAB             0       0       0       0         0.00
+METIS - G2                     10 TAB             0       0       0       0         0.00
+RDL - F                        10 TAB             0       0       0       0         0.00
+RDL - GOLD 10                  10 CAPS           10       0       0      10      1520.00
+RDL - GOLD 20                  10 CAPS           10       0       0      10      2024.70
+REXITE FORTE CAPS              10 CAPS           30       0       0      30      3780.01
+TRIEXER 1 MG                   10 TAB            30      40      63       7       878.95
+TRIEXER 2                      10 TAB            10     200     193      17      3269.12
+VYSOV - D - 10                 10 TAB             1      34      35       0         0.00
+VYSOV 50                       14 TAB             1      97      65      33      5168.26
+VYSOV DM 100/10/1000           10 TAB             1      13       0      14       150.05
+VYSOV DM 100/10/500            10 TAB             9      60      60       9      1223.46
+VYSOV M 50/1000                10 TAB            10       6       0      16         0.00
+VYSOV M 50/500                 15 TAB             0     183      24     159     18645.74
+VYSOV XR 100                   15 TAB             2       3       0       5       381.58
+-----------------------------------------------------------------------------------------
+Total Opening :     14773.93
+Total St-In   :     86866.00
+Total St-Out  :     64598.06
+Total Closing :     37041.87
+ 
+Total Purchase Value       :     86866.00
+Total Sale Value(At Cost)  :     64598.06
+Total Sale Value(At S.Rate):     65709.55
+=========================================================================================

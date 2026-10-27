@@ -60,7 +60,7 @@ async function listPortalStockists({ user = "", role = "" } = {}) {
               AND f.statement_type = 'AWS'
         ) aws ON TRUE
 
-        LEFT JOIN LATERAL (
+                LEFT JOIN LATERAL (
             SELECT STRING_AGG(
                 f.file_id::text,
                 ','

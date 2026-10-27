@@ -48,6 +48,7 @@ const QUANTITY_VALUE_PAIRS = [
     ["Common Credit", "Common Credit Value"],
     ["Common Debit", "Common Debit Value"],
     ["Common Adjustment", "Common Adjustment Value"],
+    ["Common Adjustment1", "Common Adjustment1 Value"],
     ["Common Closing", "Common Closing Value"],
     ["Common Closing Free", "Common Closing Free Value"],
     ["Common Total Stock", "Common Total Stock Value"]

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Statement Automation Portal — Reports</title><link rel="stylesheet" href="overview.css"><link rel="stylesheet" href="reports.css"><script src="https://unpkg.com/lucide@latest"></script></head>
+<body><aside class="sidebar"><div class="brand"><span class="brand-mark"><i data-lucide="file-text"></i></span><span><b>Statement</b><small>AUTOMATION PORTAL</small></span></div><div class="nav-label">WORKSPACE</div><nav>
+<a class="nav-item" href="/overview.html"><i data-lucide="layout-dashboard"></i><span>Overview</span></a><a class="nav-item" href="/dashboard.html"><i data-lucide="cloud-upload"></i><span>Upload Statements</span></a><a class="nav-item active" href="/reports.html"><i data-lucide="chart-no-axes-column"></i><span>Reports</span></a></nav>
+<div class="signed-in"><span class="avatar" id="userInitial">A</span><span class="user-copy"><small>Signed in as</small><b id="signedInUser">Administrator</b></span><button id="logoutButton" title="Log out" aria-label="Log out"><i data-lucide="log-out"></i></button></div></aside>
+<main class="main reports-main"><header class="page-heading"><div><h1>Reports &amp; Downloads</h1><p>Download submitted statements and extracted master files</p></div><span class="role-chip">Admin only</span></header>
+
+<section class="report-panel">
+    
+<div class="panel-heading"><div><h2>Statement Downloads</h2><p>Select one or more AWS/SSS statements to download.</p></div><button class="btn secondary" id="refreshButton" type="button"><i data-lucide="refresh-cw"></i> Refresh</button></div>
+<div class="filters"><input id="searchInput" type="search" placeholder="Search division, state, code, filename…" aria-label="Search statements"><select id="typeFilter" aria-label="Filter statement type"><option value="">All types</option><option value="AWS">AWS</option><option value="SSS">SSS</option></select><button class="btn secondary" id="selectVisibleButton" type="button">Select visible</button><button class="btn secondary" id="clearSelectionButton" type="button">Clear selection</button></div>
+<div class="selection-bar"><span id="statementCount">Loading statements…</span><button class="btn primary" id="downloadZipButton" type="button" disabled><i data-lucide="archive"></i> Download selected ZIP</button></div>
+<div class="table-wrap"><table><thead><tr><th><input id="selectAllCheckbox" type="checkbox" aria-label="Select all visible statements"></th><th>Type</th><th>Division</th><th>State</th><th>Code</th><th>Original filename</th><th>Uploaded by</th><th>Uploaded at</th><th>Action</th></tr></thead><tbody id="statementTableBody"><tr><td colspan="9" class="empty">Loading…</td></tr></tbody></table></div></section>
+
+
+<section class="report-panel">
+  <div class="panel-heading">
+    <div>
+      <h2>Download All Statements</h2>
+      <p>Download all regular or invalid statements in separate ZIP files, organized by Division, State, and Type.</p>
+    </div>
+  </div>
+
+  <div class="master-grid">
+    <article class="master-card">
+      <span class="master-icon">
+        <i data-lucide="archive"></i>
+      </span>
+      <div>
+        <b>All Regular Statements</b>
+        <small>ALL Division Statements.zip</small>
+      </div>
+      <button
+        class="btn primary"
+        id="downloadAllRegularZipButton"
+        type="button">
+        Download ZIP
+      </button>
+    </article>
+
+    <article class="master-card">
+      <span class="master-icon">
+        <i data-lucide="archive-restore"></i>
+      </span>
+      <div>
+        <b>All Invalid Statements</b>
+        <small>ALL Division Invalid Statements.zip</small>
+      </div>
+      <button
+        class="btn primary"
+        id="downloadAllInvalidZipButton"
+        type="button">
+        Download ZIP
+      </button>
+    </article>
+  </div>
+</section>
+
+
+<section class="report-panel">
+    
+    
+
+<div class="panel-heading">
+  <div>
+    <h2>Extracted Master Downloads</h2>
+    <p>Only the approved master files are available here.</p>
+  </div>
+
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+    <button
+      class="btn"
+      id="deleteAllExtractionMastersButton"
+      type="button"
+      style="background:#dc2626;color:#fff;"
+    >
+      <i data-lucide="trash-2"></i>
+      Delete All Extraction Masters
+    </button>
+
+    <button
+      class="btn"
+      id="deleteAllStatementsButton"
+      type="button"
+      style="background:#b91c1c;color:#fff;"
+    >
+      <i data-lucide="trash-2"></i>
+      Delete All Statements
+    </button>
+  </div>
+</div>
+
+
+    
+    
+<p>Only the approved master files are available here.</p></div></div><div class="master-grid">
+<article class="master-card"><span class="master-icon"><i data-lucide="file-spreadsheet"></i></span><div><b>Excel Master Extraction</b><small>EXCEL / Master_Extraction.xlsx</small></div><button class="btn primary master-download" data-master="excel" type="button">Download</button></article>
+<article class="master-card"><span class="master-icon"><i data-lucide="file-text"></i></span><div><b>TXT Master Extraction</b><small>TXT / Master_Extraction.xlsx</small></div><button class="btn primary master-download" data-master="txt" type="button">Download</button></article>
+<article class="master-card"><span class="master-icon"><i data-lucide="file-check"></i></span><div><b>SSS Matched Master</b><small>SSS / Matched_Master_Extraction.xlsx</small></div><button class="btn primary master-download" data-master="sss-matched" type="button">Download</button></article>
+</div></section><div id="statusMessage" role="status" aria-live="polite"></div></main><script src="reports.js"></script></body></html>

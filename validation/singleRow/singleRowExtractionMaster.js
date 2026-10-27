@@ -24,6 +24,15 @@
 const fs = require("fs");
 const path = require("path");
 const XLSX = require("xlsx");
+const crypto = require("crypto");
+const pool = require("../../services/postgresPool");
+
+const {
+    MASTER_COLUMNS,
+    VALUE_COLUMNS,
+    MATCH_COLUMNS,
+    createEmptyMasterRow
+} = require("../../services/masterSchema");
 
 const {
     extractSingleRowData
@@ -70,7 +79,7 @@ const {
 const MASTER_DIR =
     path.resolve(
         __dirname,
-        "../../storage/extraction/SSS"
+        "../../storage/extraction/WORKING"
     );
 
 const MASTER_FILE =
@@ -96,12 +105,19 @@ const COMMON_COLUMNS = [
     "Common Purchase Return",
     "Common Purchase Return Free",
     "Common Replacement",
+    "Common Sales Replacement",
     "Common Sales",
     "Common Sales Free",
     "Common Sales Value",
     "Common Sales Last",
     "Common Sales Return",
     "Common Sales Return Free",
+    "Common TRN IN",
+    "Common TRN OUT",
+    "Common Credit",
+    "Common Debit",
+    "Common Adjustment",
+    "Common Adjustment1",
     "Common Closing",
     "Common Closing Free",
     "Common Closing Value",
@@ -598,6 +614,8 @@ function createMultiRowMappedRecord(
         "purchaseReturn",
         "purchaseReturnFree",
         "purchaseReturnFreeQty",
+        "adjustment",
+        "adjustment1",
         "replacement",
         "sales",
         "salesFree",
@@ -841,6 +859,16 @@ function createMasterRow(
             common.salesReturnFreeQty
         );
 
+        row["Common Adjustment"] =
+        safeValue(
+            common.adjustment
+        );
+
+    row["Common Adjustment1"] =
+        safeValue(
+            common.adjustment1
+        );
+
     row["Common Closing"] =
         safeValue(
             common.closing
@@ -1079,181 +1107,232 @@ function mergeHeaders(
 }
 
 // ============================================================
-// APPEND TO MASTER
+// SAVE TXT EXTRACTION ROWS TO POSTGRESQL
 // ============================================================
 
-function appendToMaster(
-    rows
-) {
 
-    ensureMasterDirectory();
+async function saveRowsToPostgres(rows, portalData = {}) {
+    if (!Array.isArray(rows)) {
+        throw new Error("TXT extraction rows must be an array.");
+    }
 
-    const existing =
-        readExistingMaster();
+    const uploadCategory = String(
+        portalData.uploadCategory ?? "REGULAR"
+    ).trim().toUpperCase();
 
-    const existingRows =
-        existing.rows || [];
-
-    const existingHeaders =
-        existing.headers || [];
-
-    const existingKeys =
-        new Set(
-            existingRows.map(
-                recordKey
-            )
-        );
-
-    const addedRows = [];
-
-    for (
-        const row
-        of rows
-    ) {
-
-        const key =
-            recordKey(
-                row
-            );
-
-        if (
-            existingKeys.has(key)
-        ) {
-            continue;
-        }
-
-        existingKeys.add(key);
-
-        addedRows.push(
-            row
+    if (!["REGULAR", "INVALID"].includes(uploadCategory)) {
+        throw new Error(
+            `Invalid TXT upload category: ${uploadCategory}`
         );
     }
 
-    const allRows =
-        existingRows.concat(
-            addedRows
-        );
+    if (rows.length === 0) {
+        return {
+            success: true,
+            addedRecords: 0,
+            skippedDuplicates: 0
+        };
+    }
 
-    // --------------------------------------------------------
-    // FIXED MASTER SCHEMA
-    // --------------------------------------------------------
-    //
-    // Source-specific headers such as PACKG, C.STOCK, Pr.Sale,
-    // DAY, etc. must never become new physical Excel columns.
-    // They remain available in the support columns.
-    //
-    // Existing legacy source-header columns are intentionally
-    // excluded when rebuilding the workbook so the master remains
-    // stable across structures.
-    // --------------------------------------------------------
+    const client = await pool.connect();
 
-    const MASTER_COLUMNS = [
-        ...SYSTEM_COLUMNS,
-        ...SUPPORT_COLUMNS,
-        ...COMMON_COLUMNS
-    ];
+    let addedRecords = 0;
+    let skippedDuplicates = 0;
 
-    const headers = MASTER_COLUMNS;
+    try {
+        await client.query("BEGIN");
 
-    const worksheet =
-        XLSX.utils.json_to_sheet(
-            allRows,
-            {
-                header: headers
+        await client.query(`
+            ALTER TABLE "statement_extraction_master"
+            ADD COLUMN IF NOT EXISTS "Common Adjustment1" TEXT
+        `);
+
+        await client.query(`
+            ALTER TABLE "statement_extraction_master"
+            ADD COLUMN IF NOT EXISTS "Common Adjustment1 Value" TEXT
+        `);
+
+        await client.query(`
+            ALTER TABLE "statement_extraction_master"
+            ADD COLUMN IF NOT EXISTS "Upload Category" TEXT
+        `);
+
+        for (const row of rows) {
+            const sourceFile = String(
+                row["Source File"] ?? ""
+            ).trim();
+
+            const sourceRow = String(
+                row["Source Row"] ?? ""
+            ).trim();
+
+            if (!sourceFile || !sourceRow) {
+                throw new Error(
+                    "Source File and Source Row are required for TXT extraction records."
+                );
             }
-        );
 
-    worksheet["!cols"] =
-        headers.map(
-            header => {
+            const duplicate = await client.query(
+                `
+                SELECT 1
+                FROM "statement_extraction_master"
+                WHERE UPPER(TRIM("Source File")) =
+                      UPPER(TRIM($1))
+                  AND TRIM("Source Row") = TRIM($2)
+                  AND COALESCE(
+                      UPPER(TRIM("Upload Category")),
+                      'REGULAR'
+                  ) = $3
+                LIMIT 1
+                `,
+                [sourceFile, sourceRow, uploadCategory]
+            );
 
-                if (
-                    header ===
-                    "Source File"
-                ) {
-                    return {
-                        wch: 45
-                    };
-                }
-
-                if (
-                    header ===
-                    "Raw Source Values"
-                ) {
-                    return {
-                        wch: 90
-                    };
-                }
-
-                if (
-                    header ===
-                    "Header Mapping"
-                ) {
-                    return {
-                        wch: 100
-                    };
-                }
-
-                if (
-                    header ===
-                    "Unidentified Headers"
-                ) {
-                    return {
-                        wch: 40
-                    };
-                }
-
-                if (
-                    header ===
-                    "Product Name"
-                ) {
-                    return {
-                        wch: 35
-                    };
-                }
-
-                return {
-                    wch: 18
-                };
+            if (duplicate.rowCount > 0) {
+                skippedDuplicates++;
+                continue;
             }
-        );
 
-    const workbook =
-        XLSX.utils.book_new();
+            const metadata = {
+                division: String(
+                    portalData.division ?? ""
+                ).trim(),
+                bmHQ: String(
+                    portalData.bmHQ ?? ""
+                ).trim(),
+                code: String(
+                    portalData.code ?? ""
+                ).trim(),
+                stockistName: String(
+                    portalData.stockistName ?? ""
+                ).trim()
+            };
 
-    XLSX.utils.book_append_sheet(
-        workbook,
-        worksheet,
-        "Raw Extraction"
-    );
+            const normalizedRow = createEmptyMasterRow();
 
-    XLSX.writeFile(
-        workbook,
-        MASTER_FILE
-    );
+            normalizedRow["Division"] = metadata.division;
+            normalizedRow["BM HQ"] = metadata.bmHQ;
+            normalizedRow["Code"] = metadata.code;
+            normalizedRow["Stockist Name"] =
+                metadata.stockistName;
+
+            for (const column of MASTER_COLUMNS) {
+                if (
+                    Object.prototype.hasOwnProperty.call(
+                        row,
+                        column
+                    )
+                ) {
+                    normalizedRow[column] = row[column] ?? "";
+                }
+            }
+
+            normalizedRow["Source Sheet"] = "";
+
+            normalizedRow["Record ID"] = crypto
+                .createHash("sha256")
+                .update(JSON.stringify({
+                    uploadCategory,
+                    division: metadata.division.toUpperCase(),
+                    code: metadata.code.toUpperCase(),
+                    sourceFile: sourceFile
+                        .split(/[\\/]/)
+                        .pop()
+                        .toUpperCase(),
+                    sourceRow,
+                    statementStructure: String(
+                        row["Statement Structure"] ?? ""
+                    ).trim().toUpperCase(),
+                    rawSourceValues: String(
+                        row["Raw Source Values"] ?? ""
+                    ).trim(),
+                    headerMapping: String(
+                        row["Header Mapping"] ?? ""
+                    ).trim()
+                }))
+                .digest("hex");
+
+            normalizedRow["Match Status"] = "PENDING";
+
+            for (const column of VALUE_COLUMNS) {
+                normalizedRow[column] = "";
+            }
+
+            for (const column of MATCH_COLUMNS.slice(1)) {
+                normalizedRow[column] = "";
+            }
+
+            const columns = [
+                ...MASTER_COLUMNS,
+                "Upload Category"
+            ];
+
+            const quotedColumns = columns.map(
+                column => `"${column.replace(/"/g, '""')}"`
+            );
+
+            const placeholders = columns.map(
+                (_, index) => `$${index + 1}`
+            );
+
+            const values = MASTER_COLUMNS.map(column => {
+                const value = normalizedRow[column];
+
+                if (value === null || value === undefined) {
+                    return "";
+                }
+
+                return typeof value === "object"
+                    ? JSON.stringify(value)
+                    : String(value);
+            });
+
+            values.push(uploadCategory);
+
+            await client.query(
+                `
+                INSERT INTO "statement_extraction_master"
+                    (${quotedColumns.join(", ")})
+                VALUES (${placeholders.join(", ")})
+                `,
+                values
+            );
+
+            addedRecords++;
+        }
+
+        await client.query("COMMIT");
+
+        return {
+            success: true,
+            addedRecords,
+            skippedDuplicates
+        };
+    } catch (error) {
+        await client.query("ROLLBACK");
+        throw error;
+    } finally {
+        client.release();
+    }
+}
+
+
+// ============================================================
+// APPEND TO MASTER
+// ============================================================
+
+async function appendToMaster(rows, portalData = {}) {
+    const result = await saveRowsToPostgres(rows, portalData);
 
     return {
-
         success: true,
-
-        masterFile:
-            MASTER_FILE,
-
-        existingRecords:
-            existingRows.length,
-
-        addedRecords:
-            addedRows.length,
-
-        skippedDuplicates:
-            rows.length -
-            addedRows.length,
-
-        totalRecords:
-            allRows.length,
-
-        columns:
-            headers
+        masterFile: null,
+        storage: "POSTGRESQL",
+        existingRecords: 0,
+        addedRecords: result.addedRecords,
+        skippedDuplicates: result.skippedDuplicates,
+        totalRecords: result.addedRecords,
+        columns: rows.length > 0 ? Object.keys(rows[0]) : []
     };
 }
 
@@ -1261,8 +1340,10 @@ function appendToMaster(
 // PROCESS ONE FILE
 // ============================================================
 
-function processSingleRowFile(
-    filePath
+async function processSingleRowFile(
+    filePath,
+    originalName,
+    portalData = {}
 ) {
 
     const extraction =
@@ -1306,15 +1387,19 @@ function processSingleRowFile(
             record =>
                 createMasterRow(
                     record,
-                    extraction,
+                    {
+                        ...extraction,
+                        file: originalName || extraction.file
+                    },
                     mapped.header
                 )
         );
 
     const result =
-        appendToMaster(
-            rows
-        );
+    await appendToMaster(
+        rows,
+        portalData
+    );
 
     return {
         ...result,
@@ -1326,8 +1411,10 @@ function processSingleRowFile(
     };
 }
 
-function processMultiRowFile(
-    filePath
+async function processMultiRowFile(
+    filePath,
+    originalName,
+    portalData = {}
 ) {
 
     const extraction =
@@ -1372,8 +1459,7 @@ function processMultiRowFile(
                 return createMasterRow(
                     mappedRecord,
                     {
-                        file:
-                            extraction.file,
+                        file: originalName || extraction.file,
 
                         structure:
                             extraction?.mapping?.diagnostics?.structure ||
@@ -1393,9 +1479,10 @@ function processMultiRowFile(
         );
 
     const result =
-        appendToMaster(
-            rows
-        );
+    await appendToMaster(
+        rows,
+        portalData
+    );
 
     return {
         ...result,
@@ -1411,9 +1498,7 @@ function processMultiRowFile(
     };
 }
 
-function processFile(
-    filePath
-) {
+async function processFile(filePath, originalName, portalData = {}) {
 
     if (!filePath) {
         return {
@@ -1449,9 +1534,11 @@ function processFile(
             "MULTI_ROW"
     ) {
 
-        return processMultiRowFile(
-            filePath
-        );
+        return await processMultiRowFile(
+    filePath,
+    originalName,
+    portalData
+);
     }
 
     // ========================================================
@@ -1464,9 +1551,11 @@ function processFile(
     // ========================================================
 
     const result =
-        processSingleRowFile(
-            filePath
-        );
+    await processSingleRowFile(
+        filePath,
+        originalName,
+        portalData
+    );
 
     return {
         ...result,
@@ -1510,6 +1599,7 @@ module.exports = {
 if (
     require.main === module
 ) {
+    (async () => {
 
     const filePath =
         process.argv[2];
@@ -1567,8 +1657,8 @@ if (
 
         console.log("");
 
-        const result =
-            processFile(
+                const result =
+            await processFile(
                 absolutePath
             );
 
@@ -1584,16 +1674,17 @@ if (
             !result.success
         ) {
 
-            process.exit(1);
+            process.exitCode = 1;
         }
 
-    } catch (error) {
+        } catch (error) {
 
         console.error(
             error.stack ||
             error.message
         );
 
-        process.exit(1);
+        process.exitCode = 1;
     }
+    })();
 }

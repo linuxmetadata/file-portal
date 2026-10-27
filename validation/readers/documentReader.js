@@ -17,6 +17,7 @@
  */
 
 const path = require("path");
+const XLSX = require("xlsx");
 const { getReader } = require("./readerFactory");
 
 const supportedFormats = [
@@ -106,14 +107,34 @@ async function readDocument(filePath) {
 
         }
 
+                let workbook = result.workbook;
+
+        // TXT reader returns lines instead of a workbook.
+        // Convert only TXT results into a one-column workbook.
+        if (
+            !workbook &&
+            extension === ".txt" &&
+            Array.isArray(result.lines)
+        ) {
+            const worksheet = XLSX.utils.aoa_to_sheet(
+                result.lines.map(
+                    line => [String(line ?? "")]
+                )
+            );
+
+            workbook = XLSX.utils.book_new();
+
+            XLSX.utils.book_append_sheet(
+                workbook,
+                worksheet,
+                "TXT"
+            );
+        }
+
         return {
-
             success: true,
-
             type: extension,
-
-            workbook: result.workbook
-
+            workbook
         };
 
     }

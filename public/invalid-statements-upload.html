@@ -1,0 +1,639 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invalid Statements Upload</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .invalid-page { padding: 20px; }
+    .invalid-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .invalid-actions, .search-fields, .upload-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .invalid-page button {
+      padding: 9px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: white;
+      cursor: pointer;
+    }
+    .invalid-page button:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+    .invalid-page input {
+      padding: 9px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      min-width: 150px;
+      max-width: 100%;
+    }
+    .invalid-page button.primary {
+      background: #1d4ed8;
+      color: white;
+      border-color: #1d4ed8;
+    }
+    .invalid-section {
+      margin: 22px 0;
+      padding: 18px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      background: white;
+    }
+    .invalid-section h3 { margin-top: 0; }
+    .invalid-table-container {
+      overflow: auto;
+      max-height: 45vh;
+      border-radius: 8px;
+      background: white;
+    }
+    .invalid-table-container table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .invalid-table-container th,
+    .invalid-table-container td {
+      padding: 10px;
+      border: 1px solid #e5e7eb;
+      text-align: left;
+      white-space: nowrap;
+    }
+    .invalid-table-container th {
+      background: #f3f4f6;
+      position: sticky;
+      top: 0;
+    }
+    #invalidMessage {
+      display: none;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      overflow-wrap: anywhere;
+    }
+    .invalid-empty {
+      text-align: center;
+      padding: 20px;
+      color: #6b7280;
+    }
+    #selectedStockist {
+      padding: 12px;
+      margin: 12px 0;
+      border-radius: 6px;
+      background: #eff6ff;
+      color: #1e3a8a;
+    }
+    #filePicker { min-width: 240px; }
+    .hint { color: #6b7280; font-size: 13px; }
+  </style>
+</head>
+
+<body>
+<div class="invalid-page">
+
+  <div class="invalid-header">
+    <h2>Invalid Statements Upload</h2>
+    <div class="invalid-actions">
+      <button type="button"
+        onclick="window.location.href='/dashboard.html'">
+        Back to Dashboard
+      </button>
+      <button type="button" id="refreshButton">
+        Refresh List
+      </button>
+      <button type="button" id="logoutButton">
+        Logout
+      </button>
+    </div>
+  </div>
+
+  <div id="invalidMessage" role="status" aria-live="polite"></div>
+
+  <section class="invalid-section">
+    <h3>1. Search and Select Stockist</h3>
+
+    <div class="search-fields">
+      <input id="searchDivision" placeholder="Search Division">
+      <input id="searchState" placeholder="Search State">
+      <input id="searchBMHQ" placeholder="Search BM HQ">
+      <input id="searchCode" placeholder="Search Code">
+      <input id="searchName" placeholder="Search Stockist Name">
+    </div>
+
+    <p class="hint">Enter any search text to narrow the stockist list, then select the correct stockist.</p>
+
+    <div class="invalid-table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>S.No.</th>
+            <th>Division</th>
+            <th>State</th>
+            <th>BM HQ</th>
+            <th>Code</th>
+            <th>Stockist Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="stockistTable">
+          <tr><td colspan="7" class="invalid-empty">Loading stockists...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="invalid-section">
+    <h3>2. Upload Invalid Statements</h3>
+
+    <div id="selectedStockist">
+      No stockist selected. Select a stockist from the search results above.
+    </div>
+
+    <div class="upload-controls">
+      <input type="file" id="filePicker" multiple disabled>
+      <button type="button" class="primary" id="uploadButton" disabled>
+        Upload Invalid Statements
+      </button>
+    </div>
+
+    <p class="hint">
+      Select one or more files. This page does not run the regular upload
+      validation. The existing server may still attempt statement extraction.
+    </p>
+  </section>
+
+  <section class="invalid-section">
+    <h3>3. Uploaded Invalid Statements</h3>
+
+    <div class="search-fields">
+      <input id="filterDivision" placeholder="Filter Division">
+      <input id="filterState" placeholder="Filter State">
+      <input id="filterBMHQ" placeholder="Filter BM HQ">
+      <input id="filterCode" placeholder="Filter Code">
+      <input id="filterName" placeholder="Filter Stockist Name">
+    </div>
+
+    <div class="invalid-table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>S.No.</th>
+            <th>Division</th>
+            <th>State</th>
+            <th>BM HQ</th>
+            <th>Code</th>
+            <th>Stockist Name</th>
+            <th>Statement Type</th>
+            <th>Uploaded File</th>
+            <th>Upload Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="invalidStatementsTable">
+          <tr><td colspan="11" class="invalid-empty">Loading uploaded files...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script>
+"use strict";
+
+let stockists = [];
+let invalidFiles = [];
+let selectedStockist = null;
+let uploadInProgress = false;
+
+const $ = id => document.getElementById(id);
+
+function token() {
+  return localStorage.getItem("token") || "";
+}
+
+function showInvalidMessage(message, type = "info") {
+  const element = $("invalidMessage");
+  element.textContent = message;
+  element.style.display = "block";
+  element.style.background = type === "error" ? "#fee2e2" : "#e0f2fe";
+  element.style.color = type === "error" ? "#991b1b" : "#075985";
+}
+
+async function apiFetch(url, options = {}) {
+  const currentToken = token();
+
+  if (!currentToken) {
+    window.location.href = "/index.html";
+    throw new Error("Your session has expired. Please log in again.");
+  }
+
+  const headers = new Headers(options.headers || {});
+  headers.set("Authorization", "Bearer " + currentToken);
+
+  const response = await fetch(url, { ...options, headers });
+
+  if (response.status === 401) {
+    window.location.href = "/index.html";
+    throw new Error("Your session has expired. Please log in again.");
+  }
+
+  return response;
+}
+
+function addCell(row, value) {
+  const cell = document.createElement("td");
+  cell.textContent = String(value ?? "");
+  row.appendChild(cell);
+  return cell;
+}
+
+function addButton(parent, label, handler, className = "") {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = label;
+  if (className) button.className = className;
+  button.addEventListener("click", handler);
+  parent.appendChild(button);
+  return button;
+}
+
+function normalized(value) {
+  return String(value ?? "").trim().toLowerCase();
+}
+
+function renderStockists() {
+  const table = $("stockistTable");
+  table.replaceChildren();
+
+  const filters = {
+    division: normalized($("searchDivision").value),
+    state: normalized($("searchState").value),
+    bmhq: normalized($("searchBMHQ").value),
+    code: normalized($("searchCode").value),
+    name: normalized($("searchName").value)
+  };
+
+  const matches = stockists.filter(row =>
+    normalized(row.division).includes(filters.division) &&
+    normalized(row.state).includes(filters.state) &&
+    normalized(row.bmhq).includes(filters.bmhq) &&
+    normalized(row.code).includes(filters.code) &&
+    normalized(row.name).includes(filters.name)
+  );
+
+  if (!matches.length) {
+    const tr = table.insertRow();
+    const td = tr.insertCell();
+    td.colSpan = 7;
+    td.className = "invalid-empty";
+    td.textContent = "No matching stockists found.";
+    return;
+  }
+
+  matches.forEach((item, index) => {
+    const tr = table.insertRow();
+    addCell(tr, index + 1);
+    addCell(tr, item.division);
+    addCell(tr, item.state);
+    addCell(tr, item.bmhq);
+    addCell(tr, item.code);
+    addCell(tr, item.name);
+
+    const action = tr.insertCell();
+    const button = addButton(action, "Select", () => selectStockist(item));
+
+    if (
+      selectedStockist &&
+      String(selectedStockist.code) === String(item.code) &&
+      String(selectedStockist.division) === String(item.division)
+    ) {
+      button.textContent = "Selected";
+      button.disabled = true;
+    }
+  });
+}
+
+function selectStockist(item) {
+  selectedStockist = item;
+
+  $("selectedStockist").textContent =
+    "Selected Stockist: " + (item.name || "") +
+    " | Code: " + (item.code || "") +
+    " | Division: " + (item.division || "");
+
+  $("filePicker").disabled = false;
+  $("uploadButton").disabled = false;
+
+  renderStockists();
+  showInvalidMessage("Stockist selected. Choose the file or files to upload.");
+}
+
+async function loadStockists() {
+  $("stockistTable").replaceChildren();
+  const tr = $("stockistTable").insertRow();
+  const td = tr.insertCell();
+  td.colSpan = 7;
+  td.className = "invalid-empty";
+  td.textContent = "Loading stockists...";
+
+  try {
+    const response = await apiFetch("/data/list");
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Unable to load stockists.");
+    }
+
+    if (!Array.isArray(data)) {
+      throw new Error("Unexpected stockist-list response.");
+    }
+
+    // Match the field names already used by app.js.
+    stockists = data.map(row => ({
+      ...row,
+      division: row.division || "",
+      state: row.state || "",
+      bmhq: row.bmhq || "",
+      code: row.code || "",
+      name: row.name || ""
+    }));
+
+    renderStockists();
+  } catch (error) {
+    console.error("STOCKIST LIST ERROR:", error);
+    $("stockistTable").replaceChildren();
+    const row = $("stockistTable").insertRow();
+    const cell = row.insertCell();
+    cell.colSpan = 7;
+    cell.className = "invalid-empty";
+    cell.textContent = "Unable to load stockists.";
+    showInvalidMessage(error.message, "error");
+  }
+}
+
+function renderInvalidFiles() {
+  const table = $("invalidStatementsTable");
+  table.replaceChildren();
+
+  const filters = {
+    division: normalized($("filterDivision").value),
+    state: normalized($("filterState").value),
+    bmhq: normalized($("filterBMHQ").value),
+    code: normalized($("filterCode").value),
+    name: normalized($("filterName").value)
+  };
+
+  const matches = invalidFiles.filter(file =>
+    normalized(file.division).includes(filters.division) &&
+    normalized(file.state).includes(filters.state) &&
+    normalized(file.bmhq).includes(filters.bmhq) &&
+    normalized(file.code).includes(filters.code) &&
+    normalized(file.stockist_name).includes(filters.name)
+  );
+
+  if (!matches.length) {
+    const row = table.insertRow();
+    const cell = row.insertCell();
+    cell.colSpan = 11;
+    cell.className = "invalid-empty";
+    cell.textContent = "No invalid statements found.";
+    return;
+  }
+
+  matches.forEach((file, index) => {
+    const row = table.insertRow();
+
+    addCell(row, index + 1);
+    addCell(row, file.division);
+    addCell(row, file.state);
+    addCell(row, file.bmhq);
+    addCell(row, file.code);
+    addCell(row, file.stockist_name);
+    addCell(row, file.statement_type || "SSS");
+    addCell(row, file.original_filename);
+    addCell(row, file.uploaded_at
+      ? new Date(file.uploaded_at).toLocaleString()
+      : "");
+    addCell(row, file.status || "UPLOADED");
+
+    const actions = row.insertCell();
+
+    addButton(actions, "View", () => viewInvalidFile(file.file_id));
+
+    if (String(localStorage.getItem("role") || "").toLowerCase() === "admin") {
+      addButton(actions, "Delete", () => deleteInvalidFile(file));
+    }
+  });
+}
+
+async function loadInvalidStatements() {
+  const table = $("invalidStatementsTable");
+  table.replaceChildren();
+  const loadingRow = table.insertRow();
+  const loadingCell = loadingRow.insertCell();
+  loadingCell.colSpan = 11;
+  loadingCell.className = "invalid-empty";
+  loadingCell.textContent = "Loading uploaded files...";
+
+  try {
+    const response = await apiFetch("/data/invalid-list");
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Unable to load uploaded files.");
+    }
+
+    if (!Array.isArray(data)) {
+      throw new Error("Unexpected invalid-list response.");
+    }
+
+    invalidFiles = data;
+    renderInvalidFiles();
+  } catch (error) {
+    console.error("INVALID LIST ERROR:", error);
+    table.replaceChildren();
+    const row = table.insertRow();
+    const cell = row.insertCell();
+    cell.colSpan = 11;
+    cell.className = "invalid-empty";
+    cell.textContent = "Unable to load uploaded files.";
+    showInvalidMessage(error.message, "error");
+  }
+}
+
+async function uploadInvalidStatements() {
+  if (uploadInProgress) return;
+
+  if (!selectedStockist) {
+    showInvalidMessage("Please select a stockist first.", "error");
+    return;
+  }
+
+  const files = Array.from($("filePicker").files || []);
+
+  if (!files.length) {
+    showInvalidMessage("Please select at least one file.", "error");
+    return;
+  }
+
+  uploadInProgress = true;
+  $("uploadButton").disabled = true;
+  $("uploadButton").textContent = "Uploading...";
+
+  let successful = 0;
+  const problems = [];
+
+  try {
+    for (const file of files) {
+      const form = new FormData();
+      form.append("file", file);
+      form.append("division", selectedStockist.division);
+      form.append("code", selectedStockist.code);
+      form.append("type", "SSS");
+      form.append("stockistName", selectedStockist.name || "");
+
+      try {
+        const response = await apiFetch("/data/invalid-upload", {
+          method: "POST",
+          body: form
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok || data.success !== true) {
+          throw new Error(data.error || "Upload failed.");
+        }
+
+        successful++;
+
+        if (data.extractionSuccess === false) {
+          problems.push(
+            file.name + ": stored, but extraction did not succeed."
+          );
+        }
+      } catch (error) {
+        problems.push(file.name + ": " + error.message);
+      }
+    }
+
+    $("filePicker").value = "";
+
+    if (successful > 0) {
+      await loadInvalidStatements();
+    }
+
+    if (problems.length) {
+      showInvalidMessage(
+        successful + " file(s) stored. " + problems.join(" "),
+        "error"
+      );
+    } else {
+      showInvalidMessage(successful + " file(s) uploaded successfully.");
+    }
+  } finally {
+    uploadInProgress = false;
+    $("uploadButton").disabled = !selectedStockist;
+    $("uploadButton").textContent = "Upload Invalid Statements";
+  }
+}
+
+async function viewInvalidFile(fileId) {
+  const previewWindow = window.open("about:blank", "_blank");
+
+  if (!previewWindow) {
+    showInvalidMessage("Please allow pop-ups to view files.", "error");
+    return;
+  }
+
+  try {
+    const response = await apiFetch(
+      "/data/file/" + encodeURIComponent(fileId)
+    );
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.error || "Unable to open file.");
+    }
+
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    previewWindow.location.href = url;
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  } catch (error) {
+    previewWindow.close();
+    showInvalidMessage(error.message, "error");
+  }
+}
+
+async function deleteInvalidFile(file) {
+  if (String(localStorage.getItem("role") || "").toLowerCase() !== "admin") {
+    showInvalidMessage("Admin access is required to delete files.", "error");
+    return;
+  }
+
+  if (!confirm("Delete this uploaded statement?")) return;
+
+  try {
+    const url =
+      "/data/delete/" +
+      encodeURIComponent(file.division) + "/" +
+      encodeURIComponent(file.code) + "/SSS/" +
+      encodeURIComponent(file.file_id);
+
+    const response = await apiFetch(url, { method: "DELETE" });
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || "Delete failed.");
+    }
+
+    showInvalidMessage("File deleted successfully.");
+    await loadInvalidStatements();
+  } catch (error) {
+    showInvalidMessage(error.message, "error");
+  }
+}
+
+function logout() {
+  localStorage.removeItem("user");
+  localStorage.removeItem("role");
+  localStorage.removeItem("token");
+  window.location.href = "/index.html";
+}
+
+$("refreshButton").addEventListener("click", async () => {
+  await loadStockists();
+  await loadInvalidStatements();
+});
+
+$("logoutButton").addEventListener("click", logout);
+$("uploadButton").addEventListener("click", uploadInvalidStatements);
+
+[
+  "searchDivision", "searchState", "searchBMHQ", "searchCode", "searchName"
+].forEach(id => $(id).addEventListener("input", renderStockists));
+
+[
+  "filterDivision", "filterState", "filterBMHQ", "filterCode", "filterName"
+].forEach(id => $(id).addEventListener("input", renderInvalidFiles));
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadStockists();
+  loadInvalidStatements();
+});
+</script>
+</body>
+</html>

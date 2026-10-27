@@ -7,6 +7,9 @@ let currentPreviewCode = null;
 let currentPreviewType = null;
 let currentPreviewDivision = null;
 let isValidFile = true;
+let pendingStockistWarning = null;
+let stockistConfirmationInProgress = false;
+let isUploadInProgress = false;
 
 function resetValidationState() {
 
@@ -14,6 +17,14 @@ function resetValidationState() {
   currentPreviewFiles = [];
   currentPreviewCode = null;
   currentPreviewType = null;
+  pendingStockistWarning = null;
+
+const stockistConfirmModal =
+    document.getElementById("stockistConfirmModal");
+
+if (stockistConfirmModal) {
+    stockistConfirmModal.style.display = "none";
+}
 
   isValidFile = true;
 
@@ -281,6 +292,7 @@ function getUploadUI(row, code, type) {
     `;
   }
 
+
   return buttons;
 }
 
@@ -390,21 +402,39 @@ function chooseFile(division, code, type) {
       };
     }
 
-    if (!validateRes.ok) {
-
-      console.log(
-        "FAILED FILE:",
-        file.name,
-        validateData
-      );
-
-    showMessage(
-      validateData.error || "INVALID FILE",
-      true
-    );
-
-    return;
+    
+   // STOCKIST NAME MISMATCH WARNING
+if (validateRes.ok && validateData.stockistWarning) {
+    if (!pendingStockistWarning) {
+        pendingStockistWarning = {
+            message:
+                validateData.stockistMessage ||
+                "Stockist name not matched. Please confirm.",
+            reason: validateData.stockistReason || "",
+            extractedStockistName:
+                validateData.extractedStockistName || "",
+            expectedStockistName: row ? row.name : "",
+            fileName: file.name
+        };
     }
+}
+
+    // BLOCK FILES THAT FAIL VALIDATION
+    if (!validateRes.ok) {
+        console.log(
+            "FAILED FILE:",
+            file.name,
+            validateData
+        );
+
+        showMessage(
+            validateData.error || "INVALID FILE",
+            true
+        );
+
+        return;
+    }
+
   }
 
 } catch (err) {
@@ -429,11 +459,109 @@ function chooseFile(division, code, type) {
     "OPENING PREVIEW:",
     currentPreviewFiles.map(f => f.name)
     );
-    openPreview();
+        openPreview();
+
+    // Show stockist mismatch confirmation over the preview.
+    if (pendingStockistWarning) {
+      const warningModal =
+        document.getElementById("stockistConfirmModal");
+
+      const warningMessage =
+        document.getElementById("stockistConfirmMessage");
+
+      if (warningMessage) {
+        const expectedName =
+      pendingStockistWarning.expectedStockistName || "Not available";
+
+      warningMessage.textContent =
+      `Stockist name not matched. The correct stockist name is ${expectedName}. Please confirm.`;
+      }
+
+      if (warningModal) {
+        warningModal.style.display = "flex";
+      }
+    }
   };
 
   input.click();
 }
+
+
+/* =========================
+   INVALID SSS UPLOAD
+========================= */
+function chooseInvalidFile(division, code) {
+  if (isUploadInProgress) return;
+
+  const input = document.createElement("input");
+  input.type = "file";
+  input.multiple = true;
+
+  input.onchange = async () => {
+    const files = Array.from(input.files || []);
+    if (!files.length) return;
+
+    if (isUploadInProgress) return;
+    isUploadInProgress = true;
+
+    try {
+      const row = fullData.find(
+        r =>
+          String(r.code) === String(code) &&
+          String(r.division) === String(division)
+      );
+
+      for (const file of files) {
+        const form = new FormData();
+
+        form.append("file", file);
+        form.append("division", division);
+        form.append("code", code);
+        form.append("type", "SSS");
+        form.append("stockistName", row ? row.name : "");
+
+        const res = await fetch("/data/invalid-upload", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token") || ""}`
+          },
+          body: form
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          showMessage(
+            `${file.name}: ${data.error || "Invalid upload failed"}`,
+            true
+          );
+          return;
+        }
+
+        if (data.extractionSuccess === false) {
+        showMessage(
+        `${file.name} uploaded, but extraction was skipped or failed.`,
+        true
+        );
+        return;
+        }
+      }
+
+      showMessage("Invalid SSS upload process completed.");
+      await loadData();
+
+    } catch (err) {
+      console.error("INVALID SSS UPLOAD ERROR:", err);
+      showMessage("Invalid SSS upload failed.", true);
+
+    } finally {
+      isUploadInProgress = false;
+    }
+  };
+
+  input.click();
+}
+
 
 /* =========================
    PREVIEW
@@ -654,6 +782,69 @@ else if (ext === "doc") {
 }
 
 /* =========================
+   STOCKIST MISMATCH CONFIRMATION
+========================= */
+async function confirmStockistMismatch() {
+
+  if (
+    !pendingStockistWarning ||
+    stockistConfirmationInProgress ||
+    isUploadInProgress ||
+    !currentPreviewFiles.length
+  ) {
+    return;
+  }
+
+  stockistConfirmationInProgress = true;
+
+  const confirmBtn =
+    document.getElementById("confirmStockistBtn");
+
+  const warningModal =
+    document.getElementById("stockistConfirmModal");
+
+  if (confirmBtn) {
+    confirmBtn.disabled = true;
+    confirmBtn.innerText = "Please wait...";
+  }
+
+  if (warningModal) {
+    warningModal.style.display = "none";
+  }
+
+  try {
+    await submitFile(
+      document.getElementById("submitBtn")
+    );
+  } finally {
+    stockistConfirmationInProgress = false;
+
+    if (confirmBtn) {
+      confirmBtn.disabled = false;
+      confirmBtn.innerText = "Confirm & Continue";
+    }
+  }
+}
+
+function cancelStockistMismatch() {
+
+  if (isUploadInProgress) {
+    return;
+  }
+
+  const warningModal =
+    document.getElementById("stockistConfirmModal");
+
+  if (warningModal) {
+    warningModal.style.display = "none";
+  }
+
+  pendingStockistWarning = null;
+
+  closePreview();
+}
+
+/* =========================
    CLOSE
 ========================= */
 function closePreview() {
@@ -672,10 +863,21 @@ function closePreview() {
   currentPreviewType = null;
 }
 
+
 /* =========================
    SUBMIT
 ========================= */
 async function submitFile(btn) {
+
+  if (pendingStockistWarning && !stockistConfirmationInProgress) {
+    return;
+  }
+
+  if (isUploadInProgress) {
+    return;
+  }
+
+  isUploadInProgress = true;
 
   try {
 
@@ -739,7 +941,9 @@ async function submitFile(btn) {
 
     showMessage("Upload error", true);
 
-  } finally {
+    } finally {
+
+    isUploadInProgress = false;
 
     if (btn) {
       btn.disabled = false;
@@ -1028,4 +1232,6 @@ function setCardFilter(type) {
   applyFilters();
 }
 
-window.onload = loadData;
+if (document.getElementById("tableData")) {
+  window.onload = loadData;
+}

@@ -3302,6 +3302,64 @@ if (
     continue;
 }
 
+
+            //==================================================
+            // DERMASCIENCE STOCK & SALE REPORT
+            // Product data is in column B, while "Item"
+            // is physically located in column C.
+            //==================================================
+
+            const dermascienceTitle =
+                normalize(rowText(rows[r - 2] || []));
+
+            const dermascienceHeaders =
+                rows[r] || [];
+
+            const isDermascienceStockSale =
+                r >= 2 &&
+                dermascienceTitle.includes("STOCK AND SALE REPORT") &&
+                normalize(dermascienceHeaders[2]) === "ITEM" &&
+                normalize(dermascienceHeaders[12]) === "PACK" &&
+                normalize(dermascienceHeaders[22]) === "OP" &&
+                normalize(dermascienceHeaders[24]) === "PUR" &&
+                normalize(dermascienceHeaders[29]) === "SALE" &&
+                normalize(dermascienceHeaders[47]) === "BAL";
+
+            if (isDermascienceStockSale) {
+
+                // Preserve the physical column positions for all
+                // movement headers, but align "Item" with column B
+                // so the mapper uses the actual product-data column.
+                const dermascienceLogicalHeaders =
+                    [...dermascienceHeaders];
+
+                dermascienceLogicalHeaders[1] = "Item";
+                dermascienceLogicalHeaders[2] = "";
+
+                const dermascienceHeader = {
+                    score: 680,
+                    sheetName,
+                    sheet,
+                    rows,
+                    headerRow: r,
+                    productColumn: 1,
+                    row: dermascienceLogicalHeaders,
+                    verified: 0,
+                    detection: "DERMASCIENCE_STOCK_SALE_COLUMN_OFFSET",
+                    specialFormat: false
+                };
+
+                if (
+                    !best ||
+                    dermascienceHeader.score > best.score
+                ) {
+                    best = dermascienceHeader;
+                }
+
+                continue;
+            }
+
+
 const result =
     scoreRow(row);
 

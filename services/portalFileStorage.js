@@ -6,6 +6,20 @@ const pool = require("./postgresPool");
 
 const ALLOWED_TYPES = new Set(["AWS", "SSS"]);
 
+const ALLOWED_CATEGORIES = new Set(["REGULAR", "INVALID"]);
+
+function normalizeCategory(value = "REGULAR") {
+    const category = clean(value).toUpperCase();
+
+    if (!ALLOWED_CATEGORIES.has(category)) {
+        throw new Error(
+            "Upload category must be REGULAR or INVALID."
+        );
+    }
+
+    return category;
+}
+
 function clean(value) {
     return String(value ?? "").trim();
 }
@@ -53,7 +67,8 @@ async function storeUploadedFile({
     type,
     state = "General",
     uploadedBy = "",
-    mimeType = "application/octet-stream"
+    mimeType = "application/octet-stream",
+    uploadCategory = "REGULAR"
 }) {
     if (!filePath) {
         throw new Error("Uploaded file path is required.");
@@ -62,6 +77,7 @@ async function storeUploadedFile({
     const normalizedDivision = normalizeKey(division);
     const normalizedCode = normalizeKey(code);
     const statementType = normalizeType(type);
+    const category = normalizeCategory(uploadCategory);
 
     if (!normalizedDivision || !normalizedCode) {
         throw new Error("Division and Code are required.");
@@ -79,43 +95,46 @@ async function storeUploadedFile({
     }
 
     const result = await pool.query(
-        `
-        INSERT INTO portal_uploaded_files (
-            division,
-            code,
-            statement_type,
-            original_filename,
-            mime_type,
-            file_size_bytes,
-            file_data,
-            state,
-            uploaded_by
-        )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-        RETURNING
-            file_id,
-            division,
-            code,
-            statement_type,
-            original_filename,
-            mime_type,
-            file_size_bytes,
-            state,
-            uploaded_by,
-            uploaded_at
-        `,
-        [
-            normalizedDivision,
-            normalizedCode,
-            statementType,
-            filename,
-            clean(mimeType) || "application/octet-stream",
-            buffer.length,
-            buffer,
-            clean(state) || "General",
-            clean(uploadedBy)
-        ]
-    );
+    `
+    INSERT INTO portal_uploaded_files (
+        division,
+        code,
+        statement_type,
+        original_filename,
+        mime_type,
+        file_size_bytes,
+        file_data,
+        state,
+        uploaded_by,
+        upload_category
+    )
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    RETURNING
+        file_id,
+        division,
+        code,
+        statement_type,
+        original_filename,
+        mime_type,
+        file_size_bytes,
+        state,
+        uploaded_by,
+        upload_category,
+        uploaded_at
+    `,
+    [
+        normalizedDivision,
+        normalizedCode,
+        statementType,
+        filename,
+        clean(mimeType) || "application/octet-stream",
+        buffer.length,
+        buffer,
+        clean(state) || "General",
+        clean(uploadedBy),
+        category
+    ]
+);
 
     return result.rows[0];
 }
@@ -123,7 +142,8 @@ async function storeUploadedFile({
 async function listUploadedFiles({
     division,
     code,
-    type
+    type,
+    uploadCategory
 } = {}) {
     const conditions = [];
     const values = [];
@@ -143,6 +163,11 @@ async function listUploadedFiles({
         conditions.push(`statement_type = $${values.length}`);
     }
 
+    if (uploadCategory !== undefined) {
+    values.push(normalizeCategory(uploadCategory));
+    conditions.push(`upload_category = $${values.length}`);
+    }
+
     const whereClause = conditions.length
         ? `WHERE ${conditions.join(" AND ")}`
         : "";
@@ -159,6 +184,7 @@ async function listUploadedFiles({
             file_size_bytes,
             state,
             uploaded_by,
+            upload_category,
             uploaded_at
         FROM portal_uploaded_files
         ${whereClause}
@@ -186,6 +212,7 @@ async function getUploadedFile(fileId) {
             file_data,
             state,
             uploaded_by,
+            upload_category,
             uploaded_at
         FROM portal_uploaded_files
         WHERE file_id = $1

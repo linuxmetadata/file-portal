@@ -126,6 +126,20 @@ function normalizeRawRow(sourceRow, metadata) {
     return row;
 }
 
+
+async function ensureAdjustmentColumns(client) {
+    await client.query(`
+        ALTER TABLE "statement_extraction_master"
+        ADD COLUMN IF NOT EXISTS "Common Adjustment1" TEXT
+    `);
+
+    await client.query(`
+        ALTER TABLE "statement_extraction_master"
+        ADD COLUMN IF NOT EXISTS "Common Adjustment1 Value" TEXT
+    `);
+}
+
+
 function validateSchema() {
     if (new Set(MASTER_COLUMNS).size !== MASTER_COLUMNS.length) {
         throw new Error("MASTER_COLUMNS contains duplicate names.");
@@ -233,11 +247,15 @@ async function updatePostgresMaster({
     let inserted = 0;
     let updated = 0;
 
-    try {
-        await client.connect();
-        await client.query("BEGIN");
+    
+try {
+    await client.connect();
+    await client.query("BEGIN");
 
-        for (const row of normalizedRows) {
+    await ensureAdjustmentColumns(client);
+
+    for (const row of normalizedRows) {
+
             const values = MASTER_COLUMNS.map(
                 column => dbValue(row[column])
             );

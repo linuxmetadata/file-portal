@@ -1,6 +1,6 @@
 const { readWorkbook: readExcel } = require("./excelReader");
 const { readWorkbook: readCSV } = require("./csvReader");
-const { readWorkbook: readTXT } = require("./txtReader");
+const { readTXT } = require("./txtReader");
 const { readWorkbook: readHTML } = require("./htmlReader");
 const { readWorkbook: readPDF } = require("./pdfReader");
 const { readWorkbook: readSmartXLS } = require("./smartXlsReader");

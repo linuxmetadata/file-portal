@@ -497,7 +497,20 @@ const STRUCTURES = [
             "OPENING_STOCK",
             "PURCHASE"
         ]
-    }
+    },
+        {
+        "id": "H034",
+        "raw": "Product Name | Unit | Op.St | St-In | St-Out | Bal | Value",
+        "identifiers": [
+            "PRODUCT_NAME",
+            "UNIT",
+            "OP_ST",
+            "ST_IN",
+            "ST_OUT",
+            "BAL",
+            "VALUE"
+        ]
+    }    
 ];
 
 function normalizeHeader(value) {
@@ -793,6 +806,46 @@ function findPhysicalHeader(lines,detection) {
 function extractColumns(headerLine,structure) {
     const line=String(headerLine||"");
 
+        // H034 - ARHAM PHARMACEUTICALS pipe-delimited header.
+    // The product rows are fixed-width, without pipe delimiters.
+    if (
+        structure &&
+        String(structure.id || "") === "H034"
+    ) {
+        const labels = [
+            "Product Name",
+            "Unit",
+            "Op.St",
+            "St-In",
+            "St-Out",
+            "Bal",
+            "Value"
+        ];
+
+        const barPositions = [
+            ...line.matchAll(/\|/g)
+        ].map(match => match.index);
+
+        if (barPositions.length !== 7) {
+            return [];
+        }
+
+        const starts = [
+            0,
+            ...barPositions
+                .slice(0, 6)
+                .map(position => position + 1)
+        ];
+
+        return labels.map((label, index) => ({
+            index,
+            header: label,
+            normalized: normalizeIdentifier(label),
+            position: starts[index],
+            end: starts[index + 1] ?? null
+        }));
+    }
+    
     /*
      * H010 is a fixed-width header whose labels are separated by
      * single spaces. The generic whitespace parser cannot safely

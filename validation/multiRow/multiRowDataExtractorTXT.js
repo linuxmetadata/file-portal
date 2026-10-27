@@ -864,12 +864,27 @@ function resolveField(
  * before positional mapping.
  */ 
 
+
 function isChellasStructure(columns) {
+    if (!Array.isArray(columns) || columns.length !== 15) {
+        return false;
+    }
+
+    const headers = columns.map(column =>
+        String(column?.header ?? "").trim().toUpperCase()
+    );
+
     return (
-        Array.isArray(columns) &&
-        columns.length === 15
+        headers.includes("PACKING") &&
+        headers.includes("SALES QTY PREV") &&
+        headers.includes("SALES QTY LAST") &&
+        headers.includes("SALES QTY CURRENT") &&
+        headers.includes("TRANS QTY") &&
+        headers.includes("UNIT RATE") &&
+        headers.includes("VALUE STOCK")
     );
 }
+
 
 function chellasOperationalTokens(
     line,
@@ -1038,6 +1053,8 @@ function extractChellasPhysicalRow(
         "sales",
         "salesFree",
         "expBro",
+        "adjustment",
+        "adjustment1",
         "closing",
         "transQty",
         "unitRate",
@@ -2083,7 +2100,9 @@ function isDermasciScienceStructure(columns) {
         columns.length === 12 &&
         columns.some(c => c && c.header === "Product Name") &&
         columns.some(c => c && c.header === "Opening Stock") &&
-        columns.some(c => c && c.header === "Receipt")
+        columns.some(c => c && c.header === "Receipt") &&
+        !columns.some(c => c && c.header === "Adj (-)") &&
+        !columns.some(c => c && c.header === "Adj (+)")
     );
 }
 

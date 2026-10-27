@@ -553,6 +553,10 @@ const {
 } = require("./portalDataMerger");
 
 const {
+    writeMatchedMaster
+} = require("./matchedMasterWriter");
+
+const {
     writeExtraction
 } = require("./outputWriter");
 
@@ -863,17 +867,14 @@ function buildFailureResult({
 //======================================================
 
 async function processStatement(options) {
-
     const {
-
         statementFile,
-
         priceFile,
-
         portalData = {},
-
-        statementType = "SSS"
-
+        statementType = "SSS",
+        skipMasterOutput = false,
+        skipMatchedMasterOutput = false,
+        uploadCategory = "REGULAR"
     } = options;
 
 
@@ -1384,6 +1385,8 @@ async function processStatement(options) {
 
     const unmatchedProducts = [];
 
+    const matchedMasterRows = [];
+
 
     let matched = 0;
 
@@ -1594,6 +1597,221 @@ async function processStatement(options) {
             finalRecord
         );
 
+                //==============================================
+        // BUILD SEPARATE MATCHED MASTER RECORD
+        //==============================================
+
+        const hasMatchedProduct = Boolean(
+            product?.matched &&
+            product?.product
+        );
+
+        const mismatchRemark = hasMatchedProduct
+            ? (
+                product.reviewRequired
+                    ? (
+                        Array.isArray(product.reviewReasons)
+                            ? product.reviewReasons.join("; ")
+                            : String(
+                                product.reviewReasons || ""
+                            )
+                    )
+                    : ""
+            )
+            : (
+                product?.reason ||
+                "No matching product passed the attribute checks"
+            );
+
+            
+        //==============================================
+        // COMMON QUANTITY AND CALCULATED VALUE FIELDS
+        //==============================================
+
+        const matchedPrice = Number(calculated.PRICE ?? 0);
+
+        const commonCalculatedValue = (
+            quantity,
+            existingValue
+        ) => {
+            if (!hasMatchedProduct) {
+                return "";
+            }
+
+            if (
+                existingValue !== undefined &&
+                existingValue !== null &&
+                existingValue !== ""
+            ) {
+                return existingValue;
+            }
+
+            if (
+                quantity === undefined ||
+                quantity === null ||
+                String(quantity).trim() === ""
+            ) {
+                return "";
+            }
+
+            const qty = Number(quantity);
+
+            return Number.isFinite(qty)
+                ? qty * matchedPrice
+                : "";
+        };
+
+        const commonQuantityFields = {
+            "Common Opening": row.opening ?? "",
+            "Common Opening Value": commonCalculatedValue(
+                row.opening, calculated.OPENING_V
+            ),
+
+            "Common Purchase": row.purchase ?? "",
+            "Common Purchase Value": commonCalculatedValue(
+                row.purchase, calculated.PURCHASE_V
+            ),
+
+            "Common Purchase Free": row.purchaseFree ?? "",
+            "Common Purchase Free Value": commonCalculatedValue(
+                row.purchaseFree, calculated.PUR_FREE
+            ),
+
+            "Common Purchase Return": row.purchaseReturn ?? "",
+            "Common Purchase Return Value": commonCalculatedValue(
+                row.purchaseReturn, calculated.P_RET_VAL
+            ),
+
+            "Common Purchase Return Free": row.purchaseReturnFree ?? "",
+            "Common Purchase Return Free Value": commonCalculatedValue(
+                row.purchaseReturnFree, calculated.P_RET_FREE_VAL
+            ),
+
+            "Common Replacement": row.replacement ?? "",
+            "Common Replacement Value": commonCalculatedValue(
+                row.replacement, calculated.REPL
+            ),
+
+            "Common Sales Replacement": row.salesReplacement ?? "",
+            "Common Sales Replacement Value": commonCalculatedValue(
+                row.salesReplacement, calculated.SALES_REPL_V
+            ),
+
+            "Common Sales": row.sales ?? "",
+            "Common Sales Value": commonCalculatedValue(
+                row.sales, calculated.SALES_V
+            ),
+
+            "Common Sales Free": row.free ?? "",
+            "Common Sales Free Value": commonCalculatedValue(
+                row.free, calculated.FREE
+            ),
+
+            "Common Sales Last": row.salesLast ?? "",
+            "Common Sales Last Value": commonCalculatedValue(
+                row.salesLast, calculated.SALES_LAST_V
+            ),
+
+            "Common Sales Return": row.salesReturn ?? "",
+            "Common Sales Return Value": commonCalculatedValue(
+                row.salesReturn, calculated.SAL_RET_V
+            ),
+
+            "Common Sales Return Free": row.salesReturnFree ?? "",
+            "Common Sales Return Free Value": commonCalculatedValue(
+                row.salesReturnFree, calculated.SAL_RET_FREE_V
+            ),
+
+            "Common TRN IN": row.trnIn ?? "",
+            "Common TRN IN Value": commonCalculatedValue(
+                row.trnIn, calculated.TRN_IN_V
+            ),
+
+            "Common TRN OUT": row.trnOut ?? "",
+            "Common TRN OUT Value": commonCalculatedValue(
+                row.trnOut, calculated.TRN_OUT_V
+            ),
+
+            "Common Credit": row.credit ?? "",
+            "Common Credit Value": commonCalculatedValue(
+                row.credit, calculated.CREDIT
+            ),
+
+            "Common Debit": row.debit ?? "",
+            "Common Debit Value": commonCalculatedValue(
+                row.debit, calculated.DEBIT
+            ),
+
+            "Common Adjustment": row.adjustment ?? "",
+            "Common Adjustment Value": commonCalculatedValue(
+                row.adjustment, calculated.ADJUSTMENT
+            ),
+
+            "Common Closing": row.closing ?? "",
+            "Common Closing Value": commonCalculatedValue(
+                row.closing, calculated.CLOSING_V
+            ),
+
+            "Common Closing Free": row.closingFree ?? "",
+            "Common Closing Free Value": commonCalculatedValue(
+                row.closingFree, calculated.CLOSING_FREE_V
+            ),
+
+            "Common Total Stock": row.totalStock ?? "",
+            "Common Total Stock Value": commonCalculatedValue(
+                row.totalStock, calculated.TOTAL_STOCK_V
+            )
+        };
+
+                if (
+            String(finalRecord.STKCODE ?? "").trim() === "KER434"
+        ) {
+            console.log("KER434 MATCHED MASTER INPUT:", {
+                product: row.product,
+                opening: row.opening,
+                purchase: row.purchase,
+                sales: row.sales,
+                closing: row.closing
+            });
+        }
+
+        matchedMasterRows.push({
+            "Division":
+            portalData.DIVISION ??
+            portalData.Division ??
+            finalRecord.DIVISION ??
+            finalRecord.Division ??
+            "",
+            "State": finalRecord.STATE ?? "",
+            "HQ": finalRecord.HQ ?? "",
+            "Code": finalRecord.STKCODE ?? "",
+            "Stockist Name": finalRecord.STOCKIST ?? "",
+
+            "Extracted Product": row.product ?? "",
+
+            "Matched Product": hasMatchedProduct
+                ? (
+                    product.product["Product Description"] || ""
+                )
+                : "",
+
+            "Mismatch Remark": mismatchRemark,
+
+            
+
+            "PTS": hasMatchedProduct
+                ? (calculated.PRICE ?? "")
+                : "",
+
+            // Quantities come from the extracted statement.
+            // Values come from the existing calculation engine.
+
+                        //==============================================
+            // COMMON QUANTITY AND CALCULATED VALUE FIELDS
+            //==============================================
+
+            ...commonQuantityFields
+        });
     }
 
 
@@ -1608,59 +1826,92 @@ async function processStatement(options) {
     );
 
 
+    
     let output;
 
+    if (!skipMasterOutput) {
 
-    try {
+        try {
 
-        output =
-            await writeExtraction(
+            output = await writeExtraction(
+    finalRecords,
+    statementType,
+    path.basename(
+        statementFile,
+        path.extname(statementFile)
+    ),
+    uploadCategory
+);
 
-                finalRecords,
-
-                statementType,
-
-                path.basename(
-                    statementFile,
-                    path.extname(statementFile)
-                )
-
+            console.log(
+                "OUTPUT WRITER COMPLETED"
             );
 
+        } catch (error) {
+
+            console.log("");
+            console.log("================================");
+            console.log("OUTPUT WRITER FAILED");
+            console.log("================================");
+
+            console.log(
+                "File :",
+                path.basename(statementFile)
+            );
+
+            console.error(error.message);
+
+            throw error;
+        }
+
+    } else {
+
+        output = {
+            file: null
+        };
 
         console.log(
-            "OUTPUT WRITER COMPLETED"
+            "NORMALIZED SSS MASTER OUTPUT SKIPPED"
+        );
+    }
+
+
+        //==============================================
+    // WRITE SEPARATE MATCHED MASTER
+    //==============================================
+
+    
+let matchedMasterOutput;
+
+if (!skipMatchedMasterOutput) {
+    try {
+        matchedMasterOutput = await writeMatchedMaster(
+    matchedMasterRows,
+    statementType,
+    uploadCategory
+);
+
+        console.log(
+            "MATCHED MASTER UPDATED:",
+            matchedMasterOutput.file
         );
 
+        console.log(
+            "Matched Master Records:",
+            matchedMasterOutput.appendedRecords
+        );
     } catch (error) {
-
-        console.log("");
-
-        console.log(
-            "================================"
-        );
-
-        console.log(
-            "OUTPUT WRITER FAILED"
-        );
-
-        console.log(
-            "================================"
-        );
-
-        console.log(
-            "File :",
-            path.basename(statementFile)
-        );
-
         console.error(
+            "MATCHED MASTER OUTPUT FAILED:",
             error.message
         );
 
-
         throw error;
-
     }
+} else {
+    matchedMasterOutput = { file: null };
+    console.log("MATCHED MASTER OUTPUT SKIPPED");
+}
 
 
     //--------------------------------------------------
